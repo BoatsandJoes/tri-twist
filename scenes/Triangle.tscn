@@ -4,7 +4,6 @@
 
 [node name="Triangle" type="Area2D"]
 script = ExtResource( 1 )
-size = 100
 
 [node name="VerticalEdge" type="Polygon2D" parent="."]
 

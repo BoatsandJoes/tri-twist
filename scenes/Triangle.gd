@@ -1,15 +1,19 @@
 extends Area2D
 
-export var size: int
+var size: int
 const colors = [Color.royalblue, Color.crimson]
 var leftColor: int
 var rightColor: int
 var verticalColor: int
-var upsideDown = false
+var pointFacingUp = false
 var triangleFocused = false
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
+	pass
+
+# Called when the node enters the scene tree for the first time.
+func init(triangleSize: int):
+	size = triangleSize
 	# Define vertices
 	var baseVectorArray = PoolVector2Array()
 	baseVectorArray.append(Vector2(0, 0))
@@ -46,14 +50,20 @@ func _ready():
 
 func flip():
 	scale = Vector2(1, scale[1] * -1)
+	#TODO position fix should work no matter whether we are flipping up or down
 	position = Vector2(position[0], position[1] + size * 0.87)
-	upsideDown = true
+	pointFacingUp = !pointFacingUp
+
+func topple(direction: int):
+	# 1 is right, -1 is left
+	# TODO
+	pass
 
 func spin(direction: int):
 	var tempVerticalColor = verticalColor
 	var tempLeftColor = leftColor
 	# -1 is counterclockwise, 1 is clockwise
-	if (direction == -1 && !upsideDown) || (direction == 1 && upsideDown):
+	if (direction == -1 && !pointFacingUp) || (direction == 1 && pointFacingUp):
 		verticalColor = rightColor
 		leftColor = tempVerticalColor
 		rightColor = tempLeftColor
