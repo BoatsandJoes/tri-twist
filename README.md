@@ -34,7 +34,7 @@ other stuff:
 color choices, like splatoon
 
 issues:
-	if a single color piece is bordered by a wall or an opposite color piece, it is unclearable forever (can keep this and give a limited resource to get rid of it, or enable a setting that detects this situation and changes the piece type)
+	if a single color piece is bordered by a wall or an opposite color piece, it is unclearable forever (can keep this and give a limited resource to get rid of it, or enable a setting that detects this situation and changes the piece type/deletes the pieces)
 	aside from this, there is no organic lose condition
 
 todo:

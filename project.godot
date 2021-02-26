@@ -8,9 +8,20 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Node2D",
+"class": "GameGrid",
+"language": "GDScript",
+"path": "res://scenes/GameGrid.gd"
+}, {
+"base": "Area2D",
+"class": "TriangleCell",
+"language": "GDScript",
+"path": "res://scenes/TriangleCell.gd"
+} ]
 _global_script_class_icons={
-
+"GameGrid": "",
+"TriangleCell": ""
 }
 
 [application]
