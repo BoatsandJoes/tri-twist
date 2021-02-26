@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/Triangle.gd" type="Script" id=1]
+
+[node name="Triangle" type="Area2D"]
+script = ExtResource( 1 )
+size = 100
+
+[node name="VerticalEdge" type="Polygon2D" parent="."]
+
+[node name="LeftEdge" type="Polygon2D" parent="."]
+
+[node name="RightEdge" type="Polygon2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+[connection signal="mouse_entered" from="." to="." method="_on_Triangle_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_Triangle_mouse_exited"]
