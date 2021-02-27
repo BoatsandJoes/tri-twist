@@ -163,6 +163,11 @@ func get_area(cell: TriangleCell, color: int, partialResult: Array) -> Array:
 	if alreadyIncluded:
 		# nothing to do
 		return partialResult
+	# If this is the first cell, make sure it contains the specified color
+	if partialResult[0].empty() && cell.leftColor != color && cell.rightColor != color && cell.verticalColor != color:
+		# There is no area at all
+		partialResult[1] = false
+		return partialResult
 	# include passed cell in partial area
 	partialResult[0].append(cell)
 	

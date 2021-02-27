@@ -44,4 +44,3 @@ issues:
 todo:
 	player-controlled drop pieces in (with previews + ghost)
 	ui with score, time, moves, previews, etc
-	bug: pieces that have cleared once keep clearing even if they don't fulfill the conditions

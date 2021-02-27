@@ -5,7 +5,7 @@ extends Node2D
 # var a = 2
 # var b = "text"
 export (PackedScene) var GameGrid
-var grid
+var grid: GameGrid
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

@@ -62,11 +62,9 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 
 func fill_randomly():
 	leftColor = randi() % (colors.size() - 1)
-	$LeftEdge.set_color(colors[leftColor])
 	rightColor = randi() % (colors.size() - 1)
-	$RightEdge.set_color(colors[rightColor])
 	verticalColor = randi() % (colors.size() - 1)
-	$VerticalEdge.set_color(colors[verticalColor])
+	update_colors_visually()
 
 func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighborVerticalColor: int, direction: int,
 		isLeftNeighborFilled: bool, isRightNeighborFilled: bool):
@@ -84,9 +82,17 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 		rightColor = neighborRightColor;
 		leftColor = neighborLeftColor;
 		verticalColor = neighborVerticalColor;
-	$LeftEdge.set_color(colors[leftColor])
-	$RightEdge.set_color(colors[rightColor])
-	$VerticalEdge.set_color(colors[verticalColor])
+	update_colors_visually()
+
+func update_colors_visually():
+	if cellFocused:
+		$LeftEdge.set_color(focusColors[leftColor])
+		$RightEdge.set_color(focusColors[rightColor])
+		$VerticalEdge.set_color(focusColors[verticalColor])
+	else:
+		$LeftEdge.set_color(colors[leftColor])
+		$RightEdge.set_color(colors[rightColor])
+		$VerticalEdge.set_color(colors[verticalColor])
 
 func flip():
 	scale = Vector2(1, scale[1] * -1)
@@ -97,7 +103,7 @@ func flip():
 	pointFacingUp = !pointFacingUp
 
 func spin(rotation: int):
-	if $ClearTimer.is_stopped():
+	if !is_marked_for_clear():
 		var tempVerticalColor = verticalColor
 		var tempLeftColor = leftColor
 		if ((rotation == get_parent().Rotation.COUNTERCLOCKWISE && !pointFacingUp)
@@ -109,20 +115,16 @@ func spin(rotation: int):
 			leftColor = rightColor
 			verticalColor = tempLeftColor
 			rightColor = tempVerticalColor
-		$VerticalEdge.set_color(colors[verticalColor])
-		$LeftEdge.set_color(colors[leftColor])
-		$RightEdge.set_color(colors[rightColor])
+		update_colors_visually()
 
 func clear(color: int):
-	if (color == colors.size() - 1 && $ClearTimer.is_stopped()):
+	if (color == colors.size() - 1 && !is_marked_for_clear()):
 		# Immediately blank tile.
 		leftColor = colors.size() - 1
-		$LeftEdge.set_color(colors[leftColor])
 		rightColor = colors.size() - 1
-		$RightEdge.set_color(colors[rightColor])
 		verticalColor = colors.size() - 1
-		$VerticalEdge.set_color(colors[verticalColor])
-	else:
+		update_colors_visually()
+	elif color != colors.size() - 1:
 		# Mark cell for clearing, visually. Remove focus highlights, too, but not other clear highlights.
 		if leftColor == color:
 			$LeftEdge.set_color(highlightColors[leftColor])
@@ -160,21 +162,16 @@ func _on_TriangleCell_mouse_entered():
 	cellFocused = true
 	if !is_marked_for_clear():
 		# Highlight.
-		$LeftEdge.set_color(focusColors[leftColor])
-		$RightEdge.set_color(focusColors[rightColor])
-		$VerticalEdge.set_color(focusColors[verticalColor])
+		update_colors_visually()
 
 func _on_TriangleCell_mouse_exited():
 	cellFocused = false
 	if !is_marked_for_clear():
-		# Remove highlight.
-		$LeftEdge.set_color(colors[leftColor])
-		$RightEdge.set_color(colors[rightColor])
-		$VerticalEdge.set_color(colors[verticalColor])
+		# Remove highlight
+		update_colors_visually()
 
 
 func _on_ClearTimer_timeout():
-	$ClearTimer.stop()
 	# visual effect
 	$CPUParticles2D.emitting = true
 	clear(colors.size() - 1)
