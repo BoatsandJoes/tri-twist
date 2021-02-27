@@ -8,7 +8,7 @@ export var margin: int
 var grid: Array
 var window: Rect2
 var gravityTimer: Timer
-enum Direction {LEFT, RIGHT, VERTICAL}
+enum Direction {LEFT, RIGHT, VERTICAL, VERTICAL_POINT}
 enum Rotation {CLOCKWISE, COUNTERCLOCKWISE}
 
 # Called when the node enters the scene tree for the first time.
@@ -46,7 +46,7 @@ func get_all_empty_cells() -> Array:
 	var results = []
 	for rowIndex in grid.size():
 		for columnIndex in grid[rowIndex].size():
-			if grid[rowIndex][columnIndex].empty:
+			if grid[rowIndex][columnIndex].is_empty():
 				results.append(grid[rowIndex][columnIndex])
 	return results
 
@@ -55,12 +55,35 @@ func get_neighbor(rowIndex: int, columnIndex: int, direction: int) -> TriangleCe
 		return grid[rowIndex][columnIndex - 1]
 	elif direction == Direction.RIGHT && columnIndex < grid[rowIndex].size() - 1:
 		return grid[rowIndex][columnIndex + 1]
-	elif direction == Direction.VERTICAL:
-		if grid[rowIndex][columnIndex].pointFacingUp && rowIndex > 0:
+	elif (((grid[rowIndex][columnIndex].pointFacingUp && direction == Direction.VERTICAL)
+	|| (!grid[rowIndex][columnIndex].pointFacingUp && direction == Direction.VERTICAL_POINT))
+	&& rowIndex > 0):
 			return grid[rowIndex - 1][columnIndex - 1]
-		elif !grid[rowIndex][columnIndex].pointFacingUp && rowIndex < grid.size() - 1:
-			return grid[rowIndex + 1][columnIndex + 1]
+	elif (((!grid[rowIndex][columnIndex].pointFacingUp && direction == Direction.VERTICAL)
+	|| (grid[rowIndex][columnIndex].pointFacingUp && direction == Direction.VERTICAL_POINT))
+	&& rowIndex < grid.size() - 1):
+		return grid[rowIndex + 1][columnIndex + 1]
 	return null
+
+func move_neighbor_here(rowIndex: int, columnIndex: int, direction: int) -> bool:
+	var neighbor = get_neighbor(rowIndex, columnIndex, direction)
+	if neighbor != null && !neighbor.is_empty():
+		var leftNeighborFilled = false;
+		var rightNeighborFilled = false;
+		if direction == Direction.VERTICAL:
+			# get other neighbor info if we need it
+			var leftNeighbor = get_neighbor(rowIndex, columnIndex, Direction.LEFT)
+			var rightNeighbor = get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
+			leftNeighborFilled = leftNeighbor == null || (leftNeighbor != null && !leftNeighbor.is_empty())
+			rightNeighborFilled = rightNeighbor == null || (rightNeighbor != null && !rightNeighbor.is_empty())
+		# copy
+		grid[rowIndex][columnIndex].fill_from_neighbor(
+			neighbor.leftColor, neighbor.rightColor, neighbor.verticalColor,
+			direction, leftNeighborFilled, rightNeighborFilled)
+		# clear neighbor
+		grid[neighbor.rowIndex][neighbor.columnIndex].clear()
+		return true
+	return false
 
 func _input(event):
 	if event is InputEventMouseButton:
@@ -97,32 +120,24 @@ func handle_cell_input(rowIndex: int, columnIndex: int, event: InputEventMouseBu
 #	pass
 
 func _on_GravityTimer_timeout():
-	var floatingPieces = false
-	# scan for floating pieces and move each one once
+	var thereWereFloatingPieces = false
+	# scan for empty cells
 	for emptyCell in get_all_empty_cells():
+		var filled = false
 		if !emptyCell.pointFacingUp:
-			# Check cell above
-			if get_neighbor(emptyCell.rowIndex, emptyCell.columnIndex, Direction.VERTICAL) != null:
-				floatingPieces = true
-				#TODO move_triangle_down_one_step(emptyCell[0] + 1, emptyCell[1] + 1)
+			# Try to fill from above
+			filled = move_neighbor_here(emptyCell.rowIndex, emptyCell.columnIndex, Direction.VERTICAL)
 		else:
-			# Check left neighbor
-			var leftNeighbor = get_neighbor(emptyCell.rowIndex, emptyCell.columnIndex, Direction.LEFT)
-			if leftNeighbor != null && !leftNeighbor.empty:
-				# Move piece right TODO
-				floatingPieces = true
-				#grid[emptyCell[0]][emptyCell[1]] = grid[emptyCell[0]][emptyCell[1] - 1]
-				#grid[emptyCell[0]][emptyCell[1] - 1] = null
-				#grid[emptyCell[0]][emptyCell[1]].topple(1)
-			# Check right neighbor
-			var rightNeighbor = get_neighbor(emptyCell.rowIndex, emptyCell.columnIndex, Direction.RIGHT)
-			if rightNeighbor != null && !rightNeighbor.empty:
-				# Move piece left TODO
-				floatingPieces = true
-				#grid[emptyCell[0]][emptyCell[1]] = grid[emptyCell[0]][emptyCell[1] + 1]
-				#grid[emptyCell[0]][emptyCell[1] + 1] = null
-				#grid[emptyCell[0]][emptyCell[1]].topple(-1)
-	if !floatingPieces:
+			# Try to fill from side
+			filled = move_neighbor_here(emptyCell.rowIndex, emptyCell.columnIndex, Direction.RIGHT)
+			if !filled:
+				filled = move_neighbor_here(emptyCell.rowIndex, emptyCell.columnIndex, Direction.LEFT)
+				if !filled:
+					# Fill from above the point
+					filled = move_neighbor_here(emptyCell.rowIndex, emptyCell.columnIndex, Direction.VERTICAL_POINT)
+		if filled:
+			thereWereFloatingPieces = true
+	if !thereWereFloatingPieces:
 		# stop gravity and fill grid; debug
 		$GravityTimer.stop()
 		fill_grid()

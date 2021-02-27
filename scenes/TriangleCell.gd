@@ -2,13 +2,13 @@ extends Area2D
 class_name TriangleCell
 
 var size: int
+# last color is the null color, for empty cells
 const colors = [Color.royalblue, Color.crimson, Color.black]
 var leftColor: int = colors.size() - 1
 var rightColor: int = colors.size() - 1
 var verticalColor: int = colors.size() - 1
 var pointFacingUp = false
 var cellFocused = false
-var empty = true
 var rowIndex: int
 var columnIndex: int
 
@@ -63,7 +63,26 @@ func fill_randomly():
 	$RightEdge.set_color(colors[rightColor])
 	verticalColor = randi() % (colors.size() - 1)
 	$VerticalEdge.set_color(colors[verticalColor])
-	empty = false
+
+func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighborVerticalColor: int, direction: int,
+		isLeftNeighborFilled: bool, isRightNeighborFilled: bool):
+	if (direction == get_parent().Direction.LEFT ||
+	(isRightNeighborFilled && direction == get_parent().Direction.VERTICAL)):
+		leftColor = neighborLeftColor
+		rightColor = neighborVerticalColor
+		verticalColor = neighborRightColor
+	elif (direction == get_parent().Direction.RIGHT ||
+	(isLeftNeighborFilled && direction == get_parent().Direction.VERTICAL)):
+		rightColor = neighborRightColor
+		leftColor = neighborVerticalColor
+		verticalColor = neighborLeftColor
+	else:
+		rightColor = neighborRightColor;
+		leftColor = neighborLeftColor;
+		verticalColor = neighborVerticalColor;
+	$LeftEdge.set_color(colors[leftColor])
+	$RightEdge.set_color(colors[rightColor])
+	$VerticalEdge.set_color(colors[verticalColor])
 
 func flip():
 	scale = Vector2(1, scale[1] * -1)
@@ -94,7 +113,9 @@ func clear():
 	$RightEdge.set_color(colors[rightColor])
 	verticalColor = colors.size() - 1
 	$VerticalEdge.set_color(colors[verticalColor])
-	empty = true
+
+func is_empty() -> bool:
+	return leftColor == colors.size() - 1
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
