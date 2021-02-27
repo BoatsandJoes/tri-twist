@@ -14,14 +14,26 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/GameGrid.gd"
 }, {
+"base": "Node2D",
+"class": "GameScene",
+"language": "GDScript",
+"path": "res://scenes/GameScene.gd"
+}, {
 "base": "Area2D",
 "class": "TriangleCell",
 "language": "GDScript",
 "path": "res://scenes/TriangleCell.gd"
+}, {
+"base": "Node2D",
+"class": "TriangleDropper",
+"language": "GDScript",
+"path": "res://scenes/TriangleDropper.gd"
 } ]
 _global_script_class_icons={
 "GameGrid": "",
-"TriangleCell": ""
+"GameScene": "",
+"TriangleCell": "",
+"TriangleDropper": ""
 }
 
 [application]

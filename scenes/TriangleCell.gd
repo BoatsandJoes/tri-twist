@@ -57,7 +57,7 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 		flip()
 	# make empty
 	clear(colors.size() - 1)
-	# offset so the center is in the center TODO
+	# offset so the center is in the center XXX
 	#translate(Vector2(-size/2,-(size * tan(PI/6))))
 
 func fill_randomly():

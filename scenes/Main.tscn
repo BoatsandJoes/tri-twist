@@ -1,13 +1,13 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scenes/Main.gd" type="Script" id=1]
-[ext_resource path="res://scenes/GameGrid.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/GameScene.tscn" type="PackedScene" id=2]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 1 )
-GameGrid = ExtResource( 2 )
+GameScene = ExtResource( 2 )
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
