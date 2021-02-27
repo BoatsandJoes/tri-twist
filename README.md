@@ -35,9 +35,9 @@ color choices, like splatoon
 
 issues:
 	if a single color piece is bordered by a wall or an opposite color piece, it is unclearable forever (can keep this and give a limited resource to get rid of it, or enable a setting that detects this situation and changes the piece type/deletes the pieces)
-	aside from this, there is no organic lose condition
+	worried about lose condition
+	worried that the gravity doesn't make sense
 
 todo:
-	detect closed area
-	gravity rules
 	player-controlled drop pieces in (with previews)
+	detect closed area

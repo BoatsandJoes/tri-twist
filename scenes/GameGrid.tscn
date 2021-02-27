@@ -10,5 +10,5 @@ cellSize = 100
 margin = 3
 
 [node name="GravityTimer" type="Timer" parent="."]
-wait_time = 0.5
+wait_time = 0.2
 [connection signal="timeout" from="GravityTimer" to="." method="_on_GravityTimer_timeout"]

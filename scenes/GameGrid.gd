@@ -65,6 +65,14 @@ func get_neighbor(rowIndex: int, columnIndex: int, direction: int) -> TriangleCe
 		return grid[rowIndex + 1][columnIndex + 1]
 	return null
 
+func get_move(rowIndex: int, columnIndex: int, direction: int) -> Array:
+	var neighbor = get_neighbor(rowIndex, columnIndex, direction)
+	if neighbor != null && !neighbor.is_empty():
+		# return move instructions
+		return [rowIndex, columnIndex, direction]
+	return []
+
+# Safely grabs neighbor in the given direction and moves it to the given position.
 func move_neighbor_here(rowIndex: int, columnIndex: int, direction: int) -> bool:
 	var neighbor = get_neighbor(rowIndex, columnIndex, direction)
 	if neighbor != null && !neighbor.is_empty():
@@ -121,23 +129,28 @@ func handle_cell_input(rowIndex: int, columnIndex: int, event: InputEventMouseBu
 
 func _on_GravityTimer_timeout():
 	var thereWereFloatingPieces = false
+	var moves: Array = []
 	# scan for empty cells
 	for emptyCell in get_all_empty_cells():
-		var filled = false
+		var move: Array
 		if !emptyCell.pointFacingUp:
 			# Try to fill from above
-			filled = move_neighbor_here(emptyCell.rowIndex, emptyCell.columnIndex, Direction.VERTICAL)
+			move = get_move(emptyCell.rowIndex, emptyCell.columnIndex, Direction.VERTICAL)
 		else:
 			# Try to fill from side
-			filled = move_neighbor_here(emptyCell.rowIndex, emptyCell.columnIndex, Direction.RIGHT)
-			if !filled:
-				filled = move_neighbor_here(emptyCell.rowIndex, emptyCell.columnIndex, Direction.LEFT)
-				if !filled:
+			move = get_move(emptyCell.rowIndex, emptyCell.columnIndex, Direction.RIGHT)
+			if move == []:
+				move = get_move(emptyCell.rowIndex, emptyCell.columnIndex, Direction.LEFT)
+				if move == []:
 					# Fill from above the point
-					filled = move_neighbor_here(emptyCell.rowIndex, emptyCell.columnIndex, Direction.VERTICAL_POINT)
-		if filled:
-			thereWereFloatingPieces = true
-	if !thereWereFloatingPieces:
-		# stop gravity and fill grid; debug
-		$GravityTimer.stop()
+					move = get_move(emptyCell.rowIndex, emptyCell.columnIndex, Direction.VERTICAL_POINT)
+		if (move != []):
+			moves.append(move)
+	# update grid at THIS point, so that pieces don't get double pulled
+	for move in moves:
+		move_neighbor_here(move[0], move[1], move[2])
+	if moves.empty():
+		#fill grid; debug
 		fill_grid()
+		# stop gravity, debug
+		$GravityTimer.stop()
