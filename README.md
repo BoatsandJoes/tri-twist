@@ -30,7 +30,7 @@ scoring:
 	chains give bonus points but maybe not too many because they're hard to plan? they would be easier to plan with squares
 
 other stuff:
-2 cute characters, one for each color or one for drop/twist
+2 cute characters, one for each color or one for drop/twist (another for squares?)
 color choices, like splatoon
 
 issues:
@@ -41,3 +41,6 @@ issues:
 todo:
 	player-controlled drop pieces in (with previews)
 	detect closed area
+		check after every piece movement, whether by the system or the human
+		look at every cell once for color 1 and then every cell once for color 2
+		prevent pieces from moving if they are cleared

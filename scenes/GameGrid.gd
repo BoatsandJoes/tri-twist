@@ -17,6 +17,7 @@ func _ready():
 	gravityTimer = Timer.new()
 	_initialize_grid()
 
+# create grid and fill it with cells
 func _initialize_grid():
 	grid = [[null, null, null],
 			[null, null, null, null, null],
@@ -32,16 +33,18 @@ func _initialize_grid():
 	# Fill grid randomly; debug
 	fill_grid()
 
+# fills all cells with random triangles
 func fill_grid():
-	# fills all cells with random triangles
 	for emptyCell in get_all_empty_cells():
 		emptyCell.fill_randomly()
 
+# Gets the position in which to draw the cell with the passed indices
 func get_position_for_cell(rowIndex: int, columnIndex: int) -> Vector2:
 	return Vector2((window.size[0]/2) - cellSize/2 +
 				((columnIndex - (grid[rowIndex].size()/2)) * ((cellSize/2) + margin)),
 				window.size[1] - cellSize - (rowIndex * ((cellSize * sqrt(3) / 2) + margin)))
 
+# returns an array of TriangleCells
 func get_all_empty_cells() -> Array:
 	var results = []
 	for rowIndex in grid.size():
@@ -50,6 +53,8 @@ func get_all_empty_cells() -> Array:
 				results.append(grid[rowIndex][columnIndex])
 	return results
 
+# get neighbor of the cell with the passed index,
+# in the given direction. If off the edge, return null
 func get_neighbor(rowIndex: int, columnIndex: int, direction: int) -> TriangleCell:
 	if direction == Direction.LEFT && columnIndex > 0:
 		return grid[rowIndex][columnIndex - 1]
@@ -65,6 +70,7 @@ func get_neighbor(rowIndex: int, columnIndex: int, direction: int) -> TriangleCe
 		return grid[rowIndex + 1][columnIndex + 1]
 	return null
 
+# return an array with move instructions if a move is possible, empty array otherwise
 func get_move(rowIndex: int, columnIndex: int, direction: int) -> Array:
 	var neighbor = get_neighbor(rowIndex, columnIndex, direction)
 	if neighbor != null && !neighbor.is_empty():
@@ -105,6 +111,7 @@ func _input(event):
 		# kick off gravity, debug
 		$GravityTimer.start()
 
+# handles a cell click TODO handle controller and keyboard input
 func handle_cell_input(rowIndex: int, columnIndex: int, event: InputEventMouseButton):
 	if event.button_index == 3:
 		# delete tile, debug
@@ -122,11 +129,73 @@ func handle_cell_input(rowIndex: int, columnIndex: int, event: InputEventMouseBu
 			var neighbor = get_neighbor(rowIndex, columnIndex, i)
 			if neighbor != null:
 				neighbor.spin(-rotation)
+		clear_enclosed_areas()
+
+# find all cells that have an enclosed area, and clear them.
+func clear_enclosed_areas():
+	var colors = grid[0][0].colors
+	for color in (colors.size() - 1):
+		clear_cells_with_enclosed_areas_of_color(colors[color])
+
+# clear all cells that have an enclosed area of the passed color index
+func clear_cells_with_enclosed_areas_of_color(color: int):
+	var cellsToCheck = grid.duplicate(true)
+	for row in cellsToCheck:
+		for cell in row:
+			if cell != null:
+				var checkedCells = get_area(cell, color, [])
+				if checkedCells[1]:
+					for checkedCell in checkedCells[0]:
+						# mark for clearing TODO delayed clear, score
+						grid[checkedCell.rowIndex][checkedCell.columnIndex].clear()
+						# Don't need to check these cells again for this color
+						cellsToCheck[checkedCell.rowIndex][checkedCell.columnIndex] = null
+				else:
+					for checkedCell in checkedCells[0]:
+						# Don't need to check these cells again for this color
+						cellsToCheck[checkedCell.rowIndex][checkedCell.columnIndex] = null
+
+# returns an array with first element an array of TriangleCells,
+# second element true if area is enclosed, false otherwise
+func get_area(cell: TriangleCell, color: int, partialArea: Array) -> Array:
+	var result = [[], false]
+	partialArea.append(cell)
+	if cell.leftColor == color:
+		var neighbor = get_neighbor(cell.rowIndex, cell.columnIndex, Direction.LEFT)
+		if neighbor != null && neighbor.rightColor == color:
+			walk_if_not_already_included(neighbor, color, partialArea)
+	if cell.rightColor == color:
+		var neighbor = get_neighbor(cell.rowIndex, cell.columnIndex, Direction.RIGHT)
+		if neighbor != null && neighbor.leftColor == color:
+			walk_if_not_already_included(neighbor, color, partialArea)
+	if cell.verticalColorColor == color:
+		var neighbor = get_neighbor(cell.rowIndex, cell.columnIndex, Direction.VERTICAL)
+		if neighbor != null && neighbor.verticalColor == color:
+			walk_if_not_already_included(neighbor, color, partialArea)
+	# TODO put the result from walk...() in partialArea
+	# TODO base case when either no neighbors matched or all neighbors are already included
+	# TODO figure out if area is closed or open
+	result[0] = partialArea
+	return result
+
+func walk_if_not_already_included(neighbor: TriangleCell, color: int, partialArea: Array) -> Array:
+	# Check to see if this is already included in our partial area
+			var alreadyIncluded = false
+			for areaCell in partialArea:
+				if areaCell.rowIndex == neighbor.rowIndex && areaCell.columnIndex == neighbor.columnIndex:
+					alreadyIncluded = true
+					break
+			if !alreadyIncluded:
+				return get_area(neighbor, color, partialArea)
+			else:
+				return null
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
 
+# Make pieces fall at regular intervals
 func _on_GravityTimer_timeout():
 	var thereWereFloatingPieces = false
 	var moves: Array = []
