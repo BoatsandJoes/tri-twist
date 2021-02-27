@@ -3,9 +3,11 @@ class_name GameGrid
 
 
 export (PackedScene) var TriangleCell
+export var gridBase: int
+export var gridHeight: int
 export var cellSize: int
 export var margin: int
-var grid: Array
+var grid: Array = []
 var window: Rect2
 var gravityTimer: Timer
 enum Direction {LEFT, RIGHT, VERTICAL, VERTICAL_POINT}
@@ -14,22 +16,17 @@ enum Rotation {CLOCKWISE, COUNTERCLOCKWISE}
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	window = OS.get_window_safe_area()
-	_initialize_grid()
+	initialize_grid()
 
 # create grid and fill it with cells
-func _initialize_grid():
-	grid = [[null, null, null],
-			[null, null, null, null, null],
-			[null, null, null, null, null, null, null],
-			[null, null, null, null, null, null, null, null, null],
-			[null, null, null, null, null, null, null, null, null, null, null]]
-	for rowIndex in grid.size():
-		for columnIndex in grid[rowIndex].size():
-			grid[rowIndex][columnIndex] = TriangleCell.instance()
+func initialize_grid():
+	for rowIndex in gridHeight:
+		grid.append([])
+		for columnIndex in gridBase + 2 * rowIndex:
+			grid[rowIndex].append(TriangleCell.instance())
 			grid[rowIndex][columnIndex].init(cellSize, rowIndex, columnIndex, get_position_for_cell(rowIndex, columnIndex))
-			grid[rowIndex][columnIndex].fill_randomly()
+			# debug
 			add_child(grid[rowIndex][columnIndex])
-	# Fill grid randomly; debug
 	fill_grid()
 
 # fills all cells with random triangles, will probably only be used for debug
@@ -41,7 +38,7 @@ func fill_grid():
 # Gets the position in which to draw the cell with the passed indices
 func get_position_for_cell(rowIndex: int, columnIndex: int) -> Vector2:
 	return Vector2((window.size[0]/2) - cellSize/2 +
-				((columnIndex - (grid[rowIndex].size()/2)) * ((cellSize/2) + margin)),
+				((columnIndex - ((gridBase + rowIndex * 2)/2)) * ((cellSize/2) + margin)),
 				window.size[1] - cellSize - (rowIndex * ((cellSize * sqrt(3) / 2) + margin)))
 
 # returns an array of TriangleCells
