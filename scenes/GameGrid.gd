@@ -127,20 +127,40 @@ func handle_cell_input(rowIndex: int, columnIndex: int, event: InputEventMouseBu
 	if event.button_index == 3:
 		# delete tile, debug
 		grid[rowIndex][columnIndex].clear(grid[rowIndex][columnIndex].colors.size() - 1)
-	if event.button_index == 1 || event.button_index == 2:
+	elif event.button_index == 8 || event.button_index == 9 || event.button_index == 1 || event.button_index == 2:
 		# rotate
 		var rotation
-		if event.button_index == 1:
+		if event.button_index == 8 || event.button_index == 1:
 			rotation = Rotation.COUNTERCLOCKWISE
 		else:
 			rotation = Rotation.CLOCKWISE
 		grid[rowIndex][columnIndex].spin(rotation)
-		# Get and rotate neighbors opposite way
-		for i in range(3):
-			var neighbor = get_neighbor(rowIndex, columnIndex, i)
-			if neighbor != null:
-				neighbor.spin(-rotation)
-		clear_enclosed_areas()
+		# Get and rotate neighbors same way
+		var leftNeighbor = get_neighbor(rowIndex, columnIndex, Direction.LEFT)
+		var rightNeighbor = get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
+		var verticalNeighbor = get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
+		# move disallowed if one neighbor is off the grid
+		if (leftNeighbor != null && rightNeighbor != null && verticalNeighbor != null):
+			leftNeighbor.spin(rotation)
+			rightNeighbor.spin(rotation)
+			verticalNeighbor.spin(rotation)
+			if ((event.button_index == 1 && grid[rowIndex][columnIndex].pointFacingUp) ||
+			(event.button_index == 2 && !grid[rowIndex][columnIndex].pointFacingUp)):
+				# Move tiles around center
+				var tempVertColors = [verticalNeighbor.leftColor,
+						verticalNeighbor.rightColor, verticalNeighbor.verticalColor]
+				verticalNeighbor.set_colors(leftNeighbor.leftColor, leftNeighbor.rightColor, leftNeighbor.verticalColor)
+				leftNeighbor.set_colors(rightNeighbor.leftColor, rightNeighbor.rightColor, rightNeighbor.verticalColor)
+				rightNeighbor.set_colors(tempVertColors[0], tempVertColors[1], tempVertColors[2])
+			elif ((event.button_index == 1 && !grid[rowIndex][columnIndex].pointFacingUp) ||
+			(event.button_index == 2 && grid[rowIndex][columnIndex].pointFacingUp)):
+				# Move tiles around center
+				var tempVertColors = [verticalNeighbor.leftColor,
+						verticalNeighbor.rightColor, verticalNeighbor.verticalColor]
+				verticalNeighbor.set_colors(rightNeighbor.leftColor, rightNeighbor.rightColor, rightNeighbor.verticalColor)
+				rightNeighbor.set_colors(leftNeighbor.leftColor, leftNeighbor.rightColor, leftNeighbor.verticalColor)
+				leftNeighbor.set_colors(tempVertColors[0], tempVertColors[1], tempVertColors[2])
+			clear_enclosed_areas()
 
 # find all cells that have an enclosed area, and clear them.
 func clear_enclosed_areas():

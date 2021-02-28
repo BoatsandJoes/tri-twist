@@ -1,15 +1,20 @@
 # tri-twist
 ruleset tweaks:
 	grid size
-	square
+	square*
+	gravity rules
+		triangles should continue tumbling in the same direction once they start tumbling, instead of flipping at the end
+		pieces that fall directly point to point with no neighbors could just stay there. This could allow neat tucks
 	# of colors
+	piece randomizer weights/special cases (no full triangles in the first 2 moves)
 	falling pieces can/can't form matches with fixed pieces or with each other
 	restrict how quickly you can drop/DAS/ARR/hard drop
 	gravity speed
+	control piece as it falls, allowing overhangs and tucks
 	# previews
 	don't want to make areas but instead just match edges of the same color (more focus on making chains)
-	rotate rotates positions of neighbors instead of neighbors twisting in place
-	rotate before dropping
+	rotate rotates positions of neighbors instead of neighbors twisting in place*
+	rotate before dropping* (often possible with tumbling already)
 	different ways to handle unclearable pieces:
 		just keep it as a lose/win condition
 		detect and clear immediately or change piece type: award points
@@ -37,8 +42,20 @@ other stuff:
 2 cute characters, one for each color or one for drop/twist (3rd for squares?)
 color choices, like splatoon
 
+One path I see is to focus on the tumbling and make everything else as easy as possible (except maybe might keep out initial rotate, which you can get around with big slopes and it might be fun to do so, idk)
+	ghost piece helps
+	no clears on tumbling pieces since it's hard enough to plan already
+	don't expect anyone to plan ahead after a big clear: it's just gonna jumble the pieces and that's okay
+	solid color triangles are either the lose condition or extremely generous, with some other lose condition
+	one problem I see with this is it's impossible to dig sometimes: need to be able to shake the board
+	piece randomizer can really kick your butt; can look to previews/hold/tetris randomizers
+another path I see is twisting only
+
 todo next:
+	new gravity (tumbling, points, no clears while falling)
+	squares
 	ui with score, time, moves, previews, ghost piece, etc
+	a piece that is just spawned in should skip a gravity cycle if it comes too soon after dropping in (like less than half the wait time)
 	controller support
 	main menu
 	experiment with rulesets

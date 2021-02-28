@@ -68,23 +68,22 @@ func fill_randomly():
 	verticalColor = randi() % (colors.size() - 1)
 	update_colors_visually()
 
+func set_colors(left: int, right: int, vertical: int):
+	leftColor = left
+	rightColor = right
+	verticalColor = vertical
+	update_colors_visually()
+
 func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighborVerticalColor: int, direction: int,
 		isLeftNeighborFilled: bool, isRightNeighborFilled: bool):
 	if (direction == get_parent().Direction.LEFT ||
 	(isRightNeighborFilled && direction == get_parent().Direction.VERTICAL)):
-		leftColor = neighborLeftColor
-		rightColor = neighborVerticalColor
-		verticalColor = neighborRightColor
+		set_colors(neighborLeftColor, neighborVerticalColor, neighborRightColor)
 	elif (direction == get_parent().Direction.RIGHT ||
 	(isLeftNeighborFilled && direction == get_parent().Direction.VERTICAL)):
-		rightColor = neighborRightColor
-		leftColor = neighborVerticalColor
-		verticalColor = neighborLeftColor
+		set_colors(neighborVerticalColor, neighborRightColor,neighborLeftColor)
 	else:
-		rightColor = neighborRightColor;
-		leftColor = neighborLeftColor;
-		verticalColor = neighborVerticalColor;
-	update_colors_visually()
+		set_colors(neighborLeftColor, neighborRightColor, neighborVerticalColor)
 
 func update_colors_visually():
 	if cellFocused:
@@ -106,26 +105,16 @@ func flip():
 
 func spin(rotation: int):
 	if !is_marked_for_clear():
-		var tempVerticalColor = verticalColor
-		var tempLeftColor = leftColor
 		if ((rotation == get_parent().Rotation.COUNTERCLOCKWISE && !pointFacingUp)
 				|| (rotation == get_parent().Rotation.CLOCKWISE && pointFacingUp)):
-			verticalColor = rightColor
-			leftColor = tempVerticalColor
-			rightColor = tempLeftColor
+			set_colors(verticalColor, leftColor, rightColor)
 		else:
-			leftColor = rightColor
-			verticalColor = tempLeftColor
-			rightColor = tempVerticalColor
-		update_colors_visually()
+			set_colors(rightColor, verticalColor, leftColor)
 
 func clear(color: int):
 	if (color == colors.size() - 1 && !is_marked_for_clear()):
 		# Immediately blank tile.
-		leftColor = colors.size() - 1
-		rightColor = colors.size() - 1
-		verticalColor = colors.size() - 1
-		update_colors_visually()
+		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 	elif color != colors.size() - 1:
 		# Mark cell for clearing, visually. Remove focus highlights, too, but not other clear highlights.
 		if leftColor == color:
