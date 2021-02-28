@@ -22,6 +22,7 @@ modes:
 	mode where you can choose when to pop the area
 	multiple multiplayer ideas
 		one board versus, p1 and p2 each have "their color"
+			they want to have more of their color NOT cleared at the end?
 		seperate boards versus, play for quota or top out (garbage sends third color?)
 		same board coop, one player drops and the other rotates
 			simul play; bump a sliding piece this way?
@@ -42,5 +43,4 @@ issues:
 	areas get enclosed by accident frequently (less aggressively autofilling might help, squares might help, more colors could help, excluding falling pieces could help)
 
 todo:
-	player-controlled drop pieces in (with previews + ghost)
-	ui with score, time, moves, previews, etc
+	ui with score, time, moves, previews, ghost piece, etc

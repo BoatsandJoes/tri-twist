@@ -13,16 +13,18 @@ var pointFacingUp = false
 var cellFocused = false
 var rowIndex: int
 var columnIndex: int
+var inGrid
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
 
 # Call after instantiation to initialize.
-func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion: Vector2):
+func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion: Vector2, isInGrid: bool):
 	size = triangleSize
 	rowIndex = triRowIndex
 	columnIndex = triColumnIndex
+	inGrid = isInGrid
 	# set position
 	position = cellPostion
 	# move particle emitter to center
@@ -52,8 +54,8 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	verticalEdgeVectorArray.append(Vector2(size, 0))
 	verticalEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 6))
 	$VerticalEdge.set_polygon(verticalEdgeVectorArray)
-	# flip every odd triangle cell
-	if columnIndex % 2 == 1:
+	# flip every odd triangle cell and cells outside the grid
+	if columnIndex % 2 != 0 || !inGrid:
 		flip()
 	# make empty
 	clear(colors.size() - 1)
@@ -159,16 +161,20 @@ func is_marked_for_clear() -> bool:
 #	pass
 
 func _on_TriangleCell_mouse_entered():
-	cellFocused = true
-	if !is_marked_for_clear():
-		# Highlight.
-		update_colors_visually()
+	# If not in grid, do nothing.
+	if inGrid:
+		cellFocused = true
+		if !is_marked_for_clear():
+			# Highlight.
+			update_colors_visually()
 
 func _on_TriangleCell_mouse_exited():
-	cellFocused = false
-	if !is_marked_for_clear():
-		# Remove highlight
-		update_colors_visually()
+	# If not in grid, do nothing.
+	if inGrid:
+		cellFocused = false
+		if !is_marked_for_clear():
+			# Remove highlight
+			update_colors_visually()
 
 
 func _on_ClearTimer_timeout():

@@ -24,22 +24,39 @@ func initialize_grid():
 		grid.append([])
 		for columnIndex in gridBase + 2 * rowIndex:
 			grid[rowIndex].append(TriangleCell.instance())
-			grid[rowIndex][columnIndex].init(cellSize, rowIndex, columnIndex, get_position_for_cell(rowIndex, columnIndex))
-			# debug
+			grid[rowIndex][columnIndex].init(cellSize, rowIndex, columnIndex,
+			get_position_for_cell(rowIndex, columnIndex, false), true)
 			add_child(grid[rowIndex][columnIndex])
-	fill_grid()
 
-# fills all cells with random triangles, will probably only be used for debug
-func fill_grid():
-	for emptyCell in get_all_empty_cells():
-		emptyCell.fill_randomly()
+# Try to put the given piece in the top row. return true if successful.
+func drop_piece(piece) -> bool:
+	var direction: int
+	var neighborDirection: int
+	if (piece.columnIndex + piece.rowIndex) % 2 != 0:
+		direction = Direction.VERTICAL
+		neighborDirection = Direction.VERTICAL_POINT
+	else:
+		direction = Direction.VERTICAL_POINT
+		neighborDirection = Direction.VERTICAL
+	var neighbor: TriangleCell = grid[piece.rowIndex - 1][piece.columnIndex - 1]
+	if !neighbor.is_empty():
+		# Cannot fill.
+		return false
+	var leftNeighbor = get_neighbor(neighbor.rowIndex, neighbor.columnIndex, Direction.LEFT)
+	var rightNeighbor = get_neighbor(neighbor.rowIndex, neighbor.columnIndex, Direction.RIGHT)
+	neighbor.fill_from_neighbor(piece.leftColor, piece.rightColor, piece.verticalColor, neighborDirection,
+		!(leftNeighbor != null && leftNeighbor.is_empty()), !(rightNeighbor != null && rightNeighbor.is_empty()))
 	clear_enclosed_areas()
+	return true
 
 # Gets the position in which to draw the cell with the passed indices
-func get_position_for_cell(rowIndex: int, columnIndex: int) -> Vector2:
-	return Vector2((window.size[0]/2) - cellSize/2 +
+func get_position_for_cell(rowIndex: int, columnIndex: int, flipped: bool) -> Vector2:
+	var result = Vector2((window.size[0]/2) - cellSize/2 +
 				((columnIndex - ((gridBase + rowIndex * 2)/2)) * ((cellSize/2) + margin)),
 				window.size[1] - cellSize - (rowIndex * ((cellSize * sqrt(3) / 2) + margin)))
+	if flipped:
+		result = Vector2(result[0], result[1] + cellSize * 0.87)
+	return result
 
 # returns an array of TriangleCells
 func get_all_empty_cells() -> Array:
@@ -220,6 +237,3 @@ func _on_GravityTimer_timeout():
 	for move in moves:
 		move_neighbor_here(move[0], move[1], move[2])
 	clear_enclosed_areas()
-	if moves.empty():
-		#fill grid; debug
-		fill_grid()
