@@ -14,6 +14,7 @@ var cellFocused = false
 var rowIndex: int
 var columnIndex: int
 var inGrid
+var autofillMode = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -61,6 +62,12 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	clear(colors.size() - 1)
 	# offset so the center is in the center XXX
 	#translate(Vector2(-size/2,-(size * tan(PI/6))))
+
+func _input(event):
+	if event is InputEventKey && event.is_action_pressed("ui_focus_next"):
+		autofillMode = !autofillMode
+		if autofillMode:
+			fill_randomly()
 
 func fill_randomly():
 	leftColor = randi() % (colors.size() - 1)
@@ -115,6 +122,8 @@ func clear(color: int):
 	if (color == colors.size() - 1 && !is_marked_for_clear()):
 		# Immediately blank tile.
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
+		if (autofillMode):
+			fill_randomly()
 	elif color != colors.size() - 1:
 		# Mark cell for clearing, visually. Remove focus highlights, too, but not other clear highlights.
 		if leftColor == color:

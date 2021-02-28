@@ -6,7 +6,7 @@
 [node name="GameGrid" type="Node2D"]
 script = ExtResource( 1 )
 TriangleCell = ExtResource( 2 )
-gridBase = 3
+gridBase = 1
 gridHeight = 5
 cellSize = 100
 margin = 3

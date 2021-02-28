@@ -129,18 +129,20 @@ func handle_cell_input(rowIndex: int, columnIndex: int, event: InputEventMouseBu
 		grid[rowIndex][columnIndex].clear(grid[rowIndex][columnIndex].colors.size() - 1)
 	elif event.button_index == 8 || event.button_index == 9 || event.button_index == 1 || event.button_index == 2:
 		# rotate
-		var rotation
-		if event.button_index == 8 || event.button_index == 1:
-			rotation = Rotation.COUNTERCLOCKWISE
-		else:
-			rotation = Rotation.CLOCKWISE
-		grid[rowIndex][columnIndex].spin(rotation)
-		# Get and rotate neighbors same way
 		var leftNeighbor = get_neighbor(rowIndex, columnIndex, Direction.LEFT)
 		var rightNeighbor = get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
 		var verticalNeighbor = get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
-		# move disallowed if one neighbor is off the grid
-		if (leftNeighbor != null && rightNeighbor != null && verticalNeighbor != null):
+		# move disallowed if one neighbor is off the grid or being cleared
+		if (leftNeighbor != null && rightNeighbor != null && verticalNeighbor != null
+		&& !grid[rowIndex][columnIndex].is_marked_for_clear() && !leftNeighbor.is_marked_for_clear()
+		&& !rightNeighbor.is_marked_for_clear() && !verticalNeighbor.is_marked_for_clear()):
+			var rotation
+			if event.button_index == 8 || event.button_index == 1:
+				rotation = Rotation.COUNTERCLOCKWISE
+			else:
+				rotation = Rotation.CLOCKWISE
+			grid[rowIndex][columnIndex].spin(rotation)
+			# rotate neighbors same way
 			leftNeighbor.spin(rotation)
 			rightNeighbor.spin(rotation)
 			verticalNeighbor.spin(rotation)
