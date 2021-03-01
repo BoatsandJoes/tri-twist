@@ -7,8 +7,7 @@
 script = ExtResource( 1 )
 TriangleCell = ExtResource( 2 )
 gridBase = 1
-gridHeight = 5
-cellSize = 100
+gridHeight = 6
 margin = 3
 
 [node name="GravityTimer" type="Timer" parent="."]

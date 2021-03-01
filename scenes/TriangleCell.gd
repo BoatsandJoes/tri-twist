@@ -3,6 +3,8 @@ class_name TriangleCell
 
 var size: int
 # last color is the null color, for empty cells
+enum Direction {LEFT, RIGHT, VERTICAL, VERTICAL_POINT}
+enum Rotation {CLOCKWISE, COUNTERCLOCKWISE}
 const colors = [Color.royalblue, Color.crimson, Color.black]
 const focusColors = [Color.dodgerblue, Color.indianred, Color.darkslategray]
 const highlightColors = [Color.deepskyblue, Color.deeppink]
@@ -15,10 +17,11 @@ var rowIndex: int
 var columnIndex: int
 var inGrid
 var autofillMode = false
+var tumbleDirection
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	tumbleDirection = Direction.VERTICAL
 
 # Call after instantiation to initialize.
 func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion: Vector2, isInGrid: bool):
@@ -82,15 +85,22 @@ func set_colors(left: int, right: int, vertical: int):
 	update_colors_visually()
 
 func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighborVerticalColor: int, direction: int,
-		isLeftNeighborFilled: bool, isRightNeighborFilled: bool):
-	if (direction == get_parent().Direction.LEFT ||
-	(isRightNeighborFilled && direction == get_parent().Direction.VERTICAL)):
+		tumblingDirection: int):
+	if direction == Direction.VERTICAL || direction == Direction.VERTICAL_POINT:
+		tumbleDirection = tumblingDirection
+		if tumblingDirection == Direction.VERTICAL:
+			set_colors(neighborLeftColor, neighborRightColor, neighborVerticalColor)
+		elif ((tumblingDirection == Direction.RIGHT && pointFacingUp) ||
+				(tumblingDirection == Direction.LEFT && !pointFacingUp)):
+			set_colors(neighborLeftColor, neighborVerticalColor, neighborRightColor)
+		else:
+			set_colors(neighborVerticalColor, neighborRightColor, neighborLeftColor)
+	elif direction == Direction.LEFT:
+		tumbleDirection = Direction.RIGHT
 		set_colors(neighborLeftColor, neighborVerticalColor, neighborRightColor)
-	elif (direction == get_parent().Direction.RIGHT ||
-	(isLeftNeighborFilled && direction == get_parent().Direction.VERTICAL)):
-		set_colors(neighborVerticalColor, neighborRightColor,neighborLeftColor)
-	else:
-		set_colors(neighborLeftColor, neighborRightColor, neighborVerticalColor)
+	elif direction == Direction.RIGHT:
+		set_colors(neighborVerticalColor, neighborRightColor, neighborLeftColor)
+		tumbleDirection = Direction.LEFT
 
 func update_colors_visually():
 	if cellFocused:
@@ -112,13 +122,14 @@ func flip():
 
 func spin(rotation: int):
 	if !is_marked_for_clear():
-		if ((rotation == get_parent().Rotation.COUNTERCLOCKWISE && !pointFacingUp)
-				|| (rotation == get_parent().Rotation.CLOCKWISE && pointFacingUp)):
+		if ((rotation == Rotation.COUNTERCLOCKWISE && !pointFacingUp)
+				|| (rotation == Rotation.CLOCKWISE && pointFacingUp)):
 			set_colors(verticalColor, leftColor, rightColor)
 		else:
 			set_colors(rightColor, verticalColor, leftColor)
 
 func clear(color: int):
+	tumbleDirection = Direction.VERTICAL
 	if (color == colors.size() - 1 && !is_marked_for_clear()):
 		# Immediately blank tile.
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
