@@ -1,5 +1,7 @@
 # tri-twist
 ruleset tweaks:
+	can clear against an edge
+	piece could roll off a double-balanced piece
 	grid size
 	square*
 	# of colors
@@ -47,14 +49,15 @@ One path I see is to focus on the tumbling and make everything else as easy as p
 	piece randomizer can really kick your butt; can look to previews/hold/tetris randomizers
 
 todo next:
-	balancing on points
+	edge clear rule
 	no clears while falling
 	gravity timer problems
 		a piece that is just spawned in should skip a gravity cycle if it comes too soon after dropping in (like less than half the wait time)
 		non-global gravity timer start when the piece is dropped or when a clear happens, and then stop after (but then they won't be synchronized)
 		disallow dropping until the piece has dropped all the way and all clears have settled)
+	ghost piece
 	squares
-	ui with score, time, moves, previews, ghost piece, etc
+	ui with score, time, moves, etc
 	controller support
 	main menu
 	experiment with rulesets

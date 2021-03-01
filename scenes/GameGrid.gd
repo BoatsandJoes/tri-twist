@@ -85,6 +85,12 @@ func get_neighbor(rowIndex: int, columnIndex: int, direction: int) -> TriangleCe
 func get_move(rowIndex: int, columnIndex: int, direction: int) -> Array:
 	var neighbor = get_neighbor(rowIndex, columnIndex, direction)
 	if neighbor != null && !neighbor.is_empty() && !neighbor.is_marked_for_clear():
+		if (direction == grid[0][0].Direction.LEFT || direction == grid[0][0].Direction.RIGHT):
+			# check to see if neighbor is balancing on a point
+			var neighborsNeighbor = get_neighbor(neighbor.rowIndex, neighbor.columnIndex, direction)
+			if neighborsNeighbor != null && neighborsNeighbor.is_empty():
+				# neighbor is balancing: leave it there
+				return []
 		# return move instructions
 		return [rowIndex, columnIndex, direction]
 	return []
