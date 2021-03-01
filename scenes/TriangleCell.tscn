@@ -26,6 +26,11 @@ direction = Vector2( 0, -1 )
 gravity = Vector2( 0, 1800 )
 initial_velocity = 250.0
 initial_velocity_random = 0.5
+
+[node name="GravityTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
 [connection signal="mouse_entered" from="." to="." method="_on_TriangleCell_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_TriangleCell_mouse_exited"]
 [connection signal="timeout" from="ClearTimer" to="." method="_on_ClearTimer_timeout"]
+[connection signal="timeout" from="GravityTimer" to="." method="_on_GravityTimer_timeout"]

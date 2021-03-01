@@ -42,22 +42,17 @@ color choices, like splatoon
 
 One path I see is to focus on the tumbling and make everything else as easy as possible (except maybe might keep out initial rotate, which you can get around with big slopes and it might be fun to do so, idk)
 	ghost piece helps
-	no clears on falling pieces since it's hard enough to plan already
 	don't expect anyone to plan ahead after a big clear: it's just gonna jumble the pieces and that's okay
 	solid color triangles are either the lose condition or extremely generous, with some other lose condition
 	one problem I see with this is it's impossible to dig sometimes: need to be able to shake the board
+	the carcassonne clear might be too hard to make: an easier piece clear might be good, focus more on the tumbling, which I like
 	piece randomizer can really kick your butt; can look to previews/hold/tetris randomizers
 
 todo next:
-	edge clear rule
-	no clears while falling
-	gravity timer problems
-		a piece that is just spawned in should skip a gravity cycle if it comes too soon after dropping in (like less than half the wait time)
-		non-global gravity timer start when the piece is dropped or when a clear happens, and then stop after (but then they won't be synchronized)
-		disallow dropping until the piece has dropped all the way and all clears have settled)
+	gravity processing changes
+		areas are now only checked when *this* cell says so
+	shared edge clear rule
 	ghost piece
-	squares
 	ui with score, time, moves, etc
 	controller support
 	main menu
-	experiment with rulesets

@@ -9,7 +9,6 @@ export var margin: int
 var cellSize: int
 var grid: Array = []
 var window: Rect2
-var gravityTimer: Timer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -43,7 +42,6 @@ func drop_piece(piece) -> bool:
 		return false
 	neighbor.fill_from_neighbor(piece.leftColor, piece.rightColor, piece.verticalColor,
 			neighborDirection, grid[0][0].Direction.VERTICAL)
-	clear_enclosed_areas()
 	return true
 
 # Gets the position in which to draw the cell with the passed indices
@@ -80,33 +78,6 @@ func get_neighbor(rowIndex: int, columnIndex: int, direction: int) -> TriangleCe
 	&& rowIndex < grid.size() - 1):
 		return grid[rowIndex + 1][columnIndex + 1]
 	return null
-
-# return an array with move instructions if a move is possible, empty array otherwise
-func get_move(rowIndex: int, columnIndex: int, direction: int) -> Array:
-	var neighbor = get_neighbor(rowIndex, columnIndex, direction)
-	if neighbor != null && !neighbor.is_empty() && !neighbor.is_marked_for_clear():
-		if (direction == grid[0][0].Direction.LEFT || direction == grid[0][0].Direction.RIGHT):
-			# check to see if neighbor is balancing on a point
-			var neighborsNeighbor = get_neighbor(neighbor.rowIndex, neighbor.columnIndex, direction)
-			if neighborsNeighbor != null && neighborsNeighbor.is_empty():
-				# neighbor is balancing: leave it there
-				return []
-		# return move instructions
-		return [rowIndex, columnIndex, direction]
-	return []
-
-# Safely grabs neighbor in the given direction and moves it to the given position.
-func move_neighbor_here(rowIndex: int, columnIndex: int, direction: int) -> bool:
-	var neighbor = get_neighbor(rowIndex, columnIndex, direction)
-	if neighbor != null && !neighbor.is_empty():
-		# copy
-		grid[rowIndex][columnIndex].fill_from_neighbor(
-			neighbor.leftColor, neighbor.rightColor, neighbor.verticalColor,
-			direction, neighbor.tumbleDirection)
-		# clear neighbor
-		grid[neighbor.rowIndex][neighbor.columnIndex].clear(neighbor.colors.size() - 1)
-		return true
-	return false
 
 func _input(event):
 	if event is InputEventMouseButton:
@@ -157,29 +128,10 @@ func handle_cell_input(rowIndex: int, columnIndex: int, event: InputEventMouseBu
 				verticalNeighbor.set_colors(rightNeighbor.leftColor, rightNeighbor.rightColor, rightNeighbor.verticalColor)
 				rightNeighbor.set_colors(leftNeighbor.leftColor, leftNeighbor.rightColor, leftNeighbor.verticalColor)
 				leftNeighbor.set_colors(tempVertColors[0], tempVertColors[1], tempVertColors[2])
-			clear_enclosed_areas()
-
-# find all cells that have an enclosed area, and clear them.
-func clear_enclosed_areas():
-	var colors = grid[0][0].colors
-	# exclude final color, which is "empty cell"
-	for color in (colors.size() - 1):
-		var cellsToCheck = grid.duplicate(true)
-		for row in cellsToCheck:
-			for cell in row:
-				if cell != null:
-					var checkedCells = get_area(cell, color, [[], true])
-					# checkedCells[1] is true if area is enclosed
-					if checkedCells[1]:
-						for checkedCell in checkedCells[0]:
-							# mark for clearing
-							grid[checkedCell.rowIndex][checkedCell.columnIndex].clear(color)
-							# Don't need to check these cells again for this color
-							cellsToCheck[checkedCell.rowIndex][checkedCell.columnIndex] = null
-					else:
-						for checkedCell in checkedCells[0]:
-							# Don't need to check these cells again for this color
-							cellsToCheck[checkedCell.rowIndex][checkedCell.columnIndex] = null
+			grid[rowIndex][columnIndex].check_for_clear()
+			leftNeighbor.check_for_clear()
+			rightNeighbor.check_for_clear()
+			verticalNeighbor.check_for_clear()
 
 # takes a cell, color to check, and partially completed result (may already include cell)
 # returns an array with first element an array of TriangleCells representing a contiguous area of that color,
@@ -229,28 +181,3 @@ func get_area(cell: TriangleCell, color: int, partialResult: Array) -> Array:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
-
-# Make pieces fall at regular intervals
-func _on_GravityTimer_timeout():
-	var thereWereFloatingPieces = false
-	var moves: Array = []
-	# scan for empty cells
-	for emptyCell in get_all_empty_cells():
-		var move: Array
-		if !emptyCell.pointFacingUp:
-			# Try to fill from above
-			move = get_move(emptyCell.rowIndex, emptyCell.columnIndex, grid[0][0].Direction.VERTICAL)
-		else:
-			# Try to fill from side
-			move = get_move(emptyCell.rowIndex, emptyCell.columnIndex, grid[0][0].Direction.RIGHT)
-			if move == []:
-				move = get_move(emptyCell.rowIndex, emptyCell.columnIndex, grid[0][0].Direction.LEFT)
-				if move == []:
-					# Fill from above the point
-					move = get_move(emptyCell.rowIndex, emptyCell.columnIndex, grid[0][0].Direction.VERTICAL_POINT)
-		if (move != []):
-			moves.append(move)
-	# update grid at THIS point, so that pieces don't get double pulled
-	for move in moves:
-		move_neighbor_here(move[0], move[1], move[2])
-	clear_enclosed_areas()

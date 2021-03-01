@@ -9,8 +9,3 @@ TriangleCell = ExtResource( 2 )
 gridBase = 1
 gridHeight = 6
 margin = 3
-
-[node name="GravityTimer" type="Timer" parent="."]
-wait_time = 0.2
-autostart = true
-[connection signal="timeout" from="GravityTimer" to="." method="_on_GravityTimer_timeout"]

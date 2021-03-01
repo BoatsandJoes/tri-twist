@@ -17,7 +17,7 @@ var rowIndex: int
 var columnIndex: int
 var inGrid
 var autofillMode = false
-var tumbleDirection
+var tumbleDirection: int
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -101,6 +101,36 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 	elif direction == Direction.RIGHT:
 		set_colors(neighborVerticalColor, neighborRightColor, neighborLeftColor)
 		tumbleDirection = Direction.LEFT
+	# Check if we should start our gravity timer or come to rest
+	var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
+	var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
+	var leftNeighborFilled = leftNeighbor == null || !leftColor.is_empty()
+	var rightNeighborFilled = rightNeighbor == null || !rightColor.is_empty()
+	var belowNeighbor
+	if pointFacingUp:
+		belowNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
+	else:
+		belowNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
+	if (belowNeighbor != null && belowNeighbor.is_empty()):
+		enter_falling_state(Direction.VERTICAL)
+	elif !pointFacingUp && leftNeighborFilled != rightNeighborFilled:
+		if rightNeighborFilled:
+			enter_falling_state(Direction.LEFT)
+		else:
+			enter_falling_state(Direction.RIGHT)
+	# Check for enclosed areas.
+	check_for_clear()
+	# push balancing pieces over
+	if leftNeighbor != null && !leftNeighbor.empty():
+		var neighborsNeighbor = get_parent().get_neighbor(
+			leftNeighbor.rowIndex, leftNeighbor.columnIndex, Direction.LEFT)
+		if neighborsNeighbor != null && neighborsNeighbor.is_empty():
+			leftNeighbor.enter_falling_state(Direction.LEFT)
+	if rightNeighbor != null && !rightNeighbor.empty():
+		var neighborsNeighbor = get_parent().get_neighbor(
+			rightNeighbor.rowIndex, rightNeighbor.columnIndex, Direction.RIGHT)
+		if neighborsNeighbor != null && neighborsNeighbor.is_empty():
+			rightNeighbor.enter_falling_state(Direction.RIGHT)
 
 func update_colors_visually():
 	if cellFocused:
@@ -128,13 +158,41 @@ func spin(rotation: int):
 		else:
 			set_colors(rightColor, verticalColor, leftColor)
 
+func enter_falling_state(tumblingDirection: int):
+	if !is_marked_for_clear() && !falling && !is_empty():
+		$GravityTimer.start()
+		tumbleDirection = tumblingDirection
+
 func clear(color: int):
 	tumbleDirection = Direction.VERTICAL
+	$GravityTimer.stop()
 	if (color == colors.size() - 1 && !is_marked_for_clear()):
 		# Immediately blank tile.
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 		if (autofillMode):
 			fill_randomly()
+		# Check to see if any neighbors should enter falling state.
+		if !pointFacingUp:
+			# We only have to check above.
+			var neighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
+			if neighbor != null:
+				neighbor.enter_falling_state(Direction.VERTICAL)
+		else:
+			# If left and right are both empty or both full, they shouldn't move.
+			var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
+			var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
+			var leftNeighborFilled = leftNeighbor == null || !leftNeighbor.is_empty()
+			var rightNeighborFilled = rightNeighbor == null || !rightNeighbor.is_empty()
+			if leftNeighborFilled != rightNeighborFilled:
+				if leftNeighborFilled:
+					leftNeighbor.enter_falling_state(Direction.RIGHT)
+				else:
+					rightNeighbor.enter_falling_state(Direction.LEFT)
+			else:
+				# Fall from above.
+				var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
+				if verticalNeighbor != null:
+					verticalNeighbor.enter_falling_state(Direction.VERTICAL)
 	elif color != colors.size() - 1:
 		# Mark cell for clearing, visually. Remove focus highlights, too, but not other clear highlights.
 		if leftColor == color:
@@ -159,8 +217,33 @@ func clear(color: int):
 			# set a timer to actually clear the cell
 			$ClearTimer.start()
 
+# find all cells that have an enclosed area, and clear them.
+func check_for_clear():
+	# only check if we aren't already marked for clear and aren't falling
+	if !is_marked_for_clear() && !is_falling():
+		# exclude final color, which is "empty cell"
+		for color in (colors.size() - 1):
+			# TODO finish refactor of this method from GameGrid
+			# TODO require piece to be not falling in order to mark for clear
+			# TODO change clear rule to edge match
+			var checkedCells = get_area(cell, color, [[], true])
+			# checkedCells[1] is true if area is enclosed
+			if checkedCells[1]:
+				for checkedCell in checkedCells[0]:
+					# mark for clearing
+					grid[checkedCell.rowIndex][checkedCell.columnIndex].clear(color)
+					# Don't need to check these cells again for this color
+					cellsToCheck[checkedCell.rowIndex][checkedCell.columnIndex] = null
+			else:
+				for checkedCell in checkedCells[0]:
+					# Don't need to check these cells again for this color
+					cellsToCheck[checkedCell.rowIndex][checkedCell.columnIndex] = null
+
 func is_empty() -> bool:
 	return leftColor == colors.size() - 1
+
+func is_falling() -> bool:
+	return !$GravityTimer.is_stopped()
 
 func is_marked_for_clear() -> bool:
 	return !$ClearTimer.is_stopped()
@@ -190,3 +273,39 @@ func _on_ClearTimer_timeout():
 	# visual effect
 	$CPUParticles2D.emitting = true
 	clear(colors.size() - 1)
+
+func _on_GravityTimer_timeout():
+	# Check neighbors to figure out where this triangle should go, and if it should go at all
+	var emptyCell: TriangleCell
+	var direction: int
+	if pointFacingUp:
+		emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
+		direction = Direction.VERTICAL_POINT
+	else:
+		emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
+		direction = Direction.VERTICAL
+	if (emptyCell == null || !emptyCell.empty) && !pointFacingUp:
+		emptyCell = null
+		# We can't fall there but we are on our point; try left/right
+		var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
+		var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
+		var leftNeighborFilled = leftNeighbor == null || !leftNeighbor.is_empty()
+		var rightNeighborFilled = rightNeighbor == null || !rightNeighbor.is_empty()
+		# Don't tumble unless only one neighbor is filled
+		if (leftNeighborFilled != rightNeighborFilled):
+			if leftNeighborFilled:
+				emptyCell = rightNeighbor
+				direction = Direction.RIGHT
+			else:
+				emptyCell = leftNeighbor
+				direction = Direction.LEFT
+	if emptyCell != null && !emptyCell.is_empty():
+		# copy to neighbor
+		get_parent().grid[emptyCell.rowIndex][emptyCell.columnIndex].fill_from_neighbor(
+			leftColor, rightColor, verticalColor,
+			direction, tumbleDirection)
+		# clear self
+		clear(colors.size() - 1)
+	else:
+		# We have come to rest.
+		tumbleDirection = Direction.VERTICAL
