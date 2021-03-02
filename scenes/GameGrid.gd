@@ -28,13 +28,10 @@ func initialize_grid():
 
 # Try to put the given piece in the top row. return true if successful.
 func drop_piece(piece) -> bool:
-	var direction: int
 	var neighborDirection: int
 	if (piece.columnIndex + piece.rowIndex) % 2 != 0:
-		direction = grid[0][0].Direction.VERTICAL
 		neighborDirection = grid[0][0].Direction.VERTICAL_POINT
 	else:
-		direction = grid[0][0].Direction.VERTICAL_POINT
 		neighborDirection = grid[0][0].Direction.VERTICAL
 	var neighbor: TriangleCell = grid[piece.rowIndex - 1][piece.columnIndex - 1]
 	if !neighbor.is_empty():
@@ -71,7 +68,7 @@ func get_neighbor(rowIndex: int, columnIndex: int, direction: int) -> TriangleCe
 		return grid[rowIndex][columnIndex + 1]
 	elif (((grid[rowIndex][columnIndex].pointFacingUp && direction == grid[0][0].Direction.VERTICAL)
 	|| (!grid[rowIndex][columnIndex].pointFacingUp && direction == grid[0][0].Direction.VERTICAL_POINT))
-	&& rowIndex > 0):
+	&& rowIndex > 0 && grid[rowIndex - 1].size() > columnIndex - 1 && columnIndex != 0):
 			return grid[rowIndex - 1][columnIndex - 1]
 	elif (((!grid[rowIndex][columnIndex].pointFacingUp && direction == grid[0][0].Direction.VERTICAL)
 	|| (grid[rowIndex][columnIndex].pointFacingUp && direction == grid[0][0].Direction.VERTICAL_POINT))
@@ -132,51 +129,6 @@ func handle_cell_input(rowIndex: int, columnIndex: int, event: InputEventMouseBu
 			leftNeighbor.check_for_clear()
 			rightNeighbor.check_for_clear()
 			verticalNeighbor.check_for_clear()
-
-# takes a cell, color to check, and partially completed result (may already include cell)
-# returns an array with first element an array of TriangleCells representing a contiguous area of that color,
-# second element true if area is enclosed, false otherwise
-func get_area(cell: TriangleCell, color: int, partialResult: Array) -> Array:
-	# Check to see if the passed cell is already included in our partial result
-	var alreadyIncluded = false
-	for areaCell in partialResult[0]:
-		if areaCell.rowIndex == cell.rowIndex && areaCell.columnIndex == cell.columnIndex:
-			alreadyIncluded = true
-			break
-	if alreadyIncluded:
-		# nothing to do
-		return partialResult
-	# If this is the first cell, make sure it contains the specified color
-	if partialResult[0].empty() && cell.leftColor != color && cell.rightColor != color && cell.verticalColor != color:
-		# There is no area at all
-		partialResult[1] = false
-		return partialResult
-	# include passed cell in partial area
-	partialResult[0].append(cell)
-	
-	# Check neighbors for other cells that might be part of this area
-	if cell.leftColor == color:
-		var neighbor = get_neighbor(cell.rowIndex, cell.columnIndex, grid[0][0].Direction.LEFT)
-		if neighbor != null && neighbor.rightColor == color:
-			partialResult = get_area(neighbor, color, partialResult)
-		else:
-			# area is not enclosed
-			partialResult[1] = false
-	if cell.rightColor == color:
-		var neighbor = get_neighbor(cell.rowIndex, cell.columnIndex, grid[0][0].Direction.RIGHT)
-		if neighbor != null && neighbor.leftColor == color:
-			partialResult = get_area(neighbor, color, partialResult)
-		else:
-			# area is not enclosed
-			partialResult[1] = false
-	if cell.verticalColor == color:
-		var neighbor = get_neighbor(cell.rowIndex, cell.columnIndex, grid[0][0].Direction.VERTICAL)
-		if neighbor != null && neighbor.verticalColor == color:
-			partialResult = get_area(neighbor, color, partialResult)
-		else:
-			# area is not enclosed
-			partialResult[1] = false
-	return partialResult
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

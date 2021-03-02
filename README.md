@@ -49,9 +49,10 @@ One path I see is to focus on the tumbling and make everything else as easy as p
 	piece randomizer can really kick your butt; can look to previews/hold/tetris randomizers
 
 todo next:
-	gravity processing changes
-		areas are now only checked when *this* cell says so
-	shared edge clear rule
+	bug where piece on its point doesn't topple when a piece to its right vanishes from a clear, because the piece 2 to its right technically is there at that moment and vanishes 0.1 seconds later
+		probably check neighbor's neighbor when a piece on its point vanishes
+	bug where balancing pieces can't be toppled to the right, only the left
+	change so that either pieces can't clear on clearing pieces, or it restarts the clear timer down the chain
 	ghost piece
 	ui with score, time, moves, etc
 	controller support
