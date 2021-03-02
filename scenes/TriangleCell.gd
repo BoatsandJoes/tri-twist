@@ -163,10 +163,10 @@ func enter_falling_state(tumblingDirection: int):
 		$GravityTimer.start()
 		tumbleDirection = tumblingDirection
 
-func clear(color: int):
+func clear(edge: int):
 	tumbleDirection = Direction.VERTICAL
 	$GravityTimer.stop()
-	if (color == colors.size() - 1 && !is_marked_for_clear()):
+	if (edge == Direction.VERTICAL_POINT && !is_marked_for_clear()):
 		# Immediately blank tile.
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 		if (autofillMode):
@@ -212,29 +212,23 @@ func clear(color: int):
 				var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
 				if verticalNeighbor != null:
 					verticalNeighbor.enter_falling_state(verticalNeighbor.tumbleDirection)
-	elif color != colors.size() - 1:
-		# Mark cell for clearing, visually. Remove focus highlights, too, but not other clear highlights.
-		if leftColor == color:
+	elif edge != Direction.VERTICAL_POINT:
+		# Mark edge for clearing, visually.
+		var particleColor: int = 0
+		if Direction.LEFT == edge:
 			$LeftEdge.set_color(highlightColors[leftColor])
-		elif !is_marked_for_clear():
-			$LeftEdge.set_color(colors[leftColor])
-		if rightColor == color:
+			particleColor = leftColor
+		if Direction.RIGHT == edge:
 			$RightEdge.set_color(highlightColors[rightColor])
-		elif !is_marked_for_clear():
-			$RightEdge.set_color(colors[rightColor])
-		if verticalColor == color:
+			particleColor = rightColor
+		elif Direction.VERTICAL == edge:
 			$VerticalEdge.set_color(highlightColors[verticalColor])
-		elif !is_marked_for_clear():
-			$VerticalEdge.set_color(colors[verticalColor])
-		# Set particle color
+			particleColor = verticalColor
+		# Set particle color XXX else block to handle split color case
 		if !is_marked_for_clear():
-			$CPUParticles2D.color = highlightColors[color]
-		else:
-			# Split colors case XXX does the same thing for now
-			$CPUParticles2D.color = highlightColors[color]
-		if $ClearTimer.is_stopped():
-			# set a timer to actually clear the cell
-			$ClearTimer.start()
+			$CPUParticles2D.color = highlightColors[particleColor]
+		# set a timer to actually clear the cell, or restart it
+		$ClearTimer.start()
 
 # find neighbors that match with this cell, and mark both for clear.
 func check_for_clear():
@@ -246,17 +240,17 @@ func check_for_clear():
 		var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
 		if leftNeighbor != null && !leftNeighbor.is_falling() && !leftNeighbor.is_empty() && leftNeighbor.rightColor == leftColor:
 			# Mark for clear
-			leftNeighbor.clear(leftColor)
-			clear(leftColor)
+			leftNeighbor.clear(Direction.RIGHT)
+			clear(Direction.LEFT)
 		if rightNeighbor != null && !rightNeighbor.is_falling() && !rightNeighbor.is_empty() && rightNeighbor.leftColor == rightColor:
 			# Mark for clear
-			rightNeighbor.clear(rightColor)
-			clear(rightColor)
+			rightNeighbor.clear(Direction.LEFT)
+			clear(Direction.RIGHT)
 		if (verticalNeighbor != null && !verticalNeighbor.is_falling() && !verticalNeighbor.is_empty()
 		&& verticalNeighbor.verticalColor == verticalColor):
 			# Mark for clear
-			verticalNeighbor.clear(verticalColor)
-			clear(verticalColor)
+			verticalNeighbor.clear(Direction.VERTICAL)
+			clear(Direction.VERTICAL)
 
 func is_empty() -> bool:
 	return leftColor == colors.size() - 1
@@ -290,7 +284,7 @@ func _on_TriangleCell_mouse_exited():
 func _on_ClearTimer_timeout():
 	# visual effect
 	$CPUParticles2D.emitting = true
-	clear(colors.size() - 1)
+	clear(Direction.VERTICAL_POINT)
 
 func _on_GravityTimer_timeout():
 	# Check neighbors to figure out where this triangle should go, and if it should go at all
@@ -324,7 +318,7 @@ func _on_GravityTimer_timeout():
 		var tempVerticalColor = verticalColor
 		var tempTumbleDirection = tumbleDirection
 		# clear self
-		clear(colors.size() - 1)
+		clear(Direction.VERTICAL_POINT)
 		# copy to neighbor
 		get_parent().grid[emptyCell.rowIndex][emptyCell.columnIndex].fill_from_neighbor(
 			tempLeftColor, tempRightColor, tempVerticalColor,

@@ -29,8 +29,7 @@ color choices, like splatoon
 
 todo next:
 	bug where balancing pieces can't be toppled to the right, only the left (because when the gravity times out, the piece on the left has gone, so it doesn't go anywhere. falling on the right changes the processing order)
-	change so that either pieces can't clear on clearing pieces, or it restarts the clear timer down the chain
-	change triangles to separate sides and only light up one edge on clear
+	consider restarting the clear timer all the way down the chain, not just our neighbor
 	lose condition
 	randomizer/previews/hold
 	ghost piece
