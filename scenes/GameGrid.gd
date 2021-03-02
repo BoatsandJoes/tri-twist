@@ -87,48 +87,9 @@ func _input(event):
 
 # handles a cell click TODO handle controller and keyboard input
 func handle_cell_input(rowIndex: int, columnIndex: int, event: InputEventMouseButton):
-	if event.button_index == 3:
+	if event.button_index == 3 || event.button_index == 1 || event.button_index == 2:
 		# delete tile, debug
 		grid[rowIndex][columnIndex].clear(grid[rowIndex][columnIndex].colors.size() - 1)
-	elif event.button_index == 8 || event.button_index == 9 || event.button_index == 1 || event.button_index == 2:
-		# rotate
-		var leftNeighbor = get_neighbor(rowIndex, columnIndex, grid[0][0].Direction.LEFT)
-		var rightNeighbor = get_neighbor(rowIndex, columnIndex, grid[0][0].Direction.RIGHT)
-		var verticalNeighbor = get_neighbor(rowIndex, columnIndex, grid[0][0].Direction.VERTICAL)
-		# move disallowed if one neighbor is off the grid or being cleared
-		if (leftNeighbor != null && rightNeighbor != null && verticalNeighbor != null
-		&& !grid[rowIndex][columnIndex].is_marked_for_clear() && !leftNeighbor.is_marked_for_clear()
-		&& !rightNeighbor.is_marked_for_clear() && !verticalNeighbor.is_marked_for_clear()):
-			var rotation
-			if event.button_index == 8 || event.button_index == 1:
-				rotation = grid[rowIndex][columnIndex].Rotation.COUNTERCLOCKWISE
-			else:
-				rotation = grid[rowIndex][columnIndex].Rotation.CLOCKWISE
-			grid[rowIndex][columnIndex].spin(rotation)
-			# rotate neighbors same way
-			leftNeighbor.spin(rotation)
-			rightNeighbor.spin(rotation)
-			verticalNeighbor.spin(rotation)
-			if ((event.button_index == 1 && grid[rowIndex][columnIndex].pointFacingUp) ||
-			(event.button_index == 2 && !grid[rowIndex][columnIndex].pointFacingUp)):
-				# Move tiles around center
-				var tempVertColors = [verticalNeighbor.leftColor,
-						verticalNeighbor.rightColor, verticalNeighbor.verticalColor]
-				verticalNeighbor.set_colors(leftNeighbor.leftColor, leftNeighbor.rightColor, leftNeighbor.verticalColor)
-				leftNeighbor.set_colors(rightNeighbor.leftColor, rightNeighbor.rightColor, rightNeighbor.verticalColor)
-				rightNeighbor.set_colors(tempVertColors[0], tempVertColors[1], tempVertColors[2])
-			elif ((event.button_index == 1 && !grid[rowIndex][columnIndex].pointFacingUp) ||
-			(event.button_index == 2 && grid[rowIndex][columnIndex].pointFacingUp)):
-				# Move tiles around center
-				var tempVertColors = [verticalNeighbor.leftColor,
-						verticalNeighbor.rightColor, verticalNeighbor.verticalColor]
-				verticalNeighbor.set_colors(rightNeighbor.leftColor, rightNeighbor.rightColor, rightNeighbor.verticalColor)
-				rightNeighbor.set_colors(leftNeighbor.leftColor, leftNeighbor.rightColor, leftNeighbor.verticalColor)
-				leftNeighbor.set_colors(tempVertColors[0], tempVertColors[1], tempVertColors[2])
-			grid[rowIndex][columnIndex].check_for_clear()
-			leftNeighbor.check_for_clear()
-			rightNeighbor.check_for_clear()
-			verticalNeighbor.check_for_clear()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

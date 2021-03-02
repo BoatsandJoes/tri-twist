@@ -16,7 +16,7 @@ var cellFocused = false
 var rowIndex: int
 var columnIndex: int
 var inGrid
-var autofillMode = false
+var bigClearMode = true
 var tumbleDirection: int
 
 # Called when the node enters the scene tree for the first time.
@@ -68,9 +68,7 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 
 func _input(event):
 	if event is InputEventKey && event.is_action_pressed("ui_focus_next"):
-		autofillMode = !autofillMode
-		if autofillMode:
-			fill_randomly()
+		bigClearMode = !bigClearMode
 
 func fill_randomly():
 	leftColor = randi() % (colors.size() - 1)
@@ -119,7 +117,7 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 		else:
 			enter_falling_state(Direction.RIGHT)
 	# Check for enclosed areas.
-	check_for_clear()
+	check_for_clear([])
 	# push balancing pieces over
 	if leftNeighbor != null && !leftNeighbor.is_empty():
 		var neighborsNeighbor = get_parent().get_neighbor(
@@ -169,8 +167,6 @@ func clear(edge: int):
 	if (edge == Direction.VERTICAL_POINT && !is_marked_for_clear()):
 		# Immediately blank tile.
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
-		if (autofillMode):
-			fill_randomly()
 		# Check to see if any neighbors should enter falling state.
 		if !pointFacingUp:
 			# Primarily, we have to check above.
@@ -231,25 +227,40 @@ func clear(edge: int):
 		$ClearTimer.start()
 
 # find neighbors that match with this cell, and mark both for clear.
-func check_for_clear():
-	# only check if we aren't already marked for clear and aren't falling and aren't empty
-	if !is_marked_for_clear() && !is_falling() && !is_empty():
+func check_for_clear(alreadyCheckedCoordinates: Array):
+	# only check if we aren't already checked, and aren't falling, and aren't empty
+	var alreadyChecked = false
+	for coordinates in alreadyCheckedCoordinates:
+		if rowIndex == coordinates[0] && columnIndex == coordinates[1]:
+			alreadyChecked = true
+			break
+	if !alreadyChecked && !is_falling() && !is_empty():
+		alreadyCheckedCoordinates.append([rowIndex, columnIndex])
 		# get neighbors.
 		var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
 		var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
 		var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
 		if leftNeighbor != null && !leftNeighbor.is_falling() && !leftNeighbor.is_empty() && leftNeighbor.rightColor == leftColor:
 			# Mark for clear
-			leftNeighbor.clear(Direction.RIGHT)
+			if bigClearMode:
+				leftNeighbor.check_for_clear(alreadyCheckedCoordinates)
+			else:
+				leftNeighbor.clear(Direction.RIGHT)
 			clear(Direction.LEFT)
 		if rightNeighbor != null && !rightNeighbor.is_falling() && !rightNeighbor.is_empty() && rightNeighbor.leftColor == rightColor:
 			# Mark for clear
-			rightNeighbor.clear(Direction.LEFT)
+			if bigClearMode:
+				rightNeighbor.check_for_clear(alreadyCheckedCoordinates)
+			else:
+				rightNeighbor.clear(Direction.LEFT)
 			clear(Direction.RIGHT)
 		if (verticalNeighbor != null && !verticalNeighbor.is_falling() && !verticalNeighbor.is_empty()
 		&& verticalNeighbor.verticalColor == verticalColor):
 			# Mark for clear
-			verticalNeighbor.clear(Direction.VERTICAL)
+			if bigClearMode:
+				verticalNeighbor.check_for_clear(alreadyCheckedCoordinates)
+			else:
+				verticalNeighbor.clear(Direction.VERTICAL)
 			clear(Direction.VERTICAL)
 
 func is_empty() -> bool:
