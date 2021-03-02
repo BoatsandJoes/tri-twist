@@ -5,9 +5,9 @@ var size: int
 # last color is the null color, for empty cells
 enum Direction {LEFT, RIGHT, VERTICAL, VERTICAL_POINT}
 enum Rotation {CLOCKWISE, COUNTERCLOCKWISE}
-const colors = [Color.royalblue, Color.crimson, Color.webgreen, Color.black]
-const focusColors = [Color.dodgerblue, Color.indianred, Color.seagreen, Color.darkslategray]
-const highlightColors = [Color.deepskyblue, Color.deeppink, Color.green]
+const colors = [Color.royalblue, Color.crimson, Color.webgreen, Color.goldenrod, Color.black]
+const focusColors = [Color.dodgerblue, Color.indianred, Color.seagreen, Color.orange, Color.darkslategray]
+const highlightColors = [Color.deepskyblue, Color.deeppink, Color.green, Color.gold]
 var leftColor: int = colors.size() - 1
 var rightColor: int = colors.size() - 1
 var verticalColor: int = colors.size() - 1
