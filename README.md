@@ -28,8 +28,8 @@ cute characters for each color (one can drop the pieces)
 color choices, like splatoon
 
 todo next:
-	bug where balancing pieces can't be toppled to the right, only the left (because when the gravity times out, the piece on the left has gone, so it doesn't go anywhere. falling on the right changes the processing order)
-	consider restarting the clear timer all the way down the chain, not just our neighbor
+	consider restarting the clear timer all the way down the chain, not just our neighbor (but not down 2 neighboring chains that aren't connected)
+	check if I fixed tumbling off an overhang (it should go 1 farther, because clears can lock an overhang into place and then you could build a slope on top of it)
 	lose condition
 	randomizer/previews/hold
 	ghost piece
