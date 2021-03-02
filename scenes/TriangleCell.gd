@@ -173,13 +173,31 @@ func clear(color: int):
 			fill_randomly()
 		# Check to see if any neighbors should enter falling state.
 		if !pointFacingUp:
-			# We only have to check above.
+			# Primarily, we have to check above.
 			var neighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
 			if neighbor != null:
 				neighbor.enter_falling_state(neighbor.tumbleDirection)
+			# We also have to check our left/right neighbors, and if they're empty, our neighbors' neighbor should consider falling.
+			var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
+			if leftNeighbor != null && leftNeighbor.is_empty():
+				var neighborsNeighbor = get_parent().get_neighbor(leftNeighbor.rowIndex, leftNeighbor.columnIndex, Direction.LEFT)
+				if neighborsNeighbor != null:
+					# This is just getting silly
+					var neighborsNeighborsNeighbor = get_parent().get_neighbor(neighborsNeighbor.rowIndex,
+					neighborsNeighbor.columnIndex, Direction.LEFT)
+					if neighborsNeighborsNeighbor == null || !neighborsNeighborsNeighbor.is_empty():
+						neighborsNeighbor.enter_falling_state(Direction.RIGHT)
+			var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
+			if rightNeighbor != null && rightNeighbor.is_empty():
+				var neighborsNeighbor = get_parent().get_neighbor(rightNeighbor.rowIndex, rightNeighbor.columnIndex, Direction.RIGHT)
+				if neighborsNeighbor != null:
+					# This is just getting silly
+					var neighborsNeighborsNeighbor = get_parent().get_neighbor(neighborsNeighbor.rowIndex,
+					neighborsNeighbor.columnIndex, Direction.RIGHT)
+					if neighborsNeighborsNeighbor == null || !neighborsNeighborsNeighbor.is_empty():
+						neighborsNeighbor.enter_falling_state(Direction.LEFT)
 		else:
 			# If left and right are both empty or both full, they shouldn't move.
-			# TODO bug where our neighbor is clearing with us, but technically it's still there :(
 			var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
 			var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
 			var leftNeighborFilled = leftNeighbor == null || !leftNeighbor.is_empty()
@@ -268,7 +286,6 @@ func _on_TriangleCell_mouse_exited():
 		if !is_marked_for_clear():
 			# Remove highlight
 			update_colors_visually()
-
 
 func _on_ClearTimer_timeout():
 	# visual effect
