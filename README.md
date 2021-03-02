@@ -28,7 +28,7 @@ cute characters for each color (one can drop the pieces)
 color choices, like splatoon
 
 todo next:
-	fix tumbling off an overhang (it should go 1 farther, because clears can lock an overhang into place and then you could build a slope on top of it, and the immediate drop is unexpected.)
+	test tumbling off an overhang (it should go 1 farther, because clears can lock an overhang into place and then you could build a slope on top of it, and the immediate drop is unexpected.) see if it's fixed
 	lose condition
 	randomizer/previews/hold
 	ghost piece

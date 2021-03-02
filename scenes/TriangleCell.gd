@@ -304,10 +304,13 @@ func _on_GravityTimer_timeout():
 	if pointFacingUp:
 		emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
 		direction = Direction.VERTICAL
-	#elif tumbleDirection == Direction.LEFT || tumbleDirection == Direction.RIGHT:
+	elif tumbleDirection == Direction.LEFT || tumbleDirection == Direction.RIGHT:
 		# Inertia on precarious/tumbling pieces TODO this doesn't work
-		#emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, tumbleDirection)
-		#direction = tumbleDirection
+		emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, tumbleDirection)
+		if tumbleDirection == Direction.LEFT:
+			direction = Direction.RIGHT
+		elif tumbleDirection == Direction.RIGHT:
+			direction = Direction.LEFT
 	else:
 		# Fall down
 		emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
