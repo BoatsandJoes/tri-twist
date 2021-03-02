@@ -87,9 +87,18 @@ func _input(event):
 
 # handles a cell click TODO handle controller and keyboard input
 func handle_cell_input(rowIndex: int, columnIndex: int, event: InputEventMouseButton):
-	if event.button_index == 3 || event.button_index == 1 || event.button_index == 2:
+	if event.button_index == 3:
 		# delete tile, debug
-		grid[rowIndex][columnIndex].clear(grid[rowIndex][columnIndex].colors.size() - 1)
+		grid[rowIndex][columnIndex].clear(grid[rowIndex][columnIndex].Direction.VERTICAL_POINT)
+	elif event.button_index == 1 || event.button_index == 2:
+		# spin
+		var rotation
+		if event.button_index == 1:
+			rotation = grid[0][0].Rotation.COUNTERCLOCKWISE
+		else:
+			rotation = grid[0][0].Rotation.CLOCKWISE
+		grid[rowIndex][columnIndex].spin(rotation)
+		grid[rowIndex][columnIndex].spin(rotation)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

@@ -5,9 +5,9 @@ var size: int
 # last color is the null color, for empty cells
 enum Direction {LEFT, RIGHT, VERTICAL, VERTICAL_POINT}
 enum Rotation {CLOCKWISE, COUNTERCLOCKWISE}
-const colors = [Color.royalblue, Color.crimson, Color.webgreen, Color.goldenrod, Color.black]
-const focusColors = [Color.dodgerblue, Color.indianred, Color.seagreen, Color.orange, Color.darkslategray]
-const highlightColors = [Color.deepskyblue, Color.deeppink, Color.green, Color.gold]
+const colors = [Color.royalblue, Color.crimson, Color.goldenrod, Color.webgreen, Color.black]
+const focusColors = [Color.dodgerblue, Color.indianred, Color.orange, Color.seagreen, Color.darkslategray]
+const highlightColors = [Color.deepskyblue, Color.deeppink, Color.gold, Color.green]
 var leftColor: int = colors.size() - 1
 var rightColor: int = colors.size() - 1
 var verticalColor: int = colors.size() - 1
@@ -155,6 +155,7 @@ func spin(rotation: int):
 			set_colors(verticalColor, leftColor, rightColor)
 		else:
 			set_colors(rightColor, verticalColor, leftColor)
+		check_for_clear([])
 
 func enter_falling_state(tumblingDirection: int):
 	if !is_marked_for_clear() && !is_falling() && !is_empty():
@@ -204,7 +205,7 @@ func clear(edge: int):
 				else:
 					rightNeighbor.enter_falling_state(Direction.LEFT)
 			else:
-				# Fall from above.
+				# Fall from above. TODO this sometimes doesn't work?
 				var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
 				if verticalNeighbor != null:
 					verticalNeighbor.enter_falling_state(verticalNeighbor.tumbleDirection)
