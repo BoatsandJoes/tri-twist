@@ -61,12 +61,17 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	verticalEdgeVectorArray.append(Vector2(size, 0))
 	verticalEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 6))
 	$VerticalEdge.set_polygon(verticalEdgeVectorArray)
+	# Move polygons to center on our position.
+	$CollisionPolygon2D.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
+	$LeftEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
+	$RightEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
+	$VerticalEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 	# flip every odd triangle cell and cells outside the grid
 	if (columnIndex % 2 != 0 && !pointFacingUp) || (!inGrid && !isGhost):
 		scale = Vector2(1, -1)
 		# Postion adjust.
 		if (!isGhost):
-			position = Vector2(position[0], position[1] + size * 0.87)
+			position = Vector2(position[0], position[1] + size * sqrt(3) / 6 )
 		# Flip particle emitter back over
 		$CPUParticles2D.scale = Vector2(1, -1)
 		pointFacingUp = true

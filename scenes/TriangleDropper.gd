@@ -27,6 +27,7 @@ func _ready():
 	ghostPieceSurface = TriangleCell.instance()
 	ghostPieceFinal = TriangleCell.instance()
 	ghostPieceSurface.set_modulate(Color(1,1,1,0.3))
+	ghostPieceFinal.set_modulate(Color(1,1,1,0.5))
 	add_child(ghostPieceSurface)
 	add_child(ghostPieceFinal)
 
@@ -71,6 +72,11 @@ func draw_ghost_pieces():
 			else:
 				# We are done: TODO draw second ghost here
 				ghostPieceSurface.visible = false
+				ghostPieceFinal.init(gameGrid.cellSize, lastMove[0].rowIndex, lastMove[0].columnIndex,
+						gameGrid.get_position_for_cell(lastMove[0].rowIndex, lastMove[0].columnIndex,
+						(lastMove[0].columnIndex) % 2 != 0), false, true)
+				ghostPieceFinal.set_colors(activePiece.leftColor, activePiece.rightColor, activePiece.verticalColor)
+				ghostPieceFinal.visible = true
 				break
 	else:
 		ghostPieceSurface.visible = false

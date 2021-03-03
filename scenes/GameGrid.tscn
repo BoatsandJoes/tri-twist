@@ -8,4 +8,4 @@ script = ExtResource( 1 )
 TriangleCell = ExtResource( 2 )
 gridBase = 1
 gridHeight = 6
-margin = 3
+margin = 2

@@ -17,7 +17,7 @@ func _ready():
 
 # create grid and fill it with cells
 func initialize_grid():
-	cellSize = window.size[1] / (((gridHeight) * sqrt(3) + margin) / 2)
+	cellSize = ((window.size[1] / (gridHeight + 2)) - margin) / (sqrt(3) / 2)
 	for rowIndex in gridHeight:
 		grid.append([])
 		for columnIndex in gridBase + 2 * rowIndex:
@@ -49,7 +49,7 @@ func get_position_for_cell(rowIndex: int, columnIndex: int, flipped: bool) -> Ve
 				((columnIndex - ((gridBase + rowIndex * 2)/2)) * ((cellSize/2) + margin)),
 				window.size[1] - cellSize - (rowIndex * ((cellSize * sqrt(3) / 2) + margin)))
 	if flipped:
-		result = Vector2(result[0], result[1] + cellSize * 0.87)
+		result = Vector2(result[0], result[1] + cellSize * sqrt(3) / 6)
 	return result
 
 # returns an array of TriangleCells

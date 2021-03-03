@@ -133,7 +133,7 @@ Things that I want but will have to cut:
 Credits
 Joe
 Timo (Sound blaster, loud boy)
-Crimefighter (playtesting, came up with idea of edge match clear)
+Crimefighter, Shadow President Illuminati Beta Government (playtesting, came up with idea of edge match clear)
 Amy Rose Groncowski (Had numerous sick ideas) (credit for Japanese localization that doesn't exist, or as a kickstarter backer) (Good opinion haver (likes Daikatana)) (balancing, no, the other kind of balancing)
 Thank you indie developers who encourage others to make games:
 	Tim Ashley Jenkins
