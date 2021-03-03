@@ -8,7 +8,6 @@ var activePiece: TriangleCell
 var ghostPieceSurface: TriangleCell
 var ghostPieceFinal: TriangleCell
 var ghostPiecesTumble: Array = []
-var flag = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -37,7 +36,6 @@ func _input(event):
 			activePiece.columnIndex = activePiece.columnIndex - 1
 			activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
 		elif event.is_action_pressed("ui_right") && activePiece.columnIndex < gameGrid.grid[-1].size():
-			flag = true
 			activePiece.columnIndex = activePiece.columnIndex + 1
 			activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
 		elif (event.is_action_pressed("ui_accept") ||
@@ -52,10 +50,33 @@ func draw_ghost_pieces():
 			gameGrid.get_position_for_cell(activePiece.rowIndex - 1, activePiece.columnIndex - 1,
 			(activePiece.columnIndex - 1) % 2 != 0), false, true)
 		ghostPieceSurface.set_colors(activePiece.leftColor, activePiece.rightColor, activePiece.verticalColor)
+		var move = gameGrid.grid[ghostPieceSurface.rowIndex][ghostPieceSurface.columnIndex].get_next_move_if_this_were_you(
+			ghostPieceSurface.tumbleDirection)
+		var lastMove
+		while true:
+			if move[0] != null:
+				if move[1] != ghostPieceSurface.Direction.VERTICAL && move[1] != ghostPieceSurface.Direction.VERTICAL_POINT:
+					# Draw ghost
+					if lastMove == null:
+						lastMove = move
+					ghostPieceSurface.init(gameGrid.cellSize, lastMove[0].rowIndex, lastMove[0].columnIndex,
+						gameGrid.get_position_for_cell(lastMove[0].rowIndex, lastMove[0].columnIndex,
+						(lastMove[0].columnIndex) % 2 != 0), false, true)
+					ghostPieceSurface.set_colors(activePiece.leftColor, activePiece.rightColor, activePiece.verticalColor)
+					# TODO second ghost
+					break
+				else:
+					lastMove = move
+					move = move[0].get_next_move_if_this_were_you(
+						move[0].tumbleDirection)
+			else:
+				# We are done: TODO draw second ghost here
+				ghostPieceSurface.visible = false
+				break
+		ghostPieceSurface.visible = true
 	else:
 		ghostPieceSurface.visible = false
-		if ghostPieceFinal != null:
-			ghostPieceFinal.visible = false
+		ghostPieceFinal.visible = false
 		for ghostPieceTumble in ghostPiecesTumble:
 			if ghostPieceTumble != null:
 				ghostPieceTumble.free()

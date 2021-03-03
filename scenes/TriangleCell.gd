@@ -22,7 +22,7 @@ var tumbleDirection: int
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	tumbleDirection = Direction.VERTICAL
+	pass
 
 # Call after instantiation to initialize.
 func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion: Vector2, isInGrid: bool, isAGhost: bool):
@@ -31,6 +31,7 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	columnIndex = triColumnIndex
 	inGrid = isInGrid
 	isGhost = isAGhost
+	tumbleDirection = Direction.VERTICAL
 	# set position
 	position = cellPostion
 	# move particle emitter to center

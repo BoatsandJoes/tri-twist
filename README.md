@@ -97,6 +97,7 @@ Things that I want but will have to cut:
 	Multiplayer:
 		vs cpu
 		GGPO is a C++ module so I could compile the engine with both modules, or remove FMod, or change to FMod GDNative
+		When searching/connecting it should say "Triangulating an opponent"
 		Could have people play 2 single player games side by side and see who wins, either playing a game to completion and seeing who did better, or going over a certain score differential
 		Could have item attacks/buffs like:
 			match anything and whatever matches, mass replace that color with a random other color (probably making a big clear)
@@ -130,9 +131,9 @@ Things that I want but will have to cut:
 
 Credits
 Joe
-Timo
+Timo (Sound blaster, loud boy)
 Crimefighter (playtesting, came up with idea of edge match clear)
-BunniesFromHell (balancing, no, the other kind of balancing)
+Amy Rose Groncowski (Had numerous sick ideas) (credit for Japanese localization that doesn't exist, or as a kickstarter backer) (Good opinion haver (likes Daikatana)) (balancing, no, the other kind of balancing)
 Thank you indie developers who encourage others to make games:
 	Tim Ashley Jenkins
 	Dave Makes
