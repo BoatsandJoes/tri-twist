@@ -40,7 +40,7 @@ Tuning settings (*- can ramp for difficulty, based on score or moves or time or 
 
 Score:
 	4 match should be bigger than 2 2 matches, but idk exactly how much it should scale up. Depends on chain length distribution
-	Tucking into the middle of a chain is already implicitly worth more (longer chain), so maybe it doesn't need to award points, but maybe it should or at least make a different sound (this would raise the skill ceiling)
+	Tucking into the middle of a chain is already implicitly worth more (longer chain, especially if chain length is normally capped but has generous timer on the lower end), so maybe it doesn't need to award points, but maybe it should or at least make a different sound (this would raise the skill ceiling)
 	Rolling at all could award nominal points. It could increase the chain value by a lot or it could not at all
 	Non-active chains could award points and then allow extensions (basically only a 2 chain has meaning), but they are difficult to plan (might be cool…)
 	All Clear is easy and shouldn't award points
@@ -75,6 +75,7 @@ Things that I want but will have to cut:
 	steam achievements
 	Daily challenge
 	save/share rulesets
+	Chainsim
 	replays
 		watch leaderboard replays
 		export clip/video

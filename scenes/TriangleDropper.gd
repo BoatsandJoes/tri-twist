@@ -52,17 +52,16 @@ func draw_ghost_pieces():
 		ghostPieceSurface.set_colors(activePiece.leftColor, activePiece.rightColor, activePiece.verticalColor)
 		var move = gameGrid.grid[ghostPieceSurface.rowIndex][ghostPieceSurface.columnIndex].get_next_move_if_this_were_you(
 			ghostPieceSurface.tumbleDirection)
-		var lastMove
+		var lastMove = [ghostPieceSurface, ghostPieceSurface.Direction.VERTICAL]
 		while true:
 			if move[0] != null:
 				if move[1] != ghostPieceSurface.Direction.VERTICAL && move[1] != ghostPieceSurface.Direction.VERTICAL_POINT:
 					# Draw ghost
-					if lastMove == null:
-						lastMove = move
 					ghostPieceSurface.init(gameGrid.cellSize, lastMove[0].rowIndex, lastMove[0].columnIndex,
 						gameGrid.get_position_for_cell(lastMove[0].rowIndex, lastMove[0].columnIndex,
 						(lastMove[0].columnIndex) % 2 != 0), false, true)
 					ghostPieceSurface.set_colors(activePiece.leftColor, activePiece.rightColor, activePiece.verticalColor)
+					ghostPieceSurface.visible = true
 					# TODO second ghost
 					break
 				else:
@@ -73,7 +72,6 @@ func draw_ghost_pieces():
 				# We are done: TODO draw second ghost here
 				ghostPieceSurface.visible = false
 				break
-		ghostPieceSurface.visible = true
 	else:
 		ghostPieceSurface.visible = false
 		ghostPieceFinal.visible = false
