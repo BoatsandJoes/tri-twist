@@ -23,11 +23,12 @@ func initialize_grid():
 		for columnIndex in gridBase + 2 * rowIndex:
 			grid[rowIndex].append(TriangleCell.instance())
 			grid[rowIndex][columnIndex].init(cellSize, rowIndex, columnIndex,
-			get_position_for_cell(rowIndex, columnIndex, false), true)
+			get_position_for_cell(rowIndex, columnIndex, false), true, false)
 			add_child(grid[rowIndex][columnIndex])
 
-# Try to put the given piece in the top row. return true if successful.
-func drop_piece(piece) -> bool:
+# Try to put the given piece in the top row. Return true if successful.
+# Pass false as a second parameter to not actually drop the piece; just know if we can.
+func drop_piece(piece: TriangleCell, dropForReal: bool):
 	var neighborDirection: int
 	if (piece.columnIndex + piece.rowIndex) % 2 != 0:
 		neighborDirection = grid[0][0].Direction.VERTICAL_POINT
@@ -37,7 +38,8 @@ func drop_piece(piece) -> bool:
 	if !neighbor.is_empty():
 		# Cannot fill.
 		return false
-	neighbor.fill_from_neighbor(piece.leftColor, piece.rightColor, piece.verticalColor,
+	if dropForReal:
+		neighbor.fill_from_neighbor(piece.leftColor, piece.rightColor, piece.verticalColor,
 			neighborDirection, grid[0][0].Direction.VERTICAL)
 	return true
 
@@ -93,7 +95,7 @@ func handle_cell_input(rowIndex: int, columnIndex: int, event: InputEventMouseBu
 	elif event.button_index == 1 || event.button_index == 2:
 		# spin
 		var rotation
-		if event.button_index == 1:
+		if event.button_index == 2:
 			rotation = grid[0][0].Rotation.COUNTERCLOCKWISE
 		else:
 			rotation = grid[0][0].Rotation.CLOCKWISE

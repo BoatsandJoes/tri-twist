@@ -16,6 +16,7 @@ var cellFocused = false
 var rowIndex: int
 var columnIndex: int
 var inGrid
+var isGhost
 var bigClearMode = true
 var tumbleDirection: int
 
@@ -24,11 +25,12 @@ func _ready():
 	tumbleDirection = Direction.VERTICAL
 
 # Call after instantiation to initialize.
-func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion: Vector2, isInGrid: bool):
+func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion: Vector2, isInGrid: bool, isAGhost: bool):
 	size = triangleSize
 	rowIndex = triRowIndex
 	columnIndex = triColumnIndex
 	inGrid = isInGrid
+	isGhost = isAGhost
 	# set position
 	position = cellPostion
 	# move particle emitter to center
@@ -59,8 +61,18 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	verticalEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 6))
 	$VerticalEdge.set_polygon(verticalEdgeVectorArray)
 	# flip every odd triangle cell and cells outside the grid
-	if columnIndex % 2 != 0 || !inGrid:
-		flip()
+	if (columnIndex % 2 != 0 && !pointFacingUp) || (!inGrid && !isGhost):
+		scale = Vector2(1, -1)
+		# Postion adjust.
+		if (!isGhost):
+			position = Vector2(position[0], position[1] + size * 0.87)
+		# Flip particle emitter back over
+		$CPUParticles2D.scale = Vector2(1, -1)
+		pointFacingUp = true
+	elif columnIndex % 2 == 0:
+		scale = Vector2(1, 1)
+		$CPUParticles2D.scale = Vector2(1, 1)
+		pointFacingUp = false
 	# make empty
 	set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 	# offset so the center is in the center XXX
@@ -139,14 +151,6 @@ func update_colors_visually():
 		$LeftEdge.set_color(colors[leftColor])
 		$RightEdge.set_color(colors[rightColor])
 		$VerticalEdge.set_color(colors[verticalColor])
-
-func flip():
-	scale = Vector2(1, scale[1] * -1)
-	# Position fix will cause the tile to drift if flipped more than once
-	position = Vector2(position[0], position[1] + size * 0.87)
-	# Flip particle emitter back over
-	$CPUParticles2D.scale = Vector2(1, $CPUParticles2D.scale[1] * -1)
-	pointFacingUp = !pointFacingUp
 
 func spin(rotation: int):
 	if !is_marked_for_clear():
