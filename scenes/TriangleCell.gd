@@ -205,7 +205,7 @@ func clear(edge: int):
 				else:
 					rightNeighbor.enter_falling_state(Direction.LEFT)
 			else:
-				# Fall from above. TODO this sometimes doesn't work?
+				# Fall from above. XXX I have observed a floating piece for this case twice. Not sure what happened.
 				var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
 				if verticalNeighbor != null:
 					verticalNeighbor.enter_falling_state(verticalNeighbor.tumbleDirection)
@@ -273,6 +273,43 @@ func is_falling() -> bool:
 func is_marked_for_clear() -> bool:
 	return !$ClearTimer.is_stopped()
 
+func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
+	if theoryTumbleDirection == Direction.VERTICAL_POINT:
+		# Dummy direction meant to represent our own actual direction
+		theoryTumbleDirection = tumbleDirection
+	var emptyCell: TriangleCell
+	var direction: int
+	if pointFacingUp:
+		emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
+		direction = Direction.VERTICAL
+	elif theoryTumbleDirection == Direction.LEFT || theoryTumbleDirection == Direction.RIGHT:
+		# Inertia on precarious/tumbling pieces
+		emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, theoryTumbleDirection)
+		if theoryTumbleDirection == Direction.LEFT:
+			direction = Direction.RIGHT
+		elif theoryTumbleDirection == Direction.RIGHT:
+			direction = Direction.LEFT
+	else:
+		# Look to see if we fall down
+		emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
+		direction = Direction.VERTICAL_POINT
+	if (emptyCell == null || !emptyCell.is_empty()) && !pointFacingUp:
+		emptyCell = null
+		# We can't fall there but we are on our point; try left/right
+		var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
+		var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
+		var leftNeighborFilled = leftNeighbor == null || !leftNeighbor.is_empty()
+		var rightNeighborFilled = rightNeighbor == null || !rightNeighbor.is_empty()
+		# Don't tumble unless only one neighbor is filled
+		if (leftNeighborFilled != rightNeighborFilled):
+			if leftNeighborFilled:
+				emptyCell = rightNeighbor
+				direction = Direction.LEFT
+			else:
+				emptyCell = leftNeighbor
+				direction = Direction.RIGHT
+	return [emptyCell, direction]
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
@@ -300,37 +337,9 @@ func _on_ClearTimer_timeout():
 
 func _on_GravityTimer_timeout():
 	# Check neighbors to figure out where this triangle should go, and if it should go at all
-	var emptyCell: TriangleCell
-	var direction: int
-	if pointFacingUp:
-		emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
-		direction = Direction.VERTICAL
-	elif tumbleDirection == Direction.LEFT || tumbleDirection == Direction.RIGHT:
-		# Inertia on precarious/tumbling pieces TODO this doesn't work
-		emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, tumbleDirection)
-		if tumbleDirection == Direction.LEFT:
-			direction = Direction.RIGHT
-		elif tumbleDirection == Direction.RIGHT:
-			direction = Direction.LEFT
-	else:
-		# Fall down
-		emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
-		direction = Direction.VERTICAL_POINT
-	if (emptyCell == null || !emptyCell.is_empty()) && !pointFacingUp:
-		emptyCell = null
-		# We can't fall there but we are on our point; try left/right
-		var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
-		var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
-		var leftNeighborFilled = leftNeighbor == null || !leftNeighbor.is_empty()
-		var rightNeighborFilled = rightNeighbor == null || !rightNeighbor.is_empty()
-		# Don't tumble unless only one neighbor is filled
-		if (leftNeighborFilled != rightNeighborFilled):
-			if leftNeighborFilled:
-				emptyCell = rightNeighbor
-				direction = Direction.LEFT
-			else:
-				emptyCell = leftNeighbor
-				direction = Direction.RIGHT
+	var moveInfo = get_next_move_if_this_were_you(Direction.VERTICAL_POINT)
+	var emptyCell = moveInfo[0]
+	var direction = moveInfo[1]
 	if emptyCell != null && emptyCell.is_empty():
 		# save info in temp variables
 		var tempLeftColor = leftColor
