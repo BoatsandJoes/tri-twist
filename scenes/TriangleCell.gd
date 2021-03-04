@@ -19,6 +19,7 @@ var inGrid
 var isGhost
 var bigClearMode = true
 var tumbleDirection: int
+var clearDelay = 1.5
 var clearScaling = 0.0
 
 # Called when the node enters the scene tree for the first time.
@@ -177,6 +178,7 @@ func enter_falling_state(tumblingDirection: int):
 		tumbleDirection = tumblingDirection
 
 func clear(edge: int):
+	$ClearTimer.wait_time = clearDelay
 	tumbleDirection = Direction.VERTICAL
 	$GravityTimer.stop()
 	if (edge == Direction.VERTICAL_POINT && !is_marked_for_clear()):

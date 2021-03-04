@@ -35,6 +35,7 @@ func set_clear_delay(value):
 	for row in grid:
 		for cell in row:
 			cell.get_node("ClearTimer").set_wait_time(value)
+			cell.clearDelay = value
 
 func set_clear_scaling(value):
 	for row in grid:
