@@ -17,11 +17,11 @@ margin_bottom = 599.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 margin_right = 173.0
-margin_bottom = 295.0
+margin_bottom = 301.0
 
 [node name="Labels" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
 margin_right = 80.0
-margin_bottom = 295.0
+margin_bottom = 301.0
 
 [node name="FallDelay" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
 margin_right = 80.0
@@ -70,23 +70,59 @@ margin_right = 80.0
 margin_bottom = 140.0
 text = "0"
 
-[node name="ClearTimerScaling" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
+[node name="Das" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
 margin_top = 144.0
 margin_right = 80.0
-margin_bottom = 175.0
+margin_bottom = 158.0
+text = "DAS"
+
+[node name="DasValue" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
+margin_top = 162.0
+margin_right = 80.0
+margin_bottom = 176.0
+text = "0.25"
+
+[node name="Arr" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
+margin_top = 180.0
+margin_right = 80.0
+margin_bottom = 194.0
+text = "ARR"
+
+[node name="ArrValue" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
+margin_top = 198.0
+margin_right = 80.0
+margin_bottom = 212.0
+text = "0.05"
+
+[node name="Previews" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
+margin_top = 216.0
+margin_right = 80.0
+margin_bottom = 230.0
+text = "# Previews"
+
+[node name="PreviewsValue" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
+margin_top = 234.0
+margin_right = 80.0
+margin_bottom = 248.0
+text = "2"
+
+[node name="ClearTimerScaling" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
+margin_top = 252.0
+margin_right = 80.0
+margin_bottom = 283.0
 text = "Clear Scaling
 (todo)"
 
 [node name="ClearScalingValue" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
-margin_top = 179.0
+margin_top = 287.0
 margin_right = 80.0
-margin_bottom = 193.0
+margin_bottom = 301.0
 text = "0"
 
 [node name="Sliders" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
 margin_left = 84.0
 margin_right = 169.0
-margin_bottom = 295.0
+margin_bottom = 301.0
 size_flags_horizontal = 3
 custom_constants/separation = 20
 
@@ -122,19 +158,47 @@ margin_bottom = 124.0
 max_value = 10.0
 step = 0.5
 
-[node name="ClearScaling" type="HSlider" parent="MarginContainer/HBoxContainer/Sliders"]
+[node name="Das" type="HSlider" parent="MarginContainer/HBoxContainer/Sliders"]
 margin_top = 144.0
 margin_right = 85.0
 margin_bottom = 160.0
+min_value = 0.1
+max_value = 0.5
+step = 0.05
+value = 0.25
+
+[node name="Arr" type="HSlider" parent="MarginContainer/HBoxContainer/Sliders"]
+margin_top = 180.0
+margin_right = 85.0
+margin_bottom = 196.0
+min_value = 0.01
+max_value = 0.15
+step = 0.05
+value = 0.05
+
+[node name="Previews" type="HSlider" parent="MarginContainer/HBoxContainer/Sliders"]
+margin_top = 216.0
+margin_right = 85.0
+margin_bottom = 232.0
+max_value = 6.0
+value = 2.0
+
+[node name="ClearScaling" type="HSlider" parent="MarginContainer/HBoxContainer/Sliders"]
+margin_top = 252.0
+margin_right = 85.0
+margin_bottom = 268.0
 max_value = 2.0
 step = 0.05
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
 margin_left = 173.0
 margin_right = 173.0
-margin_bottom = 295.0
+margin_bottom = 301.0
 [connection signal="value_changed" from="MarginContainer/HBoxContainer/Sliders/GravitySlider" to="." method="_on_HSlider_value_changed"]
 [connection signal="value_changed" from="MarginContainer/HBoxContainer/Sliders/ActiveChain" to="." method="_on_ActiveChain_value_changed"]
 [connection signal="value_changed" from="MarginContainer/HBoxContainer/Sliders/NumColors" to="." method="_on_NumColors_value_changed"]
 [connection signal="value_changed" from="MarginContainer/HBoxContainer/Sliders/ForceDrop" to="." method="_on_ForceDrop_value_changed"]
+[connection signal="value_changed" from="MarginContainer/HBoxContainer/Sliders/Das" to="." method="_on_Das_value_changed"]
+[connection signal="value_changed" from="MarginContainer/HBoxContainer/Sliders/Arr" to="." method="_on_Arr_value_changed"]
+[connection signal="value_changed" from="MarginContainer/HBoxContainer/Sliders/Previews" to="." method="_on_Previews_value_changed"]
 [connection signal="value_changed" from="MarginContainer/HBoxContainer/Sliders/ClearScaling" to="." method="_on_ClearScaling_value_changed"]

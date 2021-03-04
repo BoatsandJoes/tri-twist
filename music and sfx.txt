@@ -3,6 +3,7 @@ menu https://tetr.io
 zen mode (bejeweled zen mode) (could share music with menu)
 triathalon mode (TGM master mode, first half is normal difficulty and at level ~480 the music fades out and at 500 a new pulse pounding track starts and the speed kicks way up)
 Hardcore mode (TAP Death Mode, this starts at the same difficulty that master mode ends at and then gets harder, so it's fast paced from the beginning) (could share with second half of triathalon mode)
+Novice mode (roughly equivalent to TGM2 normal, first half uses Triathalon mode track, second half uses zen mode track)
 custom settings mode (music select, probably)
 game over jingle
 you win jingle

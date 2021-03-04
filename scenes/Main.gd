@@ -45,3 +45,18 @@ func _on_ForceDrop_value_changed(value):
 func _on_ClearScaling_value_changed(value):
 	gameScene.triangleDropper.gameGrid.set_clear_scaling(value)
 	$MarginContainer/HBoxContainer/Labels/ClearScalingValue.text = String(value)
+
+
+func _on_Das_value_changed(value):
+	$MarginContainer/HBoxContainer/Labels/DasValue.text = String(value)
+	gameScene.triangleDropper.get_node("DasTimer").set_wait_time(value)
+
+
+func _on_Arr_value_changed(value):
+	$MarginContainer/HBoxContainer/Labels/ArrValue.text = String(value)
+	gameScene.triangleDropper.get_node("ArrTimer").set_wait_time(value)
+
+
+func _on_Previews_value_changed(value):
+	$MarginContainer/HBoxContainer/Labels/PreviewsValue.text = String(value)
+	gameScene.triangleDropper.set_previews_visible(value)

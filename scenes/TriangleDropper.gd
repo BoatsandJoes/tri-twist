@@ -11,6 +11,9 @@ const colors = [Color.royalblue, Color.crimson, Color.goldenrod, Color.webgreen,
 const focusColors = [Color.dodgerblue, Color.indianred, Color.orange, Color.seagreen, Color.magenta, Color.darkslategray]
 const highlightColors = [Color.deepskyblue, Color.deeppink, Color.gold, Color.green, Color.fuchsia]
 var dropTimer = false
+var leftPressed = false
+var rightPressed = false
+var previews = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -28,23 +31,65 @@ func _ready():
 	activePiece.cellFocused = true
 	activePiece.update_colors_visually()
 	add_child(activePiece)
+	# Previews
+	for i in range(6):
+		var preview: TriangleCell = TriangleCell.instance()
+		preview.init(90, -1, -1, Vector2(830, 40 + 100 * i), false, false)
+		preview.fill_randomly()
+		previews.append(preview)
+		add_child(preview)
+	set_previews_visible(2)
+	# Ghost
 	ghostPiece = TriangleCell.instance()
 	ghostPiece.set_modulate(Color(1,1,1,0.5))
 	add_child(ghostPiece)
 
+func set_previews_visible(value):
+	for i in range(previews.size()):
+		previews[i].visible = i < value
+
+func move_piece_right():
+	if activePiece.columnIndex < gameGrid.grid[-1].size():
+				activePiece.columnIndex = activePiece.columnIndex + 1
+				activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
+
+func move_piece_left():
+	if activePiece.columnIndex > 1:
+				activePiece.columnIndex = activePiece.columnIndex - 1
+				activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
+
 func _input(event):
 	if event is InputEventKey:
-		if event.is_action_pressed("left") && activePiece.columnIndex > 1:
-			activePiece.columnIndex = activePiece.columnIndex - 1
-			activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
-		elif event.is_action_pressed("right") && activePiece.columnIndex < gameGrid.grid[-1].size():
-			activePiece.columnIndex = activePiece.columnIndex + 1
-			activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
+		if event.is_action_pressed("left"):
+			leftPressed = true
+			rightPressed = false
+			$DasTimer.start()
+			$ArrTimer.stop()
+			move_piece_left()
+		elif event.is_action_pressed("right"):
+			rightPressed = true
+			leftPressed = false
+			$DasTimer.start()
+			$ArrTimer.stop()
+			move_piece_right()
+		elif event.is_action_released("left"):
+			leftPressed = false
+			$DasTimer.stop()
+			$ArrTimer.stop()
+		elif event.is_action_released("right"):
+			rightPressed = false
+			$DasTimer.stop()
+			$ArrTimer.stop()
 		elif (event.is_action_pressed("ui_accept") ||
 		event.is_action_pressed("ui_down") || event.is_action_pressed("ui_up")):
 			var accepted = gameGrid.drop_piece(activePiece, true)
 			if accepted:
-				activePiece.fill_randomly()
+				activePiece.set_colors(previews[0].leftColor, previews[0].rightColor, previews[0].verticalColor)
+				for i in range(previews.size() - 1):
+					previews[i].set_colors(previews[i+1].leftColor, previews[i+1].rightColor, previews[i+1].verticalColor)
+				previews[-1].fill_randomly()
+				if dropTimer:
+					$DropTimer.start()
 		elif (event.is_action_pressed("ui_focus_next")):
 			$Label.visible = false
 
@@ -71,6 +116,10 @@ func set_color_count(value):
 	activePiece.focusColors = tempFocusColors
 	activePiece.highlightColors = tempHighlightColors
 	activePiece.set_colors(tempColors.size() - 1,tempColors.size() - 1,tempColors.size() - 1)
+	for preview in previews:
+		preview.colors = tempColors
+		preview.focusColors = tempFocusColors
+		preview.highlightColors = tempHighlightColors
 	ghostPiece.colors = tempColors
 	ghostPiece.focusColors = tempFocusColors
 	ghostPiece.highlightColors = tempHighlightColors
@@ -138,6 +187,23 @@ func _on_DropTimer_timeout():
 	if dropTimer:
 		var accepted = gameGrid.drop_piece(activePiece, true)
 		if accepted:
-			activePiece.fill_randomly()
+			activePiece.set_colors(previews[0].leftColor, previews[0].rightColor, previews[0].verticalColor)
+			for i in range(previews.size() - 1):
+				previews[i].set_colors(previews[i+1].leftColor, previews[i+1].rightColor, previews[i+1].verticalColor)
+			previews[-1].fill_randomly()
 		else:
 			$Label.visible = true
+
+
+func _on_DasTimer_timeout():
+	if rightPressed:
+		move_piece_right()
+	elif leftPressed:
+		move_piece_left()
+	$ArrTimer.start()
+
+func _on_ArrTimer_timeout():
+	if rightPressed:
+		move_piece_right()
+	elif leftPressed:
+		move_piece_left()
