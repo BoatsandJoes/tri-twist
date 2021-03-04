@@ -5,9 +5,9 @@ var size: int
 # last color is the null color, for empty cells
 enum Direction {LEFT, RIGHT, VERTICAL, VERTICAL_POINT}
 enum Rotation {CLOCKWISE, COUNTERCLOCKWISE}
-const colors = [Color.royalblue, Color.crimson, Color.goldenrod, Color.webgreen, Color.orchid, Color.black]
-const focusColors = [Color.dodgerblue, Color.indianred, Color.orange, Color.seagreen, Color.magenta, Color.darkslategray]
-const highlightColors = [Color.deepskyblue, Color.deeppink, Color.gold, Color.green, Color.fuchsia]
+var colors = [Color.royalblue, Color.crimson, Color.black]
+var focusColors = [Color.dodgerblue, Color.indianred, Color.darkslategray]
+var highlightColors = [Color.deepskyblue, Color.deeppink]
 var leftColor: int = colors.size() - 1
 var rightColor: int = colors.size() - 1
 var verticalColor: int = colors.size() - 1
@@ -19,10 +19,14 @@ var inGrid
 var isGhost
 var bigClearMode = true
 var tumbleDirection: int
+var clearScaling = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
+
+func set_clear_scaling(value):
+	clearScaling = value
 
 # Call after instantiation to initialize.
 func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion: Vector2, isInGrid: bool, isAGhost: bool):

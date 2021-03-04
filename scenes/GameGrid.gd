@@ -26,6 +26,29 @@ func initialize_grid():
 			get_position_for_cell(rowIndex, columnIndex, false), true, false)
 			add_child(grid[rowIndex][columnIndex])
 
+func set_gravity(value):
+	for row in grid:
+		for cell in row:
+			cell.get_node("GravityTimer").set_wait_time(value)
+
+func set_clear_delay(value):
+	for row in grid:
+		for cell in row:
+			cell.get_node("ClearTimer").set_wait_time(value)
+
+func set_clear_scaling(value):
+	for row in grid:
+		for cell in row:
+			cell.clearScaling = value
+
+func set_grid_height(value):
+	for row in grid:
+		for cell in row:
+			cell.free()
+	grid = []
+	gridHeight = value
+	initialize_grid()
+
 # Try to put the given piece in the top row. Return true if successful.
 # Pass false as a second parameter to not actually drop the piece; just know if we can.
 func drop_piece(piece: TriangleCell, dropForReal: bool):

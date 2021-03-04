@@ -7,6 +7,10 @@ var gameGrid: GameGrid
 var activePiece: TriangleCell
 var ghostPiece: TriangleCell
 var ghostLinePoints: PoolVector2Array
+const colors = [Color.royalblue, Color.crimson, Color.goldenrod, Color.webgreen, Color.orchid, Color.black]
+const focusColors = [Color.dodgerblue, Color.indianred, Color.orange, Color.seagreen, Color.magenta, Color.darkslategray]
+const highlightColors = [Color.deepskyblue, Color.deeppink, Color.gold, Color.green, Color.fuchsia]
+var dropTimer = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -30,10 +34,10 @@ func _ready():
 
 func _input(event):
 	if event is InputEventKey:
-		if event.is_action_pressed("ui_left") && activePiece.columnIndex > 1:
+		if event.is_action_pressed("left") && activePiece.columnIndex > 1:
 			activePiece.columnIndex = activePiece.columnIndex - 1
 			activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
-		elif event.is_action_pressed("ui_right") && activePiece.columnIndex < gameGrid.grid[-1].size():
+		elif event.is_action_pressed("right") && activePiece.columnIndex < gameGrid.grid[-1].size():
 			activePiece.columnIndex = activePiece.columnIndex + 1
 			activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
 		elif (event.is_action_pressed("ui_accept") ||
@@ -41,6 +45,42 @@ func _input(event):
 			var accepted = gameGrid.drop_piece(activePiece, true)
 			if accepted:
 				activePiece.fill_randomly()
+		elif (event.is_action_pressed("ui_focus_next")):
+			$Label.visible = false
+
+func set_drop_timer(value):
+	if value == 0:
+		dropTimer = false
+		$DropTimer.stop()
+	else:
+		dropTimer = true
+		$DropTimer.wait_time = value
+		$DropTimer.start()
+
+func set_color_count(value):
+	var tempColors = []
+	var tempFocusColors = []
+	var tempHighlightColors = []
+	for i in range(value):
+		tempColors.append(colors[i])
+		tempFocusColors.append(focusColors[i])
+		tempHighlightColors.append(highlightColors[i])
+	tempColors.append(colors[-1])
+	tempFocusColors.append(focusColors[-1])
+	activePiece.colors = tempColors
+	activePiece.focusColors = tempFocusColors
+	activePiece.highlightColors = tempHighlightColors
+	activePiece.set_colors(tempColors.size() - 1,tempColors.size() - 1,tempColors.size() - 1)
+	ghostPiece.colors = tempColors
+	ghostPiece.focusColors = tempFocusColors
+	ghostPiece.highlightColors = tempHighlightColors
+	ghostPiece.set_colors(tempColors.size() - 1,tempColors.size() - 1,tempColors.size() - 1)
+	for row in gameGrid.grid:
+		for cell in row:
+			cell.colors = tempColors
+			cell.focusColors = focusColors
+			cell.highlightColors = highlightColors
+			cell.clear(tempColors.size() - 1)
 
 func draw_ghost_pieces():
 	ghostLinePoints = PoolVector2Array()
@@ -93,3 +133,11 @@ func draw_ghost_pieces():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	draw_ghost_pieces()
+
+func _on_DropTimer_timeout():
+	if dropTimer:
+		var accepted = gameGrid.drop_piece(activePiece, true)
+		if accepted:
+			activePiece.fill_randomly()
+		else:
+			$Label.visible = true
