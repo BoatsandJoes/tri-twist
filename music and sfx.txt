@@ -1,0 +1,53 @@
+modes + mood references:
+menu https://tetr.io
+zen mode (bejeweled zen mode) (could share music with menu)
+triathalon mode (TGM master mode, first half is normal difficulty and at level ~480 the music fades out and at 500 a new pulse pounding track starts and the speed kicks way up)
+Hardcore mode (TAP Death Mode, this starts at the same difficulty that master mode ends at and then gets harder, so it's fast paced from the beginning) (could share with second half of triathalon mode)
+custom settings mode (music select, probably)
+game over jingle
+you win jingle
+
+modes that are likely to get cut:
+dig for treasure mode (tetris effect purify)
+experimental dig survival mode that's really just a testing ground for multiplayer mechanics
+shared board coop
+
+not currently planned but I'd like to do them:
+versus modes
+story mode
+
+sfx:
+piece settling into place against a stationary piece or the wall, without matching (I think of a click)
+piece settling into place against a stationary piece or the wall, with matching
+ascending pitch sfx for connected matches of ascending quantity, capping at around 8 (cap may be tied to scoring mechanics that aren't decided yet) (reference Petal Crash)
+piece clear when timer expires (May change depending on score or may not)
+knocking another piece over, either by falling past or by rolling into it (will often happen at the same time as piece settling into place either with or without matching, but needed to make the rule feel intuitive)
+pause
+menu button click
+menu option increase/decrease
+game is about to start jingle
+countdown/start
+game end (I think of an annoying whistle? It doesn't need to be an annoying whistle)
+
+potentially annoying sounds but maybe they'd be neat:
+moving piece edge contacting another piece edge (maybe only if one is stationary?)
+active piece shift (some versions of Tetris have this, notably Tetris Effect)
+piece release (seems redundant)
+"you're about to die"
+
+sfx tied to modes or mechanics that may be cut:
+You're close to the score/time/move:
+	goal
+	limit (one sfx for 10 away, and another repeated for 5 4 3 2 1)
+these may award bonus points and may not:
+	back to back piece match (after a clear, starting another chain right away gives a point bonus on the first match only)
+	matching with a tuck (squeezing between 2 balancing pieces)
+	Connecting two active chains with a multi-match
+score extension (you got to the target score in time to continue playing)
+piece swap
+active piece rotate
+piece settling into place from instant gravity/hard drop (a woosh and thump)
+dig mode incoming treasure
+dig mode clear treasure
+dig survival incoming garbage
+dig survival clear garbage

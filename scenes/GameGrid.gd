@@ -17,17 +17,18 @@ func _ready():
 
 # create grid and fill it with cells
 func initialize_grid():
-	cellSize = window.size[1] / (((gridHeight) * sqrt(3) + margin) / 2)
+	cellSize = ((window.size[1] / (gridHeight + 2)) - margin) / (sqrt(3) / 2)
 	for rowIndex in gridHeight:
 		grid.append([])
 		for columnIndex in gridBase + 2 * rowIndex:
 			grid[rowIndex].append(TriangleCell.instance())
 			grid[rowIndex][columnIndex].init(cellSize, rowIndex, columnIndex,
-			get_position_for_cell(rowIndex, columnIndex, false), true)
+			get_position_for_cell(rowIndex, columnIndex, false), true, false)
 			add_child(grid[rowIndex][columnIndex])
 
-# Try to put the given piece in the top row. return true if successful.
-func drop_piece(piece) -> bool:
+# Try to put the given piece in the top row. Return true if successful.
+# Pass false as a second parameter to not actually drop the piece; just know if we can.
+func drop_piece(piece: TriangleCell, dropForReal: bool):
 	var neighborDirection: int
 	if (piece.columnIndex + piece.rowIndex) % 2 != 0:
 		neighborDirection = grid[0][0].Direction.VERTICAL_POINT
@@ -37,7 +38,8 @@ func drop_piece(piece) -> bool:
 	if !neighbor.is_empty():
 		# Cannot fill.
 		return false
-	neighbor.fill_from_neighbor(piece.leftColor, piece.rightColor, piece.verticalColor,
+	if dropForReal:
+		neighbor.fill_from_neighbor(piece.leftColor, piece.rightColor, piece.verticalColor,
 			neighborDirection, grid[0][0].Direction.VERTICAL)
 	return true
 
@@ -47,7 +49,7 @@ func get_position_for_cell(rowIndex: int, columnIndex: int, flipped: bool) -> Ve
 				((columnIndex - ((gridBase + rowIndex * 2)/2)) * ((cellSize/2) + margin)),
 				window.size[1] - cellSize - (rowIndex * ((cellSize * sqrt(3) / 2) + margin)))
 	if flipped:
-		result = Vector2(result[0], result[1] + cellSize * 0.87)
+		result = Vector2(result[0], result[1] + cellSize * sqrt(3) / 6)
 	return result
 
 # returns an array of TriangleCells
@@ -93,7 +95,7 @@ func handle_cell_input(rowIndex: int, columnIndex: int, event: InputEventMouseBu
 	elif event.button_index == 1 || event.button_index == 2:
 		# spin
 		var rotation
-		if event.button_index == 1:
+		if event.button_index == 2:
 			rotation = grid[0][0].Rotation.COUNTERCLOCKWISE
 		else:
 			rotation = grid[0][0].Rotation.CLOCKWISE

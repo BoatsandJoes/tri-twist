@@ -40,8 +40,9 @@ Tuning settings (*- can ramp for difficulty, based on score or moves or time or 
 
 Score:
 	4 match should be bigger than 2 2 matches, but idk exactly how much it should scale up. Depends on chain length distribution
-	Tucking into the middle of a chain is already implicitly worth more (longer chain), so maybe it doesn't need to award points, but maybe it should or at least make a different sound (this would raise the skill ceiling)
+	Tucking into the middle of a chain is already implicitly worth more (longer chain, especially if chain length is normally capped but has generous timer on the lower end), so maybe it doesn't need to award points, but maybe it should or at least make a different sound (this would raise the skill ceiling)
 	Rolling at all could award nominal points. It could increase the chain value by a lot or it could not at all
+		same for toppling a piece
 	Non-active chains could award points and then allow extensions (basically only a 2 chain has meaning), but they are difficult to plan (might be cool…)
 	All Clear is easy and shouldn't award points
 	Could have a TGM/TAP grading system, tie to score or require to fill up a score counter in a short time to advance, or you have to hit score extensions to get the highest grade (but missing them you don't lose)
@@ -75,6 +76,7 @@ Things that I want but will have to cut:
 	steam achievements
 	Daily challenge
 	save/share rulesets
+	Chainsim
 	replays
 		watch leaderboard replays
 		export clip/video
@@ -97,6 +99,7 @@ Things that I want but will have to cut:
 	Multiplayer:
 		vs cpu
 		GGPO is a C++ module so I could compile the engine with both modules, or remove FMod, or change to FMod GDNative
+		When searching/connecting it should say "Triangulating an opponent"
 		Could have people play 2 single player games side by side and see who wins, either playing a game to completion and seeing who did better, or going over a certain score differential
 		Could have item attacks/buffs like:
 			match anything and whatever matches, mass replace that color with a random other color (probably making a big clear)
@@ -130,9 +133,9 @@ Things that I want but will have to cut:
 
 Credits
 Joe
-Timo
-Crimefighter (playtesting, came up with idea of edge match clear)
-BunniesFromHell (balancing, no, the other kind of balancing)
+Timo (Sound blaster, loud boy)
+Crimefighter, Shadow President Illuminati Beta Government (playtesting, came up with idea of edge match clear)
+Amy Rose Gronkowski (Had numerous sick ideas) (credit for Japanese localization that doesn't exist, or as a kickstarter backer which also does not exist) (Good opinion haver (likes Daikatana)) (balancing, no, the other kind of balancing)
 Thank you indie developers who encourage others to make games:
 	Tim Ashley Jenkins
 	Dave Makes
