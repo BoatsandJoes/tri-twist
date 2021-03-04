@@ -13,3 +13,16 @@ TriangleCell = ExtResource( 3 )
 z_index = 1
 width = 5.0
 default_color = Color( 1, 1, 1, 0.0784314 )
+texture_mode = 111
+
+[node name="DropTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="Label" type="Label" parent="."]
+visible = false
+margin_left = 124.044
+margin_top = 218.681
+margin_right = 183.044
+margin_bottom = 232.681
+text = "You Died"
+[connection signal="timeout" from="DropTimer" to="." method="_on_DropTimer_timeout"]

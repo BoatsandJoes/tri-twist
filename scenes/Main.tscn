@@ -6,3 +6,135 @@
 [node name="Main" type="Node2D"]
 script = ExtResource( 1 )
 GameScene = ExtResource( 2 )
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 42.0
+margin_top = 304.0
+margin_right = 215.0
+margin_bottom = 599.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+margin_right = 173.0
+margin_bottom = 295.0
+
+[node name="Labels" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+margin_right = 80.0
+margin_bottom = 295.0
+
+[node name="FallDelay" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
+margin_right = 80.0
+margin_bottom = 14.0
+text = "Fall Delay"
+
+[node name="FallDelayValue" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
+margin_top = 18.0
+margin_right = 80.0
+margin_bottom = 32.0
+text = "0.2"
+
+[node name="ChainTimer" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
+margin_top = 36.0
+margin_right = 80.0
+margin_bottom = 50.0
+text = "Chain Timer"
+
+[node name="ClearDelayValue" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
+margin_top = 54.0
+margin_right = 80.0
+margin_bottom = 68.0
+text = "1.5"
+
+[node name="NumColors" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
+margin_top = 72.0
+margin_right = 80.0
+margin_bottom = 86.0
+text = "# Colors"
+
+[node name="NumColorsValue" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
+margin_top = 90.0
+margin_right = 80.0
+margin_bottom = 104.0
+text = "2"
+
+[node name="ForceDrop" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
+margin_top = 108.0
+margin_right = 80.0
+margin_bottom = 122.0
+text = "Force Drop"
+
+[node name="ForceDropValue" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
+margin_top = 126.0
+margin_right = 80.0
+margin_bottom = 140.0
+text = "0"
+
+[node name="ClearTimerScaling" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
+margin_top = 144.0
+margin_right = 80.0
+margin_bottom = 175.0
+text = "Clear Scaling
+(todo)"
+
+[node name="ClearScalingValue" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
+margin_top = 179.0
+margin_right = 80.0
+margin_bottom = 193.0
+text = "0"
+
+[node name="Sliders" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+margin_left = 84.0
+margin_right = 169.0
+margin_bottom = 295.0
+size_flags_horizontal = 3
+custom_constants/separation = 20
+
+[node name="GravitySlider" type="HSlider" parent="MarginContainer/HBoxContainer/Sliders"]
+margin_right = 85.0
+margin_bottom = 16.0
+min_value = 0.01
+max_value = 1.0
+step = 0.05
+value = 0.2
+
+[node name="ActiveChain" type="HSlider" parent="MarginContainer/HBoxContainer/Sliders"]
+margin_top = 36.0
+margin_right = 85.0
+margin_bottom = 52.0
+min_value = 0.5
+max_value = 8.0
+step = 0.1
+value = 1.5
+
+[node name="NumColors" type="HSlider" parent="MarginContainer/HBoxContainer/Sliders"]
+margin_top = 72.0
+margin_right = 85.0
+margin_bottom = 88.0
+min_value = 2.0
+max_value = 5.0
+value = 2.0
+
+[node name="ForceDrop" type="HSlider" parent="MarginContainer/HBoxContainer/Sliders"]
+margin_top = 108.0
+margin_right = 85.0
+margin_bottom = 124.0
+max_value = 10.0
+step = 0.5
+
+[node name="ClearScaling" type="HSlider" parent="MarginContainer/HBoxContainer/Sliders"]
+margin_top = 144.0
+margin_right = 85.0
+margin_bottom = 160.0
+max_value = 2.0
+step = 0.05
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+margin_left = 173.0
+margin_right = 173.0
+margin_bottom = 295.0
+[connection signal="value_changed" from="MarginContainer/HBoxContainer/Sliders/GravitySlider" to="." method="_on_HSlider_value_changed"]
+[connection signal="value_changed" from="MarginContainer/HBoxContainer/Sliders/ActiveChain" to="." method="_on_ActiveChain_value_changed"]
+[connection signal="value_changed" from="MarginContainer/HBoxContainer/Sliders/NumColors" to="." method="_on_NumColors_value_changed"]
+[connection signal="value_changed" from="MarginContainer/HBoxContainer/Sliders/ForceDrop" to="." method="_on_ForceDrop_value_changed"]
+[connection signal="value_changed" from="MarginContainer/HBoxContainer/Sliders/ClearScaling" to="." method="_on_ClearScaling_value_changed"]

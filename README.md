@@ -1,10 +1,11 @@
 # tri-twist
 todo next:
+	fix ghost piece tumble over gap
+	fix ghost line
 	give Timo repo permissions
 	test tumbling off an overhang (it should go 1 farther, because clears can lock an overhang into place and then you could build a slope on top of it, and the immediate drop is unexpected.) see if it's fixed
 	Change internal state to frames (this should fix suspension bug and make serializing/synchronizing game state easier)
 	Add tuning settings
-		ghost piece first
 	ui with score, time, moves, etc
 	controller support
 	main menu
