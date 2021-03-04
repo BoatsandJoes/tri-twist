@@ -73,13 +73,14 @@ text = "0"
 [node name="ClearTimerScaling" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
 margin_top = 144.0
 margin_right = 80.0
-margin_bottom = 158.0
-text = "Clear Scaling"
+margin_bottom = 175.0
+text = "Clear Scaling
+(todo)"
 
 [node name="ClearScalingValue" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
-margin_top = 162.0
+margin_top = 179.0
 margin_right = 80.0
-margin_bottom = 176.0
+margin_bottom = 193.0
 text = "0"
 
 [node name="Sliders" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
