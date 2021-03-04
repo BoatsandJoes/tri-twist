@@ -5,9 +5,9 @@ var size: int
 # last color is the null color, for empty cells
 enum Direction {LEFT, RIGHT, VERTICAL, VERTICAL_POINT}
 enum Rotation {CLOCKWISE, COUNTERCLOCKWISE}
-const colors = [Color.royalblue, Color.crimson, Color.goldenrod, Color.webgreen, Color.black]
-const focusColors = [Color.dodgerblue, Color.indianred, Color.orange, Color.seagreen, Color.darkslategray]
-const highlightColors = [Color.deepskyblue, Color.deeppink, Color.gold, Color.green]
+const colors = [Color.royalblue, Color.crimson, Color.goldenrod, Color.webgreen, Color.orchid, Color.black]
+const focusColors = [Color.dodgerblue, Color.indianred, Color.orange, Color.seagreen, Color.magenta, Color.darkslategray]
+const highlightColors = [Color.deepskyblue, Color.deeppink, Color.gold, Color.green, Color.fuchsia]
 var leftColor: int = colors.size() - 1
 var rightColor: int = colors.size() - 1
 var verticalColor: int = colors.size() - 1
@@ -287,11 +287,14 @@ func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
 	if theoryTumbleDirection == Direction.VERTICAL_POINT:
 		# Dummy direction meant to represent our own actual direction
 		theoryTumbleDirection = tumbleDirection
+	var tumbleResult: int = theoryTumbleDirection
 	var emptyCell: TriangleCell
 	var direction: int
 	if pointFacingUp:
 		emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
 		direction = Direction.VERTICAL
+		if !emptyCell.is_empty():
+			emptyCell = null
 	elif theoryTumbleDirection == Direction.LEFT || theoryTumbleDirection == Direction.RIGHT:
 		# Inertia on precarious/tumbling pieces
 		emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, theoryTumbleDirection)
@@ -299,6 +302,11 @@ func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
 			direction = Direction.RIGHT
 		elif theoryTumbleDirection == Direction.RIGHT:
 			direction = Direction.LEFT
+		# If we can't roll, try to fall.
+		if emptyCell == null || !emptyCell.is_empty():
+			tumbleResult = Direction.VERTICAL
+			emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
+			direction = Direction.VERTICAL_POINT
 	else:
 		# Look to see if we fall down
 		emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
@@ -318,7 +326,9 @@ func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
 			else:
 				emptyCell = leftNeighbor
 				direction = Direction.RIGHT
-	return [emptyCell, direction]
+	if direction == Direction.LEFT || direction == Direction.RIGHT:
+		tumbleResult = direction
+	return [emptyCell, direction, tumbleResult]
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -355,7 +365,7 @@ func _on_GravityTimer_timeout():
 		var tempLeftColor = leftColor
 		var tempRightColor = rightColor
 		var tempVerticalColor = verticalColor
-		var tempTumbleDirection = tumbleDirection
+		var tempTumbleDirection = moveInfo[2]
 		# clear self
 		clear(Direction.VERTICAL_POINT)
 		# copy to neighbor

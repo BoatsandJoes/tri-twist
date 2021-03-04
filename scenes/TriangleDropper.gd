@@ -5,12 +5,12 @@ export (PackedScene) var GameGrid
 export (PackedScene) var TriangleCell
 var gameGrid: GameGrid
 var activePiece: TriangleCell
-var ghostPieceSurface: TriangleCell
-var ghostPieceFinal: TriangleCell
-var ghostPiecesTumble: Array = []
+var ghostPiece: TriangleCell
+var ghostLinePoints: PoolVector2Array
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	show_on_top = true
 	gameGrid = GameGrid.instance()
 	add_child(gameGrid)
 	activePiece = TriangleCell.instance()
@@ -24,12 +24,9 @@ func _ready():
 	activePiece.cellFocused = true
 	activePiece.update_colors_visually()
 	add_child(activePiece)
-	ghostPieceSurface = TriangleCell.instance()
-	ghostPieceFinal = TriangleCell.instance()
-	ghostPieceSurface.set_modulate(Color(1,1,1,0.3))
-	ghostPieceFinal.set_modulate(Color(1,1,1,0.5))
-	add_child(ghostPieceSurface)
-	add_child(ghostPieceFinal)
+	ghostPiece = TriangleCell.instance()
+	ghostPiece.set_modulate(Color(1,1,1,0.5))
+	add_child(ghostPiece)
 
 func _input(event):
 	if event is InputEventKey:
@@ -46,45 +43,52 @@ func _input(event):
 				activePiece.fill_randomly()
 
 func draw_ghost_pieces():
+	ghostLinePoints = PoolVector2Array()
+	ghostLinePoints.append(activePiece.position)
 	if gameGrid.drop_piece(activePiece, false):
-		ghostPieceSurface.init(gameGrid.cellSize, activePiece.rowIndex - 1, activePiece.columnIndex - 1,
+		ghostPiece.init(gameGrid.cellSize, activePiece.rowIndex - 1, activePiece.columnIndex - 1,
 			gameGrid.get_position_for_cell(activePiece.rowIndex - 1, activePiece.columnIndex - 1,
 			(activePiece.columnIndex - 1) % 2 != 0), false, true)
-		ghostPieceSurface.set_colors(activePiece.leftColor, activePiece.rightColor, activePiece.verticalColor)
-		var move = gameGrid.grid[ghostPieceSurface.rowIndex][ghostPieceSurface.columnIndex].get_next_move_if_this_were_you(
-			ghostPieceSurface.tumbleDirection)
-		var lastMove = [ghostPieceSurface, ghostPieceSurface.Direction.VERTICAL]
+		var move = gameGrid.grid[ghostPiece.rowIndex][ghostPiece.columnIndex].get_next_move_if_this_were_you(
+			ghostPiece.tumbleDirection)
+		var lastMove = [ghostPiece, ghostPiece.Direction.VERTICAL]
+		var ghostLeftColor = activePiece.leftColor
+		var ghostRightColor = activePiece.rightColor
+		var ghostVerticalColor = activePiece.verticalColor
 		while true:
 			if move[0] != null:
-				if move[1] != ghostPieceSurface.Direction.VERTICAL && move[1] != ghostPieceSurface.Direction.VERTICAL_POINT:
-					# Draw ghost
-					ghostPieceSurface.init(gameGrid.cellSize, lastMove[0].rowIndex, lastMove[0].columnIndex,
-						gameGrid.get_position_for_cell(lastMove[0].rowIndex, lastMove[0].columnIndex,
-						(lastMove[0].columnIndex) % 2 != 0), false, true)
-					ghostPieceSurface.set_colors(activePiece.leftColor, activePiece.rightColor, activePiece.verticalColor)
-					ghostPieceSurface.visible = true
-					# TODO second ghost
-					break
-				else:
-					lastMove = move
-					move = move[0].get_next_move_if_this_were_you(
-						move[0].tumbleDirection)
+				if move[1] != ghostPiece.Direction.VERTICAL && move[1] != ghostPiece.Direction.VERTICAL_POINT:
+					# Make point for ghost line
+					ghostLinePoints.append(gameGrid.get_position_for_cell(lastMove[0].rowIndex, lastMove[0].columnIndex,
+						(lastMove[0].columnIndex) % 2 != 0))
+				# Rotate colors if needed
+				if ((move[2] == ghostPiece.Direction.RIGHT && !move[0].pointFacingUp) ||
+				(move[2] == ghostPiece.Direction.LEFT && move[0].pointFacingUp)):
+					var tempRightColor = ghostRightColor
+					ghostRightColor = ghostVerticalColor
+					ghostVerticalColor = tempRightColor
+				elif ((move[2] == ghostPiece.Direction.RIGHT && move[0].pointFacingUp) ||
+				(move[2] == ghostPiece.Direction.LEFT && !move[0].pointFacingUp)):
+					var tempLeftColor = ghostLeftColor
+					ghostLeftColor = ghostVerticalColor
+					ghostVerticalColor = tempLeftColor
+				lastMove = move
+				move = move[0].get_next_move_if_this_were_you(move[2])
 			else:
-				# We are done: TODO draw second ghost here
-				ghostPieceSurface.visible = false
-				ghostPieceFinal.init(gameGrid.cellSize, lastMove[0].rowIndex, lastMove[0].columnIndex,
+				# We are done
+				ghostPiece.init(gameGrid.cellSize, lastMove[0].rowIndex, lastMove[0].columnIndex,
 						gameGrid.get_position_for_cell(lastMove[0].rowIndex, lastMove[0].columnIndex,
 						(lastMove[0].columnIndex) % 2 != 0), false, true)
-				ghostPieceFinal.set_colors(activePiece.leftColor, activePiece.rightColor, activePiece.verticalColor)
-				ghostPieceFinal.visible = true
+				ghostLinePoints.append(ghostPiece.position)
 				break
+		ghostPiece.set_colors(ghostLeftColor, ghostRightColor, ghostVerticalColor)
+		ghostPiece.visible = true
+		$GhostLine.points = ghostLinePoints
+		$GhostLine.visible = true
 	else:
-		ghostPieceSurface.visible = false
-		ghostPieceFinal.visible = false
-		for ghostPieceTumble in ghostPiecesTumble:
-			if ghostPieceTumble != null:
-				ghostPieceTumble.free()
-		ghostPiecesTumble = []
+		# We can't drop into the grid from here.
+		ghostPiece.visible = false
+		$GhostLine.visible = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
