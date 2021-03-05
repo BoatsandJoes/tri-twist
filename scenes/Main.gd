@@ -60,3 +60,7 @@ func _on_Arr_value_changed(value):
 func _on_Previews_value_changed(value):
 	$MarginContainer/HBoxContainer/Labels/PreviewsValue.text = String(value)
 	gameScene.triangleDropper.set_previews_visible(value)
+
+
+func _on_ChainMode_toggled(button_pressed):
+	gameScene.triangleDropper.gameGrid.toggle_chain_mode(button_pressed)

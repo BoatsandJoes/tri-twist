@@ -5,9 +5,9 @@ var size: int
 # last color is the null color, for empty cells
 enum Direction {LEFT, RIGHT, VERTICAL, VERTICAL_POINT}
 enum Rotation {CLOCKWISE, COUNTERCLOCKWISE}
-var colors = [Color.royalblue, Color.crimson, Color.black]
-var focusColors = [Color.dodgerblue, Color.indianred, Color.darkslategray]
-var highlightColors = [Color.deepskyblue, Color.deeppink]
+var colors = [Color.royalblue, Color.crimson, Color.goldenrod, Color.webgreen, Color.orchid, Color.black]
+var focusColors = [Color.dodgerblue, Color.indianred, Color.orange, Color.seagreen, Color.magenta, Color.darkslategray]
+var highlightColors = [Color.deepskyblue, Color.deeppink, Color.gold, Color.green, Color.fuchsia]
 var leftColor: int = colors.size() - 1
 var rightColor: int = colors.size() - 1
 var verticalColor: int = colors.size() - 1
@@ -181,7 +181,7 @@ func clear(edge: int):
 	$ClearTimer.wait_time = clearDelay
 	tumbleDirection = Direction.VERTICAL
 	$GravityTimer.stop()
-	if (edge == Direction.VERTICAL_POINT && !is_marked_for_clear()):
+	if (edge == Direction.VERTICAL_POINT && (!is_marked_for_clear() || $ClearTimer.paused)):
 		# Immediately blank tile.
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 		# Check to see if any neighbors should enter falling state.
@@ -221,7 +221,7 @@ func clear(edge: int):
 				else:
 					rightNeighbor.enter_falling_state(Direction.LEFT)
 			else:
-				# Fall from above. XXX I have observed a floating piece for this case twice. Not sure what happened.
+				# Fall from above. XXX fix bug where sometimes this does not cause them to fall.
 				var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
 				if verticalNeighbor != null:
 					verticalNeighbor.enter_falling_state(verticalNeighbor.tumbleDirection)
@@ -299,7 +299,7 @@ func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
 	if pointFacingUp:
 		emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
 		direction = Direction.VERTICAL
-		if !emptyCell.is_empty():
+		if emptyCell == null || !emptyCell.is_empty():
 			emptyCell = null
 	elif theoryTumbleDirection == Direction.LEFT || theoryTumbleDirection == Direction.RIGHT:
 		# Inertia on precarious/tumbling pieces

@@ -80,16 +80,18 @@ func _input(event):
 			rightPressed = false
 			$DasTimer.stop()
 			$ArrTimer.stop()
+		elif event.is_action_pressed("clockwise"):
+			activePiece.set_colors(activePiece.verticalColor, activePiece.leftColor, activePiece.rightColor)
+		elif event.is_action_pressed("counterclockwise"):
+			activePiece.set_colors(activePiece.rightColor, activePiece.verticalColor, activePiece.leftColor)
 		elif (event.is_action_pressed("ui_accept") ||
 		event.is_action_pressed("ui_down") || event.is_action_pressed("ui_up")):
 			var accepted = gameGrid.drop_piece(activePiece, true)
 			if accepted:
-				activePiece.set_colors(previews[0].leftColor, previews[0].rightColor, previews[0].verticalColor)
-				for i in range(previews.size() - 1):
-					previews[i].set_colors(previews[i+1].leftColor, previews[i+1].rightColor, previews[i+1].verticalColor)
-				previews[-1].fill_randomly()
-				if dropTimer:
-					$DropTimer.start()
+				if gameGrid.grid[0][0].get_node("ClearTimer").paused && !gameGrid.would_have_match(ghostPiece):
+					gameGrid.set_off_chains()
+				advance_piece()
+					
 		elif (event.is_action_pressed("ui_focus_next")):
 			$Label.visible = false
 
@@ -178,6 +180,14 @@ func draw_ghost_pieces():
 		# We can't drop into the grid from here.
 		ghostPiece.visible = false
 		$GhostLine.visible = false
+
+func advance_piece():
+	activePiece.set_colors(previews[0].leftColor, previews[0].rightColor, previews[0].verticalColor)
+	for i in range(previews.size() - 1):
+		previews[i].set_colors(previews[i+1].leftColor, previews[i+1].rightColor, previews[i+1].verticalColor)
+	previews[-1].fill_randomly()
+	if dropTimer:
+		$DropTimer.start()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
