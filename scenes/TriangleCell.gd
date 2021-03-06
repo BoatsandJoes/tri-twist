@@ -145,16 +145,17 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 	# Check for enclosed areas.
 	check_for_clear([])
 	# push balancing pieces over
-	if leftNeighbor != null && !leftNeighbor.is_empty():
-		var neighborsNeighbor = get_parent().get_neighbor(
-			leftNeighbor.rowIndex, leftNeighbor.columnIndex, Direction.LEFT)
-		if neighborsNeighbor != null && neighborsNeighbor.is_empty():
-			leftNeighbor.enter_falling_state(Direction.LEFT)
-	if rightNeighbor != null && !rightNeighbor.is_empty():
-		var neighborsNeighbor = get_parent().get_neighbor(
-			rightNeighbor.rowIndex, rightNeighbor.columnIndex, Direction.RIGHT)
-		if neighborsNeighbor != null && neighborsNeighbor.is_empty():
-			rightNeighbor.enter_falling_state(Direction.RIGHT)
+	if !is_falling():
+		if leftNeighbor != null && !leftNeighbor.is_empty():
+			var neighborsNeighbor = get_parent().get_neighbor(
+				leftNeighbor.rowIndex, leftNeighbor.columnIndex, Direction.LEFT)
+			if neighborsNeighbor != null && neighborsNeighbor.is_empty():
+				leftNeighbor.enter_falling_state(Direction.LEFT)
+		if rightNeighbor != null && !rightNeighbor.is_empty():
+			var neighborsNeighbor = get_parent().get_neighbor(
+				rightNeighbor.rowIndex, rightNeighbor.columnIndex, Direction.RIGHT)
+			if neighborsNeighbor != null && neighborsNeighbor.is_empty():
+				rightNeighbor.enter_falling_state(Direction.RIGHT)
 
 func update_colors_visually():
 	if cellFocused:
@@ -220,9 +221,16 @@ func clear(edge: int):
 			var rightNeighborFilled = rightNeighbor == null || !rightNeighbor.is_empty()
 			if leftNeighborFilled != rightNeighborFilled:
 				if leftNeighborFilled && leftNeighbor != null:
-					leftNeighbor.enter_falling_state(Direction.RIGHT)
+					var neighborsNeighbor = leftNeighbor.get_parent().get_neighbor(leftNeighbor.rowIndex,
+					leftNeighbor.columnIndex, Direction.LEFT)
+					if neighborsNeighbor == null || !neighborsNeighbor.is_empty():
+						leftNeighbor.enter_falling_state(Direction.RIGHT)
 				elif rightNeighbor != null:
-					rightNeighbor.enter_falling_state(Direction.LEFT)
+					if rightNeighborFilled && rightNeighbor != null:
+						var neighborsNeighbor = rightNeighbor.get_parent().get_neighbor(rightNeighbor.rowIndex,
+						rightNeighbor.columnIndex, Direction.RIGHT)
+						if neighborsNeighbor == null || !neighborsNeighbor.is_empty():
+							rightNeighbor.enter_falling_state(Direction.RIGHT)
 			else:
 				# Fall from above. XXX fix bug where sometimes this does not cause them to fall.
 				var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
