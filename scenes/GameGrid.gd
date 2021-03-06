@@ -3,7 +3,7 @@ class_name GameGrid
 
 
 export (PackedScene) var TriangleCell
-export var gridBase: int
+export var gridWidth: int
 export var gridHeight: int
 export var margin: int
 var cellSize: int
@@ -20,7 +20,7 @@ func initialize_grid():
 	cellSize = ((window.size[1] / (gridHeight + 2)) - margin) / (sqrt(3) / 2)
 	for rowIndex in gridHeight:
 		grid.append([])
-		for columnIndex in gridBase + 2 * rowIndex:
+		for columnIndex in gridWidth:
 			grid[rowIndex].append(TriangleCell.instance())
 			grid[rowIndex][columnIndex].init(cellSize, rowIndex, columnIndex,
 			get_position_for_cell(rowIndex, columnIndex, false), true, false)
@@ -29,7 +29,9 @@ func initialize_grid():
 func toggle_chain_mode(active):
 	for row in grid:
 		for cell in row:
-			cell.get_node("ClearTimer").paused = !active
+			cell.activeChainMode = active
+			if !active:
+				cell.get_node("ClearTimer").stop()
 
 func set_gravity(value):
 	for row in grid:
@@ -59,11 +61,11 @@ func set_grid_height(value):
 # Pass false as a second parameter to not actually drop the piece; just know if we can.
 func drop_piece(piece: TriangleCell, dropForReal: bool):
 	var neighborDirection: int
-	if (piece.columnIndex + piece.rowIndex) % 2 != 0:
+	if (piece.columnIndex + piece.rowIndex) % 2 == 0:
 		neighborDirection = grid[0][0].Direction.VERTICAL_POINT
 	else:
 		neighborDirection = grid[0][0].Direction.VERTICAL
-	var neighbor: TriangleCell = grid[piece.rowIndex - 1][piece.columnIndex - 1]
+	var neighbor: TriangleCell = grid[piece.rowIndex - 1][piece.columnIndex]
 	if !neighbor.is_empty():
 		# Cannot fill.
 		return false
@@ -74,21 +76,11 @@ func drop_piece(piece: TriangleCell, dropForReal: bool):
 
 # Gets the position in which to draw the cell with the passed indices
 func get_position_for_cell(rowIndex: int, columnIndex: int, flipped: bool) -> Vector2:
-	var result = Vector2((window.size[0]/2) - cellSize/2 +
-				((columnIndex - ((gridBase + rowIndex * 2)/2)) * ((cellSize/2) + margin)),
+	var result = Vector2(columnIndex * (cellSize/2 + margin) + 300,
 				window.size[1] - cellSize - (rowIndex * ((cellSize * sqrt(3) / 2) + margin)))
 	if flipped:
 		result = Vector2(result[0], result[1] + cellSize * sqrt(3) / 6)
 	return result
-
-# returns an array of TriangleCells
-func get_all_empty_cells() -> Array:
-	var results = []
-	for rowIndex in grid.size():
-		for columnIndex in grid[rowIndex].size():
-			if grid[rowIndex][columnIndex].is_empty():
-				results.append(grid[rowIndex][columnIndex])
-	return results
 
 # get neighbor of the cell with the passed index,
 # in the given direction. If off the edge, return null
@@ -99,12 +91,12 @@ func get_neighbor(rowIndex: int, columnIndex: int, direction: int) -> TriangleCe
 		return grid[rowIndex][columnIndex + 1]
 	elif (((grid[rowIndex][columnIndex].pointFacingUp && direction == grid[0][0].Direction.VERTICAL)
 	|| (!grid[rowIndex][columnIndex].pointFacingUp && direction == grid[0][0].Direction.VERTICAL_POINT))
-	&& rowIndex > 0 && grid[rowIndex - 1].size() > columnIndex - 1 && columnIndex != 0):
-			return grid[rowIndex - 1][columnIndex - 1]
+	&& rowIndex > 0):
+			return grid[rowIndex - 1][columnIndex]
 	elif (((!grid[rowIndex][columnIndex].pointFacingUp && direction == grid[0][0].Direction.VERTICAL)
 	|| (grid[rowIndex][columnIndex].pointFacingUp && direction == grid[0][0].Direction.VERTICAL_POINT))
 	&& rowIndex < grid.size() - 1):
-		return grid[rowIndex + 1][columnIndex + 1]
+		return grid[rowIndex + 1][columnIndex]
 	return null
 
 func _input(event):

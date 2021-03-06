@@ -21,6 +21,8 @@ var bigClearMode = true
 var tumbleDirection: int
 var clearDelay = 1.5
 var clearScaling = 0.0
+var activeChainMode = true
+var isMarkedForInactiveClear = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -71,8 +73,8 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	$LeftEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 	$RightEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 	$VerticalEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
-	# flip every odd triangle cell and cells outside the grid
-	if (columnIndex % 2 != 0 && !pointFacingUp) || (!inGrid && !isGhost):
+	# flip every even triangle cell and cells outside the grid
+	if ((columnIndex + rowIndex) % 2 == 0 && !pointFacingUp) || (!inGrid && !isGhost):
 		scale = Vector2(1, -1)
 		# Postion adjust.
 		if (!isGhost):
@@ -80,7 +82,7 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 		# Flip particle emitter back over
 		$CPUParticles2D.scale = Vector2(1, -1)
 		pointFacingUp = true
-	elif columnIndex % 2 == 0:
+	elif (columnIndex + rowIndex) % 2 != 0:
 		scale = Vector2(1, 1)
 		$CPUParticles2D.scale = Vector2(1, 1)
 		pointFacingUp = false
@@ -109,8 +111,11 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 		tumblingDirection: int):
 	if direction == Direction.VERTICAL || direction == Direction.VERTICAL_POINT:
 		tumbleDirection = tumblingDirection
-		if tumblingDirection == Direction.VERTICAL:
-			set_colors(neighborLeftColor, neighborRightColor, neighborVerticalColor)
+		if (tumblingDirection == Direction.VERTICAL):
+			if rowIndex == get_parent().gridHeight - 1 && (columnIndex + rowIndex) % 2 == 0:
+				set_colors(neighborLeftColor, neighborRightColor, neighborVerticalColor)
+			else:
+				set_colors(neighborRightColor, neighborLeftColor, neighborVerticalColor)
 		elif ((tumblingDirection == Direction.RIGHT && pointFacingUp) ||
 				(tumblingDirection == Direction.LEFT && !pointFacingUp)):
 			set_colors(neighborLeftColor, neighborVerticalColor, neighborRightColor)
@@ -142,16 +147,19 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 	# Check for enclosed areas.
 	check_for_clear([])
 	# push balancing pieces over
-	if leftNeighbor != null && !leftNeighbor.is_empty():
-		var neighborsNeighbor = get_parent().get_neighbor(
-			leftNeighbor.rowIndex, leftNeighbor.columnIndex, Direction.LEFT)
-		if neighborsNeighbor != null && neighborsNeighbor.is_empty():
-			leftNeighbor.enter_falling_state(Direction.LEFT)
-	if rightNeighbor != null && !rightNeighbor.is_empty():
-		var neighborsNeighbor = get_parent().get_neighbor(
-			rightNeighbor.rowIndex, rightNeighbor.columnIndex, Direction.RIGHT)
-		if neighborsNeighbor != null && neighborsNeighbor.is_empty():
-			rightNeighbor.enter_falling_state(Direction.RIGHT)
+	if !is_falling():
+		if leftNeighbor != null && !leftNeighbor.is_empty():
+			var neighborsNeighbor = get_parent().get_neighbor(
+				leftNeighbor.rowIndex, leftNeighbor.columnIndex, Direction.LEFT)
+			if neighborsNeighbor != null && neighborsNeighbor.is_empty():
+				leftNeighbor.enter_falling_state(Direction.LEFT)
+		if rightNeighbor != null && !rightNeighbor.is_empty():
+			var neighborsNeighbor = get_parent().get_neighbor(
+				rightNeighbor.rowIndex, rightNeighbor.columnIndex, Direction.RIGHT)
+			if neighborsNeighbor != null && neighborsNeighbor.is_empty():
+				rightNeighbor.enter_falling_state(Direction.RIGHT)
+	if !is_marked_for_clear() && !is_falling() && !activeChainMode:
+		get_parent().set_off_chains()
 
 func update_colors_visually():
 	if cellFocused:
@@ -181,9 +189,10 @@ func clear(edge: int):
 	$ClearTimer.wait_time = clearDelay
 	tumbleDirection = Direction.VERTICAL
 	$GravityTimer.stop()
-	if (edge == Direction.VERTICAL_POINT && (!is_marked_for_clear() || $ClearTimer.paused)):
+	if (edge == Direction.VERTICAL_POINT):
 		# Immediately blank tile.
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
+		isMarkedForInactiveClear = false
 		# Check to see if any neighbors should enter falling state.
 		if !pointFacingUp:
 			# Primarily, we have to check above.
@@ -216,10 +225,17 @@ func clear(edge: int):
 			var leftNeighborFilled = leftNeighbor == null || !leftNeighbor.is_empty()
 			var rightNeighborFilled = rightNeighbor == null || !rightNeighbor.is_empty()
 			if leftNeighborFilled != rightNeighborFilled:
-				if leftNeighborFilled:
-					leftNeighbor.enter_falling_state(Direction.RIGHT)
-				else:
-					rightNeighbor.enter_falling_state(Direction.LEFT)
+				if leftNeighborFilled && leftNeighbor != null:
+					var neighborsNeighbor = leftNeighbor.get_parent().get_neighbor(leftNeighbor.rowIndex,
+					leftNeighbor.columnIndex, Direction.LEFT)
+					if neighborsNeighbor == null || !neighborsNeighbor.is_empty():
+						leftNeighbor.enter_falling_state(Direction.RIGHT)
+				elif rightNeighbor != null:
+					if rightNeighborFilled && rightNeighbor != null:
+						var neighborsNeighbor = rightNeighbor.get_parent().get_neighbor(rightNeighbor.rowIndex,
+						rightNeighbor.columnIndex, Direction.RIGHT)
+						if neighborsNeighbor == null || !neighborsNeighbor.is_empty():
+							rightNeighbor.enter_falling_state(Direction.RIGHT)
 			else:
 				# Fall from above. XXX fix bug where sometimes this does not cause them to fall.
 				var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
@@ -240,8 +256,11 @@ func clear(edge: int):
 		# Set particle color XXX else block to handle split color case
 		if !is_marked_for_clear():
 			$CPUParticles2D.color = highlightColors[particleColor]
-		# set a timer to actually clear the cell, or restart it
-		$ClearTimer.start()
+		if activeChainMode:
+			# set a timer to actually clear the cell, or restart it
+			$ClearTimer.start()
+		else:
+			isMarkedForInactiveClear = true
 
 # find neighbors that match with this cell, and mark both for clear.
 func check_for_clear(alreadyCheckedCoordinates: Array):
@@ -287,7 +306,7 @@ func is_falling() -> bool:
 	return !$GravityTimer.is_stopped()
 
 func is_marked_for_clear() -> bool:
-	return !$ClearTimer.is_stopped()
+	return !$ClearTimer.is_stopped() || (isMarkedForInactiveClear && !activeChainMode)
 
 func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
 	if theoryTumbleDirection == Direction.VERTICAL_POINT:

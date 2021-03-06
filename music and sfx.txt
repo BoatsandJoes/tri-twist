@@ -1,7 +1,7 @@
 modes + mood references:
 menu https://tetr.io
 zen mode (bejeweled zen mode) (could share music with menu)
-some sort of normal difficulty mode (experimenting with mechanics, probably either "reach certain score thresholds in time" or "survive rising garbage") (reference TGM 1, 2, and 3 Master Mode and TGM 2 Normal Mode)
+some sort of normal difficulty mode (hit certain score thresholds in time to extend the game) (chain timer may get shorter as the game goes on, idk yet) (reference TGM 1, 2, and 3 Master Mode and TGM 2 Normal Mode)
 custom settings mode (music select, probably)
 game over jingle
 you win jingle
@@ -13,7 +13,8 @@ sfx:
 piece settling into place against a stationary piece or the wall, without matching (I think of a click)
 piece settling into place against a stationary piece or the wall, with matching
 ascending pitch sfx for connected matches of ascending quantity, capping at around 8 (cap may be tied to scoring mechanics that aren't decided yet) (reference Petal Crash)
-piece clear when timer expires (May change depending on how good the score is, or may not)
+piece actually clearing
+piece knocking another piece over
 pause
 menu button click (could reuse piece settling sounds)
 menu option increase/decrease (could just click)
@@ -21,22 +22,14 @@ game is about to start jingle
 countdown/start
 game end (I think of an annoying whistle? It doesn't need to be an annoying whistle)
 "can't drop there/can't rotate that way"
+You reached the time extension score threshold (reference TGM grade advance, but really I think of a racing game guy going "TIME EXTENDED")
 
 potentially annoying sounds but maybe they'd be neat:
-moving piece edge contacting another piece edge (maybe only if one is stationary?)
-active piece shift (some versions of Tetris have this, notably Tetris Effect)
-active piece rotate
+moving piece edge contacting another piece edge (maybe only if one is stationary, or quiet them down if many are tumbling at once?)
+active piece shift/rotate (some versions of Tetris have this, notably Tetris Effect)
 piece release (seems redundant)
-"you're about to die"
 
 sfx tied to modes or mechanics that may be cut:
-knocking another piece over, either by falling past or by rolling into it (will often happen at the same time as piece settling into place either with or without matching, but needed to make the rule feel intuitive)
-You're close to the score/time/move:
-	goal
-	limit (one sfx for 10 away, and another repeated for 5 4 3 2 1)
-match satisfying some restriction that gives extra points (like T spins)
-score extension (you got to the target score in time to continue playing)
+You're close to the score/time/move limit (one sfx for 10 away, and another repeated for 5 4 3 2 1)
+match satisfying some restriction that gives extra points (like T spins) (currently thinking toppling a piece into a match, matching 2 or 3 sides at once, and puyo puyo-style chains
 piece settling into place from instant gravity/hard drop (a woosh and thump)
-dig mode incoming treasure
-dig survival incoming garbage
-dig survival clear garbage

@@ -121,9 +121,8 @@ text = "0"
 [node name="ChainMode" type="Label" parent="MarginContainer/HBoxContainer/Labels"]
 margin_top = 288.0
 margin_right = 79.0
-margin_bottom = 319.0
-text = "Active Chain
-Off is buggy"
+margin_bottom = 302.0
+text = "Active Chain"
 
 [node name="Sliders" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
 margin_left = 83.0
