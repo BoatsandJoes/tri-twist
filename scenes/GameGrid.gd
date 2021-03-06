@@ -76,7 +76,7 @@ func drop_piece(piece: TriangleCell, dropForReal: bool):
 
 # Gets the position in which to draw the cell with the passed indices
 func get_position_for_cell(rowIndex: int, columnIndex: int, flipped: bool) -> Vector2:
-	var result = Vector2(columnIndex * (cellSize/2 + margin) + 300,
+	var result = Vector2(columnIndex * (cellSize/2 + margin) + window.size[0]/5,
 				window.size[1] - cellSize - (rowIndex * ((cellSize * sqrt(3) / 2) + margin)))
 	if flipped:
 		result = Vector2(result[0], result[1] + cellSize * sqrt(3) / 6)

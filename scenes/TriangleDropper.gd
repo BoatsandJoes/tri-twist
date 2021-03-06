@@ -28,17 +28,17 @@ func _ready():
 	activePiece.columnIndex = gameGrid.gridWidth / 2
 	activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
 	activePiece.fill_randomly()
-	activePiece.cellFocused = true
 	activePiece.update_colors_visually()
 	add_child(activePiece)
 	# Previews
 	for i in range(6):
 		var preview: TriangleCell = TriangleCell.instance()
-		preview.init(90, -1, -1, Vector2(830, 40 + 100 * i), false, false)
+		preview.init(activePiece.size, -1, -1, Vector2(gameGrid.grid[-1][-1].position[0] + (i + 1.1) * activePiece.size,
+		activePiece.position[1]), false, false)
 		preview.fill_randomly()
 		previews.append(preview)
 		add_child(preview)
-	set_previews_visible(2)
+	set_previews_visible(3)
 	# Ghost
 	ghostPiece = TriangleCell.instance()
 	ghostPiece.set_modulate(Color(1,1,1,0.5))
@@ -76,15 +76,19 @@ func _input(event):
 			leftPressed = false
 			$DasTimer.stop()
 			$ArrTimer.stop()
+			if rightPressed:
+				$DasTimer.start()
 		elif event.is_action_released("right"):
 			rightPressed = false
 			$DasTimer.stop()
 			$ArrTimer.stop()
+			if leftPressed:
+				$DasTimer.start()
 		elif event.is_action_pressed("clockwise"):
 			activePiece.set_colors(activePiece.verticalColor, activePiece.leftColor, activePiece.rightColor)
 		elif event.is_action_pressed("counterclockwise"):
 			activePiece.set_colors(activePiece.rightColor, activePiece.verticalColor, activePiece.leftColor)
-		elif (event.is_action_pressed("ui_accept") ||
+		elif (event.is_action_pressed("ui_accept") || event.is_action_pressed("ui_select") ||
 		event.is_action_pressed("ui_down") || event.is_action_pressed("ui_up")):
 			var accepted = gameGrid.drop_piece(activePiece, true)
 			if accepted:

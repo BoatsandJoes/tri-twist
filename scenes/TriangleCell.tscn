@@ -14,14 +14,16 @@ script = ExtResource( 1 )
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 
 [node name="ClearTimer" type="Timer" parent="."]
-wait_time = 1.5
+wait_time = 5.0
 one_shot = true
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+z_index = 1
 emitting = false
-amount = 1000
-lifetime = 0.2
+amount = 2000
+lifetime = 0.15
 one_shot = true
+explosiveness = 0.1
 randomness = 1.0
 gravity = Vector2( 0, 1800 )
 initial_velocity = 250.0
