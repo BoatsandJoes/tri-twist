@@ -169,7 +169,7 @@ func draw_ghost_pieces():
 				# We are done
 				ghostPiece.init(gameGrid.cellSize, lastMove[0].rowIndex, lastMove[0].columnIndex,
 						gameGrid.get_position_for_cell(lastMove[0].rowIndex, lastMove[0].columnIndex,
-						(lastMove[0].columnIndex + lastMove[0].rowIndex) % 2 != 0), false, true)
+						(lastMove[0].columnIndex + lastMove[0].rowIndex) % 2 == 0), false, true)
 				ghostLinePoints.append(ghostPiece.position)
 				break
 		ghostPiece.set_colors(ghostLeftColor, ghostRightColor, ghostVerticalColor)

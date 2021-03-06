@@ -59,7 +59,7 @@ func set_grid_height(value):
 # Pass false as a second parameter to not actually drop the piece; just know if we can.
 func drop_piece(piece: TriangleCell, dropForReal: bool):
 	var neighborDirection: int
-	if (piece.columnIndex + piece.rowIndex) % 2 != 0:
+	if (piece.columnIndex + piece.rowIndex) % 2 == 0:
 		neighborDirection = grid[0][0].Direction.VERTICAL_POINT
 	else:
 		neighborDirection = grid[0][0].Direction.VERTICAL
@@ -79,15 +79,6 @@ func get_position_for_cell(rowIndex: int, columnIndex: int, flipped: bool) -> Ve
 	if flipped:
 		result = Vector2(result[0], result[1] + cellSize * sqrt(3) / 6)
 	return result
-
-# returns an array of TriangleCells
-func get_all_empty_cells() -> Array:
-	var results = []
-	for rowIndex in grid.size():
-		for columnIndex in grid[rowIndex].size():
-			if grid[rowIndex][columnIndex].is_empty():
-				results.append(grid[rowIndex][columnIndex])
-	return results
 
 # get neighbor of the cell with the passed index,
 # in the given direction. If off the edge, return null
