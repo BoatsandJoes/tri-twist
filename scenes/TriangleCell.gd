@@ -21,6 +21,8 @@ var bigClearMode = true
 var tumbleDirection: int
 var clearDelay = 1.5
 var clearScaling = 0.0
+var activeChainMode = true
+var isMarkedForInactiveClear = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -156,6 +158,8 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 				rightNeighbor.rowIndex, rightNeighbor.columnIndex, Direction.RIGHT)
 			if neighborsNeighbor != null && neighborsNeighbor.is_empty():
 				rightNeighbor.enter_falling_state(Direction.RIGHT)
+	if !is_marked_for_clear() && !is_falling() && !activeChainMode:
+		get_parent().set_off_chains()
 
 func update_colors_visually():
 	if cellFocused:
@@ -185,9 +189,10 @@ func clear(edge: int):
 	$ClearTimer.wait_time = clearDelay
 	tumbleDirection = Direction.VERTICAL
 	$GravityTimer.stop()
-	if (edge == Direction.VERTICAL_POINT && (!is_marked_for_clear() || $ClearTimer.paused)):
+	if (edge == Direction.VERTICAL_POINT):
 		# Immediately blank tile.
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
+		isMarkedForInactiveClear = false
 		# Check to see if any neighbors should enter falling state.
 		if !pointFacingUp:
 			# Primarily, we have to check above.
@@ -251,8 +256,11 @@ func clear(edge: int):
 		# Set particle color XXX else block to handle split color case
 		if !is_marked_for_clear():
 			$CPUParticles2D.color = highlightColors[particleColor]
-		# set a timer to actually clear the cell, or restart it
-		$ClearTimer.start()
+		if activeChainMode:
+			# set a timer to actually clear the cell, or restart it
+			$ClearTimer.start()
+		else:
+			isMarkedForInactiveClear = true
 
 # find neighbors that match with this cell, and mark both for clear.
 func check_for_clear(alreadyCheckedCoordinates: Array):
@@ -298,7 +306,7 @@ func is_falling() -> bool:
 	return !$GravityTimer.is_stopped()
 
 func is_marked_for_clear() -> bool:
-	return !$ClearTimer.is_stopped()
+	return !$ClearTimer.is_stopped() || (isMarkedForInactiveClear && !activeChainMode)
 
 func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
 	if theoryTumbleDirection == Direction.VERTICAL_POINT:

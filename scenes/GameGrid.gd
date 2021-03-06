@@ -29,7 +29,9 @@ func initialize_grid():
 func toggle_chain_mode(active):
 	for row in grid:
 		for cell in row:
-			cell.get_node("ClearTimer").paused = !active
+			cell.activeChainMode = active
+			if !active:
+				cell.get_node("ClearTimer").stop()
 
 func set_gravity(value):
 	for row in grid:
