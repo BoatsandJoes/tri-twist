@@ -109,8 +109,11 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 		tumblingDirection: int):
 	if direction == Direction.VERTICAL || direction == Direction.VERTICAL_POINT:
 		tumbleDirection = tumblingDirection
-		if tumblingDirection == Direction.VERTICAL:
-			set_colors(neighborLeftColor, neighborRightColor, neighborVerticalColor)
+		if (tumblingDirection == Direction.VERTICAL):
+			if rowIndex == get_parent().gridHeight - 1 && (columnIndex + rowIndex) % 2 == 0:
+				set_colors(neighborLeftColor, neighborRightColor, neighborVerticalColor)
+			else:
+				set_colors(neighborRightColor, neighborLeftColor, neighborVerticalColor)
 		elif ((tumblingDirection == Direction.RIGHT && pointFacingUp) ||
 				(tumblingDirection == Direction.LEFT && !pointFacingUp)):
 			set_colors(neighborLeftColor, neighborVerticalColor, neighborRightColor)
