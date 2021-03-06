@@ -23,6 +23,7 @@ countdown/start
 game end (I think of an annoying whistle? It doesn't need to be an annoying whistle)
 "can't drop there/can't rotate that way"
 You reached the time extension score threshold (reference TGM grade advance, but really I think of a racing game guy going "TIME EXTENDED")
+after a combo finishes, the accrued score ticks up into your total score (in zen mode only)
 
 potentially annoying sounds but maybe they'd be neat:
 moving piece edge contacting another piece edge (maybe only if one is stationary, or quiet them down if many are tumbling at once?)
