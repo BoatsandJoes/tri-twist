@@ -72,7 +72,7 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	$RightEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 	$VerticalEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 	# flip every odd triangle cell and cells outside the grid
-	if (columnIndex % 2 != 0 && !pointFacingUp) || (!inGrid && !isGhost):
+	if ((columnIndex + rowIndex) % 2 != 0 && !pointFacingUp) || (!inGrid && !isGhost):
 		scale = Vector2(1, -1)
 		# Postion adjust.
 		if (!isGhost):
@@ -80,7 +80,7 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 		# Flip particle emitter back over
 		$CPUParticles2D.scale = Vector2(1, -1)
 		pointFacingUp = true
-	elif columnIndex % 2 == 0:
+	elif (columnIndex + rowIndex) % 2 == 0:
 		scale = Vector2(1, 1)
 		$CPUParticles2D.scale = Vector2(1, 1)
 		pointFacingUp = false
@@ -216,9 +216,9 @@ func clear(edge: int):
 			var leftNeighborFilled = leftNeighbor == null || !leftNeighbor.is_empty()
 			var rightNeighborFilled = rightNeighbor == null || !rightNeighbor.is_empty()
 			if leftNeighborFilled != rightNeighborFilled:
-				if leftNeighborFilled:
+				if leftNeighborFilled && leftNeighbor != null:
 					leftNeighbor.enter_falling_state(Direction.RIGHT)
-				else:
+				elif rightNeighbor != null:
 					rightNeighbor.enter_falling_state(Direction.LEFT)
 			else:
 				# Fall from above. XXX fix bug where sometimes this does not cause them to fall.
