@@ -1,7 +1,7 @@
 # tri-twist
 todo next:
-	fix brain mode chains
-	add ui with moves, time, and score
+	fix brain mode chains popping too aggressively
+	hook up combo display
 	design randomizer
 	hook up sound events
 	gravity stuff
@@ -16,7 +16,7 @@ todo next:
 		light up unmatchable edges in matched piece  
 
 
-
+Could add Tribulations mode where gravity is instant and the active chain timer = the old quick chain timer and the new quick chain is even more strict
 on store page, advertise millions of polygons (my idea)
 
 Tuning settings (*- can ramp for difficulty, based on score or moves or time or some combination):  

@@ -3,7 +3,10 @@ use to fake extend the active chain timer
 towers (3 high is totally reasonable)  
 double dominoes (really difficult with 4 colors, ok with 3)
 
-swapping piece order with hard drop should give points
+When a piece is added to a chain, count # of connections. Add these connections to active/brain/quick, and if there are 2 or 3 connections add two/hat trick. Should a double connection to pieces already part of this chain count as a trick? I think so.
+What to do in case where two chains get connected? Idk about game class, but display class simply is told "combine these two keys", it doesn't matter which is kept as the root.
+
+swapping piece order with hard drop should maybe give points
 knocking a piece into a match is worth points  
 Tony hawk combo display  
 4 match should be bigger than 2 2 matches, but idk exactly how much it should scale up. Depends on chain length distribution  

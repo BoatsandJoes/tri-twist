@@ -32,7 +32,7 @@ func _ready():
 	activePiece.update_colors_visually()
 	add_child(activePiece)
 	# Previews
-	for i in range(2):
+	for i in range(3):
 		var preview: TriangleCell = TriangleCell.instance()
 		preview.init(activePiece.size, -1, -1, Vector2(gameGrid.grid[-1][-1].position[0] + (i + 1.1) * activePiece.size,
 		activePiece.position[1]), false, false)

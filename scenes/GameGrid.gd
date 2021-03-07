@@ -1,6 +1,7 @@
 extends Node2D
 class_name GameGrid
 
+signal tumble
 
 export (PackedScene) var TriangleCell
 export var gridWidth: int
@@ -25,6 +26,7 @@ func initialize_grid():
 			grid[rowIndex][columnIndex].init(cellSize, rowIndex, columnIndex,
 			get_position_for_cell(rowIndex, columnIndex, false), true, false)
 			add_child(grid[rowIndex][columnIndex])
+			grid[rowIndex][columnIndex].connect("tumble", self, "_on_TriangleCell_tumble")
 
 func toggle_chain_mode(active):
 	for row in grid:
@@ -165,3 +167,6 @@ func set_off_chains():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+func _on_TriangleCell_tumble():
+	emit_signal("tumble")

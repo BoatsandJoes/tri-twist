@@ -12,6 +12,7 @@ func _ready():
 	triangleDropper.connect("piece_sequence_advanced", self, "_on_triangleDropper_piece_sequence_advanced")
 	triangleDropper.gameGrid.toggle_chain_mode(true)
 	triangleDropper.gameGrid.set_gravity(0.05)
+	triangleDropper.gameGrid.connect("tumble", self, "_on_gameGrid_tumble")
 
 func _input(event):
 	if event is InputEventKey && event.is_action_pressed("ui_escape"):
@@ -23,3 +24,6 @@ func _input(event):
 
 func _on_triangleDropper_piece_sequence_advanced():
 	$HUD/HBoxContainer/VBoxContainer2/MoveCount.make_move()
+
+func _on_gameGrid_tumble():
+	$HUD/HBoxContainer/VBoxContainer/ScoreDisplay.increment_score(10)

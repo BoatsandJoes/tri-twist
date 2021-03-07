@@ -24,3 +24,7 @@ func _on_TimeDisplay_out_of_time():
 
 func _on_ComboDisplay_combo_done(extra_arg_0):
 	$HBoxContainer/VBoxContainer/ScoreDisplay.increment_score(extra_arg_0)
+
+
+func _on_ComboDisplay_new_best_combo(extra_arg_0):
+	$HBoxContainer/VBoxContainer/ScoreDisplay.update_best_chain_score(extra_arg_0)

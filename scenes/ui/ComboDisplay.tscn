@@ -30,6 +30,10 @@ visible = false
 margin_right = 1920.0
 margin_bottom = 14.0
 
+[node name="ChainLength" type="Label" parent="Scorecard/ComboCounter"]
+visible = false
+margin_bottom = 14.0
+
 [node name="TwoTrick" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_right = 1920.0
@@ -43,6 +47,15 @@ margin_bottom = 14.0
 [node name="SimulChaineous" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_right = 1920.0
+margin_bottom = 14.0
+
+[node name="Total" type="Label" parent="Scorecard/ComboCounter"]
+visible = false
+margin_bottom = 14.0
+
+[node name="OtherCombos" type="Label" parent="Scorecard/ComboCounter"]
+visible = false
+margin_right = 93.0
 margin_bottom = 14.0
 
 [node name="ComboScore" type="VBoxContainer" parent="Scorecard"]
@@ -63,6 +76,10 @@ margin_bottom = 14.0
 visible = false
 margin_bottom = 14.0
 
+[node name="ChainLengthScore" type="Label" parent="Scorecard/ComboScore"]
+visible = false
+margin_bottom = 14.0
+
 [node name="TwoTrickScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 14.0
@@ -72,6 +89,14 @@ visible = false
 margin_bottom = 14.0
 
 [node name="SimulChaineousScore" type="Label" parent="Scorecard/ComboScore"]
+visible = false
+margin_bottom = 14.0
+
+[node name="TotalScore" type="Label" parent="Scorecard/ComboScore"]
+visible = false
+margin_bottom = 14.0
+
+[node name="OtherCombosScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 14.0
 

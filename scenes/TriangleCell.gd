@@ -1,6 +1,8 @@
 extends Area2D
 class_name TriangleCell
 
+signal tumble
+
 var size: int
 # last color is the null color, for empty cells
 enum Direction {LEFT, RIGHT, VERTICAL, VERTICAL_POINT}
@@ -115,14 +117,18 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 		elif ((tumblingDirection == Direction.RIGHT && pointFacingUp) ||
 				(tumblingDirection == Direction.LEFT && !pointFacingUp)):
 			set_colors(neighborLeftColor, neighborVerticalColor, neighborRightColor)
+			emit_signal("tumble")
 		else:
 			set_colors(neighborVerticalColor, neighborRightColor, neighborLeftColor)
+			emit_signal("tumble")
 	elif direction == Direction.LEFT:
 		tumbleDirection = Direction.RIGHT
 		set_colors(neighborLeftColor, neighborVerticalColor, neighborRightColor)
+		emit_signal("tumble")
 	elif direction == Direction.RIGHT:
 		set_colors(neighborVerticalColor, neighborRightColor, neighborLeftColor)
 		tumbleDirection = Direction.LEFT
+		emit_signal("tumble")
 	# Check if we should start our gravity timer or come to rest
 	var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
 	var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
