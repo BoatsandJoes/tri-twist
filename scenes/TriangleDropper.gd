@@ -3,6 +3,7 @@ class_name TriangleDropper
 
 export (PackedScene) var GameGrid
 export (PackedScene) var TriangleCell
+signal piece_sequence_advanced
 var gameGrid: GameGrid
 var activePiece: TriangleCell
 var ghostPiece: TriangleCell
@@ -31,7 +32,7 @@ func _ready():
 	activePiece.update_colors_visually()
 	add_child(activePiece)
 	# Previews
-	for i in range(6):
+	for i in range(2):
 		var preview: TriangleCell = TriangleCell.instance()
 		preview.init(activePiece.size, -1, -1, Vector2(gameGrid.grid[-1][-1].position[0] + (i + 1.1) * activePiece.size,
 		activePiece.position[1]), false, false)
@@ -92,10 +93,7 @@ func _input(event):
 		event.is_action_pressed("ui_down") || event.is_action_pressed("ui_up")):
 			var accepted = gameGrid.drop_piece(activePiece, true)
 			if accepted:
-				if gameGrid.grid[0][0].get_node("ClearTimer").paused && !gameGrid.would_have_match(ghostPiece):
-					gameGrid.set_off_chains()
 				advance_piece()
-					
 		elif (event.is_action_pressed("ui_focus_next")):
 			$Label.visible = false
 
@@ -204,6 +202,7 @@ func advance_piece():
 	previews[-1].fill_randomly()
 	if dropTimer:
 		$DropTimer.start()
+	emit_signal("piece_sequence_advanced")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
