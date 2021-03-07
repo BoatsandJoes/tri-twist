@@ -12,7 +12,8 @@ hard difficulty mode (reference TGM 2 The Absolute Death+ mode)
 sfx:
 piece settling into place against a stationary piece or the wall, without matching (I think of a click)
 piece settling into place against a stationary piece or the wall, with matching
-ascending pitch sfx for connected matches of ascending quantity, capping at around 8 (cap may be tied to scoring mechanics that aren't decided yet) (reference Petal Crash)
+ascending pitch sfx for connected matches of ascending quantity, capping at around 7 (reference Petal Crash)
+"match that is worth extra points" sfx (fast chain, one piece matching multiple other pieces at once, tumbling a piece into a match)
 piece actually clearing
 piece knocking another piece over
 pause
@@ -24,6 +25,7 @@ game end (I think of an annoying whistle? It doesn't need to be an annoying whis
 "can't drop there/can't rotate that way"
 You reached the time extension score threshold (reference TGM grade advance, but really I think of a racing game guy going "TIME EXTENDED")
 after a combo finishes, the accrued score ticks up into your total score (in zen mode only)
+You're close to the score/time/move limit (one sfx for 10 away, and another repeated for 5 4 3 2 1)
 
 potentially annoying sounds but maybe they'd be neat:
 moving piece edge contacting another piece edge (maybe only if one is stationary, or quiet them down if many are tumbling at once?)
@@ -31,6 +33,4 @@ active piece shift/rotate (some versions of Tetris have this, notably Tetris Eff
 piece release (seems redundant)
 
 sfx tied to modes or mechanics that may be cut:
-You're close to the score/time/move limit (one sfx for 10 away, and another repeated for 5 4 3 2 1)
-match satisfying some restriction that gives extra points (like T spins) (currently thinking toppling a piece into a match, matching 2 or 3 sides at once, and puyo puyo-style chains
 piece settling into place from instant gravity/hard drop (a woosh and thump)

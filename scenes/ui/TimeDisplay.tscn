@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/ui/TimeDisplay.gd" type="Script" id=1]
+
+[node name="TimeDisplay" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="VBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+
+[node name="TimeLabel" type="Label" parent="VBoxContainer"]
+margin_top = 533.0
+margin_right = 36.0
+margin_bottom = 547.0
+text = "Time:"
+
+[node name="TimeValue" type="Label" parent="VBoxContainer"]
+margin_left = 40.0
+margin_top = 533.0
+margin_right = 96.0
+margin_bottom = 547.0
+text = "00:00:00"

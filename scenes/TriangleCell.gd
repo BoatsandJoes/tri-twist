@@ -5,9 +5,9 @@ var size: int
 # last color is the null color, for empty cells
 enum Direction {LEFT, RIGHT, VERTICAL, VERTICAL_POINT}
 enum Rotation {CLOCKWISE, COUNTERCLOCKWISE}
-var colors = [Color.royalblue, Color.crimson, Color.goldenrod, Color.webgreen, Color.orchid, Color.black]
-var focusColors = [Color.dodgerblue, Color.indianred, Color.orange, Color.seagreen, Color.magenta, Color.darkslategray]
-var highlightColors = [Color.deepskyblue, Color.deeppink, Color.gold, Color.green, Color.fuchsia]
+var colors = [Color.royalblue, Color.crimson, Color.goldenrod, Color.webgreen, Color.black]
+var focusColors = [Color.dodgerblue, Color.indianred, Color.orange, Color.seagreen, Color.darkslategray]
+var highlightColors = [Color.deepskyblue, Color.deeppink, Color.gold, Color.green]
 var leftColor: int = colors.size() - 1
 var rightColor: int = colors.size() - 1
 var verticalColor: int = colors.size() - 1
@@ -41,8 +41,6 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	tumbleDirection = Direction.VERTICAL
 	# set position
 	position = cellPostion
-	# move particle emitter to center
-	$CPUParticles2D.position = Vector2(size/2, size * sqrt(3) / 6)
 	# Define vertices
 	var baseVectorArray = PoolVector2Array()
 	baseVectorArray.append(Vector2(0, 0))
@@ -88,8 +86,6 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 		pointFacingUp = false
 	# make empty
 	set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
-	# offset so the center is in the center XXX
-	#translate(Vector2(-size/2,-(size * tan(PI/6))))
 
 func _input(event):
 	if event is InputEventKey && event.is_action_pressed("ui_focus_next"):
