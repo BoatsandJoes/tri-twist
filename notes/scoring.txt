@@ -1,0 +1,22 @@
+emergent chain mechanics:  
+use to fake extend the active chain timer
+towers (3 high is totally reasonable)  
+double dominoes (really difficult with 4 colors, ok with 3)
+
+swapping piece order with hard drop should give points
+knocking a piece into a match is worth points  
+Tony hawk combo display  
+4 match should be bigger than 2 2 matches, but idk exactly how much it should scale up. Depends on chain length distribution  
+Tucking into the middle of a chain is already implicitly worth more (longer chain and tuck bonus, especially if chain length is capped), so maybe it doesn't need to award points, but maybe it should
+multiple chain clears at the same time could be worth some points, as long as 2 chains aren't too good
+dominoes and towers active chains could be worth extra points, but implicitly they already give you an opportunity for more since they give you extra active chain time
+Rolling at all could award nominal points.  
+	Same for toppling a piece  
+Non-active chains could award points and then allow extensions (basically only a 2 chain has meaning), but they are difficult to plan (might be cool… but in practice it's hard to not cover the second one up in a narrow grid, test in a wide grid)  
+All Clear is easy and shouldn't award points  
+Could have a TGM/TAP grading system, tied to score or require to fill up a score counter in a short time to advance, or you have to hit score extensions to get the highest grade (but missing them you don't lose) 
+
+Fast chain when you get within a more strict timer, until you miss one and the rest of the links are now active chain
+Active chain looser timer that's worth fewer points
+Fast chain pieces don't count toward the maximum number of active chain pieces, which is idk, some number
+Galaxy chain is any piece that has come to rest and then you topple it onto a match: implicitly it is a fast chain, definitely explicitly recognized but idk if it should give more points (it already implicitly is a long fast chain that gives you thinking time to extend it)

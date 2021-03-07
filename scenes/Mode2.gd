@@ -15,7 +15,7 @@ func _ready():
 
 func _input(event):
 	if event is InputEventKey && event.is_action_pressed("ui_escape"):
-		get_tree().change_scene("scenes/MainMenu.tscn")
+		get_tree().change_scene("scenes/menus/MainMenu.tscn")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

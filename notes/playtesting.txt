@@ -1,0 +1,8 @@
+Beth
+	plays a lot of tetris and never realized that you can drop more pieces while a piece is falling  
+	if the next piece can't continue a chain, she just does nothing and waits to start a new chain (instead of throwing it to the side to try to continue this chain)  
+	she thought balancing was a little weird, but was interested in the toppling (unexpected)  
+	she thinks pieces should be able to stand up against the wall or another piece given that it can stand in the middle of nothing with no support (corroborated by Crimefighter)  
+	she's doing mostly 2 chains which is part of why she doesn't get too high up (an active chain would naturally raise the stack when you throw junk pieces to the side)    
+	she turned arr from 0.05 up to 0.1 instead of down  
+	1 frame gravity was too fast   

@@ -45,7 +45,7 @@ _global_script_class_icons={
 [application]
 
 config/name="TriTwist"
-run/main_scene="res://scenes/MainMenu.tscn"
+run/main_scene="res://scenes/menus/MainMenu.tscn"
 config/icon="res://icon.png"
 
 [display]

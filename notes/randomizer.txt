@@ -1,0 +1,47 @@
+could orient similar pieces same way every time
+
+Distinct 3 color 10/11 choices
+
+weight 6 with reflections, 3 without
+ABC/ACB
+
+weight 3
+ABB
+ACC
+BAA
+BCC
+CAA
+CBB
+
+weight 1
+AAA
+BBB
+CCC
+
+Distinct 4 color 20/24 choices
+
+weight 6 w/ reflections, 3 without
+ABC/ACB
+ABD/ADB
+ACD/ADC
+BCD/BDC
+
+weight 3
+ABB
+ACC
+ADD
+BAA
+BCC
+BDD
+CAA
+CBB
+CDD
+DAA
+DBB
+DCC
+
+weight 1
+AAA
+BBB
+CCC
+DDD
