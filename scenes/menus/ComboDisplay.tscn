@@ -8,38 +8,71 @@ anchor_bottom = 1.0
 rect_scale = Vector2( 3, 3 )
 script = ExtResource( 1 )
 
-[node name="Scorecard" type="VBoxContainer" parent="."]
+[node name="Scorecard" type="HBoxContainer" parent="."]
 margin_right = 1920.0
 margin_bottom = 1080.0
 
-[node name="GalaxyBrainChain" type="Label" parent="Scorecard"]
+[node name="ComboCounter" type="VBoxContainer" parent="Scorecard"]
+margin_bottom = 1080.0
+
+[node name="GalaxyBrainChain" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_right = 1920.0
 margin_bottom = 14.0
 
-[node name="QuickChain" type="Label" parent="Scorecard"]
+[node name="QuickChain" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_right = 1920.0
 margin_bottom = 14.0
 
-[node name="ActiveChain" type="Label" parent="Scorecard"]
+[node name="ActiveChain" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_right = 1920.0
 margin_bottom = 14.0
 
-[node name="TwoTrick" type="Label" parent="Scorecard"]
+[node name="TwoTrick" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_right = 1920.0
 margin_bottom = 14.0
 
-[node name="HatTrick" type="Label" parent="Scorecard"]
+[node name="HatTrick" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_right = 1920.0
 margin_bottom = 14.0
 
-[node name="SimulChaineous" type="Label" parent="Scorecard"]
+[node name="SimulChaineous" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_right = 1920.0
+margin_bottom = 14.0
+
+[node name="ComboScore" type="VBoxContainer" parent="Scorecard"]
+margin_left = 4.0
+margin_right = 4.0
+margin_bottom = 1080.0
+
+[node name="BrainChainScore" type="Label" parent="Scorecard/ComboScore"]
+visible = false
+margin_bottom = 14.0
+rect_pivot_offset = Vector2( -316, 10.6667 )
+
+[node name="QuickChainScore" type="Label" parent="Scorecard/ComboScore"]
+visible = false
+margin_bottom = 14.0
+
+[node name="ActiveChainScore" type="Label" parent="Scorecard/ComboScore"]
+visible = false
+margin_bottom = 14.0
+
+[node name="TwoTrickScore" type="Label" parent="Scorecard/ComboScore"]
+visible = false
+margin_bottom = 14.0
+
+[node name="HatTrickScore" type="Label" parent="Scorecard/ComboScore"]
+visible = false
+margin_bottom = 14.0
+
+[node name="SimulChaineousScore" type="Label" parent="Scorecard/ComboScore"]
+visible = false
 margin_bottom = 14.0
 
 [node name="CompleteScorecardTimer" type="Timer" parent="."]
