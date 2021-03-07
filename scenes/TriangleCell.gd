@@ -86,8 +86,6 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 		pointFacingUp = false
 	# make empty
 	set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
-	# offset so the center is in the center XXX
-	#translate(Vector2(-size/2,-(size * tan(PI/6))))
 
 func _input(event):
 	if event is InputEventKey && event.is_action_pressed("ui_focus_next"):

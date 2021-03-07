@@ -3,7 +3,6 @@ class_name Mode1
 
 export (PackedScene) var TriangleDropper
 var triangleDropper: TriangleDropper
-#TODO implement UI in this class
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

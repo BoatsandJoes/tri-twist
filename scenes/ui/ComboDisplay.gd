@@ -13,6 +13,7 @@ var activeChainLinkScore = 1000
 var twoTrickScore = 200
 var hatTrickScore = 600
 var simulchaineousScore = 300
+var displayedComboKey
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -32,6 +33,7 @@ func update_scorecard():
 			combos[comboKey] = thisCombo
 			if thisCombo.get("scoreTotal") > comboToDisplay.get("scoreTotal"):
 				comboToDisplay = thisCombo
+				displayedComboKey = comboKey
 		if comboToDisplay != null:
 			if (comboToDisplay.get("brainChain")):
 				$Scorecard/ComboCounter/GalaxyBrainChain.text = "Brain Chain! x" + String(comboToDisplay.get("brainChainCount"))
@@ -88,6 +90,7 @@ func update_scorecard():
 				child.visible = false
 			for child in $Scorecard/ComboScore.get_children():
 				child.visible = false
+			displayedComboKey = null
 
 func score_chain(combo) -> int:
 	combo["brainChainScore"] = score_brain_chain(combo.get("brainChainCount"))
@@ -132,15 +135,17 @@ func end_combo(comboKey) -> int:
 	if combos.has(comboKey):
 		combos[comboKey]["finished"] = true
 	if $CompleteScorecardTimer.is_stopped():
-		#TODO we only want to freeze the scorecard if this combo is the biggest (aka it's being shown currently).
-		$CompleteScorecardTimer.start()
-		$Scorecard.set_modulate(Color(0.483521, 0.690471, 0.910156))
-	elif $CompleteScorecardTimer.time_left < $CompleteScorecardTimer.wait_time / 2:
-		#TODO we only want to overwrite the scorecard if this combo is bigger than all unfinished combos.
-		#TODO Show our new scorecard, and scale time_left cutoff based on the two scores.
-		# Restart timer.
-		$CompleteScorecardTimer.start()
-	# TODO return combo score
+		# We only want to freeze the scorecard if this combo is the biggest (aka it's being shown currently).
+		if displayedComboKey == comboKey:
+			$CompleteScorecardTimer.start()
+			$Scorecard.set_modulate(Color(0.483521, 0.690471, 0.910156))
+	#XXX elif $CompleteScorecardTimer.time_left < $CompleteScorecardTimer.wait_time / 2:
+		#XXX we only want to overwrite the scorecard if this combo is bigger than all unfinished combos.
+		#if false:
+			#XXX Show our new scorecard, and scale time_left cutoff based on the two scores.
+			# Restart timer.
+			#$CompleteScorecardTimer.start()
+	# return combo score
 	emit_signal("combo_done", combos.get(comboKey).get("scoreTotal"))
 	return 0
 
