@@ -265,7 +265,7 @@ func clear(edge: int):
 			isMarkedForInactiveClear = true
 
 # find neighbors that match with this cell, and mark both for clear.
-func check_for_clear(alreadyCheckedCoordinates: Array):
+func check_for_clear(alreadyCheckedCoordinates: Array) -> Array:
 	# only check if we aren't already checked, and aren't falling, and aren't empty
 	var alreadyChecked = false
 	for coordinates in alreadyCheckedCoordinates:
@@ -278,19 +278,53 @@ func check_for_clear(alreadyCheckedCoordinates: Array):
 		var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
 		var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
 		var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
+		var leftRoot: Array = []
+		var rightRoot: Array = []
+		var verticalRoot: Array = []
 		if leftNeighbor != null && !leftNeighbor.is_falling() && !leftNeighbor.is_empty() && leftNeighbor.rightColor == leftColor:
 			# Mark for clear
-			leftNeighbor.check_for_clear(alreadyCheckedCoordinates)
+			leftRoot = leftNeighbor.check_for_clear(alreadyCheckedCoordinates)
 			clear(Direction.LEFT)
 		if rightNeighbor != null && !rightNeighbor.is_falling() && !rightNeighbor.is_empty() && rightNeighbor.leftColor == rightColor:
 			# Mark for clear
-			rightNeighbor.check_for_clear(alreadyCheckedCoordinates)
+			rightRoot = rightNeighbor.check_for_clear(alreadyCheckedCoordinates)
 			clear(Direction.RIGHT)
 		if (verticalNeighbor != null && !verticalNeighbor.is_falling() && !verticalNeighbor.is_empty()
 		&& verticalNeighbor.verticalColor == verticalColor):
 			# Mark for clear
-			verticalNeighbor.check_for_clear(alreadyCheckedCoordinates)
+			verticalRoot = verticalNeighbor.check_for_clear(alreadyCheckedCoordinates)
 			clear(Direction.VERTICAL)
+		# Return chain root.
+		if get_parent().get_parent().get_parent().chains.has([rowIndex,columnIndex]):
+			# We are the root.
+			return [rowIndex, columnIndex]
+		else:
+			var chainRootsArray: Array = []
+			if !leftRoot.empty():
+				chainRootsArray.append(leftRoot)
+			if !rightRoot.empty():
+				chainRootsArray.append(rightRoot)
+			if !verticalRoot.empty():
+				chainRootsArray.append(verticalRoot)
+			if chainRootsArray.size() == 1:
+				if alreadyCheckedCoordinates.size() == 1:
+					get_parent().get_parent().get_parent().chains[chainRootsArray[0]] = "TODO update with newest match into"
+				return chainRootsArray[0]
+			elif alreadyCheckedCoordinates.size() == 1:
+				if chainRootsArray.empty():
+					#The newest match becomes the new chain root if there are 0 roots in this chain.
+					get_parent().get_parent().get_parent().chains[[rowIndex,columnIndex]] = "TODO actual chain info"
+					return [rowIndex,columnIndex]
+				elif chainRootsArray.size() == 2:
+					get_parent().get_parent().get_parent().chains[chainRootsArray[0]] = "TODO actual chain info, with two trick"
+					get_parent().get_parent().get_parent().chains.erase(chainRootsArray[1])
+					return chainRootsArray[0]
+				else:
+					get_parent().get_parent().get_parent().chains[chainRootsArray[0]] = "TODO actual chain info, with hat trick"
+					get_parent().get_parent().get_parent().chains.erase(chainRootsArray[1])
+					get_parent().get_parent().get_parent().chains.erase(chainRootsArray[2])
+					return chainRootsArray[0]
+	return []
 
 func is_empty() -> bool:
 	return leftColor == colors.size() - 1
