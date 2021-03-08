@@ -3,8 +3,7 @@ use to fake extend the active chain timer
 towers (3 high is totally reasonable)  
 double dominoes (really difficult with 4 colors, ok with 3)
 
-When a piece is added to a chain, count # of connections. Add these connections to active/brain/quick, and if there are 2 or 3 connections add two/hat trick. Should a double connection to pieces already part of this chain count as a trick? I think so.
-What to do in case where two chains get connected? Idk about game class, but display class simply is told "combine these two keys", it doesn't matter which is kept as the root.
+Probably too easy for a good player to topple single pieces onto a chain as a brain chain; keep an eye on it during playtesting, think of possible solutions ahead of time (maybe can no longer brain chain after getting at least one active chain?)
 
 swapping piece order with hard drop should maybe give points
 knocking a piece into a match is worth points  

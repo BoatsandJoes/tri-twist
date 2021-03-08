@@ -65,5 +65,3 @@ margin_right = 286.0
 margin_bottom = 780.0
 [connection signal="out_of_moves" from="HBoxContainer/VBoxContainer2/MoveCount" to="." method="_on_MoveCount_out_of_moves"]
 [connection signal="out_of_time" from="HBoxContainer/VBoxContainer2/TimeDisplay" to="." method="_on_TimeDisplay_out_of_time"]
-[connection signal="combo_done" from="HBoxContainer/VBoxContainer/ComboDisplay" to="." method="_on_ComboDisplay_combo_done" binds= [ 0 ]]
-[connection signal="new_best_combo" from="HBoxContainer/VBoxContainer/ComboDisplay" to="." method="_on_ComboDisplay_new_best_combo" binds= [ 0 ]]

@@ -27,7 +27,10 @@ margin_bottom = 14.0
 
 [node name="ActiveChain" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
-margin_right = 1920.0
+margin_bottom = 14.0
+
+[node name="SequentialChain" type="Label" parent="Scorecard/ComboCounter"]
+visible = false
 margin_bottom = 14.0
 
 [node name="ChainLength" type="Label" parent="Scorecard/ComboCounter"]
@@ -73,6 +76,10 @@ visible = false
 margin_bottom = 14.0
 
 [node name="ActiveChainScore" type="Label" parent="Scorecard/ComboScore"]
+visible = false
+margin_bottom = 14.0
+
+[node name="SequentialChainScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 14.0
 

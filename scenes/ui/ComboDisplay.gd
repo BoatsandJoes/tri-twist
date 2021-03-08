@@ -8,14 +8,14 @@ signal new_best_combo
 # var a = 2
 # var b = "text"
 var combos: Dictionary = {}
-var brainChainLinkScore = 2000
-var quickChainLinkScore = 1500
-var activeChainLinkScore = 1000
-var sequentialChainLinkScore = 1000
-var chainLengthBonusScore = 100
-var twoTrickScore = 200
-var hatTrickScore = 600
-var simulchaineousScore = 300
+var brainChainLinkScore = 200
+var quickChainLinkScore = 150
+var activeChainLinkScore = 100
+var sequentialChainLinkScore = 100
+var chainLengthBonusScore = 10
+var twoTrickScore = 100
+var hatTrickScore = 300
+var simulchaineousScore = 30
 var displayedComboKey
 var activeChainOn: bool = true
 var bestCombo = null
@@ -34,7 +34,7 @@ func update_scorecard():
 		var comboToDisplay = null
 		var nonDisplayedScoreTotal: int = 0
 		for comboKey in combos.keys():
-			var thisCombo = score_chain(combos.get(comboKey))
+			var thisCombo: Dictionary = score_chain(combos.get(comboKey))
 			# Put scored combo back.
 			combos[comboKey] = thisCombo
 			if comboToDisplay == null || thisCombo.get("scoreTotal") > comboToDisplay.get("scoreTotal"):
@@ -72,7 +72,8 @@ func update_scorecard():
 				$Scorecard/ComboScore/ActiveChainScore.text = String(comboToDisplay.get("activeChainScore"))
 				$Scorecard/ComboScore/ActiveChainScore.visible = true
 			if (comboToDisplay.has("sequentialChainCount")):
-				$Scorecard/ComboCounter/SequentialChain.text = "Sequential Chain x" + String(comboToDisplay.get("sequentialChainCount"))
+				$Scorecard/ComboCounter/SequentialChain.text = ("Sequential Chain x"
+				+ String(comboToDisplay.get("sequentialChainCount")))
 				$Scorecard/ComboCounter/SequentialChain.visible = true
 				$Scorecard/ComboScore/SequentialChainScore.text = String(comboToDisplay.get("sequentialChainScore"))
 				$Scorecard/ComboScore/SequentialChainScore.visible = true
@@ -105,7 +106,7 @@ func update_scorecard():
 				$Scorecard/ComboScore/HatTrickScore.visible = false
 			if (comboToDisplay.has("simulchaineousCount")):
 				$Scorecard/ComboCounter/SimulChaineous.text = "Simulchaineous x" + String(comboToDisplay.get("simulchaineousCount"))
-				$Scorecard/ComboCounter/Simulchaineous.visible = true
+				$Scorecard/ComboCounter/SimulChaineous.visible = true
 				$Scorecard/ComboScore/SimulChaineousScore.text = String(comboToDisplay.get("simulchaineousScore"))
 				$Scorecard/ComboScore/SimulChaineousScore.visible = true
 			else:
@@ -116,9 +117,9 @@ func update_scorecard():
 			$Scorecard/ComboCounter/Total.visible = true
 			$Scorecard/ComboScore/TotalScore.visible = true
 			if nonDisplayedScoreTotal > 0:
-				$Scorecard/ComboCounter/OtherCombos.text = "Other Chains"
+				$Scorecard/ComboCounter/OtherCombos.text = "\nOther Chains"
 				$Scorecard/ComboCounter/OtherCombos.visible = true
-				$Scorecard/ComboScore/OtherCombosScore.text = String(nonDisplayedScoreTotal)
+				$Scorecard/ComboScore/OtherCombosScore.text = "\n" + String(nonDisplayedScoreTotal)
 				$Scorecard/ComboScore/OtherCombosScore.visible = true
 			else:
 				$Scorecard/ComboCounter/OtherCombos.text = ""
@@ -135,7 +136,7 @@ func update_scorecard():
 		# Scorecard is frozen, but we still want to update the other scores.
 		var nonDisplayedScoreTotal: int = 0
 		for comboKey in combos.keys():
-			var thisCombo = combos.get(comboKey)
+			var thisCombo: Dictionary = combos.get(comboKey)
 			if !thisCombo.has("finished"):
 				thisCombo = score_chain(thisCombo)
 				# Put scored combo back.
@@ -143,9 +144,9 @@ func update_scorecard():
 				# Update nondisplayed tally
 				nonDisplayedScoreTotal = nonDisplayedScoreTotal + thisCombo.get("scoreTotal")
 		if nonDisplayedScoreTotal > 0:
-			$Scorecard/ComboCounter/OtherCombos.text = "Other Chains"
+			$Scorecard/ComboCounter/OtherCombos.text = "\nOther Chains"
 			$Scorecard/ComboCounter/OtherCombos.visible = true
-			$Scorecard/ComboScore/OtherCombosScore.text = String(nonDisplayedScoreTotal)
+			$Scorecard/ComboScore/OtherCombosScore.text = "\n" + String(nonDisplayedScoreTotal)
 			$Scorecard/ComboScore/OtherCombosScore.visible = true
 		else:
 			$Scorecard/ComboCounter/OtherCombos.text = ""
@@ -153,7 +154,7 @@ func update_scorecard():
 			$Scorecard/ComboScore/OtherCombosScore.text = String(0)
 			$Scorecard/ComboScore/OtherCombosScore.visible = false
 
-func score_chain(combo) -> int:
+func score_chain(combo) -> Dictionary:
 	var chainCount = 0
 	var runningTotal = 0
 	if combo.has("brainChainCount"):
@@ -175,14 +176,14 @@ func score_chain(combo) -> int:
 		combo["activeChainScore"] = activeScore
 		chainCount = chainCount + activeCount
 	if combo.has("sequentialChainCount"):
-		var sequentialCount = score_brain_chain(combo.get("activeChainCount"))
+		var sequentialCount = score_brain_chain(combo.get("sequentialChainCount"))
 		var sequentialScore = sequentialCount
 		runningTotal = runningTotal + sequentialScore
 		combo["sequentialChainScore"] = sequentialScore
 		chainCount = chainCount + sequentialCount
 	combo["chainLengthBonus"] = chainCount
 	combo["chainLengthScore"] = score_chain_length(chainCount)
-	if combo.has("twoTickCount"):
+	if combo.has("twoTrickCount"):
 		var twoTrickScore = score_two_trick(combo.get("twoTrickCount"))
 		runningTotal = runningTotal + twoTrickScore
 		combo["twoTrickScore"] = twoTrickScore
@@ -224,6 +225,9 @@ func score_hat_trick(count: int) -> int:
 func score_simulchaineous(count: int) -> int:
 	return count * simulchaineousScore
 
+func delete_combo(comboKey):
+	combos.erase(comboKey)
+
 func upsert_combo(comboKey, comboValue):
 	#XXX Can calculate score delta instead of recalculating whole score, depending on how formula shakes out
 	for loopComboKey in combos.keys():
@@ -237,36 +241,36 @@ func upsert_combo(comboKey, comboValue):
 	combos[comboKey] = comboValue
 	update_scorecard()
 
-func end_combo(comboKey) -> int:
+func end_combo_if_exists(comboKey):
 	if combos.has(comboKey):
 		combos[comboKey]["finished"] = true
-	if $CompleteScorecardTimer.is_stopped():
-		# We only want to freeze the scorecard if this combo is the biggest (aka it's being shown currently).
-		# XXX keep othercombos the same color.
-		if displayedComboKey == comboKey:
-			$CompleteScorecardTimer.start()
-			$Scorecard.set_modulate(Color(0.483521, 0.690471, 0.910156))
-	#XXX elif $CompleteScorecardTimer.time_left < $CompleteScorecardTimer.wait_time / 2:
-		#XXX we only want to overwrite the scorecard if this combo is bigger than all unfinished combos.
-		#if false:
-			#XXX Show our new scorecard, and scale time_left cutoff based on the two scores.
-			# Restart timer.
-			#$CompleteScorecardTimer.start()
-	# return combo score
-	emit_signal("combo_done", combos.get(comboKey).get("scoreTotal"))
-	return 0
+		if $CompleteScorecardTimer.is_stopped():
+			# We only want to freeze the scorecard if this combo is the biggest (aka it's being shown currently).
+			# XXX keep othercombos the same color.
+			if displayedComboKey == comboKey:
+				$CompleteScorecardTimer.start()
+				$Scorecard.set_modulate(Color(0.483521, 0.690471, 0.910156))
+		#XXX elif $CompleteScorecardTimer.time_left < $CompleteScorecardTimer.wait_time / 2:
+			#XXX we only want to overwrite the scorecard if this combo is bigger than all unfinished combos.
+			#if false:
+				#XXX Show our new scorecard, and scale time_left cutoff based on the two scores.
+				# Restart timer.
+				#$CompleteScorecardTimer.start()
 
 func _on_CompleteScorecardTimer_timeout():
 	$Scorecard.set_modulate(Color(1, 1, 1))
 	var comboKeys = combos.keys()
 	for comboKey in comboKeys:
 		if combos.get(comboKey).has("finished"):
+			# emit combo score.
+			emit_signal("combo_done", combos.get(comboKey).get("scoreTotal"))
 			# If this is the new biggest, save it.
 			if bestCombo == null || combos.get(comboKey).get("scoreTotal") > bestCombo.get("scoreTotal"):
 				# Save our new best combo.
 				bestCombo = combos.get(comboKey)
 				emit_signal("new_best_combo", bestCombo.get("scoreTotal"))
-			# XXX this is the only place we erase combos, so technically the list could grow unbounded
-			# XXX if new ones keep ending and restarting the timer. deal with this case somehow
+			# XXX this is the only place we erase combos aside from combining chains.
+			# XXX Technically, the list could grow unbounded if new combos keep ending and restarting the timer.
+			# XXX similarly, we want to emit scores at some point rather than letting them stack up.
 			combos.erase(comboKey)
 	update_scorecard()
