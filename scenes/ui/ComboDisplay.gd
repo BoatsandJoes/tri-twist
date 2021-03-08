@@ -57,7 +57,7 @@ func update_scorecard():
 				$Scorecard/ComboScore/BrainChainScore.visible = true
 			else:
 				$Scorecard/ComboCounter/GalaxyBrainChain.visible = false
-				$Scorecard/ComboScore/.visible = false
+				$Scorecard/ComboScore/BrainChainScore.visible = false
 			if (comboToDisplay.has("quickChainCount")):
 				$Scorecard/ComboCounter/QuickChain.text = "Quick Chain! x" + String(comboToDisplay.get("quickChainCount"))
 				$Scorecard/ComboCounter/QuickChain.visible = true
