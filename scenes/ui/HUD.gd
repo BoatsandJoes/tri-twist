@@ -1,4 +1,5 @@
 extends MarginContainer
+class_name HUD
 
 # Declare member variables here. Examples:
 # var a = 2

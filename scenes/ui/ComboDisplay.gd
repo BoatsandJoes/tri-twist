@@ -11,6 +11,7 @@ var combos: Dictionary = {}
 var brainChainLinkScore = 2000
 var quickChainLinkScore = 1500
 var activeChainLinkScore = 1000
+var sequentialChainLinkScore = 1000
 var chainLengthBonusScore = 100
 var twoTrickScore = 200
 var hatTrickScore = 600
@@ -26,9 +27,6 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 	#pass
-
-func set_active_chain_on(value: bool):
-	activeChainOn = value
 
 func update_scorecard():
 	if $CompleteScorecardTimer.is_stopped():
@@ -69,16 +67,18 @@ func update_scorecard():
 				$Scorecard/ComboCounter/QuickChain.visible = false
 				$Scorecard/ComboScore/QuickChainScore.visible = false
 			if (comboToDisplay.has("activeChainCount")):
-				if activeChainOn:
-					$Scorecard/ComboCounter/ActiveChain.text = "Active Chain x" + String(comboToDisplay.get("activeChainCount"))
-				else:
-					$Scorecard/ComboCounter/ActiveChain.text = "Sequential Chain x" + String(comboToDisplay.get("activeChainCount"))
+				$Scorecard/ComboCounter/ActiveChain.text = "Active Chain x" + String(comboToDisplay.get("activeChainCount"))
 				$Scorecard/ComboCounter/ActiveChain.visible = true
 				$Scorecard/ComboScore/ActiveChainScore.text = String(comboToDisplay.get("activeChainScore"))
 				$Scorecard/ComboScore/ActiveChainScore.visible = true
+			if (comboToDisplay.has("sequentialChainCount")):
+				$Scorecard/ComboCounter/SequentialChain.text = "Sequential Chain x" + String(comboToDisplay.get("sequentialChainCount"))
+				$Scorecard/ComboCounter/SequentialChain.visible = true
+				$Scorecard/ComboScore/SequentialChainScore.text = String(comboToDisplay.get("sequentialChainScore"))
+				$Scorecard/ComboScore/SequentialChainScore.visible = true
 			else:
-				$Scorecard/ComboCounter/ActiveChain.visible = false
-				$Scorecard/ComboScore/ActiveChainScore.visible = false
+				$Scorecard/ComboCounter/SequentialChain.visible = false
+				$Scorecard/ComboScore/SequentialChainScore.visible = false
 			if (comboToDisplay.has("chainLengthBonus") && comboToDisplay.get("chainLengthBonus") > 0):
 				$Scorecard/ComboCounter/ChainLength.text = "Chain Length x" + String(comboToDisplay.get("chainLengthBonus"))
 				$Scorecard/ComboCounter/ChainLength.visible = true
@@ -157,34 +157,43 @@ func score_chain(combo) -> int:
 	var chainCount = 0
 	var runningTotal = 0
 	if combo.has("brainChainCount"):
-		var brainScore = score_brain_chain(combo.get("brainChainCount"))
+		var brainCount = combo.get("brainChainCount")
+		var brainScore = score_brain_chain(brainCount)
 		runningTotal = runningTotal + brainScore
 		combo["brainChainScore"] = brainScore
-		chainCount = chainCount + combo.get("brainChainCount")
+		chainCount = chainCount + brainCount
 	if combo.has("quickChainCount"):
-		var quickScore = score_brain_chain(combo.get("quickChainCount"))
+		var quickCount = combo.get("quickChainCount")
+		var quickScore = score_quick_chain(quickCount)
 		runningTotal = runningTotal + quickScore
-		combo["quickChainScore"] = score_quick_chain(combo.get("quickChainCount"))
-		chainCount = chainCount + combo.get("quickChainCount")
+		combo["quickChainScore"] = quickScore
+		chainCount = chainCount + quickCount
 	if combo.has("activeChainCount"):
-		var activeScore = score_brain_chain(combo.get("activeChainCount"))
+		var activeCount = combo.get("activeChainCount")
+		var activeScore = score_active_chain(activeCount)
 		runningTotal = runningTotal + activeScore
-		combo["activeChainScore"] = score_active_chain(combo.get("activeChainCount"))
-		chainCount = chainCount + combo.get("activeChainCount")
+		combo["activeChainScore"] = activeScore
+		chainCount = chainCount + activeCount
+	if combo.has("sequentialChainCount"):
+		var sequentialCount = score_brain_chain(combo.get("activeChainCount"))
+		var sequentialScore = sequentialCount
+		runningTotal = runningTotal + sequentialScore
+		combo["sequentialChainScore"] = sequentialScore
+		chainCount = chainCount + sequentialCount
 	combo["chainLengthBonus"] = chainCount
 	combo["chainLengthScore"] = score_chain_length(chainCount)
 	if combo.has("twoTickCount"):
-		var twoTrickScore = score_brain_chain(combo.get("twoTrickCount"))
+		var twoTrickScore = score_two_trick(combo.get("twoTrickCount"))
 		runningTotal = runningTotal + twoTrickScore
-		combo["twoTrickScore"] = score_two_trick(combo.get("twoTrickCount"))
+		combo["twoTrickScore"] = twoTrickScore
 	if combo.has("hatTrickCount"):
-		var brainScore = score_brain_chain(combo.get("hatTrickCount"))
+		var hatTrickScore = score_hat_trick(combo.get("hatTrickCount"))
 		runningTotal = runningTotal + hatTrickScore
-		combo["hatTrickScore"] = score_hat_trick(combo.get("hatTrickCount"))
+		combo["hatTrickScore"] = hatTrickScore
 	if combo.has("simulchaineousCount"):
-		var simulchaineousScore = score_brain_chain(combo.get("simulchaineousCount"))
+		var simulchaineousScore = score_simulchaineous(combo.get("simulchaineousCount"))
 		runningTotal = runningTotal + simulchaineousScore
-		combo["simulchaineousScore"] = score_simulchaineous(combo.get("simulchaineousCount"))
+		combo["simulchaineousScore"] = simulchaineousScore
 	combo["scoreTotal"] = (runningTotal)
 	return combo
 
@@ -196,6 +205,9 @@ func score_quick_chain(count: int) -> int:
 
 func score_active_chain(count: int) -> int:
 	return count * activeChainLinkScore
+
+func score_sequential_chain(count: int) -> int:
+	return count * sequentialChainLinkScore
 
 func score_chain_length(count: int) -> int:
 	var result = 0

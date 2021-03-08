@@ -20,11 +20,21 @@ _global_script_classes=[ {
 "path": "res://scenes/GameGrid.gd"
 }, {
 "base": "Node2D",
+"class": "GameScene",
+"language": "GDScript",
+"path": "res://scenes/GameScene.gd"
+}, {
+"base": "MarginContainer",
+"class": "HUD",
+"language": "GDScript",
+"path": "res://scenes/ui/HUD.gd"
+}, {
+"base": "GameScene",
 "class": "Mode1",
 "language": "GDScript",
 "path": "res://scenes/Mode1.gd"
 }, {
-"base": "Node2D",
+"base": "GameScene",
 "class": "Mode2",
 "language": "GDScript",
 "path": "res://scenes/Mode2.gd"
@@ -47,6 +57,8 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "ComboDisplay": "",
 "GameGrid": "",
+"GameScene": "",
+"HUD": "",
 "Mode1": "",
 "Mode2": "",
 "ScoreDisplay": "",
