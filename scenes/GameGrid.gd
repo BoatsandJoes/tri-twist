@@ -73,7 +73,7 @@ func drop_piece(piece: TriangleCell, dropForReal: bool):
 		return false
 	if dropForReal:
 		neighbor.fill_from_neighbor(piece.leftColor, piece.rightColor, piece.verticalColor,
-			neighborDirection, grid[0][0].Direction.VERTICAL)
+			neighborDirection, grid[0][0].Direction.VERTICAL, true)
 	return true
 
 # Gets the position in which to draw the cell with the passed indices

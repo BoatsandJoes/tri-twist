@@ -19,12 +19,12 @@ var rowIndex: int
 var columnIndex: int
 var inGrid
 var isGhost
-var bigClearMode = true
 var tumbleDirection: int
 var clearDelay = 1.5
 var clearScaling = 0.0
 var activeChainMode = true
 var isMarkedForInactiveClear = false
+var isDroppingFromActive = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -89,10 +89,6 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	# make empty
 	set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 
-func _input(event):
-	if event is InputEventKey && event.is_action_pressed("ui_focus_next"):
-		bigClearMode = !bigClearMode
-
 func fill_randomly():
 	leftColor = randi() % (colors.size() - 1)
 	rightColor = randi() % (colors.size() - 1)
@@ -106,7 +102,8 @@ func set_colors(left: int, right: int, vertical: int):
 	update_colors_visually()
 
 func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighborVerticalColor: int, direction: int,
-		tumblingDirection: int):
+		tumblingDirection: int, droppingFromActive: bool):
+	isDroppingFromActive = droppingFromActive
 	if direction == Direction.VERTICAL || direction == Direction.VERTICAL_POINT:
 		tumbleDirection = tumblingDirection
 		if (tumblingDirection == Direction.VERTICAL):
@@ -160,7 +157,9 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 				rightNeighbor.rowIndex, rightNeighbor.columnIndex, Direction.RIGHT)
 			if neighborsNeighbor != null && neighborsNeighbor.is_empty():
 				rightNeighbor.enter_falling_state(Direction.RIGHT)
-	if !is_marked_for_clear() && !is_falling() && !activeChainMode:
+		# While we're here, clear isDroppingFromActive, since we are no longer dropping.
+		isDroppingFromActive = false
+	if !is_marked_for_clear() && !is_falling() && !activeChainMode && droppingFromActive:
 		get_parent().set_off_chains()
 
 func update_colors_visually():
@@ -195,6 +194,7 @@ func clear(edge: int):
 		# Immediately blank tile.
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 		isMarkedForInactiveClear = false
+		isDroppingFromActive = false
 		# Check to see if any neighbors should enter falling state.
 		if !pointFacingUp:
 			# Primarily, we have to check above.
@@ -280,25 +280,16 @@ func check_for_clear(alreadyCheckedCoordinates: Array):
 		var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
 		if leftNeighbor != null && !leftNeighbor.is_falling() && !leftNeighbor.is_empty() && leftNeighbor.rightColor == leftColor:
 			# Mark for clear
-			if bigClearMode:
-				leftNeighbor.check_for_clear(alreadyCheckedCoordinates)
-			else:
-				leftNeighbor.clear(Direction.RIGHT)
+			leftNeighbor.check_for_clear(alreadyCheckedCoordinates)
 			clear(Direction.LEFT)
 		if rightNeighbor != null && !rightNeighbor.is_falling() && !rightNeighbor.is_empty() && rightNeighbor.leftColor == rightColor:
 			# Mark for clear
-			if bigClearMode:
-				rightNeighbor.check_for_clear(alreadyCheckedCoordinates)
-			else:
-				rightNeighbor.clear(Direction.LEFT)
+			rightNeighbor.check_for_clear(alreadyCheckedCoordinates)
 			clear(Direction.RIGHT)
 		if (verticalNeighbor != null && !verticalNeighbor.is_falling() && !verticalNeighbor.is_empty()
 		&& verticalNeighbor.verticalColor == verticalColor):
 			# Mark for clear
-			if bigClearMode:
-				verticalNeighbor.check_for_clear(alreadyCheckedCoordinates)
-			else:
-				verticalNeighbor.clear(Direction.VERTICAL)
+			verticalNeighbor.check_for_clear(alreadyCheckedCoordinates)
 			clear(Direction.VERTICAL)
 
 func is_empty() -> bool:
@@ -394,11 +385,12 @@ func _on_GravityTimer_timeout():
 		var tempVerticalColor = verticalColor
 		var tempTumbleDirection = moveInfo[2]
 		# clear self
+		var tempIsDroppingFromActive = isDroppingFromActive
 		clear(Direction.VERTICAL_POINT)
 		# copy to neighbor
 		get_parent().grid[emptyCell.rowIndex][emptyCell.columnIndex].fill_from_neighbor(
 			tempLeftColor, tempRightColor, tempVerticalColor,
-			direction, tempTumbleDirection)
+			direction, tempTumbleDirection, tempIsDroppingFromActive)
 	else:
 		# We have come to rest.
 		tumbleDirection = Direction.VERTICAL
