@@ -1,7 +1,8 @@
 # tri-twist
 todo next:
-	fix brain mode chains popping too aggressively
-	hook up combo display
+	win/loss
+	cooldown on drop to prevent double tap
+	hard drop
 	design randomizer
 	hook up sound events
 	gravity stuff
@@ -15,6 +16,8 @@ todo next:
 		solid colors should no longer be contiguous, because it looks like they belong together, but they don't  
 		light up unmatchable edges in matched piece  
 
+
+I don't really like the thing where pieces under clear and the pieces above are still floating waiting for clear
 
 Could add Tribulations mode where gravity is instant and the active chain timer = the old quick chain timer and the new quick chain is even more strict
 on store page, advertise millions of polygons (my idea)
@@ -159,6 +162,8 @@ Tri words for mechanics or modes or titles:
 Titles:  
 	Trillion Trippy Triangles  
 	Triangle Triumph  
+	Triangle Trial
+	Twist and Shout
 
 Credits  
 Joe  
@@ -168,13 +173,5 @@ Jackie Clam (office pet)
 Birdie (chief executive in charge of being a cutie patootie)
 Amy Rose Gronkowski (Had numerous sick ideas) (credit for Japanese localization that doesn't exist, or as a kickstarter backer which also does not exist) (Good opinion haver (likes Daikatana)) (balancing, no, the other kind of balancing)  
 BethBat (playtesting)
-Thank you indie developers who encourage others to make games:  
-	Tim Ashley Jenkins  
-	Dave Makes  
-	Derek Yu  
-	Andy Hull  
-	Ryan Clark  
-	Tom Francis  
-	Bennett Foddy  
 FMod license  
 Godot license  

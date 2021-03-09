@@ -20,7 +20,7 @@ var columnIndex: int
 var inGrid
 var isGhost
 var tumbleDirection: int
-var clearDelay = 3
+var clearDelay = 5
 var quickChainCutoff = 1.0
 var activeChainCap = 6
 var clearScaling = 0.0
