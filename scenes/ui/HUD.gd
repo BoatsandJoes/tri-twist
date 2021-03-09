@@ -8,8 +8,8 @@ signal end_game
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$HBoxContainer/VBoxContainer/ComboDisplay.connect("combo_done", self, "_on_ComboDisplay_combo_done")
-	$HBoxContainer/VBoxContainer/ComboDisplay.connect("new_best_combo", self, "_on_ComboDisplay_new_best_combo")
+	$HBoxContainer/VBoxContainer/HBoxContainer/ComboDisplay.connect("combo_done", self, "_on_ComboDisplay_combo_done")
+	$HBoxContainer/VBoxContainer/HBoxContainer/ComboDisplay.connect("new_best_combo", self, "_on_ComboDisplay_new_best_combo")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

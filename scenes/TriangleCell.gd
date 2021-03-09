@@ -20,7 +20,7 @@ var columnIndex: int
 var inGrid
 var isGhost
 var tumbleDirection: int
-var clearDelay = 1.5
+var clearDelay = 3
 var quickChainCutoff = 1.0
 var activeChainCap = 6
 var clearScaling = 0.0
@@ -176,14 +176,34 @@ func update_colors_visually():
 		$RightEdge.set_color(colors[rightColor])
 		$VerticalEdge.set_color(colors[verticalColor])
 
-func spin(rotation: int):
+func spin(rotation: int) -> bool:
 	if !is_marked_for_clear():
+		# Naively spin.
 		if ((rotation == Rotation.COUNTERCLOCKWISE && !pointFacingUp)
 				|| (rotation == Rotation.CLOCKWISE && pointFacingUp)):
 			set_colors(verticalColor, leftColor, rightColor)
 		else:
 			set_colors(rightColor, verticalColor, leftColor)
-		check_for_clear([])
+		# Check to see if we match.
+		var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
+		var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
+		var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
+		if ((leftNeighbor != null && leftNeighbor.rightColor == leftColor) ||
+		(rightNeighbor != null && rightNeighbor.leftColor == rightColor) ||
+		(verticalNeighbor != null && verticalNeighbor.verticalColor == verticalColor)):
+			# Perform the match
+			isDroppingFromActive = true
+			check_for_clear([])
+			isDroppingFromActive = false
+			return true
+		else:
+			#unspin.
+			if ((rotation == Rotation.COUNTERCLOCKWISE && !pointFacingUp)
+				|| (rotation == Rotation.CLOCKWISE && pointFacingUp)):
+				set_colors(rightColor, verticalColor, leftColor)
+			else:
+				set_colors(verticalColor, leftColor, rightColor)
+	return false
 
 func enter_falling_state(tumblingDirection: int):
 	if !is_marked_for_clear() && !is_falling() && !is_empty():

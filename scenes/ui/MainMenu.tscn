@@ -1,6 +1,38 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scenes/ui/MainMenu.gd" type="Script" id=1]
+[ext_resource path="res://assets/fonts/agane/Agane╠Ç 55 (roman).ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 128
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 48
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 48
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 48
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 48
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=7]
+size = 48
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 48
+font_data = ExtResource( 2 )
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -20,62 +52,82 @@ margin_right = 1800.0
 margin_bottom = 960.0
 alignment = 1
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer"]
-margin_left = 737.0
-margin_top = 473.0
-margin_right = 954.0
-margin_bottom = 487.0
+[node name="VBoxContainer3" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+margin_left = 468.0
+margin_right = 947.0
+margin_bottom = 960.0
+alignment = 1
+
+[node name="Title" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer3"]
+margin_top = 406.0
+margin_right = 479.0
+margin_bottom = 534.0
+custom_fonts/font = SubResource( 1 )
+text = "TriTwist"
+
+[node name="Tagline" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer3"]
+margin_top = 538.0
+margin_right = 479.0
+margin_bottom = 554.0
+custom_fonts/font = SubResource( 2 )
 text = "I can be your angle... or your devil"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 958.0
-margin_right = 1050.0
+margin_left = 951.0
+margin_right = 1299.0
 margin_bottom = 960.0
+custom_constants/separation = 5
 alignment = 1
 
 [node name="Mode1" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 446.0
-margin_right = 85.0
-margin_bottom = 466.0
+margin_top = 394.0
+margin_right = 348.0
+margin_bottom = 448.0
 size_flags_horizontal = 0
-text = "Brain Mode"
+custom_fonts/font = SubResource( 3 )
+text = "Take your time"
 
 [node name="Mode2" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 470.0
-margin_right = 92.0
-margin_bottom = 490.0
+margin_top = 453.0
+margin_right = 218.0
+margin_bottom = 507.0
 size_flags_horizontal = 0
-text = "Hands Mode"
+custom_fonts/font = SubResource( 4 )
+text = "Go go go"
 
 [node name="Quit" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 494.0
-margin_right = 77.0
-margin_bottom = 514.0
+margin_top = 512.0
+margin_right = 241.0
+margin_bottom = 566.0
 size_flags_horizontal = 0
+custom_fonts/font = SubResource( 5 )
 text = "Exit Game"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 1054.0
-margin_right = 1062.0
+margin_left = 1303.0
+margin_right = 1332.0
 margin_bottom = 960.0
-custom_constants/separation = 10
+custom_constants/separation = 13
 alignment = 1
 
 [node name="Mode1Arrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
-margin_top = 449.0
-margin_right = 8.0
-margin_bottom = 463.0
+margin_top = 395.0
+margin_right = 29.0
+margin_bottom = 443.0
+custom_fonts/font = SubResource( 6 )
 text = "<"
 
 [node name="Mode2Arrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
-margin_top = 473.0
-margin_right = 8.0
-margin_bottom = 487.0
+margin_top = 456.0
+margin_right = 29.0
+margin_bottom = 504.0
+custom_fonts/font = SubResource( 7 )
 
 [node name="ExitArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
-margin_top = 497.0
-margin_right = 8.0
-margin_bottom = 511.0
+margin_top = 517.0
+margin_right = 29.0
+margin_bottom = 565.0
+custom_fonts/font = SubResource( 8 )
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Mode1" to="." method="_on_Mode1_pressed"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Mode2" to="." method="_on_Mode2_pressed"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Quit" to="." method="_on_Quit_pressed"]

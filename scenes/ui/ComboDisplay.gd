@@ -176,8 +176,8 @@ func score_chain(combo) -> Dictionary:
 		combo["activeChainScore"] = activeScore
 		chainCount = chainCount + activeCount
 	if combo.has("sequentialChainCount"):
-		var sequentialCount = score_brain_chain(combo.get("sequentialChainCount"))
-		var sequentialScore = sequentialCount
+		var sequentialCount = combo.get("sequentialChainCount")
+		var sequentialScore = score_sequential_chain(sequentialCount)
 		runningTotal = runningTotal + sequentialScore
 		combo["sequentialChainScore"] = sequentialScore
 		chainCount = chainCount + sequentialCount
