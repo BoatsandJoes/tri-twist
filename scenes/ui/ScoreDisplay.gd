@@ -5,6 +5,7 @@ class_name ScoreDisplay
 # var a = 2
 # var b = "text"
 var score: int = 0
+var bestChainScore: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -16,4 +17,8 @@ func _ready():
 
 func increment_score(value: int):
 	score = score + value
-	$VBoxContainer/HBoxContainer/ScoreValue.text = String(score).pad_zeros(12)
+	$HBoxContainer/Values/ScoreValue.text = String(score).pad_zeros(11)
+
+func update_best_chain_score(value: int):
+	bestChainScore = value
+	$HBoxContainer/Values/BestChain.text = String(value)

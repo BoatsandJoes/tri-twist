@@ -1,7 +1,7 @@
 # tri-twist
 todo next:
-	fix brain mode chains
-	add ui with moves, time, and score
+	fix brain mode chains popping too aggressively
+	hook up combo display
 	design randomizer
 	hook up sound events
 	gravity stuff
@@ -16,7 +16,7 @@ todo next:
 		light up unmatchable edges in matched piece  
 
 
-
+Could add Tribulations mode where gravity is instant and the active chain timer = the old quick chain timer and the new quick chain is even more strict
 on store page, advertise millions of polygons (my idea)
 
 Tuning settings (*- can ramp for difficulty, based on score or moves or time or some combination):  
@@ -164,6 +164,8 @@ Credits
 Joe  
 Timo (Sound blaster, loud boy)  
 Crimefighter, Shadow President Illuminati Beta Government (playtesting, came up with idea of edge match clear)  
+Jackie Clam (office pet)
+Birdie (chief executive in charge of being a cutie patootie)
 Amy Rose Gronkowski (Had numerous sick ideas) (credit for Japanese localization that doesn't exist, or as a kickstarter backer which also does not exist) (Good opinion haver (likes Daikatana)) (balancing, no, the other kind of balancing)  
 BethBat (playtesting)
 Thank you indie developers who encourage others to make games:  

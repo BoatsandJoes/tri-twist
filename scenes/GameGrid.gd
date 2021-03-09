@@ -1,6 +1,7 @@
 extends Node2D
 class_name GameGrid
 
+signal tumble
 
 export (PackedScene) var TriangleCell
 export var gridWidth: int
@@ -25,6 +26,7 @@ func initialize_grid():
 			grid[rowIndex][columnIndex].init(cellSize, rowIndex, columnIndex,
 			get_position_for_cell(rowIndex, columnIndex, false), true, false)
 			add_child(grid[rowIndex][columnIndex])
+			grid[rowIndex][columnIndex].connect("tumble", self, "_on_TriangleCell_tumble")
 
 func toggle_chain_mode(active):
 	for row in grid:
@@ -71,7 +73,7 @@ func drop_piece(piece: TriangleCell, dropForReal: bool):
 		return false
 	if dropForReal:
 		neighbor.fill_from_neighbor(piece.leftColor, piece.rightColor, piece.verticalColor,
-			neighborDirection, grid[0][0].Direction.VERTICAL)
+			neighborDirection, grid[0][0].Direction.VERTICAL, true)
 	return true
 
 # Gets the position in which to draw the cell with the passed indices
@@ -110,7 +112,7 @@ func _input(event):
 
 # handles a cell click TODO handle controller and keyboard input
 func handle_cell_input(rowIndex: int, columnIndex: int, event: InputEventMouseButton):
-	if !grid[rowIndex][columnIndex].is_empty() && !grid[rowIndex][columnIndex].is_marked_for_clear():
+	if !grid[rowIndex][columnIndex].is_empty() && !grid[rowIndex][columnIndex].is_marked_for_clear() && !grid[0][0].activeChainMode:
 		if event.button_index == 3:
 			# delete tile, debug
 			grid[rowIndex][columnIndex].clear(grid[rowIndex][columnIndex].Direction.VERTICAL_POINT)
@@ -121,39 +123,11 @@ func handle_cell_input(rowIndex: int, columnIndex: int, event: InputEventMouseBu
 				rotation = grid[0][0].Rotation.COUNTERCLOCKWISE
 			else:
 				rotation = grid[0][0].Rotation.CLOCKWISE
-			if rotation_would_result_in_match(rowIndex, columnIndex, rotation):
+			if grid[rowIndex][columnIndex].spin(rotation):
 				get_parent().advance_piece()
-				grid[rowIndex][columnIndex].spin(rotation)
 			else:
 				# Play sound.
 				pass
-
-func rotation_would_result_in_match(rowIndex: int, columnIndex:int, rotation: int) -> bool:
-	var cell: TriangleCell = TriangleCell.instance()
-	cell.rowIndex = grid[rowIndex][columnIndex].rowIndex
-	cell.columnIndex = grid[rowIndex][columnIndex].columnIndex
-	cell.leftColor = grid[rowIndex][columnIndex].leftColor
-	cell.rightColor = grid[rowIndex][columnIndex].rightColor
-	cell.verticalColor = grid[rowIndex][columnIndex].verticalColor
-	cell.pointFacingUp = grid[rowIndex][columnIndex].pointFacingUp
-	cell.visible = false
-	add_child(cell)
-	cell.spin(rotation)
-	var result = would_have_match(cell)
-	cell.free()
-	return result
-
-func would_have_match(cell: TriangleCell) -> bool:
-	var leftNeighbor = get_neighbor(cell.rowIndex, cell.columnIndex, cell.Direction.LEFT)
-	var rightNeighbor = get_neighbor(cell.rowIndex, cell.columnIndex, cell.Direction.RIGHT)
-	var verticalNeighbor = get_neighbor(cell.rowIndex, cell.columnIndex, cell.Direction.VERTICAL)
-	if leftNeighbor != null && leftNeighbor.rightColor == cell.leftColor:
-		return true
-	elif rightNeighbor != null && rightNeighbor.leftColor == cell.rightColor:
-		return true
-	elif verticalNeighbor != null && verticalNeighbor.verticalColor == cell.verticalColor:
-		return true
-	return false
 
 func set_off_chains():
 	for row in grid:
@@ -165,3 +139,6 @@ func set_off_chains():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+func _on_TriangleCell_tumble():
+	emit_signal("tumble")

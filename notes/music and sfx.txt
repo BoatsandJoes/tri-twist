@@ -14,7 +14,7 @@ piece settling into place against a stationary piece or the wall, without matchi
 piece settling into place against a stationary piece or the wall, with matching
 ascending pitch sfx for connected matches of ascending quantity, capping at around 7 (reference Petal Crash)
 "match that is worth extra points" sfx (fast chain, one piece matching multiple other pieces at once, tumbling a piece into a match)
-piece actually clearing
+piece actually clearing (could cascade, may also cascade visually, idk yet)
 piece knocking another piece over
 pause
 menu button click (could reuse piece settling sounds)

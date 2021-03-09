@@ -3,7 +3,12 @@ use to fake extend the active chain timer
 towers (3 high is totally reasonable)  
 double dominoes (really difficult with 4 colors, ok with 3)
 
-swapping piece order with hard drop should give points
+Probably too easy for a good player to topple single pieces onto a chain as a brain chain; keep an eye on it during playtesting, think of possible solutions ahead of time (maybe can no longer brain chain after getting at least one active chain?)
+
+double trouble
+visual effect for a certain trick, on the piece itself so you can see
+
+swapping piece order with hard drop should maybe give points (brain chain)
 knocking a piece into a match is worth points  
 Tony hawk combo display  
 4 match should be bigger than 2 2 matches, but idk exactly how much it should scale up. Depends on chain length distribution  

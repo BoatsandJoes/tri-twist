@@ -20,49 +20,58 @@ margin_right = 1720.0
 margin_bottom = 780.0
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
-margin_right = 1430.0
+margin_right = 1147.0
 margin_bottom = 780.0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 5.0
-custom_constants/separation = 300
+custom_constants/separation = 250
 alignment = 2
 
 [node name="MoveCount" parent="HBoxContainer/VBoxContainer2" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 452.0
-margin_right = 1430.0
-margin_bottom = 466.0
+margin_top = 434.0
+margin_right = 1147.0
+margin_bottom = 482.0
 
 [node name="TimeDisplay" parent="HBoxContainer/VBoxContainer2" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 766.0
-margin_right = 1430.0
+margin_top = 732.0
+margin_right = 1147.0
 margin_bottom = 780.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
-margin_left = 1434.0
+margin_left = 1151.0
 margin_right = 1720.0
 margin_bottom = 780.0
 size_flags_horizontal = 3
-custom_constants/separation = 250
+custom_constants/separation = 70
 alignment = 2
 
-[node name="ComboDisplay" parent="HBoxContainer/VBoxContainer" instance=ExtResource( 4 )]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+margin_top = 596.0
+margin_right = 569.0
+margin_bottom = 610.0
+
+[node name="HackySpacingLabel" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
+margin_right = 56.0
+margin_bottom = 14.0
+text = "              "
+
+[node name="ComboDisplay" parent="HBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 516.0
-margin_right = 286.0
-margin_bottom = 516.0
+margin_left = 60.0
+margin_right = 75.0
+margin_bottom = 14.0
 rect_scale = Vector2( 1, 1 )
 
 [node name="ScoreDisplay" parent="HBoxContainer/VBoxContainer" instance=ExtResource( 5 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 766.0
-margin_right = 286.0
+margin_top = 680.0
+margin_right = 569.0
 margin_bottom = 780.0
 [connection signal="out_of_moves" from="HBoxContainer/VBoxContainer2/MoveCount" to="." method="_on_MoveCount_out_of_moves"]
 [connection signal="out_of_time" from="HBoxContainer/VBoxContainer2/TimeDisplay" to="." method="_on_TimeDisplay_out_of_time"]
-[connection signal="combo_done" from="HBoxContainer/VBoxContainer/ComboDisplay" to="." method="_on_ComboDisplay_combo_done" binds= [ 0 ]]

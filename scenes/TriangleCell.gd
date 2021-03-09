@@ -1,6 +1,8 @@
 extends Area2D
 class_name TriangleCell
 
+signal tumble
+
 var size: int
 # last color is the null color, for empty cells
 enum Direction {LEFT, RIGHT, VERTICAL, VERTICAL_POINT}
@@ -17,12 +19,14 @@ var rowIndex: int
 var columnIndex: int
 var inGrid
 var isGhost
-var bigClearMode = true
 var tumbleDirection: int
-var clearDelay = 1.5
+var clearDelay = 3
+var quickChainCutoff = 1.0
+var activeChainCap = 6
 var clearScaling = 0.0
 var activeChainMode = true
 var isMarkedForInactiveClear = false
+var isDroppingFromActive = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -87,10 +91,6 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	# make empty
 	set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 
-func _input(event):
-	if event is InputEventKey && event.is_action_pressed("ui_focus_next"):
-		bigClearMode = !bigClearMode
-
 func fill_randomly():
 	leftColor = randi() % (colors.size() - 1)
 	rightColor = randi() % (colors.size() - 1)
@@ -104,7 +104,8 @@ func set_colors(left: int, right: int, vertical: int):
 	update_colors_visually()
 
 func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighborVerticalColor: int, direction: int,
-		tumblingDirection: int):
+		tumblingDirection: int, droppingFromActive: bool):
+	isDroppingFromActive = droppingFromActive
 	if direction == Direction.VERTICAL || direction == Direction.VERTICAL_POINT:
 		tumbleDirection = tumblingDirection
 		if (tumblingDirection == Direction.VERTICAL):
@@ -115,14 +116,18 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 		elif ((tumblingDirection == Direction.RIGHT && pointFacingUp) ||
 				(tumblingDirection == Direction.LEFT && !pointFacingUp)):
 			set_colors(neighborLeftColor, neighborVerticalColor, neighborRightColor)
+			emit_signal("tumble")
 		else:
 			set_colors(neighborVerticalColor, neighborRightColor, neighborLeftColor)
+			emit_signal("tumble")
 	elif direction == Direction.LEFT:
 		tumbleDirection = Direction.RIGHT
 		set_colors(neighborLeftColor, neighborVerticalColor, neighborRightColor)
+		emit_signal("tumble")
 	elif direction == Direction.RIGHT:
 		set_colors(neighborVerticalColor, neighborRightColor, neighborLeftColor)
 		tumbleDirection = Direction.LEFT
+		emit_signal("tumble")
 	# Check if we should start our gravity timer or come to rest
 	var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
 	var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
@@ -141,7 +146,9 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 		else:
 			enter_falling_state(Direction.RIGHT)
 	# Check for enclosed areas.
-	check_for_clear([])
+	if (!is_marked_for_clear()):
+		# XXX there is technically still a race condition here, but it's a narrow window. This piece would be double counted
+		check_for_clear([])
 	# push balancing pieces over
 	if !is_falling():
 		if leftNeighbor != null && !leftNeighbor.is_empty():
@@ -154,7 +161,9 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 				rightNeighbor.rowIndex, rightNeighbor.columnIndex, Direction.RIGHT)
 			if neighborsNeighbor != null && neighborsNeighbor.is_empty():
 				rightNeighbor.enter_falling_state(Direction.RIGHT)
-	if !is_marked_for_clear() && !is_falling() && !activeChainMode:
+		# While we're here, clear isDroppingFromActive, since we are no longer dropping.
+		isDroppingFromActive = false
+	if !is_marked_for_clear() && !is_falling() && !activeChainMode && droppingFromActive:
 		get_parent().set_off_chains()
 
 func update_colors_visually():
@@ -167,14 +176,34 @@ func update_colors_visually():
 		$RightEdge.set_color(colors[rightColor])
 		$VerticalEdge.set_color(colors[verticalColor])
 
-func spin(rotation: int):
+func spin(rotation: int) -> bool:
 	if !is_marked_for_clear():
+		# Naively spin.
 		if ((rotation == Rotation.COUNTERCLOCKWISE && !pointFacingUp)
 				|| (rotation == Rotation.CLOCKWISE && pointFacingUp)):
 			set_colors(verticalColor, leftColor, rightColor)
 		else:
 			set_colors(rightColor, verticalColor, leftColor)
-		check_for_clear([])
+		# Check to see if we match.
+		var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
+		var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
+		var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
+		if ((leftNeighbor != null && leftNeighbor.rightColor == leftColor) ||
+		(rightNeighbor != null && rightNeighbor.leftColor == rightColor) ||
+		(verticalNeighbor != null && verticalNeighbor.verticalColor == verticalColor)):
+			# Perform the match
+			isDroppingFromActive = true
+			check_for_clear([])
+			isDroppingFromActive = false
+			return true
+		else:
+			#unspin.
+			if ((rotation == Rotation.COUNTERCLOCKWISE && !pointFacingUp)
+				|| (rotation == Rotation.CLOCKWISE && pointFacingUp)):
+				set_colors(rightColor, verticalColor, leftColor)
+			else:
+				set_colors(verticalColor, leftColor, rightColor)
+	return false
 
 func enter_falling_state(tumblingDirection: int):
 	if !is_marked_for_clear() && !is_falling() && !is_empty():
@@ -189,6 +218,8 @@ func clear(edge: int):
 		# Immediately blank tile.
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 		isMarkedForInactiveClear = false
+		isDroppingFromActive = false
+		get_parent().get_parent().get_parent().end_combo_if_exists([rowIndex, columnIndex])
 		# Check to see if any neighbors should enter falling state.
 		if !pointFacingUp:
 			# Primarily, we have to check above.
@@ -259,7 +290,8 @@ func clear(edge: int):
 			isMarkedForInactiveClear = true
 
 # find neighbors that match with this cell, and mark both for clear.
-func check_for_clear(alreadyCheckedCoordinates: Array):
+func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
+	var initialCheckedCoordinates = alreadyCheckedCoordinates.duplicate()
 	# only check if we aren't already checked, and aren't falling, and aren't empty
 	var alreadyChecked = false
 	for coordinates in alreadyCheckedCoordinates:
@@ -272,28 +304,169 @@ func check_for_clear(alreadyCheckedCoordinates: Array):
 		var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
 		var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
 		var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
+		var leftRoot: Array = []
+		var rightRoot: Array = []
+		var verticalRoot: Array = []
+		var leftClearTimeLeft: float = $ClearTimer.wait_time
+		var rightClearTimeLeft: float = $ClearTimer.wait_time
+		var verticalClearTimeLeft: float = $ClearTimer.wait_time
+		var numMatches: int = 0
 		if leftNeighbor != null && !leftNeighbor.is_falling() && !leftNeighbor.is_empty() && leftNeighbor.rightColor == leftColor:
 			# Mark for clear
-			if bigClearMode:
-				leftNeighbor.check_for_clear(alreadyCheckedCoordinates)
-			else:
-				leftNeighbor.clear(Direction.RIGHT)
+			var resultDictionary = leftNeighbor.check_for_clear(alreadyCheckedCoordinates)
+			if resultDictionary.has("root"):
+				leftRoot = resultDictionary.get("root")
+			if resultDictionary.has("clearTimeRemaining"):
+				leftClearTimeLeft = resultDictionary.get("clearTimeRemaining")
 			clear(Direction.LEFT)
+			numMatches = numMatches + 1
 		if rightNeighbor != null && !rightNeighbor.is_falling() && !rightNeighbor.is_empty() && rightNeighbor.leftColor == rightColor:
 			# Mark for clear
-			if bigClearMode:
-				rightNeighbor.check_for_clear(alreadyCheckedCoordinates)
-			else:
-				rightNeighbor.clear(Direction.LEFT)
+			var resultDictionary = rightNeighbor.check_for_clear(alreadyCheckedCoordinates)
+			if resultDictionary.has("root"):
+				rightRoot = resultDictionary.get("root")
+			if resultDictionary.has("clearTimeRemaining"):
+				rightClearTimeLeft = resultDictionary.get("clearTimeRemaining")
 			clear(Direction.RIGHT)
+			numMatches = numMatches + 1
 		if (verticalNeighbor != null && !verticalNeighbor.is_falling() && !verticalNeighbor.is_empty()
 		&& verticalNeighbor.verticalColor == verticalColor):
 			# Mark for clear
-			if bigClearMode:
-				verticalNeighbor.check_for_clear(alreadyCheckedCoordinates)
-			else:
-				verticalNeighbor.clear(Direction.VERTICAL)
+			var resultDictionary = verticalNeighbor.check_for_clear(alreadyCheckedCoordinates)
+			if resultDictionary.has("root"):
+				verticalRoot = resultDictionary.get("root")
+			if resultDictionary.has("clearTimeRemaining"):
+				verticalClearTimeLeft = resultDictionary.get("clearTimeRemaining")
 			clear(Direction.VERTICAL)
+			numMatches = numMatches + 1
+		# Return chain root and this cell clear time remaining.
+		if get_parent().get_parent().get_parent().get_chains().has([rowIndex,columnIndex]):
+			# We are the root.
+			return {"root": [rowIndex, columnIndex], "clearTimeRemaining": $ClearTimer.time_left}
+		else:
+			var chainRootsArray: Array = []
+			if !leftRoot.empty():
+				chainRootsArray.append(leftRoot)
+			if !rightRoot.empty():
+				chainRootsArray.append(rightRoot)
+			if !verticalRoot.empty():
+				chainRootsArray.append(verticalRoot)
+			if chainRootsArray.size() == 1:
+				if initialCheckedCoordinates.empty():
+					# We are the single newest piece in an existing chain
+					get_parent().get_parent().get_parent().upsert_chain(chainRootsArray[0],
+					update_existing_chain(get_parent().get_parent().get_parent().get_chain(chainRootsArray[0]),
+					numMatches, min(leftClearTimeLeft, min(rightClearTimeLeft, verticalClearTimeLeft))))
+				# Tell our caller the root and clear time remaining.
+				return {"root": chainRootsArray[0], "clearTimeRemaining": $ClearTimer.time_left}
+			elif initialCheckedCoordinates.empty() && numMatches > 0:
+				if chainRootsArray.empty():
+					# The newest match becomes the new chain root if there are 0 roots in this chain.
+					get_parent().get_parent().get_parent().upsert_chain([rowIndex,columnIndex],
+					update_existing_chain(get_parent().get_parent().get_parent().get_chain([rowIndex,columnIndex]),
+					numMatches, 0.0))
+					return {"root": [rowIndex, columnIndex], "clearTimeRemaining": $ClearTimer.time_left}
+				elif chainRootsArray.size() >= 2:
+					# combine the chains
+					get_parent().get_parent().get_parent().upsert_chain([chainRootsArray[0]],
+					combine_chains(chainRootsArray, numMatches,
+					min(leftClearTimeLeft, min(rightClearTimeLeft, verticalClearTimeLeft))))
+					return {"root": chainRootsArray[0], "clearTimeRemaining": $ClearTimer.time_left}
+	return {"root": [], "clearTimeRemaining": $ClearTimer.time_left}
+
+func combine_chains(chainRoots: Array, numMatches, lowestTimeLeft) -> Dictionary:
+	var combinedChain: Dictionary = get_parent().get_parent().get_parent().get_chain(chainRoots[0])
+	for chainRootIndex in range(chainRoots.size()):
+		if chainRootIndex != 0:
+			var contributingChain: Dictionary = get_parent().get_parent().get_parent().get_chain(chainRoots[chainRootIndex])
+			if contributingChain.has("brainChainCount"):
+				if combinedChain.has("brainChainCount"):
+					combinedChain["brainChainCount"] = combinedChain.get("brainChainCount") + contributingChain.get("brainChainCount")
+				else:
+					combinedChain["brainChainCount"] = contributingChain.get("brainChainCount")
+			if contributingChain.has("quickChainCount"):
+				if combinedChain.has("quickChainCount"):
+					combinedChain["quickChainCount"] = combinedChain.get("quickChainCount") + contributingChain.get("quickChainCount")
+				else:
+					combinedChain["quickChainCount"] = contributingChain.get("quickChainCount")
+			if contributingChain.has("activeChainCount"):
+				if combinedChain.has("activeChainCount"):
+					combinedChain["activeChainCount"] = (combinedChain.get("activeChainCount")
+					+ contributingChain.get("activeChainCount"))
+				else:
+					combinedChain["activeChainCount"] = contributingChain.get("activeChainCount")
+			if contributingChain.has("sequentialChainCount"):
+				if combinedChain.has("sequentialChainCount"):
+					combinedChain["sequentialChainCount"] = (combinedChain.get("sequentialChainCount")
+					+ contributingChain.get("sequentialChainCount"))
+				else:
+					combinedChain["sequentialChainCount"] = contributingChain.get("sequentialChainCount")
+			if contributingChain.has("twoTrickCount"):
+				if combinedChain.has("twoTrickCount"):
+					combinedChain["twoTrickCount"] = combinedChain.get("twoTrickCount") + contributingChain.get("twoTrickCount")
+				else:
+					combinedChain["twoTrickCount"] = contributingChain.get("twoTrickCount")
+			if contributingChain.has("hatTrickCount"):
+				if combinedChain.has("hatTrickCount"):
+					combinedChain["hatTrickCount"] = combinedChain.get("hatTrickCount") + contributingChain.get("hatTrickCount")
+				else:
+					combinedChain["hatTrickCount"] = contributingChain.get("hatTrickCount")
+			if contributingChain.has("simulchaineousCount"):
+				if combinedChain.has("simulchaineousCount"):
+					combinedChain["simulchaineousCount"] = (combinedChain.get("simulchaineousCount")
+					+ contributingChain.get("simulchaineousCount"))
+				else:
+					combinedChain["simulchaineousCount"] = contributingChain.get("simulchaineousCount")
+			get_parent().get_parent().get_parent().delete_chain(chainRoots[chainRootIndex])
+	return update_existing_chain(combinedChain, numMatches, lowestTimeLeft)
+
+func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Dictionary:
+	if numMatches == 2:
+		# We performed a two trick.
+		var existingTwoTricks: int = 0
+		if existingChain.has("twoTrickCount"):
+			existingTwoTricks = existingChain.get("twoTrickCount")
+		existingTwoTricks = existingTwoTricks + 1
+		existingChain["twoTrickCount"] = existingTwoTricks
+	if numMatches == 3:
+		# We performed a hat trick.
+		var existingHatTricks: int = 0
+		if existingChain.has("hatTrickCount"):
+			existingHatTricks = existingChain.get("hatTrickCount")
+		existingHatTricks = existingHatTricks + 1
+		existingChain["hatTrickCount"] = existingHatTricks
+	if !isDroppingFromActive:
+		# Brain chain
+		var existingBrainChainCount: int = 0
+		if existingChain.has("brainChainCount"):
+			existingBrainChainCount = existingChain.get("brainChainCount")
+		existingBrainChainCount = existingBrainChainCount + 1
+		existingChain["brainChainCount"] = existingBrainChainCount
+	else:
+		if !activeChainMode:
+			# Sequential chain
+			var existingSequentialChainCount: int = 0
+			if existingChain.has("sequentialChainCount"):
+				existingSequentialChainCount = existingChain.get("sequentialChainCount")
+			existingSequentialChainCount = existingSequentialChainCount + 1
+			existingChain["sequentialChainCount"] = existingSequentialChainCount
+		else:
+			if lowestTimeLeft > $ClearTimer.wait_time - quickChainCutoff:
+				# Quick chain
+				var existingQuickChainCount: int = 0
+				if existingChain.has("quickChainCount"):
+					existingQuickChainCount = existingChain.get("quickChainCount")
+				existingQuickChainCount = existingQuickChainCount + 1
+				existingChain["quickChainCount"] = existingQuickChainCount
+			else:
+				# Active chain
+				var existingActiveChainCount: int = 0
+				if existingChain.has("activeChainCount"):
+					existingActiveChainCount = existingChain.get("activeChainCount")
+				existingActiveChainCount = existingActiveChainCount + 1
+				existingChain["activeChainCount"] = existingActiveChainCount
+				#TODO check against active chain cap
+	return existingChain
 
 func is_empty() -> bool:
 	return leftColor == colors.size() - 1
@@ -388,11 +561,12 @@ func _on_GravityTimer_timeout():
 		var tempVerticalColor = verticalColor
 		var tempTumbleDirection = moveInfo[2]
 		# clear self
+		var tempIsDroppingFromActive = isDroppingFromActive
 		clear(Direction.VERTICAL_POINT)
 		# copy to neighbor
 		get_parent().grid[emptyCell.rowIndex][emptyCell.columnIndex].fill_from_neighbor(
 			tempLeftColor, tempRightColor, tempVerticalColor,
-			direction, tempTumbleDirection)
+			direction, tempTumbleDirection, tempIsDroppingFromActive)
 	else:
 		# We have come to rest.
 		tumbleDirection = Direction.VERTICAL
