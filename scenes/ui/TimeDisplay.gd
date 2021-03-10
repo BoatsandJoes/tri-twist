@@ -12,10 +12,10 @@ var incrementing: bool = true
 func _ready():
 	pass # Replace with function body.
 
-func init(minutes: float, seconds: float):
+func init(minutes: int, seconds: int):
 	incrementing = minutes == 0 && seconds == 0
 	if !incrementing:
-		currentTime = minutes * 6000.0 + seconds * 100.0
+		currentTime = minutes * 60.0 + seconds
 	update_time_string()
 
 func update_time_string():

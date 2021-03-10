@@ -101,34 +101,6 @@ func get_neighbor(rowIndex: int, columnIndex: int, direction: int) -> TriangleCe
 		return grid[rowIndex + 1][columnIndex]
 	return null
 
-func _input(event):
-	if event is InputEventMouseButton:
-		if event.pressed:
-			for rowIndex in grid.size():
-				for columnIndex in grid[rowIndex].size():
-					if grid[rowIndex][columnIndex].cellFocused:
-						handle_cell_input(rowIndex, columnIndex, event)
-						break
-
-# handles a cell click TODO handle controller and keyboard input
-func handle_cell_input(rowIndex: int, columnIndex: int, event: InputEventMouseButton):
-	if !grid[rowIndex][columnIndex].is_empty() && !grid[rowIndex][columnIndex].is_marked_for_clear() && !grid[0][0].activeChainMode:
-		if event.button_index == 3:
-			# delete tile, debug
-			grid[rowIndex][columnIndex].clear(grid[rowIndex][columnIndex].Direction.VERTICAL_POINT)
-		elif event.button_index == 1 || event.button_index == 2:
-			# spin
-			var rotation
-			if event.button_index == 1:
-				rotation = grid[0][0].Rotation.COUNTERCLOCKWISE
-			else:
-				rotation = grid[0][0].Rotation.CLOCKWISE
-			if grid[rowIndex][columnIndex].spin(rotation):
-				get_parent().advance_piece()
-			else:
-				# Play sound.
-				pass
-
 func set_off_chains():
 	for row in grid:
 		for cell in row:

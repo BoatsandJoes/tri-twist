@@ -1,48 +1,20 @@
 # tri-twist
 todo next:
-	fix brain mode chains popping too aggressively
-	hook up combo display
-	design randomizer
+	triangle trip
+	cooldown on drop to prevent double tap
+	undo in brain mode
+	hard drop
 	hook up sound events
-	gravity stuff
-		do whole board at once, for simpler state serialization and to fix floating piece bug   
-		fix ghost piece not matching real piece (tumbling off a cliff momentum is not shown, dropping a balancing piece next to a falling piece predicts a push when no push will occur)  
-		decide what to actually do when tumbling off a cliff
+	chain cap
 	readability:  
 		fix ghost line visibility (maybe 2nd ghost piece)  
 		light up ghost piece if it will match?  
 		show if ghost will disturb other pieces  
 		solid colors should no longer be contiguous, because it looks like they belong together, but they don't  
-		light up unmatchable edges in matched piece  
+		light up unmatchable edges in matched piece
 
 
-Could add Tribulations mode where gravity is instant and the active chain timer = the old quick chain timer and the new quick chain is even more strict
 on store page, advertise millions of polygons (my idea)
-
-Tuning settings (*- can ramp for difficulty, based on score or moves or time or some combination):  
-	DAS/ARR  
-	Rotate allowed  
-	Hard drop allowed (the only reason to soft drop is if you want to change piece order and get another, later piece under it with hard drop)  
-	Gravity* (ramp to keep pace with other changes only. As gravity gets faster, piece height matters less; matches low down effectively have shorter timers in low gravity. So high gravity kind of gets easier, but high gravity is bad for learning. Instant sounds fun though)  
-	Clear timer (including literally 0 and infinite + button or + scaling)* (ramping is weird because it doesn't change the difficulty of match 2, so digging actually gets faster. Could just keep pace with gravity? In that case chain extensions at the bottom of the board would not change difficulty, but top would get harder.)  
-	Clear timer scaling (lower numbers could literally never clear until a third is added and that would also work. Technically that's what single triangles are already doing. Could clear instantly at a certain number (although could connect a neighboring chain to extend more… seems powerful, and annoying to do) 
-	Sequential chaining mode (have infinite time but a move that does not match will end the chain)  
-	# colors* (3-6) (test 6)  
-	# previews* (ramping would be weird)  
-	Grid size*  
-	Ghost piece search depth (0, contact stack, final resting place, final resting place of balancing pieces)* (ramping would be weird, people don't like it in TGM. It could be made better to keep pace with gravity, maybe, but probably just starting with the best version is fine)  
-	Hold  
-	Nice randomizer* (ramping this would be wild):  
-		First two pieces restricted to avoid annoying cases (is it more annoying to have no match possible, or have a forced match? or are both fine?)  
-		Bag  
-		Puyo 2 randomizer  
-		Piece history  
-		Piece reroll  
-		TGM 3 randomizer  
-	Time limit (could have score extension)  
-	Piece limit (could have score extension)  
-	Score quota (could function as time/piece extension)  
-	a chain of sufficient size (maybe the cap?) could award a helpful item piece (either random, specific, or choose based on some controlable criteria like chain length or tucks or color distribution)  
 
 Scope Creep:  
 	Character who instead of 4 says 3
@@ -159,6 +131,9 @@ Tri words for mechanics or modes or titles:
 Titles:  
 	Trillion Trippy Triangles  
 	Triangle Triumph  
+	Triangle Trial
+	Twist and Shout
+	Chain Train
 
 Credits  
 Joe  
@@ -168,13 +143,5 @@ Jackie Clam (office pet)
 Birdie (chief executive in charge of being a cutie patootie)
 Amy Rose Gronkowski (Had numerous sick ideas) (credit for Japanese localization that doesn't exist, or as a kickstarter backer which also does not exist) (Good opinion haver (likes Daikatana)) (balancing, no, the other kind of balancing)  
 BethBat (playtesting)
-Thank you indie developers who encourage others to make games:  
-	Tim Ashley Jenkins  
-	Dave Makes  
-	Derek Yu  
-	Andy Hull  
-	Ryan Clark  
-	Tom Francis  
-	Bennett Foddy  
 FMod license  
 Godot license  

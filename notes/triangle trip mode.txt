@@ -1,0 +1,82 @@
+Story select between active and passive chain modes
+Each story has some # of levels and then a boss at the end
+levels have a list of goals and you need about 75% of all available goals completed to unlock the next level
+you can end a level at any time to move to the next one, or when you hit the limit the run ends and you can retry the level to pick up other goals or move on to an earlier/later level or quit to menu
+boss gives you one goal at a time (fixed list or random?) and you have to complete it in a limit, if you miss then you get hit, if you get hit 3 times you lose. If you either survive to the end or hit the boss enough times, then you beat the boss (what if there is one goal that they just get hit every time? That sucks)
+have way to erase progress without erasing records (and allow to restore unlocked stuff, it's just for speedrunning)
+if you beat both bosses, unlock a final level/boss of some kind
+true final boss if you do fulfill certain stat conditions? Game should at least recognize it in some way, I think. careful of save scumming.
+
+stats per level and totals
+time
+total score
+best chain score
+move count
+goals completed
+# of runs
+
+Goals list
+total score
+chain score
+chain length
+# brain chain
+# quick chain
+# two tricks
+# hat tricks
+# simulchainenous
+make a chain that completely encircles a certain block with point face down (and connects in a cycle)
+make a clear on top of a certain cell (can further restrict the clear to a hat trick, for example)
+make this many moves/matches (they're basically the same)
+tumble through these points (could be fun on ice, or as a slalom in sequential chain mode)
+
+goal restrictions list
+sequential mode only: chain with only twists
+sequential mode only: chain with no twists
+only brain chains count
+
+level restrictions list
+# previews
+no rotate
+# twists
+can drop pieces in but only score by twisting (fallen matched pieces either behave normally and give no points, or vanish w/o matching, or can't make a move that would match)
+more colors
+oops! all berries
+lower chain timer
+lower chain cap (even 0, brain chains only, extendable by brain/quick chains)
+smaller grid
+slidey pieces
+piece pairs
+
+pressure list:
+move limit
+time limit
+rising/falling garbage
+drop timer
+
+Sequential (timer off by default but option to turn it on):
+Stage 1:
+default colors, gravity
+move limit some number (300? 200?)
+goals:
+chain score 700
+total score 7000
+do a two trick
+
+Ice Cold Beer
+
+Active:
+Stage 1:
+default colors, gravity
+time limit some number (3 mins? 2 mins?)
+goals:
+chain score 500
+total score 5000
+do a two trick
+
+Ice Cold Beer
+
+Ice cold beer stage:
+all pieces above row 1 that do not match vanish either immediately or after a short time/# of moves (depending on chain mode)
+have to make a match on a certain triangle, when you do, it ends your chain and a more difficult triangle appears
+reach all cells in the time limit (move limit? chain limit?) in order to win. maybe don't track score, just time/moves/chains (depending on chain mode).
+could have one think ahead level and one go go go level

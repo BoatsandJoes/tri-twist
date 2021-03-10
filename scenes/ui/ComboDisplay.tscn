@@ -63,6 +63,10 @@ font_data = ExtResource( 2 )
 size = 32
 font_data = ExtResource( 2 )
 
+[sub_resource type="DynamicFont" id=16]
+size = 32
+font_data = ExtResource( 2 )
+
 [sub_resource type="DynamicFont" id=17]
 size = 32
 font_data = ExtResource( 2 )
@@ -72,10 +76,6 @@ size = 32
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=19]
-size = 32
-font_data = ExtResource( 2 )
-
-[sub_resource type="DynamicFont" id=16]
 size = 32
 font_data = ExtResource( 2 )
 
@@ -187,22 +187,22 @@ custom_fonts/font = SubResource( 15 )
 [node name="TwoTrickScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 14.0
-custom_fonts/font = SubResource( 17 )
+custom_fonts/font = SubResource( 16 )
 
 [node name="HatTrickScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 14.0
-custom_fonts/font = SubResource( 18 )
+custom_fonts/font = SubResource( 17 )
 
 [node name="SimulChaineousScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 14.0
-custom_fonts/font = SubResource( 19 )
+custom_fonts/font = SubResource( 18 )
 
 [node name="TotalScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 14.0
-custom_fonts/font = SubResource( 16 )
+custom_fonts/font = SubResource( 19 )
 
 [node name="OtherCombosScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
