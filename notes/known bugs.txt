@@ -1,0 +1,6 @@
+sometimes scorecard is not clearing one combo in sequential mode
+floating pieces
+pieces clearing pushes pieces in non-deterministic directions depending on clear order (can fix this by having clearing piece ask neighbor to check what they should do instead of telling them)
+ghost piece doesn't tumble off cliffs, instead dropping straight down
+sometimes cells out of the first row cannot be focused
+dropping a balancing piece next to a falling piece predicts a push when no push will occur

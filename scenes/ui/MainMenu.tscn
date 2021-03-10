@@ -50,11 +50,12 @@ margin_bottom = -60.0
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 margin_right = 1800.0
 margin_bottom = 960.0
+custom_constants/separation = 20
 alignment = 1
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 468.0
-margin_right = 947.0
+margin_left = 452.0
+margin_right = 931.0
 margin_bottom = 960.0
 alignment = 1
 
@@ -104,8 +105,8 @@ custom_fonts/font = SubResource( 5 )
 text = "Exit Game"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 1303.0
-margin_right = 1332.0
+margin_left = 1319.0
+margin_right = 1348.0
 margin_bottom = 960.0
 custom_constants/separation = 13
 alignment = 1
