@@ -9,16 +9,14 @@ Beth
 
 jackie
 	high pitched whine
-	ui is on top of board a little
+	ui is on top of board a little (still applies to pause menu)
 	didn't know about rotate or twist, obviously
-	jackie never spins ever (want to see if they will start using it independently)
+	jackie never spins ever (want to see if they will start using it independently) (I've decided to remove it)
 they don't use the outermost 2 cells on either side
 They don't like to place too many setup pieces before starting to match
-can you actually run out of moves?
 their playstyle is to place pieces with many faces exposed and then take matches when they become available
 need visual for chain timer
-remove mouse highlight
-no brain chains
+not doing brain chains
 thinks it's odd that chains dont share a timer (may be able to make a visual cue that makes that clear, along with the timer)
 no hat tricks although they did do some neat balancing
-faster gravity would be good even in brain mode, hard drop
+faster gravity would be good even in brain mode (down to 0.1 from 0.2 now), hard drop

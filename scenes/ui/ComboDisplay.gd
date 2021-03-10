@@ -8,7 +8,7 @@ signal new_best_combo
 # var a = 2
 # var b = "text"
 var combos: Dictionary = {}
-var brainChainLinkScore = 200
+var brainChainLinkScore = 400
 var quickChainLinkScore = 150
 var activeChainLinkScore = 100
 var sequentialChainLinkScore = 100
@@ -89,7 +89,7 @@ func update_scorecard():
 				$Scorecard/ComboCounter/ChainLength.visible = false
 				$Scorecard/ComboScore/ChainLengthScore.visible = false
 			if (comboToDisplay.has("twoTrickCount")):
-				$Scorecard/ComboCounter/TwoTrick.text = "Two Trick x" + String(comboToDisplay.get("twoTrickCount"))
+				$Scorecard/ComboCounter/TwoTrick.text = "Double Trouble x" + String(comboToDisplay.get("twoTrickCount"))
 				$Scorecard/ComboCounter/TwoTrick.visible = true
 				$Scorecard/ComboScore/TwoTrickScore.text = String(comboToDisplay.get("twoTrickScore"))
 				$Scorecard/ComboScore/TwoTrickScore.visible = true

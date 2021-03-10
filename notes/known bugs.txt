@@ -1,4 +1,5 @@
 sometimes scorecard is not clearing one combo in sequential mode (might be fixed?)
+saw a case where it looked like two chains didn't combine properly in active chain mode (only one chain actually active, it got stuck in "other chains" while the displayed chain "simulchaineous" kept counting up)
 floating pieces
 pieces clearing pushes pieces in non-deterministic directions depending on clear order (can fix this by having clearing piece ask neighbor to check what they should do instead of telling them)
 ghost piece doesn't tumble off cliffs, instead dropping straight down

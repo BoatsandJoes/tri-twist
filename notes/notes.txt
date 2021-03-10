@@ -5,7 +5,6 @@ todo next:
 	undo in brain mode
 	hard drop
 	hook up sound events
-	chain cap
 	readability:  
 		fix ghost line visibility (maybe 2nd ghost piece)  
 		light up ghost piece if it will match?  
@@ -26,26 +25,12 @@ Scope Creep:
 		Music  
 		SFX  
 		color choices (in menu or per character or both)  
-	Core singleplayer modes:  
-		Custom tuning mode (make this first, for testing)  
-		Journey/Novice
-			Second half is Triathalon first half  
-			Basically this is for new players so that the first half of Triathalon can be less boring for good players (or vice versa)  
-		Triathlon (experiment with tuning settings to find a good ramp)  
-			Maybe have a grading system that tries to let new players play but serious players be challenged  
-		Triple Threat mode with instant gravity and fast pace, focused on survival  
-		Novice -> Middle -> Triple Threat could be called Triathalon, actually? Just those 3 difficulties glued together in a different way?  
-		Zen mode for people who don't want to stress, and maybe want to learn  
-			Can think for as long as you want  
-			Can't lose (or have piece limit (w/ score threshold?)  
-			Sequential chain mode  
-			Can twist  
-			Keep track of biggest chain  
+	mode ideas:
 		Purify/dig race/Dr mario, just focus on downstacking  
 			maybe have some incentive to make small chains, idk what  
 			could fill board with unmatched pieces and mark some as "clear these" so you have to dig to them (like purify), and big chain marks more as "clear these". Something like that  
 			could fill board with garbage instead of normal pieces. Idk if this would be fun so it's worth testing, especially since garbage might make a good versus mode some day.  
-	Shared board local coop seems pretty easy to implement compared to all other forms of multiplayer. Probably worth it.  
+		Shared board local coop seems pretty easy to implement compared to all other forms of multiplayer.
 	button configuration  
 	controller support  
 	mobile port  
@@ -134,6 +119,7 @@ Titles:
 	Triangle Trial
 	Twist and Shout
 	Chain Train
+	Triple Threat
 
 Credits  
 Joe  

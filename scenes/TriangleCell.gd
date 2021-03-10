@@ -21,8 +21,9 @@ var inGrid
 var isGhost
 var tumbleDirection: int
 var clearDelay = 5
-var quickChainCutoff = 1.0
+var quickChainCutoff = 1.5
 var activeChainCap = 6
+var sequentialChainCap = 10
 var clearScaling = 0.0
 var activeChainMode = true
 var isMarkedForInactiveClear = false
@@ -212,6 +213,7 @@ func clear(edge: int):
 	$ClearTimer.wait_time = clearDelay
 	tumbleDirection = Direction.VERTICAL
 	$GravityTimer.stop()
+	$ClearTimer.stop()
 	if (edge == Direction.VERTICAL_POINT):
 		# Immediately blank tile.
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
@@ -289,6 +291,7 @@ func clear(edge: int):
 
 # find neighbors that match with this cell, and mark both for clear.
 func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
+	var clearTimerTimeLeft: float = $ClearTimer.get_time_left()
 	var initialCheckedCoordinates = alreadyCheckedCoordinates.duplicate()
 	# only check if we aren't already checked, and aren't falling, and aren't empty
 	var alreadyChecked = false
@@ -340,7 +343,7 @@ func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
 		# Return chain root and this cell clear time remaining.
 		if get_parent().get_parent().get_parent().get_chains().has([rowIndex,columnIndex]):
 			# We are the root.
-			return {"root": [rowIndex, columnIndex], "clearTimeRemaining": $ClearTimer.time_left}
+			return {"root": [rowIndex, columnIndex], "clearTimeRemaining": clearTimerTimeLeft}
 		else:
 			var chainRootsArray: Array = []
 			if !leftRoot.empty():
@@ -352,25 +355,35 @@ func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
 			if chainRootsArray.size() == 1:
 				if initialCheckedCoordinates.empty():
 					# We are the single newest piece in an existing chain
-					get_parent().get_parent().get_parent().upsert_chain(chainRootsArray[0],
-					update_existing_chain(get_parent().get_parent().get_parent().get_chain(chainRootsArray[0]),
-					numMatches, min(leftClearTimeLeft, min(rightClearTimeLeft, verticalClearTimeLeft))))
+					var combinedChain = update_existing_chain(get_parent().get_parent().get_parent().get_chain(chainRootsArray[0]),
+					numMatches, min(leftClearTimeLeft, min(rightClearTimeLeft, verticalClearTimeLeft)))
+					get_parent().get_parent().get_parent().upsert_chain(chainRootsArray[0], combinedChain)
+					# Check chain cap.
+					if ((combinedChain.has("activeChainCount") && combinedChain.get("activeChainCount") >= activeChainCap) ||
+					(combinedChain.has("sequentialChainCount") && combinedChain.get("sequentialChainCount") >= sequentialChainCap)):
+						# Clear.
+						clear_self_and_matching_neighbors([])
 				# Tell our caller the root and clear time remaining.
-				return {"root": chainRootsArray[0], "clearTimeRemaining": $ClearTimer.time_left}
+				return {"root": chainRootsArray[0], "clearTimeRemaining": clearTimerTimeLeft}
 			elif initialCheckedCoordinates.empty() && numMatches > 0:
 				if chainRootsArray.empty():
 					# The newest match becomes the new chain root if there are 0 roots in this chain.
 					get_parent().get_parent().get_parent().upsert_chain([rowIndex,columnIndex],
 					update_existing_chain(get_parent().get_parent().get_parent().get_chain([rowIndex,columnIndex]),
 					numMatches, 0.0))
-					return {"root": [rowIndex, columnIndex], "clearTimeRemaining": $ClearTimer.time_left}
+					return {"root": [rowIndex, columnIndex], "clearTimeRemaining": clearTimerTimeLeft}
 				elif chainRootsArray.size() >= 2:
 					# combine the chains
-					get_parent().get_parent().get_parent().upsert_chain([chainRootsArray[0]],
-					combine_chains(chainRootsArray, numMatches,
-					min(leftClearTimeLeft, min(rightClearTimeLeft, verticalClearTimeLeft))))
-					return {"root": chainRootsArray[0], "clearTimeRemaining": $ClearTimer.time_left}
-	return {"root": [], "clearTimeRemaining": $ClearTimer.time_left}
+					var combinedChain = combine_chains(chainRootsArray, numMatches,
+					min(leftClearTimeLeft, min(rightClearTimeLeft, verticalClearTimeLeft)))
+					get_parent().get_parent().get_parent().upsert_chain([chainRootsArray[0]], combinedChain)
+					# Check chain caps.
+					if ((combinedChain.has("activeChainCount") && combinedChain.get("activeChainCount") >= activeChainCap) ||
+					(combinedChain.has("sequentialChainCount") && combinedChain.get("sequentialChainCount") >= sequentialChainCap)):
+						# Clear.
+						clear_self_and_matching_neighbors([])
+					return {"root": chainRootsArray[0], "clearTimeRemaining": clearTimerTimeLeft}
+	return {"root": [], "clearTimeRemaining": clearTimerTimeLeft}
 
 func combine_chains(chainRoots: Array, numMatches, lowestTimeLeft) -> Dictionary:
 	var combinedChain: Dictionary = get_parent().get_parent().get_parent().get_chain(chainRoots[0])
@@ -463,11 +476,22 @@ func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Diction
 					existingActiveChainCount = existingChain.get("activeChainCount")
 				existingActiveChainCount = existingActiveChainCount + 1
 				existingChain["activeChainCount"] = existingActiveChainCount
-				# check against active chain cap
-				if existingActiveChainCount >= activeChainCap:
-					# TODO Pop chain.
-					pass
 	return existingChain
+
+func clear_self_and_matching_neighbors(alreadyCheckedCoordinates: Array):
+	if !alreadyCheckedCoordinates.has([rowIndex, columnIndex]):
+		$CPUParticles2D.emitting = true
+		alreadyCheckedCoordinates.append([rowIndex, columnIndex])
+		var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
+		var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
+		var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
+		if leftNeighbor != null && leftNeighbor.rightColor == leftColor && leftNeighbor.is_marked_for_clear():
+			leftNeighbor.clear_self_and_matching_neighbors(alreadyCheckedCoordinates)
+		if rightNeighbor != null && rightNeighbor.leftColor == rightColor && rightNeighbor.is_marked_for_clear():
+			rightNeighbor.clear_self_and_matching_neighbors(alreadyCheckedCoordinates)
+		if verticalNeighbor != null && verticalNeighbor.verticalColor == verticalColor && verticalNeighbor.is_marked_for_clear():
+			verticalNeighbor.clear_self_and_matching_neighbors(alreadyCheckedCoordinates)
+		clear(Direction.VERTICAL_POINT)
 
 func is_empty() -> bool:
 	return leftColor == colors.size() - 1
