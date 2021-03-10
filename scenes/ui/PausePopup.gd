@@ -19,7 +19,7 @@ func set_mode_pause():
 	$VBoxContainer/HBoxContainer2/SelectArrow/Restart.text = ""
 	$VBoxContainer/HBoxContainer2/SelectArrow/BackToMain.text = ""
 	self.visible = true
-	get_parent().triangleDropper.set_process_input(false)
+	get_parent().set_process_input(false)
 	get_tree().paused = true
 
 func set_mode_finished():
@@ -81,7 +81,7 @@ func _input(event):
 func _on_Resume_pressed():
 	self.visible = false
 	get_tree().paused = false
-	get_parent().triangleDropper.set_process_input(true)
+	get_parent().set_process_input(true)
 
 func _on_Restart_pressed():
 	get_tree().paused = false

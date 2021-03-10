@@ -46,11 +46,10 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	# set position
 	position = cellPostion
 	# Define vertices
-	var baseVectorArray = PoolVector2Array()
-	baseVectorArray.append(Vector2(0, 0))
-	baseVectorArray.append(Vector2(size, 0))
-	baseVectorArray.append(Vector2(size/2, size * sqrt(3) / 2))
-	$CollisionPolygon2D.set_polygon(baseVectorArray)
+	#var baseVectorArray = PoolVector2Array()
+	#baseVectorArray.append(Vector2(0, 0))
+	#baseVectorArray.append(Vector2(size, 0))
+	#baseVectorArray.append(Vector2(size/2, size * sqrt(3) / 2))
 	# Define vertices of children
 	# left
 	var leftEdgeVectorArray = PoolVector2Array()
@@ -71,7 +70,6 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	verticalEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 6))
 	$VerticalEdge.set_polygon(verticalEdgeVectorArray)
 	# Move polygons to center on our position.
-	$CollisionPolygon2D.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 	$LeftEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 	$RightEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 	$VerticalEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
@@ -465,7 +463,10 @@ func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Diction
 					existingActiveChainCount = existingChain.get("activeChainCount")
 				existingActiveChainCount = existingActiveChainCount + 1
 				existingChain["activeChainCount"] = existingActiveChainCount
-				#TODO check against active chain cap
+				# check against active chain cap
+				if existingActiveChainCount >= activeChainCap:
+					# TODO Pop chain.
+					pass
 	return existingChain
 
 func is_empty() -> bool:
@@ -527,22 +528,6 @@ func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
-
-func _on_TriangleCell_mouse_entered():
-	# If not in grid, do nothing.
-	if inGrid:
-		cellFocused = true
-		if !is_marked_for_clear():
-			# Highlight.
-			update_colors_visually()
-
-func _on_TriangleCell_mouse_exited():
-	# If not in grid, do nothing.
-	if inGrid:
-		cellFocused = false
-		if !is_marked_for_clear():
-			# Remove highlight
-			update_colors_visually()
 
 func _on_ClearTimer_timeout():
 	# visual effect
