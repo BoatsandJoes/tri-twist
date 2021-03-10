@@ -537,6 +537,7 @@ func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
 			direction = Direction.LEFT
 		# If we can't roll, try to fall.
 		if emptyCell == null || !emptyCell.is_empty():
+			breakpoint
 			tumbleResult = Direction.VERTICAL
 			emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
 			direction = Direction.VERTICAL_POINT
@@ -551,12 +552,12 @@ func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
 		var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
 		var leftNeighborFilled = leftNeighbor == null || !leftNeighbor.is_empty()
 		var rightNeighborFilled = rightNeighbor == null || !rightNeighbor.is_empty()
-		# Don't tumble unless only one neighbor is filled
+		# Don't tumble unless only one neighbor is filled, and it is not falling
 		if (leftNeighborFilled != rightNeighborFilled):
-			if leftNeighborFilled:
+			if leftNeighborFilled && (leftNeighbor == null || !leftNeighbor.is_falling()):
 				emptyCell = rightNeighbor
 				direction = Direction.LEFT
-			else:
+			elif rightNeighbor == null || !rightNeighbor.is_falling():
 				emptyCell = leftNeighbor
 				direction = Direction.RIGHT
 	if direction == Direction.LEFT || direction == Direction.RIGHT:
@@ -566,7 +567,7 @@ func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if !$ClearTimer.is_stopped():
-		var timeLeftRatio = ($ClearTimer.time_left + 0.4 * ($ClearTimer.wait_time - $ClearTimer.time_left)) / $ClearTimer.wait_time
+		var timeLeftRatio = ($ClearTimer.time_left + 0.1 * ($ClearTimer.wait_time - $ClearTimer.time_left)) / $ClearTimer.wait_time
 		set_modulate(Color(timeLeftRatio, timeLeftRatio, timeLeftRatio))
 
 func _on_ClearTimer_timeout():
