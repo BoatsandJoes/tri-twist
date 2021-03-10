@@ -250,6 +250,7 @@ func end_combo_if_exists(comboKey):
 			if displayedComboKey == comboKey:
 				$CompleteScorecardTimer.start()
 				$Scorecard.set_modulate(Color(0.483521, 0.690471, 0.910156))
+			update_scorecard()
 		#XXX elif $CompleteScorecardTimer.time_left < $CompleteScorecardTimer.wait_time / 2:
 			#XXX we only want to overwrite the scorecard if this combo is bigger than all unfinished combos.
 			#if false:
