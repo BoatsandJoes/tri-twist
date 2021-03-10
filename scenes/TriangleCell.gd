@@ -28,6 +28,7 @@ var clearScaling = 0.0
 var activeChainMode = true
 var isMarkedForInactiveClear = false
 var isDroppingFromActive = false
+var sequentialChainCapFlag = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -163,7 +164,11 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 		# While we're here, clear isDroppingFromActive, since we are no longer dropping.
 		isDroppingFromActive = false
 	if !is_marked_for_clear() && !is_falling() && !activeChainMode && droppingFromActive:
-		get_parent().set_off_chains()
+		# Don't set off if we just hit the sequential chain cap
+		if sequentialChainCapFlag:
+			sequentialChainCapFlag = false
+		else:
+			get_parent().set_off_chains()
 
 func update_colors_visually():
 	if cellFocused:
@@ -360,9 +365,13 @@ func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
 					numMatches, min(leftClearTimeLeft, min(rightClearTimeLeft, verticalClearTimeLeft)))
 					get_parent().get_parent().get_parent().upsert_chain(chainRootsArray[0], combinedChain)
 					# Check chain cap.
-					if ((combinedChain.has("activeChainCount") && combinedChain.get("activeChainCount") >= activeChainCap) ||
-					(combinedChain.has("sequentialChainCount") && combinedChain.get("sequentialChainCount") >= sequentialChainCap)):
+					if (combinedChain.has("activeChainCount") && combinedChain.get("activeChainCount") >= activeChainCap):
 						# Clear.
+						clear_self_and_matching_neighbors([])
+					elif (combinedChain.has("sequentialChainCount") &&
+					combinedChain.get("sequentialChainCount") >= sequentialChainCap):
+						# Set flag for later, and clear.
+						sequentialChainCapFlag = true
 						clear_self_and_matching_neighbors([])
 				# Tell our caller the root and clear time remaining.
 				return {"root": chainRootsArray[0], "clearTimeRemaining": clearTimerTimeLeft}
@@ -379,9 +388,13 @@ func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
 					min(leftClearTimeLeft, min(rightClearTimeLeft, verticalClearTimeLeft)))
 					get_parent().get_parent().get_parent().upsert_chain([chainRootsArray[0]], combinedChain)
 					# Check chain caps.
-					if ((combinedChain.has("activeChainCount") && combinedChain.get("activeChainCount") >= activeChainCap) ||
-					(combinedChain.has("sequentialChainCount") && combinedChain.get("sequentialChainCount") >= sequentialChainCap)):
+					if (combinedChain.has("activeChainCount") && combinedChain.get("activeChainCount") >= activeChainCap):
 						# Clear.
+						clear_self_and_matching_neighbors([])
+					elif (combinedChain.has("sequentialChainCount") &&
+					combinedChain.get("sequentialChainCount") >= sequentialChainCap):
+						# Set flag for later, and clear.
+						sequentialChainCapFlag = true
 						clear_self_and_matching_neighbors([])
 					return {"root": chainRootsArray[0], "clearTimeRemaining": clearTimerTimeLeft}
 	return {"root": [], "clearTimeRemaining": clearTimerTimeLeft}
