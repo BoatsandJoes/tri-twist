@@ -216,6 +216,7 @@ func clear(edge: int):
 	$ClearTimer.stop()
 	if (edge == Direction.VERTICAL_POINT):
 		# Immediately blank tile.
+		set_modulate(Color(1,1,1))
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 		isMarkedForInactiveClear = false
 		isDroppingFromActive = false
@@ -550,8 +551,10 @@ func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
 	return [emptyCell, direction, tumbleResult]
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(delta):
+	if !$ClearTimer.is_stopped():
+		var timeLeftRatio = ($ClearTimer.time_left + 0.4 * ($ClearTimer.wait_time - $ClearTimer.time_left)) / $ClearTimer.wait_time
+		set_modulate(Color(timeLeftRatio, timeLeftRatio, timeLeftRatio))
 
 func _on_ClearTimer_timeout():
 	# visual effect
