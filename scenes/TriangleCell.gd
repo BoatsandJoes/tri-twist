@@ -103,6 +103,11 @@ func set_colors(left: int, right: int, vertical: int):
 	verticalColor = vertical
 	update_colors_visually()
 
+func spawn_piece(piece: TriangleCell):
+	set_colors(piece.leftColor, piece.rightColor, piece.verticalColor)
+	after_fill_checks(true, get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT),
+	get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT))
+
 func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighborVerticalColor: int, direction: int,
 		tumblingDirection: int, droppingFromActive: bool):
 	isDroppingFromActive = droppingFromActive
@@ -145,6 +150,9 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 			enter_falling_state(Direction.LEFT)
 		else:
 			enter_falling_state(Direction.RIGHT)
+	after_fill_checks(droppingFromActive, leftNeighbor, rightNeighbor)
+
+func after_fill_checks(droppingFromActive: bool, leftNeighbor, rightNeighbor):
 	# Check for enclosed areas.
 	if (!is_marked_for_clear()):
 		# XXX there is technically still a race condition here, but it's a narrow window. This piece would be double counted
@@ -599,3 +607,5 @@ func _on_GravityTimer_timeout():
 		else:
 			# We have come to rest.
 			tumbleDirection = Direction.VERTICAL
+			# We may be the victim of a Zangimove
+			check_for_clear([])

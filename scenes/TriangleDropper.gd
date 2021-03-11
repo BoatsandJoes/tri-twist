@@ -89,13 +89,14 @@ func _input(event):
 			activePiece.set_colors(activePiece.verticalColor, activePiece.leftColor, activePiece.rightColor)
 		elif event.is_action_pressed("counterclockwise"):
 			activePiece.set_colors(activePiece.rightColor, activePiece.verticalColor, activePiece.leftColor)
-		elif (event.is_action_pressed("ui_accept") || event.is_action_pressed("ui_select") ||
-		event.is_action_pressed("ui_down") || event.is_action_pressed("ui_up")):
+		elif event.is_action_pressed("ui_down"):
 			var accepted = gameGrid.drop_piece(activePiece, true)
 			if accepted:
 				advance_piece()
-		elif (event.is_action_pressed("ui_focus_next")):
-			$Label.visible = false
+		elif ((event.is_action_pressed("ui_accept") || event.is_action_pressed("ui_select") || event.is_action_pressed("ui_up"))
+		&& ghostPiece.visible):
+			gameGrid.hard_drop(ghostPiece)
+			advance_piece()
 
 func set_drop_timer(value):
 	if value == 0:

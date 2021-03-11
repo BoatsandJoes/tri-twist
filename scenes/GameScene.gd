@@ -56,7 +56,8 @@ func _on_triangleDropper_piece_sequence_advanced():
 	hud.get_node("HBoxContainer/VBoxContainer2/MoveCount").make_move()
 
 func _on_gameGrid_tumble():
-	hud.get_node("HBoxContainer/VBoxContainer/ScoreDisplay").increment_score(1)
+	pass
+	#hud.get_node("HBoxContainer/VBoxContainer/ScoreDisplay").increment_score(1) Turned off because of hard drop
 
 func _on_HUD_end_game():
 	# Freeze input

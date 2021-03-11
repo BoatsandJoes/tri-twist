@@ -76,6 +76,9 @@ func drop_piece(piece: TriangleCell, dropForReal: bool):
 			neighborDirection, grid[0][0].Direction.VERTICAL, true)
 	return true
 
+func hard_drop(piece: TriangleCell):
+	grid[piece.rowIndex][piece.columnIndex].spawn_piece(piece)
+
 # Gets the position in which to draw the cell with the passed indices
 func get_position_for_cell(rowIndex: int, columnIndex: int, flipped: bool) -> Vector2:
 	var result = Vector2(columnIndex * (cellSize/2 + margin) + window.size[0]/5,
