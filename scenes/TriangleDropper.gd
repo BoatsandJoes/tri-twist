@@ -144,7 +144,7 @@ func draw_ghost_pieces():
 			(activePiece.columnIndex) % 2 != 0), false, true)
 		var move = gameGrid.grid[ghostPiece.rowIndex][ghostPiece.columnIndex].get_next_move_if_this_were_you(
 			ghostPiece.tumbleDirection)
-		var lastMove = [ghostPiece, ghostPiece.Direction.VERTICAL]
+		var lastMove = [ghostPiece, ghostPiece.Direction.VERTICAL, ghostPiece.Direction.VERTICAL]
 		var ghostLeftColor
 		var ghostRightColor
 		var ghostVerticalColor
@@ -163,13 +163,13 @@ func draw_ghost_pieces():
 					ghostLinePoints.append(gameGrid.get_position_for_cell(lastMove[0].rowIndex, lastMove[0].columnIndex,
 						(lastMove[0].columnIndex) % 2 != 0))
 				# Rotate colors
-				if ((move[2] == ghostPiece.Direction.RIGHT && !move[0].pointFacingUp) ||
-				(move[2] == ghostPiece.Direction.LEFT && move[0].pointFacingUp)):
+				if ((move[2] == ghostPiece.Direction.RIGHT && move[0].pointFacingUp) ||
+				(move[2] == ghostPiece.Direction.LEFT && !move[0].pointFacingUp)):
 					var tempRightColor = ghostRightColor
 					ghostRightColor = ghostVerticalColor
 					ghostVerticalColor = tempRightColor
-				elif ((move[2] == ghostPiece.Direction.RIGHT && move[0].pointFacingUp) ||
-				(move[2] == ghostPiece.Direction.LEFT && !move[0].pointFacingUp)):
+				elif ((move[2] == ghostPiece.Direction.RIGHT && !move[0].pointFacingUp) ||
+				(move[2] == ghostPiece.Direction.LEFT && move[0].pointFacingUp)):
 					var tempLeftColor = ghostLeftColor
 					ghostLeftColor = ghostVerticalColor
 					ghostVerticalColor = tempLeftColor

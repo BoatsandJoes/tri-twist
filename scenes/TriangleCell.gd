@@ -560,15 +560,17 @@ func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
 			elif rightNeighbor == null || !rightNeighbor.is_falling():
 				emptyCell = leftNeighbor
 				direction = Direction.RIGHT
-	if direction == Direction.LEFT || direction == Direction.RIGHT:
-		tumbleResult = direction
+	if direction == Direction.LEFT:
+		tumbleResult = Direction.RIGHT
+	elif direction == Direction.RIGHT:
+		tumbleResult = Direction.LEFT
 	return [emptyCell, direction, tumbleResult]
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if !$ClearTimer.is_stopped():
-		var timeLeftRatio = ($ClearTimer.time_left + 0.3 * ($ClearTimer.wait_time - $ClearTimer.time_left)) / $ClearTimer.wait_time
-		set_modulate(Color(timeLeftRatio, timeLeftRatio, timeLeftRatio))
+		#TODO apply effect.
+		pass
 
 func _on_ClearTimer_timeout():
 	# visual effect
@@ -587,8 +589,8 @@ func _on_GravityTimer_timeout():
 			var tempRightColor = rightColor
 			var tempVerticalColor = verticalColor
 			var tempTumbleDirection = moveInfo[2]
-			# clear self
 			var tempIsDroppingFromActive = isDroppingFromActive
+			# clear self
 			clear(Direction.VERTICAL_POINT)
 			# copy to neighbor
 			get_parent().grid[emptyCell.rowIndex][emptyCell.columnIndex].fill_from_neighbor(
