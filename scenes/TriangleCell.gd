@@ -537,7 +537,6 @@ func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
 			direction = Direction.LEFT
 		# If we can't roll, try to fall.
 		if emptyCell == null || !emptyCell.is_empty():
-			breakpoint
 			tumbleResult = Direction.VERTICAL
 			emptyCell = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
 			direction = Direction.VERTICAL_POINT
