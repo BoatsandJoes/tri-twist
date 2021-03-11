@@ -151,16 +151,17 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 		check_for_clear([])
 	# push balancing pieces over
 	if !is_falling():
-		if leftNeighbor != null && !leftNeighbor.is_empty():
-			var neighborsNeighbor = get_parent().get_neighbor(
-				leftNeighbor.rowIndex, leftNeighbor.columnIndex, Direction.LEFT)
-			if neighborsNeighbor != null && neighborsNeighbor.is_empty():
-				leftNeighbor.enter_falling_state(Direction.LEFT)
-		if rightNeighbor != null && !rightNeighbor.is_empty():
-			var neighborsNeighbor = get_parent().get_neighbor(
-				rightNeighbor.rowIndex, rightNeighbor.columnIndex, Direction.RIGHT)
-			if neighborsNeighbor != null && neighborsNeighbor.is_empty():
-				rightNeighbor.enter_falling_state(Direction.RIGHT)
+		if pointFacingUp:
+			if leftNeighbor != null && !leftNeighbor.is_empty():
+				var neighborsNeighbor = get_parent().get_neighbor(
+					leftNeighbor.rowIndex, leftNeighbor.columnIndex, Direction.LEFT)
+				if neighborsNeighbor != null && neighborsNeighbor.is_empty():
+					leftNeighbor.enter_falling_state(Direction.LEFT)
+			if rightNeighbor != null && !rightNeighbor.is_empty():
+				var neighborsNeighbor = get_parent().get_neighbor(
+					rightNeighbor.rowIndex, rightNeighbor.columnIndex, Direction.RIGHT)
+				if neighborsNeighbor != null && neighborsNeighbor.is_empty():
+					rightNeighbor.enter_falling_state(Direction.RIGHT)
 		# While we're here, clear isDroppingFromActive, since we are no longer dropping.
 		isDroppingFromActive = false
 	if !is_marked_for_clear() && !is_falling() && !activeChainMode && droppingFromActive:
@@ -210,7 +211,7 @@ func spin(rotation: int) -> bool:
 	return false
 
 func enter_falling_state(tumblingDirection: int):
-	if !is_marked_for_clear() && !is_falling() && !is_empty():
+	if !is_marked_for_clear() && !is_falling():
 		$GravityTimer.start()
 		tumbleDirection = tumblingDirection
 
@@ -566,7 +567,7 @@ func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if !$ClearTimer.is_stopped():
-		var timeLeftRatio = ($ClearTimer.time_left + 0.1 * ($ClearTimer.wait_time - $ClearTimer.time_left)) / $ClearTimer.wait_time
+		var timeLeftRatio = ($ClearTimer.time_left + 0.3 * ($ClearTimer.wait_time - $ClearTimer.time_left)) / $ClearTimer.wait_time
 		set_modulate(Color(timeLeftRatio, timeLeftRatio, timeLeftRatio))
 
 func _on_ClearTimer_timeout():
@@ -575,23 +576,24 @@ func _on_ClearTimer_timeout():
 	clear(Direction.VERTICAL_POINT)
 
 func _on_GravityTimer_timeout():
-	# Check neighbors to figure out where this triangle should go, and if it should go at all
-	var moveInfo = get_next_move_if_this_were_you(Direction.VERTICAL_POINT)
-	var emptyCell = moveInfo[0]
-	var direction = moveInfo[1]
-	if emptyCell != null && emptyCell.is_empty():
-		# save info in temp variables
-		var tempLeftColor = leftColor
-		var tempRightColor = rightColor
-		var tempVerticalColor = verticalColor
-		var tempTumbleDirection = moveInfo[2]
-		# clear self
-		var tempIsDroppingFromActive = isDroppingFromActive
-		clear(Direction.VERTICAL_POINT)
-		# copy to neighbor
-		get_parent().grid[emptyCell.rowIndex][emptyCell.columnIndex].fill_from_neighbor(
-			tempLeftColor, tempRightColor, tempVerticalColor,
-			direction, tempTumbleDirection, tempIsDroppingFromActive)
-	else:
-		# We have come to rest.
-		tumbleDirection = Direction.VERTICAL
+	if !is_empty():
+		# Check neighbors to figure out where this triangle should go, and if it should go at all
+		var moveInfo = get_next_move_if_this_were_you(Direction.VERTICAL_POINT)
+		var emptyCell = moveInfo[0]
+		var direction = moveInfo[1]
+		if emptyCell != null && emptyCell.is_empty():
+			# save info in temp variables
+			var tempLeftColor = leftColor
+			var tempRightColor = rightColor
+			var tempVerticalColor = verticalColor
+			var tempTumbleDirection = moveInfo[2]
+			# clear self
+			var tempIsDroppingFromActive = isDroppingFromActive
+			clear(Direction.VERTICAL_POINT)
+			# copy to neighbor
+			get_parent().grid[emptyCell.rowIndex][emptyCell.columnIndex].fill_from_neighbor(
+				tempLeftColor, tempRightColor, tempVerticalColor,
+				direction, tempTumbleDirection, tempIsDroppingFromActive)
+		else:
+			# We have come to rest.
+			tumbleDirection = Direction.VERTICAL
