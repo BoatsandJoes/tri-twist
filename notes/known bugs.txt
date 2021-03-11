@@ -1,6 +1,2 @@
 * saw a case where it looked like two chains didn't combine properly in active chain mode (only one chain actually active, it got stuck in "other chains" while the displayed chain "simulchaineous" kept counting up)
 * pieces clearing pushes pieces in non-deterministic directions depending on clear order (move clear vertical_point into new method that clears the chain without pushing, and then write a second method that checks the whole grid for pieces that should fall and how, which will be called in a pair with clear())
-* floating pieces (have seen it once in Take Your Time with hard drop when gravity was on 0.1)
-
-might be fixed?:
-* sometimes scorecard is not clearing one combo in sequential mode

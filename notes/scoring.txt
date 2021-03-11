@@ -3,7 +3,7 @@ use to fake extend the active chain timer
 towers (3 high is totally reasonable)  
 double dominoes (difficult with 4 colors, ok with 3)
 
-Probably too easy for a good player to topple single pieces onto a chain as a brain chain; keep an eye on it during playtesting, think of possible solutions ahead of time (maybe can no longer brain chain after getting at least one active chain? Maybe if it's not a fast chain it doesn't count?)
+May be too easy for a good player to topple single pieces onto a chain as a brain chain; keep an eye on it during playtesting, think of possible solutions ahead of time (maybe can no longer brain chain after getting at least one active chain? Maybe if it's not a fast chain it doesn't count?)
 
 visual effect for a certain trick, on the piece itself so you can see
 

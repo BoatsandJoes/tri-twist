@@ -20,9 +20,9 @@ var columnIndex: int
 var inGrid
 var isGhost
 var tumbleDirection: int
-var clearDelay = 5
-var quickChainCutoff = 1.5
-var activeChainCap = 6
+var clearDelay = 4
+var quickChainCutoff = 0
+var activeChainCap = 4
 var sequentialChainCap = 10
 var clearScaling = 0.0
 var activeChainMode = true
@@ -104,6 +104,7 @@ func set_colors(left: int, right: int, vertical: int):
 	update_colors_visually()
 
 func spawn_piece(piece: TriangleCell):
+	isDroppingFromActive = true
 	set_colors(piece.leftColor, piece.rightColor, piece.verticalColor)
 	after_fill_checks(true, get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT),
 	get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT))
@@ -278,11 +279,10 @@ func clear(edge: int):
 						rightNeighbor.columnIndex, Direction.RIGHT)
 						if neighborsNeighbor == null || !neighborsNeighbor.is_empty():
 							rightNeighbor.enter_falling_state(Direction.RIGHT)
-			else:
-				# Fall from above. XXX fix bug where sometimes this does not cause them to fall.
-				var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
-				if verticalNeighbor != null:
-					verticalNeighbor.enter_falling_state(verticalNeighbor.tumbleDirection)
+			# Fall from above. In theory, if a neighbor fills then it won't fall after all. XXX keep an eye on this
+			var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
+			if verticalNeighbor != null:
+				verticalNeighbor.enter_falling_state(verticalNeighbor.tumbleDirection)
 	elif edge != Direction.VERTICAL_POINT:
 		# Mark edge for clearing, visually.
 		var particleColor: int = 0
@@ -370,15 +370,15 @@ func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
 			if chainRootsArray.size() == 1:
 				if initialCheckedCoordinates.empty():
 					# We are the single newest piece in an existing chain
-					var combinedChain = update_existing_chain(get_parent().get_parent().get_parent().get_chain(chainRootsArray[0]),
+					var existingChain = update_existing_chain(get_parent().get_parent().get_parent().get_chain(chainRootsArray[0]),
 					numMatches, min(leftClearTimeLeft, min(rightClearTimeLeft, verticalClearTimeLeft)))
-					get_parent().get_parent().get_parent().upsert_chain(chainRootsArray[0], combinedChain)
+					get_parent().get_parent().get_parent().upsert_chain(chainRootsArray[0], existingChain)
 					# Check chain cap.
-					if (combinedChain.has("activeChainCount") && combinedChain.get("activeChainCount") >= activeChainCap):
+					if (existingChain.has("activeChainCount") && existingChain.get("activeChainCount") >= activeChainCap):
 						# Clear.
 						clear_self_and_matching_neighbors([])
-					elif (combinedChain.has("sequentialChainCount") &&
-					combinedChain.get("sequentialChainCount") >= sequentialChainCap):
+					elif (existingChain.has("sequentialChainCount") &&
+					existingChain.get("sequentialChainCount") >= sequentialChainCap):
 						# Set flag for later, and clear.
 						sequentialChainCapFlag = true
 						clear_self_and_matching_neighbors([])

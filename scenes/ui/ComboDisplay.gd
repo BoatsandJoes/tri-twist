@@ -8,13 +8,13 @@ signal new_best_combo
 # var a = 2
 # var b = "text"
 var combos: Dictionary = {}
-var brainChainLinkScore = 400
+var brainChainLinkScore = 900
 var quickChainLinkScore = 150
 var activeChainLinkScore = 100
 var sequentialChainLinkScore = 100
-var chainLengthBonusScore = 10
-var twoTrickScore = 100
-var hatTrickScore = 300
+var chainLengthBonusScore = 50
+var twoTrickScore = 300
+var hatTrickScore = 900
 var simulchaineousScore = 30
 var displayedComboKey
 var activeChainOn: bool = true
@@ -182,7 +182,9 @@ func score_chain(combo) -> Dictionary:
 		combo["sequentialChainScore"] = sequentialScore
 		chainCount = chainCount + sequentialCount
 	combo["chainLengthBonus"] = chainCount
-	combo["chainLengthScore"] = score_chain_length(chainCount)
+	var chainLengthScore = score_chain_length(chainCount)
+	combo["chainLengthScore"] = chainLengthScore
+	runningTotal = runningTotal + chainLengthScore
 	if combo.has("twoTrickCount"):
 		var twoTrickScore = score_two_trick(combo.get("twoTrickCount"))
 		runningTotal = runningTotal + twoTrickScore

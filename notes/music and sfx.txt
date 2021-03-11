@@ -2,19 +2,16 @@ modes + references:
 menu, take your time mode ( https://tetr.io menu, bejeweled zen mode)
 go go go mode (current time limit is 2 minutes, this might change. Could reference TGM 1/2/3 normal mode/master mode but I don't neccesarily want songs in that style, it's just a pace thing)
 
-modes that may get cut:
-boss mode/hard difficulty mode (reference TGM 2 The Absolute Death+, Death mode and TGM3 Shirase mode)
-
 core sfx:
-piece settling into place without matching (I think of a click)
 piece matching
-ascending pitch sfx for connected matches of ascending quantity, capping at around 6-10 (reference Petal Crash)
-"match that is worth extra points" sfx (fast chain, one piece matching multiple other pieces at once, tumbling a piece into a match, hitting chain cap)
+ascending pitch sfx for connected matches of ascending quantity, capping at some number (currently 4 in Go mode and 10 in Take Your Time) (reference Petal Crash)
+"match that is worth extra points" sfx (one piece matching multiple other pieces at once, tumbling a piece into a match, maybe fast chain/hitting chain cap)
 piece actually clearing (could cascade, may also cascade visually, idk yet)
 You're close to the time/move limit (one sfx for 10 away, and another repeated for 5 4 3 2 1)
 game end (I think of an annoying whistle? It doesn't need to be an annoying whistle)
 
 extra sfx:
+piece settling into place without matching (I think of a click)
 piece knocking another piece over
 pause
 menu button click (could reuse piece settling sounds)
