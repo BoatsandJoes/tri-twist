@@ -1,5 +1,4 @@
-emergent chain mechanics:  
-use to fake extend the active chain timer
+emergent chain mechanics:
 towers (3 high is totally reasonable)  
 double dominoes (difficult with 4 colors, ok with 3)
 

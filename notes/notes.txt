@@ -4,7 +4,6 @@ todo next:
 	undo in brain mode
 	hook up sound events
 	detect no possible moves and end game
-	fix score bugs
 	readability:  
 		fix ghost line visibility (maybe 2nd ghost piece)  
 		light up ghost piece if it will match?  
