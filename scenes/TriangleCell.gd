@@ -23,7 +23,7 @@ var tumbleDirection: int
 var clearDelay = 4
 var quickChainCutoff = 0
 var activeChainCap = 4
-var sequentialChainCap = 10
+var sequentialChainCap = 4
 var clearScaling = 0.0
 var activeChainMode = true
 var isMarkedForInactiveClear = false
@@ -407,7 +407,7 @@ func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
 					# combine the chains
 					var combinedChain = combine_chains(chainRootsArray, numMatches,
 					min(leftClearTimeLeft, min(rightClearTimeLeft, verticalClearTimeLeft)))
-					get_parent().get_parent().get_parent().upsert_chain([chainRootsArray[0]], combinedChain)
+					get_parent().get_parent().get_parent().upsert_chain(chainRootsArray[0], combinedChain)
 					# Check chain caps.
 					if (combinedChain.has("activeChainCount") && combinedChain.get("activeChainCount") >= activeChainCap):
 						# Clear.
