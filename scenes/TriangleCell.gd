@@ -28,6 +28,7 @@ var clearScaling = 0.0
 var activeChainMode = true
 var isMarkedForInactiveClear = false
 var isDroppingFromActive = false
+var wasHardDroppedMostRecently = false
 var sequentialChainCapFlag = false
 
 # Called when the node enters the scene tree for the first time.
@@ -105,6 +106,7 @@ func set_colors(left: int, right: int, vertical: int):
 
 func spawn_piece(piece: TriangleCell):
 	isDroppingFromActive = true
+	wasHardDroppedMostRecently = true
 	set_colors(piece.leftColor, piece.rightColor, piece.verticalColor)
 	after_fill_checks(true, get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT),
 	get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT))
@@ -225,6 +227,7 @@ func enter_falling_state(tumblingDirection: int):
 		tumbleDirection = tumblingDirection
 
 func clear(edge: int):
+	wasHardDroppedMostRecently = false
 	$ClearTimer.wait_time = clearDelay
 	tumbleDirection = Direction.VERTICAL
 	$GravityTimer.stop()
@@ -328,6 +331,9 @@ func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
 		var verticalClearTimeLeft: float = $ClearTimer.wait_time
 		var numMatches: int = 0
 		if leftNeighbor != null && !leftNeighbor.is_falling() && !leftNeighbor.is_empty() && leftNeighbor.rightColor == leftColor:
+			# Zangi-move check
+			if leftNeighbor.wasHardDroppedMostRecently:
+				isDroppingFromActive = false
 			# Mark for clear
 			var resultDictionary = leftNeighbor.check_for_clear(alreadyCheckedCoordinates)
 			if resultDictionary.has("root"):
@@ -337,6 +343,9 @@ func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
 			clear(Direction.LEFT)
 			numMatches = numMatches + 1
 		if rightNeighbor != null && !rightNeighbor.is_falling() && !rightNeighbor.is_empty() && rightNeighbor.leftColor == rightColor:
+			# Zangi-move check
+			if rightNeighbor.wasHardDroppedMostRecently:
+				isDroppingFromActive = false
 			# Mark for clear
 			var resultDictionary = rightNeighbor.check_for_clear(alreadyCheckedCoordinates)
 			if resultDictionary.has("root"):
@@ -347,6 +356,9 @@ func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
 			numMatches = numMatches + 1
 		if (verticalNeighbor != null && !verticalNeighbor.is_falling() && !verticalNeighbor.is_empty()
 		&& verticalNeighbor.verticalColor == verticalColor):
+			# Zangi-move check
+			if verticalNeighbor.wasHardDroppedMostRecently:
+				isDroppingFromActive = false
 			# Mark for clear
 			var resultDictionary = verticalNeighbor.check_for_clear(alreadyCheckedCoordinates)
 			if resultDictionary.has("root"):

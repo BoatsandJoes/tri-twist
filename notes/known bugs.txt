@@ -1,4 +1,5 @@
 * pieces clearing pushes pieces in non-deterministic directions depending on clear order (move clear vertical_point into new method that clears the chain without pushing, and then write a second method that checks the whole grid for pieces that should fall and how, which will be called in a pair with clear())
+* take your time mode scorecard, when a sequential chain caps, changes over to the other chain without properly updating "other chains" (should be 0, is instead a big number). When a chain combines and caps at the same time, scorecard remains white and keeps other chains + total even though it should turn blue and then vanish.
 
 might be fixed
 * saw a case where it looked like two chains didn't combine properly in active chain mode (only one chain actually active, it got stuck in "other chains" while the displayed chain "simulchaineous" kept counting up)

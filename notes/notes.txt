@@ -1,18 +1,67 @@
 # tri-twist
-todo next:
-	cooldown on drop to prevent double tap (probably want this to be configurable, since it could eat your input. even if on it should release if you push left or right, I guess)
+todo:
+	cooldown on drop to prevent double tap (probably want this to be configurable, since it could eat your input. even if on, it should release if you push left or right, I guess)
 	undo in brain mode
 	hook up sound events
 	detect no possible moves and end game
-	readability:  
+	visuals:  
 		fix ghost line visibility (maybe 2nd ghost piece)  
 		light up ghost piece if it will match?  
 		show if ghost will disturb other pieces?
 		solid colors should no longer be contiguous, because it looks like they belong together, but they don't  
 		light up unmatchable edges in matched piece
-		chain group effect and timer effect
+		chain group effect
+		chain timer effect
+		Hard drop effect on ghost line
+		Hard drop effect on stack surface
 		trick effect
-
+		backgrounds
+		ui panels
+	controller support
+	mouse support
+	credits/license
+	how to play screens
+		core mechanics
+			controls (left, right, rotate, soft drop, hard drop)
+			triangles tumble and balance
+			when they settle, they match same color edges
+			after that, they knock balancing pieces over
+		take your time
+			chains stay forever and pop when a piece settles and doesn't match, or at the cap (currently 10)
+			move limit
+		go go go
+			chains pop after a certain amount of time, or at the cap (currently 4). Crucially, you can drop other pieces in between.
+			time limit
+		scoring
+			active/sequential chain
+			chain length
+				Can circumvent cap with double trouble, hat trick, brain chain
+			double trouble
+			hat trick
+			simulchaineous
+			brain chain
+	custom mode
+		Chain mode
+		Chain cap
+		chain timer
+		Color count
+		score values
+		time limit
+		move limit
+		force drop
+	settings
+		DAS
+		ARR
+		Gravity
+		num previews
+		button config
+		volume
+			master
+			sfx
+			music
+		display
+			windowed/fullscreen/borderless
+			resolution
 
 on store page, advertise millions of polygons (my idea)
 

@@ -204,14 +204,15 @@ func delete_combo(comboKey):
 
 func upsert_combo(comboKey, comboValue):
 	#XXX Can calculate score delta instead of recalculating whole score, depending on how formula shakes out
-	for loopComboKey in combos.keys():
-		if loopComboKey != comboKey:
-			var combo = combos.get(loopComboKey)
-			if !combo.has("simulchaineousCount"):
-				combo["simulchaineousCount"] = 1
-			else:
-				combo["simulchaineousCount"] = combo.get("simulchaineousCount") + 1
-			combos[loopComboKey] = combo
+	# Calculate simulchainenous
+	var incrementSimulchaineous: int = combos.size()
+	if combos.has(comboKey):
+		incrementSimulchaineous = combos.size() - 1
+	if comboValue.has("simulchaineousCount"):
+		comboValue["simulchaineousCount"] = comboValue.get("simulchaineousCount") + incrementSimulchaineous
+	else:
+		comboValue["simulchaineousCount"] = incrementSimulchaineous
+	# Upsert and display combo
 	combos[comboKey] = comboValue
 	displayedComboKey = comboKey
 	update_scorecard()

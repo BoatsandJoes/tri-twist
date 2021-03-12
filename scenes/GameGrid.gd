@@ -72,11 +72,19 @@ func drop_piece(piece: TriangleCell, dropForReal: bool):
 		# Cannot fill.
 		return false
 	if dropForReal:
+		# Clear Zangi-move flag.
+		for rowIndex in range(grid.size()):
+			for columnIndex in range(grid[rowIndex].size()):
+				grid[rowIndex][columnIndex].wasHardDroppedMostRecently = false
 		neighbor.fill_from_neighbor(piece.leftColor, piece.rightColor, piece.verticalColor,
 			neighborDirection, grid[0][0].Direction.VERTICAL, true)
 	return true
 
 func hard_drop(piece: TriangleCell):
+	# Clear Zangi-move flag
+	for rowIndex in range(grid.size()):
+		for columnIndex in range(grid[rowIndex].size()):
+			grid[rowIndex][columnIndex].wasHardDroppedMostRecently = false
 	grid[piece.rowIndex][piece.columnIndex].spawn_piece(piece)
 
 # Gets the position in which to draw the cell with the passed indices
