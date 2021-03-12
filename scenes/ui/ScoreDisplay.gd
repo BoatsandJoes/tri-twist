@@ -18,7 +18,6 @@ func _ready():
 func increment_score(value: int):
 	score = score + value
 	$HBoxContainer/Values/ScoreValue.text = String(score).pad_zeros(11)
-
-func update_best_chain_score(value: int):
-	bestChainScore = value
-	$HBoxContainer/Values/BestChain.text = String(value)
+	if value > bestChainScore:
+		bestChainScore = value
+		$HBoxContainer/Values/BestChain.text = String(value)

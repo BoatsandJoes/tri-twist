@@ -2,7 +2,6 @@ extends MarginContainer
 class_name ComboDisplay
 
 signal combo_done
-signal new_best_combo
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -18,7 +17,6 @@ var hatTrickScore = 900
 var simulchaineousScore = 30
 var displayedComboKey
 var activeChainOn: bool = true
-var bestCombo = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -245,7 +243,12 @@ func upsert_combo(comboKey, comboValue):
 
 func end_combo_if_exists(comboKey):
 	if combos.has(comboKey):
-		combos[comboKey]["finished"] = true
+		# emit combo score.
+		emit_signal("combo_done", combos.get(comboKey).get("scoreTotal"))
+		# XXX this is the only place we erase combos aside from combining chains.
+		# XXX Technically, the list could grow unbounded if new combos keep ending and restarting the timer.
+		# XXX similarly, we want to emit scores at some point rather than letting them stack up.
+		combos.erase(comboKey)
 		if $CompleteScorecardTimer.is_stopped():
 			# We only want to freeze the scorecard if this combo is the biggest (aka it's being shown currently).
 			# XXX keep othercombos the same color.
@@ -262,18 +265,4 @@ func end_combo_if_exists(comboKey):
 
 func _on_CompleteScorecardTimer_timeout():
 	$Scorecard.set_modulate(Color(1, 1, 1))
-	var comboKeys = combos.keys()
-	for comboKey in comboKeys:
-		if combos.get(comboKey).has("finished"):
-			# emit combo score.
-			emit_signal("combo_done", combos.get(comboKey).get("scoreTotal"))
-			# If this is the new biggest, save it.
-			if bestCombo == null || combos.get(comboKey).get("scoreTotal") > bestCombo.get("scoreTotal"):
-				# Save our new best combo.
-				bestCombo = combos.get(comboKey)
-				emit_signal("new_best_combo", bestCombo.get("scoreTotal"))
-			# XXX this is the only place we erase combos aside from combining chains.
-			# XXX Technically, the list could grow unbounded if new combos keep ending and restarting the timer.
-			# XXX similarly, we want to emit scores at some point rather than letting them stack up.
-			combos.erase(comboKey)
 	update_scorecard()

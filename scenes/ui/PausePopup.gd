@@ -31,7 +31,7 @@ func set_mode_finished():
 	$VBoxContainer/HBoxContainer2/SelectArrow/Restart.text = "<"
 	$VBoxContainer/HBoxContainer2/SelectArrow/BackToMain.text = ""
 	self.visible = true
-	get_parent().triangleDropper.set_process_input(false)
+	get_parent().set_process_input(false)
 	get_tree().paused = true
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

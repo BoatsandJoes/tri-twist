@@ -1,2 +1,3 @@
 * saw a case where it looked like two chains didn't combine properly in active chain mode (only one chain actually active, it got stuck in "other chains" while the displayed chain "simulchaineous" kept counting up)
+* If a chain clears via cap and the scorecard is still showing and then you put another chain in a place that includes the old root, the new chain immediately clears. At least, I thought that's what was causing it?
 * pieces clearing pushes pieces in non-deterministic directions depending on clear order (move clear vertical_point into new method that clears the chain without pushing, and then write a second method that checks the whole grid for pieces that should fall and how, which will be called in a pair with clear())
