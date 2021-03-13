@@ -3,9 +3,10 @@ todo:
 	cooldown on drop to prevent double tap (probably want this to be configurable, since it could eat your input. even if on, it should release if you push left or right or rotate, I guess)
 	undo in brain mode
 	hook up sound events
-	weaken mashing
+	weaken mashing relative to naive active chains
+		more colors
 		move limit
-		fewer points for random topple clears
+		fewer points for random topple clears (I have done all of these things and it doesn't help that much; active chains are the problem. the only thing lucky chains count for currently is simulchaineous on active chains, and not counting towards chain cap in brain mode)
 			only award brain chain for pieces that you push over directly
 			make zangimove more specific (don't award for getting under random tumbling pieces)
 			straight up detect random topple clears and award a low number of points
@@ -13,7 +14,7 @@ todo:
 		less vertical space
 		kill them if they stack too high
 		drop cooldown
-		cannot drop while any (inactive?) piece is toppling (maybe remove hard drop)
+		cannot drop while any (inactive?) piece is toppling (maybe remove hard drop) (pauses chain timer?)
 	visuals:  
 		fix ghost line visibility (maybe 2nd ghost piece)
 		light up ghost piece if it will match?  

@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://scenes/ui/ComboDisplay.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/agane/Agane╠Ç 55 (roman).ttf" type="DynamicFontData" id=2]
@@ -83,6 +83,14 @@ font_data = ExtResource( 2 )
 size = 32
 font_data = ExtResource( 2 )
 
+[sub_resource type="DynamicFont" id=21]
+size = 32
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=22]
+size = 32
+font_data = ExtResource( 2 )
+
 [node name="ComboDisplay" type="MarginContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -109,49 +117,54 @@ margin_right = 1920.0
 margin_bottom = 14.0
 custom_fonts/font = SubResource( 2 )
 
-[node name="ActiveChain" type="Label" parent="Scorecard/ComboCounter"]
+[node name="LuckyChain" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_bottom = 14.0
 custom_fonts/font = SubResource( 3 )
 
-[node name="SequentialChain" type="Label" parent="Scorecard/ComboCounter"]
+[node name="ActiveChain" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_bottom = 14.0
 custom_fonts/font = SubResource( 4 )
 
-[node name="ChainLength" type="Label" parent="Scorecard/ComboCounter"]
+[node name="SequentialChain" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_bottom = 14.0
 custom_fonts/font = SubResource( 5 )
+
+[node name="ChainLength" type="Label" parent="Scorecard/ComboCounter"]
+visible = false
+margin_bottom = 14.0
+custom_fonts/font = SubResource( 6 )
 
 [node name="TwoTrick" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_right = 1920.0
 margin_bottom = 14.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
 
 [node name="HatTrick" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_right = 1920.0
 margin_bottom = 14.0
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 8 )
 
 [node name="SimulChaineous" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_right = 1920.0
 margin_bottom = 14.0
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 9 )
 
 [node name="Total" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_bottom = 14.0
-custom_fonts/font = SubResource( 9 )
+custom_fonts/font = SubResource( 10 )
 
 [node name="OtherCombos" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_right = 93.0
 margin_bottom = 14.0
-custom_fonts/font = SubResource( 10 )
+custom_fonts/font = SubResource( 11 )
 
 [node name="ComboScore" type="VBoxContainer" parent="Scorecard"]
 margin_left = 15.0
@@ -162,52 +175,57 @@ margin_bottom = 1080.0
 visible = false
 margin_bottom = 14.0
 rect_pivot_offset = Vector2( -316, 10.6667 )
-custom_fonts/font = SubResource( 11 )
+custom_fonts/font = SubResource( 12 )
 
 [node name="QuickChainScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 14.0
-custom_fonts/font = SubResource( 12 )
-
-[node name="ActiveChainScore" type="Label" parent="Scorecard/ComboScore"]
-visible = false
-margin_bottom = 14.0
 custom_fonts/font = SubResource( 13 )
 
-[node name="SequentialChainScore" type="Label" parent="Scorecard/ComboScore"]
+[node name="LuckyChainScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 14.0
 custom_fonts/font = SubResource( 14 )
 
-[node name="ChainLengthScore" type="Label" parent="Scorecard/ComboScore"]
+[node name="ActiveChainScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 14.0
 custom_fonts/font = SubResource( 15 )
 
-[node name="TwoTrickScore" type="Label" parent="Scorecard/ComboScore"]
+[node name="SequentialChainScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 14.0
 custom_fonts/font = SubResource( 16 )
 
-[node name="HatTrickScore" type="Label" parent="Scorecard/ComboScore"]
+[node name="ChainLengthScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 14.0
 custom_fonts/font = SubResource( 17 )
 
-[node name="SimulChaineousScore" type="Label" parent="Scorecard/ComboScore"]
+[node name="TwoTrickScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 14.0
 custom_fonts/font = SubResource( 18 )
 
-[node name="TotalScore" type="Label" parent="Scorecard/ComboScore"]
+[node name="HatTrickScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 14.0
 custom_fonts/font = SubResource( 19 )
 
-[node name="OtherCombosScore" type="Label" parent="Scorecard/ComboScore"]
+[node name="SimulChaineousScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 14.0
 custom_fonts/font = SubResource( 20 )
+
+[node name="TotalScore" type="Label" parent="Scorecard/ComboScore"]
+visible = false
+margin_bottom = 14.0
+custom_fonts/font = SubResource( 21 )
+
+[node name="OtherCombosScore" type="Label" parent="Scorecard/ComboScore"]
+visible = false
+margin_bottom = 14.0
+custom_fonts/font = SubResource( 22 )
 
 [node name="CompleteScorecardTimer" type="Timer" parent="."]
 wait_time = 5.0

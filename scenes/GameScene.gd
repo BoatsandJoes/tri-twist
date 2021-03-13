@@ -43,8 +43,8 @@ func get_chain(chainKey) -> Dictionary:
 	else:
 		return {}
 
-func upsert_chain(chainKey, chainValue):
-	hud.get_node("HBoxContainer/VBoxContainer/HBoxContainer/ComboDisplay").upsert_combo(chainKey, chainValue)
+func upsert_chain(chainKey, chainValue, isLucky: bool):
+	hud.get_node("HBoxContainer/VBoxContainer/HBoxContainer/ComboDisplay").upsert_combo(chainKey, chainValue, isLucky)
 
 func delete_chain(chainKey):
 	hud.get_node("HBoxContainer/VBoxContainer/HBoxContainer/ComboDisplay").delete_combo(chainKey)

@@ -8,6 +8,7 @@ signal combo_done
 # var b = "text"
 var combos: Dictionary = {}
 var brainChainLinkScore = 900
+var luckyChainLinkScore = 0
 var quickChainLinkScore = 150
 var activeChainLinkScore = 100
 var sequentialChainLinkScore = 100
@@ -59,11 +60,22 @@ func update_scorecard():
 		else:
 			$Scorecard/ComboCounter/QuickChain.visible = false
 			$Scorecard/ComboScore/QuickChainScore.visible = false
+		if (comboToDisplay.has("luckyChainCount")):
+			$Scorecard/ComboCounter/LuckyChain.text = "Lucky Chain x" + String(comboToDisplay.get("luckyChainCount"))
+			$Scorecard/ComboCounter/LuckyChain.visible = true
+			$Scorecard/ComboScore/LuckyChainScore.text = String(comboToDisplay.get("luckyChainScore"))
+			$Scorecard/ComboScore/LuckyChainScore.visible = true
+		else:
+			$Scorecard/ComboCounter/LuckyChain.visible = false
+			$Scorecard/ComboScore/LuckyChainScore.visible = false
 		if (comboToDisplay.has("activeChainCount")):
 			$Scorecard/ComboCounter/ActiveChain.text = "Active Chain x" + String(comboToDisplay.get("activeChainCount"))
 			$Scorecard/ComboCounter/ActiveChain.visible = true
 			$Scorecard/ComboScore/ActiveChainScore.text = String(comboToDisplay.get("activeChainScore"))
 			$Scorecard/ComboScore/ActiveChainScore.visible = true
+		else:
+			$Scorecard/ComboCounter/ActiveChain.visible = false
+			$Scorecard/ComboScore/ActiveChainScore.visible = false
 		if (comboToDisplay.has("sequentialChainCount")):
 			$Scorecard/ComboCounter/SequentialChain.text = ("Sequential Chain x"
 			+ String(comboToDisplay.get("sequentialChainCount")))
@@ -141,6 +153,12 @@ func score_chain(combo) -> Dictionary:
 		runningTotal = runningTotal + quickScore
 		combo["quickChainScore"] = quickScore
 		chainCount = chainCount + quickCount
+	if combo.has("luckyChainCount"):
+		# Not counted in chain length bonus
+		var luckyCount = combo.get("luckyChainCount")
+		var luckyScore = score_lucky_chain(luckyCount)
+		runningTotal = runningTotal + luckyScore
+		combo["luckyChainScore"] = luckyScore
 	if combo.has("activeChainCount"):
 		var activeCount = combo.get("activeChainCount")
 		var activeScore = score_active_chain(activeCount)
@@ -178,6 +196,9 @@ func score_brain_chain(count: int) -> int:
 func score_quick_chain(count: int) -> int:
 	return count * quickChainLinkScore
 
+func score_lucky_chain(count: int) -> int:
+	return count * luckyChainLinkScore
+
 func score_active_chain(count: int) -> int:
 	return count * activeChainLinkScore
 
@@ -202,16 +223,17 @@ func score_simulchaineous(count: int) -> int:
 func delete_combo(comboKey):
 	combos.erase(comboKey)
 
-func upsert_combo(comboKey, comboValue):
+func upsert_combo(comboKey, comboValue, isLucky: bool):
 	#XXX Can calculate score delta instead of recalculating whole score, depending on how formula shakes out
-	# Calculate simulchainenous
-	var incrementSimulchaineous: int = combos.size()
-	if combos.has(comboKey):
-		incrementSimulchaineous = combos.size() - 1
-	if comboValue.has("simulchaineousCount"):
-		comboValue["simulchaineousCount"] = comboValue.get("simulchaineousCount") + incrementSimulchaineous
-	else:
-		comboValue["simulchaineousCount"] = incrementSimulchaineous
+	if !isLucky:
+		# Calculate simulchainenous
+		var incrementSimulchaineous: int = combos.size()
+		if combos.has(comboKey):
+			incrementSimulchaineous = combos.size() - 1
+		if comboValue.has("simulchaineousCount"):
+			comboValue["simulchaineousCount"] = comboValue.get("simulchaineousCount") + incrementSimulchaineous
+		elif incrementSimulchaineous > 0:
+			comboValue["simulchaineousCount"] = incrementSimulchaineous
 	# Upsert and display combo
 	combos[comboKey] = comboValue
 	displayedComboKey = comboKey

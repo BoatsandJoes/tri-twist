@@ -78,7 +78,7 @@ func drop_piece(piece: TriangleCell, dropForReal: bool):
 			for columnIndex in range(grid[rowIndex].size()):
 				grid[rowIndex][columnIndex].wasHardDroppedMostRecently = false
 		neighbor.fill_from_neighbor(piece.leftColor, piece.rightColor, piece.verticalColor,
-			neighborDirection, grid[0][0].Direction.VERTICAL, true)
+			neighborDirection, piece.Direction.VERTICAL, piece.FallType.DROP)
 	return true
 
 func hard_drop(piece: TriangleCell):

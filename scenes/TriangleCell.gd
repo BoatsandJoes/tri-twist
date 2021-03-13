@@ -7,6 +7,7 @@ var size: int
 # last color is the null color, for empty cells
 enum Direction {LEFT, RIGHT, VERTICAL, VERTICAL_POINT}
 enum Rotation {CLOCKWISE, COUNTERCLOCKWISE}
+enum FallType {DROP, CLEAR, PUSH}
 var colors = [Color.royalblue, Color.crimson, Color.goldenrod, Color.webgreen, Color.black]
 var focusColors = [Color.dodgerblue, Color.indianred, Color.orange, Color.seagreen, Color.darkslategray]
 var highlightColors = [Color.deepskyblue, Color.deeppink, Color.gold, Color.green]
@@ -20,6 +21,7 @@ var columnIndex: int
 var inGrid
 var isGhost
 var tumbleDirection: int
+var fallType: int
 var clearDelay = 4
 var quickChainCutoff = 0
 var activeChainCap = 4
@@ -27,7 +29,6 @@ var sequentialChainCap = 4
 var clearScaling = 0.0
 var activeChainMode = true
 var isMarkedForInactiveClear = false
-var isDroppingFromActive = false
 var wasHardDroppedMostRecently = false
 var sequentialChainCapFlag = false
 
@@ -111,15 +112,15 @@ func set_colors(left: int, right: int, vertical: int):
 	update_colors_visually()
 
 func spawn_piece(piece: TriangleCell):
-	isDroppingFromActive = true
+	fallType = FallType.DROP
 	wasHardDroppedMostRecently = true
 	set_colors(piece.leftColor, piece.rightColor, piece.verticalColor)
-	after_fill_checks(true, get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT),
+	after_fill_checks(get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT),
 	get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT))
 
 func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighborVerticalColor: int, direction: int,
-		tumblingDirection: int, droppingFromActive: bool):
-	isDroppingFromActive = droppingFromActive
+		tumblingDirection: int, fallType: int):
+	self.fallType = fallType
 	if direction == Direction.VERTICAL || direction == Direction.VERTICAL_POINT:
 		tumbleDirection = tumblingDirection
 		if (tumblingDirection == Direction.VERTICAL):
@@ -153,15 +154,15 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 	else:
 		belowNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
 	if (belowNeighbor != null && belowNeighbor.is_empty()):
-		enter_falling_state(tumbleDirection)
+		enter_falling_state(tumbleDirection, fallType)
 	elif !pointFacingUp && leftNeighborFilled != rightNeighborFilled:
 		if rightNeighborFilled:
-			enter_falling_state(Direction.LEFT)
+			enter_falling_state(Direction.LEFT, fallType)
 		else:
-			enter_falling_state(Direction.RIGHT)
-	after_fill_checks(droppingFromActive, leftNeighbor, rightNeighbor)
+			enter_falling_state(Direction.RIGHT, fallType)
+	after_fill_checks(leftNeighbor, rightNeighbor)
 
-func after_fill_checks(droppingFromActive: bool, leftNeighbor, rightNeighbor):
+func after_fill_checks(leftNeighbor, rightNeighbor):
 	# Check for enclosed areas.
 	if (!is_marked_for_clear()):
 		# XXX there is technically still a race condition here, but it's a narrow window. This piece would be double counted
@@ -173,16 +174,23 @@ func after_fill_checks(droppingFromActive: bool, leftNeighbor, rightNeighbor):
 				var neighborsNeighbor = get_parent().get_neighbor(
 					leftNeighbor.rowIndex, leftNeighbor.columnIndex, Direction.LEFT)
 				if neighborsNeighbor != null && neighborsNeighbor.is_empty():
-					leftNeighbor.enter_falling_state(Direction.LEFT)
+					if fallType == FallType.CLEAR:
+						# Indirect result of a clear.
+						leftNeighbor.enter_falling_state(Direction.LEFT, FallType.CLEAR)
+					else:
+						# Pushing.
+						leftNeighbor.enter_falling_state(Direction.LEFT, FallType.PUSH)
 			if rightNeighbor != null && !rightNeighbor.is_empty():
 				var neighborsNeighbor = get_parent().get_neighbor(
 					rightNeighbor.rowIndex, rightNeighbor.columnIndex, Direction.RIGHT)
 				if neighborsNeighbor != null && neighborsNeighbor.is_empty():
-					rightNeighbor.enter_falling_state(Direction.RIGHT)
-		# While we're here, clear isDroppingFromActive, since we are no longer dropping.
-		# TODO this should not be cleared if we "settled" against a piece that is falling
-		isDroppingFromActive = false
-	if !is_marked_for_clear() && !is_falling() && !activeChainMode && droppingFromActive:
+					if fallType == FallType.CLEAR:
+						# Indirect result of a clear.
+						rightNeighbor.enter_falling_state(Direction.RIGHT, FallType.CLEAR)
+					else:
+						# Pushing.
+						rightNeighbor.enter_falling_state(Direction.RIGHT, FallType.PUSH)
+	if !is_marked_for_clear() && !is_falling() && !activeChainMode && fallType == FallType.DROP:
 		# Don't set off if we just hit the sequential chain cap
 		if sequentialChainCapFlag:
 			sequentialChainCapFlag = false
@@ -215,9 +223,8 @@ func spin(rotation: int) -> bool:
 		(rightNeighbor != null && rightNeighbor.leftColor == rightColor) ||
 		(verticalNeighbor != null && verticalNeighbor.verticalColor == verticalColor)):
 			# Perform the match
-			isDroppingFromActive = true
+			fallType = FallType.DROP
 			check_for_clear([])
-			isDroppingFromActive = false
 			return true
 		else:
 			#unspin.
@@ -228,10 +235,11 @@ func spin(rotation: int) -> bool:
 				set_colors(verticalColor, leftColor, rightColor)
 	return false
 
-func enter_falling_state(tumblingDirection: int):
+func enter_falling_state(tumblingDirection: int, fallType: int):
 	if !is_marked_for_clear() && !is_falling():
 		$GravityTimer.start()
 		tumbleDirection = tumblingDirection
+		self.fallType = fallType
 
 func clear(edge: int):
 	wasHardDroppedMostRecently = false
@@ -243,14 +251,13 @@ func clear(edge: int):
 		set_modulate(Color(1,1,1))
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 		isMarkedForInactiveClear = false
-		isDroppingFromActive = false
 		get_parent().get_parent().get_parent().end_combo_if_exists([rowIndex, columnIndex])
 		# Check to see if any neighbors should enter falling state.
 		if !pointFacingUp:
 			# Primarily, we have to check above.
 			var neighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
 			if neighbor != null:
-				neighbor.enter_falling_state(neighbor.tumbleDirection)
+				neighbor.enter_falling_state(neighbor.tumbleDirection, FallType.CLEAR)
 			# We also have to check our left/right neighbors, and if they're empty, our neighbors' neighbor should consider falling.
 			var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
 			if leftNeighbor != null && leftNeighbor.is_empty():
@@ -260,7 +267,7 @@ func clear(edge: int):
 					var neighborsNeighborsNeighbor = get_parent().get_neighbor(neighborsNeighbor.rowIndex,
 					neighborsNeighbor.columnIndex, Direction.LEFT)
 					if neighborsNeighborsNeighbor == null || !neighborsNeighborsNeighbor.is_empty():
-						neighborsNeighbor.enter_falling_state(Direction.RIGHT)
+						neighborsNeighbor.enter_falling_state(Direction.RIGHT, FallType.CLEAR)
 			var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
 			if rightNeighbor != null && rightNeighbor.is_empty():
 				var neighborsNeighbor = get_parent().get_neighbor(rightNeighbor.rowIndex, rightNeighbor.columnIndex, Direction.RIGHT)
@@ -269,7 +276,7 @@ func clear(edge: int):
 					var neighborsNeighborsNeighbor = get_parent().get_neighbor(neighborsNeighbor.rowIndex,
 					neighborsNeighbor.columnIndex, Direction.RIGHT)
 					if neighborsNeighborsNeighbor == null || !neighborsNeighborsNeighbor.is_empty():
-						neighborsNeighbor.enter_falling_state(Direction.LEFT)
+						neighborsNeighbor.enter_falling_state(Direction.LEFT, FallType.CLEAR)
 		else:
 			# If left and right are both empty or both full, they shouldn't move.
 			var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
@@ -281,17 +288,17 @@ func clear(edge: int):
 					var neighborsNeighbor = leftNeighbor.get_parent().get_neighbor(leftNeighbor.rowIndex,
 					leftNeighbor.columnIndex, Direction.LEFT)
 					if neighborsNeighbor == null || !neighborsNeighbor.is_empty():
-						leftNeighbor.enter_falling_state(Direction.RIGHT)
+						leftNeighbor.enter_falling_state(Direction.RIGHT, FallType.CLEAR)
 				elif rightNeighbor != null:
 					if rightNeighborFilled && rightNeighbor != null:
 						var neighborsNeighbor = rightNeighbor.get_parent().get_neighbor(rightNeighbor.rowIndex,
 						rightNeighbor.columnIndex, Direction.RIGHT)
 						if neighborsNeighbor == null || !neighborsNeighbor.is_empty():
-							rightNeighbor.enter_falling_state(Direction.RIGHT)
+							rightNeighbor.enter_falling_state(Direction.RIGHT, FallType.CLEAR)
 			# Fall from above. In theory, if a neighbor fills then it won't fall after all. XXX keep an eye on this
 			var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
 			if verticalNeighbor != null:
-				verticalNeighbor.enter_falling_state(verticalNeighbor.tumbleDirection)
+				verticalNeighbor.enter_falling_state(verticalNeighbor.tumbleDirection, FallType.CLEAR)
 	elif edge != Direction.VERTICAL_POINT:
 		# Mark edge for clearing, visually.
 		var particleColor: int = 0
@@ -339,7 +346,7 @@ func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
 		if leftNeighbor != null && !leftNeighbor.is_falling() && !leftNeighbor.is_empty() && leftNeighbor.rightColor == leftColor:
 			# Zangi-move check
 			if leftNeighbor.wasHardDroppedMostRecently:
-				isDroppingFromActive = false
+				fallType = FallType.PUSH
 			# Mark for clear
 			var resultDictionary = leftNeighbor.check_for_clear(alreadyCheckedCoordinates)
 			if resultDictionary.has("root"):
@@ -351,7 +358,7 @@ func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
 		if rightNeighbor != null && !rightNeighbor.is_falling() && !rightNeighbor.is_empty() && rightNeighbor.leftColor == rightColor:
 			# Zangi-move check
 			if rightNeighbor.wasHardDroppedMostRecently:
-				isDroppingFromActive = false
+				fallType = FallType.PUSH
 			# Mark for clear
 			var resultDictionary = rightNeighbor.check_for_clear(alreadyCheckedCoordinates)
 			if resultDictionary.has("root"):
@@ -364,7 +371,7 @@ func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
 		&& verticalNeighbor.verticalColor == verticalColor):
 			# Zangi-move check
 			if verticalNeighbor.wasHardDroppedMostRecently:
-				isDroppingFromActive = false
+				fallType = FallType.PUSH
 			# Mark for clear
 			var resultDictionary = verticalNeighbor.check_for_clear(alreadyCheckedCoordinates)
 			if resultDictionary.has("root"):
@@ -390,9 +397,14 @@ func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
 					# We are the single newest piece in an existing chain
 					var existingChain = update_existing_chain(get_parent().get_parent().get_parent().get_chain(chainRootsArray[0]),
 					numMatches, min(leftClearTimeLeft, min(rightClearTimeLeft, verticalClearTimeLeft)))
-					get_parent().get_parent().get_parent().upsert_chain(chainRootsArray[0], existingChain)
-					# Check chain cap.
-					if (existingChain.has("activeChainCount") && existingChain.get("activeChainCount") >= activeChainCap):
+					get_parent().get_parent().get_parent().upsert_chain(chainRootsArray[0], existingChain, fallType == FallType.CLEAR)
+					# Check chain caps.
+					var chainCount = 0
+					if (existingChain.has("activeChainCount")):
+						chainCount = chainCount + existingChain.get("activeChainCount")
+					if (existingChain.has("luckyChainCount")):
+						chainCount = chainCount + existingChain.get("luckyChainCount")
+					if (chainCount >= activeChainCap):
 						# Clear.
 						clear_self_and_matching_neighbors([])
 					elif (existingChain.has("sequentialChainCount") &&
@@ -407,15 +419,20 @@ func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
 					# The newest match becomes the new chain root if there are 0 roots in this chain.
 					get_parent().get_parent().get_parent().upsert_chain([rowIndex,columnIndex],
 					update_existing_chain(get_parent().get_parent().get_parent().get_chain([rowIndex,columnIndex]),
-					numMatches, 0.0))
+					numMatches, 0.0), fallType == FallType.CLEAR)
 					return {"root": [rowIndex, columnIndex], "clearTimeRemaining": clearTimerTimeLeft}
 				elif chainRootsArray.size() >= 2:
 					# combine the chains
 					var combinedChain = combine_chains(chainRootsArray, numMatches,
 					min(leftClearTimeLeft, min(rightClearTimeLeft, verticalClearTimeLeft)))
-					get_parent().get_parent().get_parent().upsert_chain(chainRootsArray[0], combinedChain)
+					get_parent().get_parent().get_parent().upsert_chain(chainRootsArray[0], combinedChain, fallType == FallType.CLEAR)
 					# Check chain caps.
-					if (combinedChain.has("activeChainCount") && combinedChain.get("activeChainCount") >= activeChainCap):
+					var chainCount = 0
+					if (combinedChain.has("activeChainCount")):
+						chainCount = chainCount + combinedChain.get("activeChainCount")
+					if (combinedChain.has("luckyChainCount")):
+						chainCount = chainCount + combinedChain.get("luckyChainCount")
+					if (chainCount >= activeChainCap):
 						# Clear.
 						clear_self_and_matching_neighbors([])
 					elif (combinedChain.has("sequentialChainCount") &&
@@ -441,6 +458,11 @@ func combine_chains(chainRoots: Array, numMatches, lowestTimeLeft) -> Dictionary
 					combinedChain["quickChainCount"] = combinedChain.get("quickChainCount") + contributingChain.get("quickChainCount")
 				else:
 					combinedChain["quickChainCount"] = contributingChain.get("quickChainCount")
+			if contributingChain.has("luckyChainCount"):
+				if combinedChain.has("luckyChainCount"):
+					combinedChain["luckyChainCount"] = combinedChain.get("luckyChainCount") + contributingChain.get("luckyChainCount")
+				else:
+					combinedChain["luckyChainCount"] = contributingChain.get("luckyChainCount")
 			if contributingChain.has("activeChainCount"):
 				if combinedChain.has("activeChainCount"):
 					combinedChain["activeChainCount"] = (combinedChain.get("activeChainCount")
@@ -473,28 +495,36 @@ func combine_chains(chainRoots: Array, numMatches, lowestTimeLeft) -> Dictionary
 	return update_existing_chain(combinedChain, numMatches, lowestTimeLeft)
 
 func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Dictionary:
-	if numMatches == 2:
+	if numMatches == 2 && fallType != FallType.CLEAR:
 		# We performed a two trick.
 		var existingTwoTricks: int = 0
 		if existingChain.has("twoTrickCount"):
 			existingTwoTricks = existingChain.get("twoTrickCount")
 		existingTwoTricks = existingTwoTricks + 1
 		existingChain["twoTrickCount"] = existingTwoTricks
-	if numMatches == 3:
+	if numMatches == 3 && fallType != FallType.CLEAR:
 		# We performed a hat trick.
 		var existingHatTricks: int = 0
 		if existingChain.has("hatTrickCount"):
 			existingHatTricks = existingChain.get("hatTrickCount")
 		existingHatTricks = existingHatTricks + 1
 		existingChain["hatTrickCount"] = existingHatTricks
-	if !isDroppingFromActive:
+	if fallType == FallType.PUSH:
 		# Brain chain
 		var existingBrainChainCount: int = 0
 		if existingChain.has("brainChainCount"):
 			existingBrainChainCount = existingChain.get("brainChainCount")
 		existingBrainChainCount = existingBrainChainCount + 1
 		existingChain["brainChainCount"] = existingBrainChainCount
+	elif fallType == FallType.CLEAR:
+		# Lucky chain (fewer points, to make mashing weaker)
+		var existingLuckyChainCount: int = 0
+		if existingChain.has("luckyChainCount"):
+			existingLuckyChainCount = existingChain.get("luckyChainCount")
+		existingLuckyChainCount = existingLuckyChainCount + 1
+		existingChain["luckyChainCount"] = existingLuckyChainCount
 	else:
+		# TODO make piece falling down from above a pushed piece count as a push, not a clear
 		if !activeChainMode:
 			# Sequential chain
 			var existingSequentialChainCount: int = 0
@@ -621,13 +651,13 @@ func _on_GravityTimer_timeout():
 			var tempRightColor = rightColor
 			var tempVerticalColor = verticalColor
 			var tempTumbleDirection = moveInfo[2]
-			var tempIsDroppingFromActive = isDroppingFromActive
+			var tempFallType = fallType
 			# clear self
 			clear(Direction.VERTICAL_POINT)
 			# copy to neighbor
 			get_parent().grid[emptyCell.rowIndex][emptyCell.columnIndex].fill_from_neighbor(
 				tempLeftColor, tempRightColor, tempVerticalColor,
-				direction, tempTumbleDirection, tempIsDroppingFromActive)
+				direction, tempTumbleDirection, tempFallType)
 		else:
 			# We have come to rest.
 			tumbleDirection = Direction.VERTICAL
