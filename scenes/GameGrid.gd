@@ -2,6 +2,7 @@ extends Node2D
 class_name GameGrid
 
 signal tumble
+signal grid_full
 
 export (PackedScene) var TriangleCell
 export var gridWidth: int
@@ -120,8 +121,23 @@ func set_off_chains():
 				cell.clear(cell.Direction.VERTICAL_POINT)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(delta):
+	var rowIndex: int = grid.size() - 1
+	var isGridFull = true
+	var isAnyCellMarkedForClear = false
+	while isGridFull && rowIndex >= 0:
+		for cell in grid[rowIndex]:
+			if cell.is_empty():
+				isGridFull = false
+				break
+			if cell.is_marked_for_clear():
+				isAnyCellMarkedForClear = true
+		rowIndex = rowIndex - 1
+	if isGridFull:
+		if !grid[0][0].activeChainMode && isAnyCellMarkedForClear:
+			set_off_chains()
+		elif !isAnyCellMarkedForClear:
+			emit_signal("grid_full")
 
 func _on_TriangleCell_tumble():
 	emit_signal("tumble")

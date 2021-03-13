@@ -180,6 +180,7 @@ func after_fill_checks(droppingFromActive: bool, leftNeighbor, rightNeighbor):
 				if neighborsNeighbor != null && neighborsNeighbor.is_empty():
 					rightNeighbor.enter_falling_state(Direction.RIGHT)
 		# While we're here, clear isDroppingFromActive, since we are no longer dropping.
+		# TODO this should not be cleared if we "settled" against a piece that is falling
 		isDroppingFromActive = false
 	if !is_marked_for_clear() && !is_falling() && !activeChainMode && droppingFromActive:
 		# Don't set off if we just hit the sequential chain cap

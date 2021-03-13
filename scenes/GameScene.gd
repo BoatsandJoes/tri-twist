@@ -17,6 +17,7 @@ func _ready():
 	triangleDropper.set_previews_visible(3)
 	triangleDropper.connect("piece_sequence_advanced", self, "_on_triangleDropper_piece_sequence_advanced")
 	triangleDropper.gameGrid.connect("tumble", self, "_on_gameGrid_tumble")
+	triangleDropper.gameGrid.connect("grid_full", self, "_on_gameGrid_grid_full")
 	hud = HUD.instance()
 	hud.set_position(Vector2(10, 100))
 	hud.set_size(Vector2(1900, 780))
@@ -61,6 +62,9 @@ func _on_triangleDropper_piece_sequence_advanced():
 func _on_gameGrid_tumble():
 	pass
 	#hud.get_node("HBoxContainer/VBoxContainer/ScoreDisplay").increment_score(1) Turned off because of hard drop
+
+func _on_gameGrid_grid_full():
+	_on_HUD_end_game()
 
 func _on_HUD_end_game():
 	# Freeze input
