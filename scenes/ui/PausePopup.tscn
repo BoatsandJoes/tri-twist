@@ -116,4 +116,5 @@ margin_bottom = 170.0
 custom_fonts/font = SubResource( 7 )
 text = "<"
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/Buttons/Resume" to="." method="_on_Resume_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/Buttons/Restart" to="." method="_on_Restart_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/Buttons/BackToMain" to="." method="_on_BackToMain_pressed"]

@@ -85,6 +85,7 @@ func _on_Resume_pressed():
 
 func _on_Restart_pressed():
 	get_tree().paused = false
+	get_parent().set_process_input(true)
 	get_tree().reload_current_scene()
 
 func _on_BackToMain_pressed():

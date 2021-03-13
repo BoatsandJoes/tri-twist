@@ -33,7 +33,9 @@ var sequentialChainCapFlag = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	$ChainTimerBar.set_percent_visible(false)
+	$ChainTimerBar.hide()
+	$ClearTimer.wait_time = clearDelay
 
 func set_clear_scaling(value):
 	clearScaling = value
@@ -89,6 +91,10 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 		scale = Vector2(1, 1)
 		$CPUParticles2D.scale = Vector2(1, 1)
 		pointFacingUp = false
+	# Chain timer bar.
+	$ChainTimerBar.max_value = clearDelay
+	$ChainTimerBar.rect_size = Vector2(size / 2, size / 10)
+	$ChainTimerBar.rect_position = Vector2($ChainTimerBar.rect_position[0] - size / 4, $ChainTimerBar.rect_position[1] - size / 20)
 	# make empty
 	set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 
@@ -228,7 +234,6 @@ func enter_falling_state(tumblingDirection: int):
 
 func clear(edge: int):
 	wasHardDroppedMostRecently = false
-	$ClearTimer.wait_time = clearDelay
 	tumbleDirection = Direction.VERTICAL
 	$GravityTimer.stop()
 	$ClearTimer.stop()
@@ -590,7 +595,10 @@ func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
 func _process(delta):
 	if !$ClearTimer.is_stopped():
 		#TODO apply effect.
-		pass
+		$ChainTimerBar.show()
+		$ChainTimerBar.value = $ClearTimer.time_left
+	else:
+		$ChainTimerBar.hide()
 
 func _on_ClearTimer_timeout():
 	# visual effect

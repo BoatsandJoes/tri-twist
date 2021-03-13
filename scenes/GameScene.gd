@@ -33,6 +33,9 @@ func _input(event):
 func get_chains():
 	return hud.get_node("HBoxContainer/VBoxContainer/HBoxContainer/ComboDisplay").combos
 
+func has_chain(chainKey):
+	return hud.get_node("HBoxContainer/VBoxContainer/HBoxContainer/ComboDisplay").combos.has(chainKey)
+
 func get_chain(chainKey) -> Dictionary:
 	if hud.get_node("HBoxContainer/VBoxContainer/HBoxContainer/ComboDisplay").combos.has(chainKey):
 		return hud.get_node("HBoxContainer/VBoxContainer/HBoxContainer/ComboDisplay").combos.get(chainKey)
@@ -62,6 +65,10 @@ func _on_gameGrid_tumble():
 func _on_HUD_end_game():
 	# Freeze input
 	triangleDropper.set_process_input(false)
+	triangleDropper.leftPressed = false
+	triangleDropper.rightPressed = false
+	triangleDropper.get_node("DasTimer").stop()
+	triangleDropper.get_node("ArrTimer").stop()
 	# Clear all chains.
 	triangleDropper.gameGrid.set_off_chains()
 	var timer = Timer.new()

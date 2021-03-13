@@ -11,7 +11,7 @@ todo:
 		solid colors should no longer be contiguous, because it looks like they belong together, but they don't  
 		light up unmatchable edges in matched piece
 		chain group effect
-		chain timer effect
+		spruce up chain timer effect
 		Hard drop effect on ghost line
 		Hard drop effect on stack surface
 		trick effect
