@@ -7,7 +7,7 @@ var size: int
 # last color is the null color, for empty cells
 enum Direction {LEFT, RIGHT, VERTICAL, VERTICAL_POINT}
 enum Rotation {CLOCKWISE, COUNTERCLOCKWISE}
-var colors = [Color.royalblue, Color.crimson, Color.goldenrod, Color.webgreen, Color.darkslategray]
+var colors = [Color.royalblue, Color.crimson, Color.goldenrod, Color.webgreen, Color.black]
 var focusColors = [Color.dodgerblue, Color.indianred, Color.orange, Color.seagreen, Color.darkslategray]
 var highlightColors = [Color.deepskyblue, Color.deeppink, Color.gold, Color.green]
 var leftColor: int = colors.size() - 1
