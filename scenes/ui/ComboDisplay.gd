@@ -8,14 +8,14 @@ signal combo_done
 # var b = "text"
 var combos: Dictionary = {}
 var brainChainLinkScore = 900
-var luckyChainLinkScore = 0
+var luckyChainLinkScore = 1
 var quickChainLinkScore = 150
 var activeChainLinkScore = 100
 var sequentialChainLinkScore = 100
 var chainLengthBonusScore = 500
 var twoTrickScore = 300
 var hatTrickScore = 900
-var simulchaineousScore = 30
+var simulchaineousScore = 1
 var displayedComboKey
 var activeChainOn: bool = true
 

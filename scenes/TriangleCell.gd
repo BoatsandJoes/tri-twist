@@ -24,8 +24,8 @@ var tumbleDirection: int
 var fallType: int
 var clearDelay = 4
 var quickChainCutoff = 0
-var activeChainCap = 4
-var sequentialChainCap = 4
+var activeChainCap = 5
+var sequentialChainCap = 5
 var clearScaling = 0.0
 var activeChainMode = true
 var isMarkedForInactiveClear = false
@@ -257,7 +257,7 @@ func clear(edge: int):
 			# Primarily, we have to check above.
 			var neighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
 			if neighbor != null:
-				neighbor.enter_falling_state(neighbor.tumbleDirection, FallType.CLEAR)
+				neighbor.enter_falling_state(neighbor.tumbleDirection, fallType)
 			# We also have to check our left/right neighbors, and if they're empty, our neighbors' neighbor should consider falling.
 			var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
 			if leftNeighbor != null && leftNeighbor.is_empty():
@@ -267,7 +267,7 @@ func clear(edge: int):
 					var neighborsNeighborsNeighbor = get_parent().get_neighbor(neighborsNeighbor.rowIndex,
 					neighborsNeighbor.columnIndex, Direction.LEFT)
 					if neighborsNeighborsNeighbor == null || !neighborsNeighborsNeighbor.is_empty():
-						neighborsNeighbor.enter_falling_state(Direction.RIGHT, FallType.CLEAR)
+						neighborsNeighbor.enter_falling_state(Direction.RIGHT, fallType)
 			var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
 			if rightNeighbor != null && rightNeighbor.is_empty():
 				var neighborsNeighbor = get_parent().get_neighbor(rightNeighbor.rowIndex, rightNeighbor.columnIndex, Direction.RIGHT)
@@ -276,7 +276,7 @@ func clear(edge: int):
 					var neighborsNeighborsNeighbor = get_parent().get_neighbor(neighborsNeighbor.rowIndex,
 					neighborsNeighbor.columnIndex, Direction.RIGHT)
 					if neighborsNeighborsNeighbor == null || !neighborsNeighborsNeighbor.is_empty():
-						neighborsNeighbor.enter_falling_state(Direction.LEFT, FallType.CLEAR)
+						neighborsNeighbor.enter_falling_state(Direction.LEFT, fallType)
 		else:
 			# If left and right are both empty or both full, they shouldn't move.
 			var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
@@ -288,17 +288,17 @@ func clear(edge: int):
 					var neighborsNeighbor = leftNeighbor.get_parent().get_neighbor(leftNeighbor.rowIndex,
 					leftNeighbor.columnIndex, Direction.LEFT)
 					if neighborsNeighbor == null || !neighborsNeighbor.is_empty():
-						leftNeighbor.enter_falling_state(Direction.RIGHT, FallType.CLEAR)
+						leftNeighbor.enter_falling_state(Direction.RIGHT, fallType)
 				elif rightNeighbor != null:
 					if rightNeighborFilled && rightNeighbor != null:
 						var neighborsNeighbor = rightNeighbor.get_parent().get_neighbor(rightNeighbor.rowIndex,
 						rightNeighbor.columnIndex, Direction.RIGHT)
 						if neighborsNeighbor == null || !neighborsNeighbor.is_empty():
-							rightNeighbor.enter_falling_state(Direction.RIGHT, FallType.CLEAR)
+							rightNeighbor.enter_falling_state(Direction.RIGHT, fallType)
 			# Fall from above. In theory, if a neighbor fills then it won't fall after all. XXX keep an eye on this
 			var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL_POINT)
 			if verticalNeighbor != null:
-				verticalNeighbor.enter_falling_state(verticalNeighbor.tumbleDirection, FallType.CLEAR)
+				verticalNeighbor.enter_falling_state(verticalNeighbor.tumbleDirection, fallType)
 	elif edge != Direction.VERTICAL_POINT:
 		# Mark edge for clearing, visually.
 		var particleColor: int = 0
@@ -551,6 +551,7 @@ func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Diction
 
 func clear_self_and_matching_neighbors(alreadyCheckedCoordinates: Array):
 	if !alreadyCheckedCoordinates.has([rowIndex, columnIndex]):
+		fallType = FallType.CLEAR
 		$CPUParticles2D.emitting = true
 		alreadyCheckedCoordinates.append([rowIndex, columnIndex])
 		var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
@@ -637,6 +638,7 @@ func _process(delta):
 func _on_ClearTimer_timeout():
 	# visual effect
 	$CPUParticles2D.emitting = true
+	fallType = FallType.CLEAR
 	clear(Direction.VERTICAL_POINT)
 
 func _on_GravityTimer_timeout():

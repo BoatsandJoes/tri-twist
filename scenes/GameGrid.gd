@@ -117,6 +117,7 @@ func set_off_chains():
 	for row in grid:
 		for cell in row:
 			if cell.is_marked_for_clear():
+				cell.fallType = cell.FallType.CLEAR
 				cell.get_node("CPUParticles2D").emitting = true
 				cell.clear(cell.Direction.VERTICAL_POINT)
 

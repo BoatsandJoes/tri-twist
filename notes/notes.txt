@@ -1,5 +1,9 @@
 # tri-twist
 todo:
+	unnerf lucky chain some
+	consider more colors
+	consider smaller board
+	consider drop cooldown/heat (could just take away points? I'm maybe a little unreasonably scared of punishing players who are just fast)
 	cooldown on drop to prevent double tap (probably want this to be configurable, since it could eat your input. even if on, it should release if you push left or right or rotate, I guess)
 	undo in brain mode
 	hook up sound events
@@ -24,6 +28,7 @@ todo:
 		Hard drop effect on ghost line
 		Hard drop effect on stack surface
 		trick effect
+		topple effect
 		backgrounds
 		ui panels
 	controller support
