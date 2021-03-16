@@ -26,6 +26,7 @@ todo:
 			cannot soft drop while any active piece is toppling (this would limit soft drops to something like 200)
 			cannot hard drop for 30 frames after hard drop (this would limit hard drops to 240)
 	visuals:  
+		make score - display not shunt the number to the side
 		fix ghost line visibility (maybe 2nd ghost piece)
 		light up ghost piece if it will match?  
 		show if ghost will disturb other pieces?

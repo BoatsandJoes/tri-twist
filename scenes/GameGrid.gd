@@ -167,6 +167,19 @@ func _process(delta):
 					if grid[digRowIndex - 2][cellIndex].is_marked_for_clear():
 						grid[digRowIndex][cellIndex].get_node("ClearTimer").start(
 						grid[digRowIndex - 2][cellIndex].get_node("ClearTimer").get_time_left())
+						# Highlights.
+						if (grid[digRowIndex - 2][cellIndex].get_node("LeftEdge").get_color() ==
+						grid[digRowIndex][cellIndex].highlightColors[grid[digRowIndex][cellIndex].leftColor]):
+							grid[digRowIndex][cellIndex].get_node("LeftEdge").set_color(
+							grid[digRowIndex][cellIndex].highlightColors[grid[digRowIndex][cellIndex].leftColor])
+						if (grid[digRowIndex - 2][cellIndex].get_node("RightEdge").get_color() ==
+						grid[digRowIndex][cellIndex].highlightColors[grid[digRowIndex][cellIndex].rightColor]):
+							grid[digRowIndex][cellIndex].get_node("RightEdge").set_color(
+							grid[digRowIndex][cellIndex].highlightColors[grid[digRowIndex][cellIndex].rightColor])
+						if (grid[digRowIndex - 2][cellIndex].get_node("VerticalEdge").get_color() ==
+						grid[digRowIndex][cellIndex].highlightColors[grid[digRowIndex][cellIndex].verticalColor]):
+							grid[digRowIndex][cellIndex].get_node("VerticalEdge").set_color(
+							grid[digRowIndex][cellIndex].highlightColors[grid[digRowIndex][cellIndex].verticalColor])
 					grid[digRowIndex][cellIndex].fallType = grid[digRowIndex - 2][cellIndex].fallType
 					grid[digRowIndex][cellIndex].tumbleDirection = grid[digRowIndex - 2][cellIndex].tumbleDirection
 					if grid[digRowIndex - 2][cellIndex].is_falling():
