@@ -18,6 +18,7 @@ menu button click (could reuse piece settling sounds)
 game is about to start jingle
 countdown/start
 "can't drop there"
+incoming garbage (can reuse "lots of points piece match" sound effect since it grants 50000 points)
 
 potentially annoying sounds but maybe they'd be neat:
 moving piece edge contacting another piece edge (maybe only if one is stationary, or quiet them down if many are tumbling at once?)

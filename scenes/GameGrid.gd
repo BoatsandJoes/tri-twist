@@ -3,6 +3,7 @@ class_name GameGrid
 
 signal tumble
 signal grid_full
+signal garbage_rows
 
 export (PackedScene) var TriangleCell
 export var gridWidth: int
@@ -11,6 +12,7 @@ export var margin: int
 var cellSize: int
 var grid: Array = []
 var window: Rect2
+var digMode: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -59,6 +61,11 @@ func set_grid_height(value):
 	grid = []
 	gridHeight = value
 	initialize_grid()
+
+func fill_bottom_rows(rows: int):
+	for rowIndex in range(rows):
+		for cell in grid[rowIndex]:
+			cell.fill_without_matching_neighbors()
 
 # Try to put the given piece in the top row. Return true if successful.
 # Pass false as a second parameter to not actually drop the piece; just know if we can.
@@ -139,6 +146,35 @@ func _process(delta):
 			set_off_chains()
 		elif !isAnyCellMarkedForClear:
 			emit_signal("grid_full")
+	# Dig mode
+	if digMode:
+		var rowsEmpty = true
+		var digRowIndex = grid.size() - 1
+		while digRowIndex > 0:
+			for cell in grid[digRowIndex]:
+				if !cell.is_empty():
+					rowsEmpty = false
+					break
+			digRowIndex = digRowIndex - 1
+		if rowsEmpty:
+			digRowIndex = grid.size() - 1
+			while digRowIndex > 1:
+				for cellIndex in grid[digRowIndex].size():
+					grid[digRowIndex][cellIndex].set_colors(grid[digRowIndex - 2][cellIndex].leftColor,
+					grid[digRowIndex - 2][cellIndex].rightColor, grid[digRowIndex - 2][cellIndex].verticalColor)
+					grid[digRowIndex][cellIndex].wasHardDroppedMostRecently = (
+					grid[digRowIndex - 2][cellIndex].wasHardDroppedMostRecently)
+					if grid[digRowIndex - 2][cellIndex].is_marked_for_clear():
+						grid[digRowIndex][cellIndex].get_node("ClearTimer").start(
+						grid[digRowIndex - 2][cellIndex].get_node("ClearTimer").get_time_left())
+					grid[digRowIndex][cellIndex].fallType = grid[digRowIndex - 2][cellIndex].fallType
+					grid[digRowIndex][cellIndex].tumbleDirection = grid[digRowIndex - 2][cellIndex].tumbleDirection
+					if grid[digRowIndex - 2][cellIndex].is_falling():
+						grid[digRowIndex][cellIndex].get_node("GravityTimer").start(
+						grid[digRowIndex - 2][cellIndex].get_node("GravityTimer").get_time_left())
+				digRowIndex = digRowIndex - 1
+			fill_bottom_rows(2)
+			emit_signal("garbage_rows")
 
 func _on_TriangleCell_tumble():
 	emit_signal("tumble")

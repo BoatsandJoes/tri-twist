@@ -14,3 +14,4 @@ func _ready():
 
 func _on_triangleDropper_piece_sequence_advanced():
 	hud.get_node("HBoxContainer/VBoxContainer/ScoreDisplay").decrement_score(100)
+	._on_triangleDropper_piece_sequence_advanced()

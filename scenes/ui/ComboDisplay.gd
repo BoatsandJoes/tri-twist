@@ -239,6 +239,14 @@ func upsert_combo(comboKey, comboValue, isLucky: bool):
 	displayedComboKey = comboKey
 	update_scorecard()
 
+func move_combos_up():
+	var newCombos: Dictionary = {}
+	for key in combos.keys():
+		newCombos[[key[0] + 2, key[1]]] = combos.get(key)
+	combos = newCombos
+	if displayedComboKey != null:
+		displayedComboKey[0] = displayedComboKey[0] + 2
+
 func end_combo_if_exists(comboKey):
 	if combos.has(comboKey):
 		if displayedComboKey == comboKey:

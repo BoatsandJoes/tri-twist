@@ -2,7 +2,7 @@ extends Node2D
 class_name GameScene
 
 
-export (PackedScene) var TriangleDropper
+var TriangleDropper = load("res://scenes/TriangleDropper.tscn")
 var HUD = load("res://scenes/ui/HUD.tscn")
 var PausePopup = load("res://scenes/ui/PausePopup.tscn")
 var triangleDropper: TriangleDropper
@@ -18,6 +18,7 @@ func _ready():
 	triangleDropper.connect("piece_sequence_advanced", self, "_on_triangleDropper_piece_sequence_advanced")
 	triangleDropper.gameGrid.connect("tumble", self, "_on_gameGrid_tumble")
 	triangleDropper.gameGrid.connect("grid_full", self, "_on_gameGrid_grid_full")
+	triangleDropper.gameGrid.connect("garbage_rows", self, "_on_gameGrid_garbage_rows")
 	hud = HUD.instance()
 	hud.set_position(Vector2(10, 100))
 	hud.set_size(Vector2(1900, 780))
@@ -61,10 +62,13 @@ func _on_triangleDropper_piece_sequence_advanced():
 
 func _on_gameGrid_tumble():
 	pass
-	#hud.get_node("HBoxContainer/VBoxContainer/ScoreDisplay").increment_score(1) Turned off because of hard drop
+	#hud.get_node("HBoxContainer/VBoxContainer/ScoreDisplay").increment_score(1, false) Turned off because of hard drop
 
 func _on_gameGrid_grid_full():
 	_on_HUD_end_game()
+
+func _on_gameGrid_garbage_rows():
+	hud.get_node("HBoxContainer/VBoxContainer/HBoxContainer/ComboDisplay").move_combos_up()
 
 func _on_HUD_end_game():
 	# Freeze input

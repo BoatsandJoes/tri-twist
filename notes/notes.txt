@@ -1,9 +1,7 @@
 # tri-twist
 todo:
 	unnerf lucky chain some
-	consider more colors
-	consider smaller board
-	consider drop cooldown/heat (could just take away points? I'm maybe a little unreasonably scared of punishing players who are just fast)
+	adjust chain length bonus
 	cooldown on drop to prevent double tap (probably want this to be configurable, since it could eat your input. even if on, it should release if you push left or right or rotate, I guess)
 	undo in brain mode
 	hook up sound events
@@ -11,15 +9,15 @@ todo:
 		make matches less likely
 			connect 3 instead of 2
 			more colors
-		allow but penalize lots of moves:
+		allow but penalize lots of moves*:
 			move limit
 			score penalize extra moves (on every move? mashing does 500 moves vs 100 so 400 moves x say 100 points would be 40000 more points lost) (5 chain currently takes 6 moves; would take away 600 points and is worth 5500 points)
 				mashing game is about 90000 points 500 moves (30000 adjusted), naive game is 60000 points (50000 adjusted)
 				if score cannot go below 0 then first 3 rows should start filled (since they would be free moves, and now first moves can score)
-		scoring tweaks
+		scoring tweaks*
 			nerf 1 chains, make chain length score difference between 2 3 4 more pronounced (this works pretty well)* (consider raising chain cap more) (consider logorithmic scaling so 17 isn't way better than 16)
 			fewer points for random topple clears (doesn't help that much. the only thing lucky chains count for currently is simulchaineous on active chains, and not counting towards chain cap in brain mode)
-				probably want to at least make this not count towards chain cap
+				probably want to at least make this not count towards chain cap, if not just make them active chain in all but name (or maybe name, too)
 			score penalty for having a full board
 		kill them if they stack too high
 		slow them down
@@ -33,6 +31,7 @@ todo:
 		show if ghost will disturb other pieces?
 		solid colors should no longer be contiguous, because it looks like they belong together, but they don't
 		chain group effect
+		spruce up match effect and fix on garbage rise
 		spruce up chain timer effect
 		Hard drop effect on ghost line
 		Hard drop effect on stack surface
@@ -53,8 +52,12 @@ todo:
 			chains stay forever and pop when a piece settles and doesn't match, or at the cap (currently 10)
 			move limit
 		go go go
-			chains pop after a certain amount of time, or at the cap (currently 4). Crucially, you can drop other pieces in between.
+			chains pop after a certain amount of time, or at the cap (currently 5). Crucially, you can drop other pieces in between.
 			time limit
+		dig deep
+			same as go go go but you start with three rows of garbage
+			dig out all but the bottom row to get more. Whenever you do, you get 50000 points!
+			get more points from chains, and if you're feeling fast, use chain cap to dig down faster!
 		scoring
 			active/sequential chain
 			chain length

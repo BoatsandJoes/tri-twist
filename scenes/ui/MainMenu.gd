@@ -23,15 +23,21 @@ func _input(event):
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/Mode2Arrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/Mode2Arrow.text = ""
 				$MarginContainer/HBoxContainer/VBoxContainer2/Mode1Arrow.text = "<"
+			elif $MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text == "<":
+				$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = ""
+				$MarginContainer/HBoxContainer/VBoxContainer2/Mode2Arrow.text = "<"
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/ExitArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/ExitArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/Mode2Arrow.text = "<"
+				$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = "<"
 		elif event.is_action_pressed("ui_down"):
 			if $MarginContainer/HBoxContainer/VBoxContainer2/Mode1Arrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/Mode1Arrow.text = ""
 				$MarginContainer/HBoxContainer/VBoxContainer2/Mode2Arrow.text = "<"
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/Mode2Arrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/Mode2Arrow.text = ""
+				$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = "<"
+			elif $MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text == "<":
+				$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = ""
 				$MarginContainer/HBoxContainer/VBoxContainer2/ExitArrow.text = "<"
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/ExitArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/ExitArrow.text = ""
@@ -41,6 +47,8 @@ func _input(event):
 				_on_Mode1_pressed()
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/Mode2Arrow.text == "<":
 				_on_Mode2_pressed()
+			elif $MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text == "<":
+				_on_DigMode_pressed()
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/ExitArrow.text == "<":
 				_on_Quit_pressed()
 
@@ -54,3 +62,7 @@ func _on_Mode1_pressed():
 
 func _on_Mode2_pressed():
 	get_tree().change_scene("scenes/Mode2.tscn")
+
+
+func _on_DigMode_pressed():
+	get_tree().change_scene("scenes/DigMode.tscn")

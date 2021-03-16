@@ -105,6 +105,31 @@ func fill_randomly():
 	verticalColor = randi() % (colors.size() - 1)
 	update_colors_visually()
 
+func fill_without_matching_neighbors():
+	$ClearTimer.stop()
+	$GravityTimer.stop()
+	tumbleDirection = Direction.VERTICAL
+	wasHardDroppedMostRecently = false
+	var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
+	var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
+	var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
+	var tempColors: Array = colors.duplicate()
+	if leftNeighbor != null && !leftNeighbor.is_empty():
+		var forbiddenColor = leftNeighbor.rightColor
+		tempColors.erase(colors[forbiddenColor])
+	leftColor = colors.find(tempColors[randi() % (tempColors.size() - 1)])
+	tempColors = colors.duplicate()
+	if rightNeighbor != null && !rightNeighbor.is_empty():
+		var forbiddenColor = rightNeighbor.leftColor
+		tempColors.erase(colors[forbiddenColor])
+	rightColor = colors.find(tempColors[randi() % (tempColors.size() - 1)])
+	tempColors = colors.duplicate()
+	if verticalNeighbor != null && !verticalNeighbor.is_empty():
+		var forbiddenColor = verticalNeighbor.verticalColor
+		tempColors.erase(colors[forbiddenColor])
+	verticalColor = colors.find(tempColors[randi() % (tempColors.size() - 1)])
+	update_colors_visually()
+
 func set_colors(left: int, right: int, vertical: int):
 	leftColor = left
 	rightColor = right

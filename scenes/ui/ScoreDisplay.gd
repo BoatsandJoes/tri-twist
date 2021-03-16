@@ -15,16 +15,15 @@ func _ready():
 #func _process(delta):
 #	pass
 
-func increment_score(value: int):
+func increment_score(value: int, chain: bool):
 	score = score + value
 	$HBoxContainer/Values/ScoreValue.text = String(score).pad_zeros(11)
-	if value > bestChainScore:
+	if chain && value > bestChainScore:
 		bestChainScore = value
 		$HBoxContainer/Values/BestChain.text = String(value)
 
 func decrement_score(value: int):
-	if score >= 100:
-		score = score - value
+	score = score - value
 	$HBoxContainer/Values/ScoreValue.text = String(score).pad_zeros(11)
 	if value > bestChainScore:
 		bestChainScore = value

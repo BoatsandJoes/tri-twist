@@ -7,11 +7,7 @@
 size = 32
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=6]
-size = 32
-font_data = ExtResource( 2 )
-
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=2]
 size = 32
 font_data = ExtResource( 2 )
 
@@ -23,7 +19,11 @@ font_data = ExtResource( 2 )
 size = 32
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=5]
+size = 32
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=6]
 size = 32
 font_data = ExtResource( 2 )
 
@@ -51,11 +51,7 @@ font_data = ExtResource( 2 )
 size = 32
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=17]
-size = 32
-font_data = ExtResource( 2 )
-
-[sub_resource type="DynamicFont" id=16]
+[sub_resource type="DynamicFont" id=13]
 size = 32
 font_data = ExtResource( 2 )
 
@@ -67,7 +63,11 @@ font_data = ExtResource( 2 )
 size = 32
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=13]
+[sub_resource type="DynamicFont" id=16]
+size = 32
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=17]
 size = 32
 font_data = ExtResource( 2 )
 
@@ -113,29 +113,29 @@ custom_fonts/font = SubResource( 1 )
 [node name="SequentialChain" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 2 )
 
 [node name="ActiveChain" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 3 )
 
 [node name="QuickChain" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_right = 1920.0
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 4 )
 
 [node name="LuckyChain" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
 
 [node name="GalaxyBrainChain" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
 margin_right = 1920.0
 margin_bottom = 14.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 6 )
 
 [node name="TwoTrick" type="Label" parent="Scorecard/ComboCounter"]
 visible = false
@@ -179,28 +179,28 @@ custom_fonts/font = SubResource( 12 )
 [node name="SequentialChainScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 17 )
+custom_fonts/font = SubResource( 13 )
 
 [node name="ActiveChainScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 16 )
+custom_fonts/font = SubResource( 14 )
 
 [node name="QuickChainScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 14 )
+custom_fonts/font = SubResource( 15 )
 
 [node name="LuckyChainScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 15 )
+custom_fonts/font = SubResource( 16 )
 
 [node name="BrainChainScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
 margin_bottom = 14.0
 rect_pivot_offset = Vector2( -316, 10.6667 )
-custom_fonts/font = SubResource( 13 )
+custom_fonts/font = SubResource( 17 )
 
 [node name="TwoTrickScore" type="Label" parent="Scorecard/ComboScore"]
 visible = false
