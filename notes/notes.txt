@@ -8,19 +8,25 @@ todo:
 	undo in brain mode
 	hook up sound events
 	weaken mashing relative to naive active chains
-		connect 3 instead of 2
-		more colors
-		move limit
-		score penalize extra moves
-		nerf 1 chains, make chain length score difference between 2 3 4 more pronounced (this works pretty well)* (consider raising chain cap more) (consider logorithmic scaling so 17 isn't way better than 16)
-		fewer points for random topple clears (doesn't help that much. the only thing lucky chains count for currently is simulchaineous on active chains, and not counting towards chain cap in brain mode)
-		smaller board
+		make matches less likely
+			connect 3 instead of 2
+			more colors
+		allow but penalize lots of moves:
+			move limit
+			score penalize extra moves (on every move? mashing does 500 moves vs 100 so 400 moves x say 100 points would be 40000 more points lost) (5 chain currently takes 6 moves; would take away 600 points and is worth 5500 points)
+				mashing game is about 90000 points 500 moves (30000 adjusted), naive game is 60000 points (50000 adjusted)
+				if score cannot go below 0 then first 3 rows should start filled (since they would be free moves, and now first moves can score)
+		scoring tweaks
+			nerf 1 chains, make chain length score difference between 2 3 4 more pronounced (this works pretty well)* (consider raising chain cap more) (consider logorithmic scaling so 17 isn't way better than 16)
+			fewer points for random topple clears (doesn't help that much. the only thing lucky chains count for currently is simulchaineous on active chains, and not counting towards chain cap in brain mode)
+				probably want to at least make this not count towards chain cap
+			score penalty for having a full board
 		kill them if they stack too high
-		drop cooldown (if I'm going to do this then I'll just remove hard drop)
-		drop heat bar
-		score penalty for having a full board
-		cannot drop while any (inactive?) piece is toppling (maybe remove hard drop) (pauses chain timer?)
-			this eats inputs randomly during normal play, which sucks
+		slow them down
+			smaller board
+			drop heat bar
+			cannot soft drop while any active piece is toppling (this would limit soft drops to something like 200)
+			cannot hard drop for 30 frames after hard drop (this would limit hard drops to 240)
 	visuals:  
 		fix ghost line visibility (maybe 2nd ghost piece)
 		light up ghost piece if it will match?  
