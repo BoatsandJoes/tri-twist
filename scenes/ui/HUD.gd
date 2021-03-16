@@ -24,7 +24,6 @@ func set_time_limit(minutes: int, seconds: int):
 func _on_MoveCount_out_of_moves():
 	emit_signal("end_game")
 
-
 func _on_TimeDisplay_out_of_time():
 	emit_signal("end_game")
 
