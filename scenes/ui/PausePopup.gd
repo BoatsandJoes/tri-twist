@@ -71,6 +71,7 @@ func _input(event):
 				else:
 					$VBoxContainer/HBoxContainer2/SelectArrow/Restart.text = "<"
 		elif event.is_action_pressed("ui_accept") || event.is_action_pressed("ui_select"):
+			get_tree().set_input_as_handled()
 			if $VBoxContainer/HBoxContainer2/SelectArrow/Resume.text == "<":
 				_on_Resume_pressed()
 			elif $VBoxContainer/HBoxContainer2/SelectArrow/Restart.text == "<":

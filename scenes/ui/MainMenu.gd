@@ -3,10 +3,26 @@ extends Control
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
+const taglines: Array = [
+"Like putting too much air in a balloon!",
+"Think of shipping channels in the ocean",
+"It's how hackers talk when they don't want to be overheard",
+"Okay, so imagine a bus",
+"This game isn't the only game that has a movement exploit; basketball has it too",
+"Chugga chugga chugga chugga CHOO CHOO",
+"Might be a roguelike",
+"I've always wanted to feel like my puzzle game had the vibe of a teen romance novel",
+"Open source https://github.com/BoatsandJoes",
+"Ah, I see you are a Windows user",
+"Oh no! It's boiling acid!",
+"A wagon full of pancakes? In the champeenship? I'd like to see it try",
+"I can be your angle... or yuor devil",
+"psssh...nothin personnel...kid..."]
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	randomize()
+	$MarginContainer/HBoxContainer/VBoxContainer3/Tagline.text = taglines[randi() % taglines.size()]
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
