@@ -4,6 +4,7 @@ class_name Main
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
+var TitleScreen = load("res://scenes/ui/mainMenu/TitleScreen.tscn")
 var MainMenu = load("res://scenes/ui/mainMenu/MainMenu.tscn")
 var ModeSelect = load("res://scenes/ui/mainMenu/ModeSelect.tscn")
 var TakeYourTime = load("res://scenes/modes/TakeYourTime.tscn")
@@ -14,7 +15,20 @@ var game
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	go_to_main_menu()
+	go_to_title()
+
+func exit_game():
+	get_tree().quit()
+
+func go_to_title():
+	if menu != null && weakref(menu).get_ref():
+		menu.queue_free()
+	if game != null && weakref(game).get_ref():
+		game.queue_free()
+	menu = TitleScreen.instance()
+	add_child(menu)
+	menu.connect("start", self, "_on_TitleScreen_start")
+	menu.connect("exit", self, "_on_TitleScreen_exit")
 
 func go_to_main_menu():
 	if menu != null && weakref(menu).get_ref():
@@ -26,6 +40,8 @@ func go_to_main_menu():
 	menu.connect("play", self, "_on_MainMenu_play")
 	menu.connect("settings", self, "_on_MainMenu_settings")
 	menu.connect("credits", self, "_on_MainMenu_credits")
+	menu.connect("back_to_title", self, "_on_MainMenu_back_to_title")
+	menu.connect("exit", self, "_on_MainMenu_exit")
 
 func go_to_mode_select():
 	if menu != null && weakref(menu).get_ref():
@@ -73,6 +89,15 @@ func go_to_dig_mode():
 #func _process(delta):
 #	pass
 
+func _on_TitleScreen_start():
+	go_to_main_menu()
+
+func _on_TitleScreen_exit():
+	exit_game()
+
+func _on_MainMenu_exit():
+	exit_game()
+
 func _on_MainMenu_play():
 	go_to_mode_select()
 
@@ -81,6 +106,9 @@ func _on_MainMenu_settings():
 
 func _on_MainMenu_credits():
 	pass
+
+func _on_MainMenu_back_to_title():
+	go_to_title()
 
 func _on_ModeSelect_take_your_time():
 	go_to_take_your_time_mode()

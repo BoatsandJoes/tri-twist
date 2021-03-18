@@ -32,7 +32,8 @@ func _ready():
 	pausePopup.connect("back_to_menu", self, "_on_PausePopup_back_to_menu")
 
 func _input(event):
-	if event is InputEventKey && event.is_action_pressed("ui_escape"):
+	if ((event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton)
+	&& event.is_action_pressed("pause")):
 		# Set pause menu to pause mode
 		pausePopup.set_mode_pause()
 

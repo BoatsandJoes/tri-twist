@@ -19,8 +19,8 @@ func _ready():
 #	pass
 
 func _input(event):
-	if event is InputEventKey:
-		if event.is_action_pressed("ui_escape"):
+	if (event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton):
+		if event.is_action_pressed("ui_escape") || event.is_action_pressed("ui_cancel"):
 			_on_Back_pressed()
 		elif event.is_action_pressed("ui_up"):
 			if $MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text == "<":

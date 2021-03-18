@@ -60,7 +60,7 @@ func move_piece_left():
 				activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
 
 func _input(event):
-	if event is InputEventKey:
+	if (event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton):
 		if event.is_action_pressed("left"):
 			leftPressed = true
 			rightPressed = false
@@ -89,12 +89,11 @@ func _input(event):
 			activePiece.set_colors(activePiece.verticalColor, activePiece.leftColor, activePiece.rightColor)
 		elif event.is_action_pressed("counterclockwise"):
 			activePiece.set_colors(activePiece.rightColor, activePiece.verticalColor, activePiece.leftColor)
-		elif event.is_action_pressed("ui_down"):
+		elif event.is_action_pressed("soft_drop"):
 			var accepted = gameGrid.drop_piece(activePiece, true)
 			if accepted:
 				advance_piece()
-		elif ((event.is_action_pressed("ui_accept") || event.is_action_pressed("ui_select") || event.is_action_pressed("ui_up"))
-		&& ghostPiece.visible):
+		elif event.is_action_pressed("hard_drop") && ghostPiece.visible:
 			gameGrid.hard_drop(ghostPiece)
 			advance_piece()
 

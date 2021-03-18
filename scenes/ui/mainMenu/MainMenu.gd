@@ -4,28 +4,32 @@ class_name MainMenu
 signal play
 signal settings
 signal credits
+signal back_to_title
+signal exit
 
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
 const taglines: Array = [
-"Like putting too much air in a balloon!",
-"Think of shipping channels in the ocean",
-"It's how hackers talk when they don't want to be overheard",
-"Okay, so imagine a bus",
-"This game isn't the only game that has a movement exploit; basketball has it too",
-"Chugga chugga chugga chugga CHOO CHOO",
-"Might be a roguelike",
-"Not a fighting game",
-"Contains arbitrary execution and artificial difficulty",
-"I've always wanted to feel like my puzzle game had the vibe of a teen romance novel",
-"Open source https://github.com/BoatsandJoes",
-"Ah, I see you are a Windows user",
-"Oh no! It's boiling acid!",
-"A wagon full of pancakes? In the championship? I'd like to see it try",
-"I can be your angle... or yuor devil",
-"psssh...nothin personnel...kid...",
-"I wanna take you for a ride"]
+"Ah, I see you are a Windows user", #Someone online's opening line of evangelism about how great open source software is (name witheld)
+"Open source https://github.com/BoatsandJoes", #This game is open source! You're reading it right now!
+"Like putting too much air in a balloon!", #Futurama: Where No Fan Has Gone Before 
+"Think of shipping channels in the ocean", #Numb3rs: Shadow Markets
+"It's how hackers talk when they don't want to be overheard", #Numb3rs: Shadow Markets
+"Okay, so imagine a bus", #Analogy often used to explain frame rules in Super Mario Bros 1 speedrunning, probably invented by Darbian
+"This game isn't the only game that has a movement exploit; basketball has it too", #Core A Gaming: The Korean Backdash
+"It's like preordering a video game", #Paraphrased from Core A Gaming: Why Button Mashing Works (Sometimes)
+"Chugga chugga chugga chugga CHOO CHOO", # Snowpiercer is a work that examines class divide, but also takes place on a train
+"Might be a roguelike", # Some purist roguelike fans get upset when someone (INCORRECTLY :O ) categorizes a game in their genre
+"Not a fighting game", # Some purist fighting game fans get upset when someone (INCORRECTLY :O ) categorizes a game in their genre
+"Contains arbitrary execution and artificial difficulty", # Video game players often complain about these things. Some people like them
+"I can be your angle... or yuor devil", #Meme, often associated with Egoraptor/Game Grumps. Also, triangles
+"I've always wanted to feel like my puzzle game had the vibe of a teen romance novel", #My sister's response to I can be your angle...
+"Oh no! It's boiling acid!", #Security guard from near the beginning of Batman Forever
+"A wagon full of pancakes? In the championship? I'd like to see it try", #Homestar Runner: Strong Bad Email #117 "Montage"
+"I wanna take you for a ride", #Lyrics from the Marvel vs Capcom 2: New Age of Heroes character select theme
+"I don't know who it is, but it probably is fhqwhgads" #Homestar Runner: Everybody to the Limit
+]
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -37,9 +41,9 @@ func _ready():
 #	pass
 
 func _input(event):
-	if event is InputEventKey:
-		if event.is_action_pressed("ui_escape"):
-			_on_Exit_pressed()
+	if (event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton):
+		if event.is_action_pressed("ui_escape") || event.is_action_pressed("ui_cancel"):
+			emit_signal("back_to_title")
 		elif event.is_action_pressed("ui_up"):
 			if $MarginContainer/HBoxContainer/VBoxContainer2/PlayArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/PlayArrow.text = ""
@@ -77,7 +81,7 @@ func _input(event):
 				_on_Exit_pressed()
 
 func _on_Exit_pressed():
-	get_tree().quit()
+	emit_signal("exit")
 
 
 func _on_Play_pressed():

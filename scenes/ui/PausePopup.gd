@@ -41,8 +41,9 @@ func set_mode_finished():
 #func _process(delta):
 #	pass
 func _input(event):
-	if event is InputEventKey && self.visible:
-		if event.is_action_pressed("ui_escape"):
+	if (event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton) && self.visible:
+		get_tree().set_input_as_handled()
+		if event.is_action_pressed("ui_escape") || event.is_action_pressed("ui_cancel") || event.is_action_pressed("pause"):
 			if $VBoxContainer/HBoxContainer2/SelectArrow/Resume.visible:
 				_on_Resume_pressed()
 			else:
@@ -74,7 +75,6 @@ func _input(event):
 				else:
 					$VBoxContainer/HBoxContainer2/SelectArrow/Restart.text = "<"
 		elif event.is_action_pressed("ui_accept") || event.is_action_pressed("ui_select"):
-			get_tree().set_input_as_handled()
 			if $VBoxContainer/HBoxContainer2/SelectArrow/Resume.text == "<":
 				_on_Resume_pressed()
 			elif $VBoxContainer/HBoxContainer2/SelectArrow/Restart.text == "<":
