@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=2]
 
-[ext_resource path="res://scenes/ui/MainMenu.gd" type="Script" id=1]
+[ext_resource path="res://scenes/ui/mainMenu/MainMenu.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/agane/Agane╠Ç 55 (roman).ttf" type="DynamicFontData" id=2]
 
 [sub_resource type="DynamicFont" id=1]
@@ -42,18 +42,16 @@ font_data = ExtResource( 2 )
 size = 48
 font_data = ExtResource( 2 )
 
-[node name="Control" type="Control"]
+[node name="MainMenu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
 margin_left = 60.0
 margin_top = 60.0
-margin_right = -60.0
-margin_bottom = -60.0
+margin_right = 1860.0
+margin_bottom = 1020.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 margin_right = 1800.0
@@ -62,8 +60,8 @@ custom_constants/separation = 20
 alignment = 1
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 445.0
-margin_right = 938.0
+margin_left = 498.0
+margin_right = 991.0
 margin_bottom = 960.0
 alignment = 1
 
@@ -79,68 +77,64 @@ margin_top = 538.0
 margin_right = 493.0
 margin_bottom = 554.0
 custom_fonts/font = SubResource( 2 )
-text = "It's like putting too much air into a balloon!"
+text = "Tagline goes here"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 958.0
-margin_right = 1306.0
+margin_left = 1011.0
+margin_right = 1252.0
 margin_bottom = 960.0
 custom_constants/separation = 5
 alignment = 1
 
-[node name="Mode1" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="Play" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 364.0
-margin_right = 348.0
+margin_right = 241.0
 margin_bottom = 418.0
-size_flags_horizontal = 0
 custom_fonts/font = SubResource( 3 )
-text = "Take your time"
+text = "Play!"
 
-[node name="Mode2" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="Settings" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 423.0
-margin_right = 218.0
+margin_right = 241.0
 margin_bottom = 477.0
-size_flags_horizontal = 0
 custom_fonts/font = SubResource( 4 )
-text = "Go go go"
+text = "Settings"
 
-[node name="DigMode" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="Credits" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 482.0
-margin_right = 215.0
+margin_right = 241.0
 margin_bottom = 536.0
-size_flags_horizontal = 0
 custom_fonts/font = SubResource( 5 )
-text = "Dig deep"
+text = "Credits"
 
-[node name="Quit" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="Exit" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 541.0
 margin_right = 241.0
 margin_bottom = 595.0
-size_flags_horizontal = 0
 custom_fonts/font = SubResource( 6 )
 text = "Exit Game"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 1326.0
-margin_right = 1355.0
+margin_left = 1272.0
+margin_right = 1301.0
 margin_bottom = 960.0
 custom_constants/separation = 13
 alignment = 1
 
-[node name="Mode1Arrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+[node name="PlayArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
 margin_top = 364.0
 margin_right = 29.0
 margin_bottom = 412.0
 custom_fonts/font = SubResource( 7 )
 text = "<"
 
-[node name="Mode2Arrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+[node name="SettingsArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
 margin_top = 425.0
 margin_right = 29.0
 margin_bottom = 473.0
 custom_fonts/font = SubResource( 8 )
 
-[node name="DigModeArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+[node name="CreditsArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
 margin_top = 486.0
 margin_right = 29.0
 margin_bottom = 534.0
@@ -151,7 +145,7 @@ margin_top = 547.0
 margin_right = 29.0
 margin_bottom = 595.0
 custom_fonts/font = SubResource( 10 )
-[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Mode1" to="." method="_on_Mode1_pressed"]
-[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Mode2" to="." method="_on_Mode2_pressed"]
-[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/DigMode" to="." method="_on_DigMode_pressed"]
-[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Quit" to="." method="_on_Quit_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Play" to="." method="_on_Play_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Settings" to="." method="_on_Settings_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Credits" to="." method="_on_Credits_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Exit" to="." method="_on_Exit_pressed"]

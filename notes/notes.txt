@@ -1,5 +1,6 @@
 # tri-twist
 todo:
+	"are you sure?" on quit
 	unnerf lucky chain some
 		more points (no more than active chain)
 		doesn't count towards chain cap
@@ -14,7 +15,6 @@ todo:
 		show if ghost will disturb other pieces?
 		solid colors should no longer be contiguous, because it looks like they belong together, but they don't
 		less subtle chain group effect
-		spruce up match effect and fix on garbage rise
 		spruce up chain timer effect
 		Hard drop effect on ghost line
 		Hard drop effect on stack surface
@@ -24,6 +24,9 @@ todo:
 		ui panels
 	controller support
 	mouse support
+		hover to move active piece
+		mouse buttons are bound same way as keyboard keys
+		default scheme is left click hard drop, right click rotate clockwise, middle click soft drop, mouse 5 rotate counterclockwise
 	credits/license
 	how to play screens
 		core mechanics
@@ -64,7 +67,23 @@ todo:
 		Gravity
 		num previews
 		double drop prevention
+		are you sure? on restart on/off
+		are you sure? on back to menu on/off
 		button config
+			pause
+			quick reset
+			soft drop
+			hard drop
+			rotate right
+			rotate left
+			move left
+			move right
+			ui accept
+			ui back
+			ui up
+			ui down
+			ui left
+			ui right
 		volume
 			master
 			sfx

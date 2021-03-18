@@ -1,6 +1,8 @@
 extends Node2D
 class_name GameScene
 
+signal back_to_menu
+signal restart
 
 var TriangleDropper = load("res://scenes/TriangleDropper.tscn")
 var HUD = load("res://scenes/ui/HUD.tscn")
@@ -26,6 +28,8 @@ func _ready():
 	hud.connect("end_game", self, "_on_HUD_end_game")
 	pausePopup = PausePopup.instance()
 	add_child(pausePopup)
+	pausePopup.connect("restart", self, "_on_PausePopup_restart")
+	pausePopup.connect("back_to_menu", self, "_on_PausePopup_back_to_menu")
 
 func _input(event):
 	if event is InputEventKey && event.is_action_pressed("ui_escape"):
@@ -87,3 +91,9 @@ func _on_HUD_end_game():
 func _on_timer_timeout():
 	# Set pause menu to game end mode
 	pausePopup.set_mode_finished()
+
+func _on_PausePopup_restart():
+	emit_signal("restart")
+
+func _on_PausePopup_back_to_menu():
+	emit_signal("back_to_menu")

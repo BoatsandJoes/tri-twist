@@ -85,18 +85,21 @@ func become_default_size():
 	leftEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 2))
 	leftEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 6))
 	$LeftEdge.set_polygon(leftEdgeVectorArray)
+	$LeftEdge.set_modulate(Color(1,1,1))
 	# right
 	var rightEdgeVectorArray = PoolVector2Array()
 	rightEdgeVectorArray.append(Vector2(size, 0))
 	rightEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 2))
 	rightEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 6))
 	$RightEdge.set_polygon(rightEdgeVectorArray)
+	$RightEdge.set_modulate(Color(1,1,1))
 	# vertical
 	var verticalEdgeVectorArray = PoolVector2Array()
 	verticalEdgeVectorArray.append(Vector2(0, 0))
 	verticalEdgeVectorArray.append(Vector2(size, 0))
 	verticalEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 6))
 	$VerticalEdge.set_polygon(verticalEdgeVectorArray)
+	$VerticalEdge.set_modulate(Color(1,1,1))
 	# Move polygons to center on our position.
 	$LeftEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 	$RightEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
@@ -277,7 +280,6 @@ func clear(edge: int):
 	$ClearTimer.stop()
 	if (edge == Direction.VERTICAL_POINT):
 		# Immediately blank tile.
-		set_modulate(Color(1,1,1))
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 		become_default_size()
 		isMarkedForInactiveClear = false
@@ -341,7 +343,7 @@ func clear(edge: int):
 func highlight_edge(edge: int):
 	var particleColor: int = 0
 	if Direction.LEFT == edge:
-		$LeftEdge.set_color(highlightColors[leftColor])
+		$LeftEdge.set_modulate(Color(1.75,1.75,1.75))
 		particleColor = leftColor
 		var leftEdgeVectorArray = PoolVector2Array()
 		leftEdgeVectorArray.append(Vector2(0, 0))
@@ -351,7 +353,7 @@ func highlight_edge(edge: int):
 		# Move polygon to center on our position.
 		$LeftEdge.position = Vector2((-1) * (size + 2)/2, (-1) * (size + 2) * sqrt(3) / 6)
 	if Direction.RIGHT == edge:
-		$RightEdge.set_color(highlightColors[rightColor])
+		$RightEdge.set_modulate(Color(1.75,1.75,1.75))
 		particleColor = rightColor
 		# right
 		var rightEdgeVectorArray = PoolVector2Array()
@@ -362,7 +364,7 @@ func highlight_edge(edge: int):
 		# Move polygon to center on our position.
 		$RightEdge.position = Vector2((-1) * (size + 2)/2, (-1) * (size + 2) * sqrt(3) / 6)
 	elif Direction.VERTICAL == edge:
-		$VerticalEdge.set_color(highlightColors[verticalColor])
+		$VerticalEdge.set_modulate(Color(1.75,1.75,1.75))
 		particleColor = verticalColor
 		# vertical
 		var verticalEdgeVectorArray = PoolVector2Array()

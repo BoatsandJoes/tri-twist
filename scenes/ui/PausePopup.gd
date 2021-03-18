@@ -1,6 +1,9 @@
 extends Panel
 class_name PausePopup
 
+signal back_to_menu
+signal restart
+
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -87,8 +90,8 @@ func _on_Resume_pressed():
 func _on_Restart_pressed():
 	get_tree().paused = false
 	get_parent().set_process_input(true)
-	get_tree().reload_current_scene()
+	emit_signal("restart")
 
 func _on_BackToMain_pressed():
 	get_tree().paused = false
-	get_tree().change_scene("res://scenes/ui/MainMenu.tscn")
+	emit_signal("back_to_menu")

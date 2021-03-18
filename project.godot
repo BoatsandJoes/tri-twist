@@ -17,7 +17,7 @@ _global_script_classes=[ {
 "base": "GameScene",
 "class": "DigMode",
 "language": "GDScript",
-"path": "res://scenes/DigMode.gd"
+"path": "res://scenes/modes/DigMode.gd"
 }, {
 "base": "Node2D",
 "class": "GameGrid",
@@ -29,20 +29,30 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/GameScene.gd"
 }, {
+"base": "GameScene",
+"class": "GoGoGo",
+"language": "GDScript",
+"path": "res://scenes/modes/GoGoGo.gd"
+}, {
 "base": "MarginContainer",
 "class": "HUD",
 "language": "GDScript",
 "path": "res://scenes/ui/HUD.gd"
 }, {
-"base": "GameScene",
-"class": "Mode1",
+"base": "Control",
+"class": "Main",
 "language": "GDScript",
-"path": "res://scenes/Mode1.gd"
+"path": "res://scenes/ui/mainMenu/Main.gd"
 }, {
-"base": "GameScene",
-"class": "Mode2",
+"base": "Control",
+"class": "MainMenu",
 "language": "GDScript",
-"path": "res://scenes/Mode2.gd"
+"path": "res://scenes/ui/mainMenu/MainMenu.gd"
+}, {
+"base": "Control",
+"class": "ModeSelect",
+"language": "GDScript",
+"path": "res://scenes/ui/mainMenu/ModeSelect.gd"
 }, {
 "base": "Panel",
 "class": "PausePopup",
@@ -53,6 +63,16 @@ _global_script_classes=[ {
 "class": "ScoreDisplay",
 "language": "GDScript",
 "path": "res://scenes/ui/ScoreDisplay.gd"
+}, {
+"base": "Control",
+"class": "Settings",
+"language": "GDScript",
+"path": "res://scenes/ui/mainMenu/Settings.gd"
+}, {
+"base": "GameScene",
+"class": "TakeYourTime",
+"language": "GDScript",
+"path": "res://scenes/modes/TakeYourTime.gd"
 }, {
 "base": "Area2D",
 "class": "TriangleCell",
@@ -69,11 +89,15 @@ _global_script_class_icons={
 "DigMode": "",
 "GameGrid": "",
 "GameScene": "",
+"GoGoGo": "",
 "HUD": "",
-"Mode1": "",
-"Mode2": "",
+"Main": "",
+"MainMenu": "",
+"ModeSelect": "",
 "PausePopup": "",
 "ScoreDisplay": "",
+"Settings": "",
+"TakeYourTime": "",
 "TriangleCell": "",
 "TriangleDropper": ""
 }
@@ -81,7 +105,7 @@ _global_script_class_icons={
 [application]
 
 config/name="TriTwist"
-run/main_scene="res://scenes/ui/MainMenu.tscn"
+run/main_scene="res://scenes/ui/mainMenu/Main.tscn"
 config/icon="res://icon.png"
 
 [display]
@@ -92,6 +116,10 @@ window/size/resizable=false
 window/size/borderless=true
 window/size/fullscreen=true
 window/vsync/use_vsync=false
+
+[global]
+
+main=false
 
 [input]
 
