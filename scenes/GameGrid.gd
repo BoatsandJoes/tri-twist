@@ -165,21 +165,18 @@ func _process(delta):
 					grid[digRowIndex][cellIndex].wasHardDroppedMostRecently = (
 					grid[digRowIndex - 2][cellIndex].wasHardDroppedMostRecently)
 					if grid[digRowIndex - 2][cellIndex].is_marked_for_clear():
-						grid[digRowIndex][cellIndex].get_node("ClearTimer").start(
-						grid[digRowIndex - 2][cellIndex].get_node("ClearTimer").get_time_left())
 						# Highlights.
 						if (grid[digRowIndex - 2][cellIndex].get_node("LeftEdge").get_color() ==
 						grid[digRowIndex][cellIndex].highlightColors[grid[digRowIndex][cellIndex].leftColor]):
-							grid[digRowIndex][cellIndex].get_node("LeftEdge").set_color(
-							grid[digRowIndex][cellIndex].highlightColors[grid[digRowIndex][cellIndex].leftColor])
+							grid[digRowIndex][cellIndex].highlight_edge(grid[digRowIndex][cellIndex].Direction.LEFT)
 						if (grid[digRowIndex - 2][cellIndex].get_node("RightEdge").get_color() ==
 						grid[digRowIndex][cellIndex].highlightColors[grid[digRowIndex][cellIndex].rightColor]):
-							grid[digRowIndex][cellIndex].get_node("RightEdge").set_color(
-							grid[digRowIndex][cellIndex].highlightColors[grid[digRowIndex][cellIndex].rightColor])
+							grid[digRowIndex][cellIndex].highlight_edge(grid[digRowIndex][cellIndex].Direction.RIGHT)
 						if (grid[digRowIndex - 2][cellIndex].get_node("VerticalEdge").get_color() ==
 						grid[digRowIndex][cellIndex].highlightColors[grid[digRowIndex][cellIndex].verticalColor]):
-							grid[digRowIndex][cellIndex].get_node("VerticalEdge").set_color(
-							grid[digRowIndex][cellIndex].highlightColors[grid[digRowIndex][cellIndex].verticalColor])
+							grid[digRowIndex][cellIndex].highlight_edge(grid[digRowIndex][cellIndex].Direction.VERTICAL)
+						grid[digRowIndex][cellIndex].get_node("ClearTimer").start(
+						grid[digRowIndex - 2][cellIndex].get_node("ClearTimer").get_time_left())
 					grid[digRowIndex][cellIndex].fallType = grid[digRowIndex - 2][cellIndex].fallType
 					grid[digRowIndex][cellIndex].tumbleDirection = grid[digRowIndex - 2][cellIndex].tumbleDirection
 					if grid[digRowIndex - 2][cellIndex].is_falling():

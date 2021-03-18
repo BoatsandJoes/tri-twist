@@ -1,6 +1,6 @@
 modes + references:
 menu, take your time mode ( https://tetr.io menu, bejeweled zen mode)
-go go go mode (current time limit is 2 minutes, this might change. Could reference TGM 1/2/3 normal mode/master mode but I don't necessarily want songs in that style, it's just a pace thing)
+go go go mode, dig deep mode (current time limit is 2 minutes, this might change. Could reference TGM 1/2/3 normal mode/master mode but I don't necessarily want songs in that style, it's just a pace thing)
 
 core sfx:
 piece matching
@@ -12,6 +12,7 @@ game end (I think of an annoying whistle? It doesn't need to be an annoying whis
 
 extra sfx:
 piece settling into place without matching (I think of a click)
+special piece settling from hard drop (I think whoosh and thump)
 piece knocking another piece over
 pause
 menu button click (could reuse piece settling sounds)
@@ -24,8 +25,3 @@ potentially annoying sounds but maybe they'd be neat:
 moving piece edge contacting another piece edge (maybe only if one is stationary, or quiet them down if many are tumbling at once?)
 active piece shift/rotate (some versions of Tetris have this, notably Tetris Effect)
 piece release (seems redundant)
-
-sfx tied to modes or mechanics that may be cut:
-piece settling into place from instant gravity/hard drop (a woosh and thump)
-Goal completed
-Score being added to your total when the score card vanishes

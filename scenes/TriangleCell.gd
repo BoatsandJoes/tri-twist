@@ -57,6 +57,28 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	#baseVectorArray.append(Vector2(size, 0))
 	#baseVectorArray.append(Vector2(size/2, size * sqrt(3) / 2))
 	# Define vertices of children
+	become_default_size()
+	# flip every even triangle cell and cells outside the grid
+	if ((columnIndex + rowIndex) % 2 == 0 && !pointFacingUp) || (!inGrid && !isGhost):
+		scale = Vector2(1, -1)
+		# Postion adjust.
+		if (!isGhost):
+			position = Vector2(position[0], position[1] + size * sqrt(3) / 6 )
+		# Flip particle emitter back over
+		$CPUParticles2D.scale = Vector2(1, -1)
+		pointFacingUp = true
+	elif (columnIndex + rowIndex) % 2 != 0:
+		scale = Vector2(1, 1)
+		$CPUParticles2D.scale = Vector2(1, 1)
+		pointFacingUp = false
+	# Chain timer bar.
+	$ChainTimerBar.max_value = clearDelay
+	$ChainTimerBar.rect_size = Vector2(size / 2, size / 10)
+	$ChainTimerBar.rect_position = Vector2($ChainTimerBar.rect_position[0] - size / 4, $ChainTimerBar.rect_position[1] - size / 20)
+	# make empty
+	set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
+
+func become_default_size():
 	# left
 	var leftEdgeVectorArray = PoolVector2Array()
 	leftEdgeVectorArray.append(Vector2(0, 0))
@@ -79,25 +101,6 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	$LeftEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 	$RightEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 	$VerticalEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
-	# flip every even triangle cell and cells outside the grid
-	if ((columnIndex + rowIndex) % 2 == 0 && !pointFacingUp) || (!inGrid && !isGhost):
-		scale = Vector2(1, -1)
-		# Postion adjust.
-		if (!isGhost):
-			position = Vector2(position[0], position[1] + size * sqrt(3) / 6 )
-		# Flip particle emitter back over
-		$CPUParticles2D.scale = Vector2(1, -1)
-		pointFacingUp = true
-	elif (columnIndex + rowIndex) % 2 != 0:
-		scale = Vector2(1, 1)
-		$CPUParticles2D.scale = Vector2(1, 1)
-		pointFacingUp = false
-	# Chain timer bar.
-	$ChainTimerBar.max_value = clearDelay
-	$ChainTimerBar.rect_size = Vector2(size / 2, size / 10)
-	$ChainTimerBar.rect_position = Vector2($ChainTimerBar.rect_position[0] - size / 4, $ChainTimerBar.rect_position[1] - size / 20)
-	# make empty
-	set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 
 func fill_randomly():
 	leftColor = randi() % (colors.size() - 1)
@@ -129,6 +132,7 @@ func fill_without_matching_neighbors():
 		tempColors.erase(colors[forbiddenColor])
 	verticalColor = colors.find(tempColors[randi() % (tempColors.size() - 1)])
 	update_colors_visually()
+	become_default_size()
 
 func set_colors(left: int, right: int, vertical: int):
 	leftColor = left
@@ -275,6 +279,7 @@ func clear(edge: int):
 		# Immediately blank tile.
 		set_modulate(Color(1,1,1))
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
+		become_default_size()
 		isMarkedForInactiveClear = false
 		get_parent().get_parent().get_parent().end_combo_if_exists([rowIndex, columnIndex])
 		# Check to see if any neighbors should enter falling state.
@@ -326,24 +331,50 @@ func clear(edge: int):
 				verticalNeighbor.enter_falling_state(verticalNeighbor.tumbleDirection, fallType)
 	elif edge != Direction.VERTICAL_POINT:
 		# Mark edge for clearing, visually.
-		var particleColor: int = 0
-		if Direction.LEFT == edge:
-			$LeftEdge.set_color(highlightColors[leftColor])
-			particleColor = leftColor
-		if Direction.RIGHT == edge:
-			$RightEdge.set_color(highlightColors[rightColor])
-			particleColor = rightColor
-		elif Direction.VERTICAL == edge:
-			$VerticalEdge.set_color(highlightColors[verticalColor])
-			particleColor = verticalColor
-		# Set particle color XXX else block to handle split color case
-		if !is_marked_for_clear():
-			$CPUParticles2D.color = highlightColors[particleColor]
+		highlight_edge(edge)
 		if activeChainMode:
 			# set a timer to actually clear the cell, or restart it
 			$ClearTimer.start()
 		else:
 			isMarkedForInactiveClear = true
+
+func highlight_edge(edge: int):
+	var particleColor: int = 0
+	if Direction.LEFT == edge:
+		$LeftEdge.set_color(highlightColors[leftColor])
+		particleColor = leftColor
+		var leftEdgeVectorArray = PoolVector2Array()
+		leftEdgeVectorArray.append(Vector2(0, 0))
+		leftEdgeVectorArray.append(Vector2((size + 2)/2, (size + 2) * sqrt(3) / 2))
+		leftEdgeVectorArray.append(Vector2((size + 2)/2, (size + 2) * sqrt(3) / 6))
+		$LeftEdge.set_polygon(leftEdgeVectorArray)
+		# Move polygon to center on our position.
+		$LeftEdge.position = Vector2((-1) * (size + 2)/2, (-1) * (size + 2) * sqrt(3) / 6)
+	if Direction.RIGHT == edge:
+		$RightEdge.set_color(highlightColors[rightColor])
+		particleColor = rightColor
+		# right
+		var rightEdgeVectorArray = PoolVector2Array()
+		rightEdgeVectorArray.append(Vector2((size + 2), 0))
+		rightEdgeVectorArray.append(Vector2((size + 2)/2, (size + 2) * sqrt(3) / 2))
+		rightEdgeVectorArray.append(Vector2((size + 2)/2, (size + 2) * sqrt(3) / 6))
+		$RightEdge.set_polygon(rightEdgeVectorArray)
+		# Move polygon to center on our position.
+		$RightEdge.position = Vector2((-1) * (size + 2)/2, (-1) * (size + 2) * sqrt(3) / 6)
+	elif Direction.VERTICAL == edge:
+		$VerticalEdge.set_color(highlightColors[verticalColor])
+		particleColor = verticalColor
+		# vertical
+		var verticalEdgeVectorArray = PoolVector2Array()
+		verticalEdgeVectorArray.append(Vector2(0, 0))
+		verticalEdgeVectorArray.append(Vector2((size + 2), 0))
+		verticalEdgeVectorArray.append(Vector2((size + 2)/2, (size + 2) * sqrt(3) / 6))
+		$VerticalEdge.set_polygon(verticalEdgeVectorArray)
+		# Move polygon to center on our position.
+		$VerticalEdge.position = Vector2((-1) * (size + 2)/2, (-1) * (size + 2) * sqrt(3) / 6)
+	# Set particle color XXX else block to handle split color case
+	if !is_marked_for_clear():
+		$CPUParticles2D.color = highlightColors[particleColor]
 
 # find neighbors that match with this cell, and mark both for clear.
 func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
