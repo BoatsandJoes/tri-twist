@@ -12,7 +12,7 @@ TriangleCell = ExtResource( 3 )
 [node name="GhostLine" type="Line2D" parent="."]
 z_index = 1
 width = 5.0
-default_color = Color( 1, 1, 1, 0.0784314 )
+default_color = Color( 1, 1, 1, 0.784314 )
 texture_mode = 111
 
 [node name="DropTimer" type="Timer" parent="."]

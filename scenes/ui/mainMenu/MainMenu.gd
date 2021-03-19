@@ -28,7 +28,8 @@ const taglines: Array = [
 "Oh no! It's boiling acid!", #Security guard from near the beginning of Batman Forever
 "A wagon full of pancakes? In the championship? I'd like to see it try", #Homestar Runner: Strong Bad Email #117 "Montage"
 "I wanna take you for a ride", #Lyrics from the Marvel vs Capcom 2: New Age of Heroes character select theme
-"I don't know who it is, but it probably is fhqwhgads" #Homestar Runner: Everybody to the Limit
+"I don't know who it is, but it probably is fhqwhgads", #Homestar Runner: Everybody to the Limit
+"No copyright infringement intended, all rights to their original owners" #Often posted under blatantly infringing Youtube videos
 ]
 
 # Called when the node enters the scene tree for the first time.

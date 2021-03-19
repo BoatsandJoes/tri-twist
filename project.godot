@@ -14,6 +14,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/ui/ComboDisplay.gd"
 }, {
+"base": "Control",
+"class": "Credits",
+"language": "GDScript",
+"path": "res://scenes/ui/mainMenu/Credits.gd"
+}, {
 "base": "GameScene",
 "class": "DigMode",
 "language": "GDScript",
@@ -64,7 +69,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/ui/ScoreDisplay.gd"
 }, {
-"base": "Control",
+"base": "MarginContainer",
 "class": "Settings",
 "language": "GDScript",
 "path": "res://scenes/ui/mainMenu/Settings.gd"
@@ -91,6 +96,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "ComboDisplay": "",
+"Credits": "",
 "DigMode": "",
 "GameGrid": "",
 "GameScene": "",
@@ -112,6 +118,8 @@ _global_script_class_icons={
 
 config/name="TriTwist"
 run/main_scene="res://scenes/ui/mainMenu/Main.tscn"
+boot_splash/image="res://assets/sprites/FMOD_LOGOS/FMOD Logo White - Black Background.png"
+boot_splash/fullsize=false
 config/icon="res://icon.png"
 
 [display]
@@ -149,6 +157,7 @@ ui_cancel={
 , Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777220,"unicode":0,"echo":false,"script":null)
 , Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777217,"unicode":0,"echo":false,"script":null)
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":3,"pressure":0.0,"pressed":false,"script":null)
+, Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":2,"pressed":false,"doubleclick":false,"script":null)
  ]
 }
 ui_left={
@@ -157,6 +166,8 @@ ui_left={
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":14,"pressure":0.0,"pressed":false,"script":null)
 , Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":0,"axis_value":-1.0,"script":null)
 , Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":65,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":4,"pressure":0.0,"pressed":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":6,"pressure":0.0,"pressed":false,"script":null)
  ]
 }
 ui_right={
@@ -165,6 +176,8 @@ ui_right={
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":15,"pressure":0.0,"pressed":false,"script":null)
 , Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":0,"axis_value":1.0,"script":null)
 , Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":68,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":5,"pressure":0.0,"pressed":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":7,"pressure":0.0,"pressed":false,"script":null)
  ]
 }
 ui_up={

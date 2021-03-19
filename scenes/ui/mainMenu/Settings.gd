@@ -1,4 +1,4 @@
-extends Control
+extends MarginContainer
 class_name Settings
 
 # Declare member variables here. Examples:

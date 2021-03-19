@@ -1,8 +1,18 @@
 # tri-twist
+must do:
+	support different resolutions
+	how to play
+	sound
+
+nice:
+	mouse support
+	button config
+	device select
+	nicer visuals
+
 todo:
 	"are you sure?" on quit
 	adjust chain length bonus (logorithmic, or keep current system but cap the per link score at some point)
-	cooldown on drop to prevent double tap (probably want this to be configurable, since it could eat your input. even if on, it should release if you push left or right or rotate, I guess)
 	undo in brain mode
 	hook up sound events
 	visuals:  
@@ -19,15 +29,12 @@ todo:
 		topple effect
 		backgrounds
 		ui panels
-	controller support
 	mouse support
 		hover to move active piece
 		mouse buttons are bound same way as keyboard keys
-		default scheme is left click hard drop, right click rotate clockwise, middle click soft drop, mouse 5 rotate counterclockwise
-	credits/license
 	how to play screens
 		core mechanics
-			controls (left, right, rotate, soft drop, hard drop)
+			controls (left, right, rotate, soft drop, hard drop, pause)
 			triangles tumble and balance
 			when they settle, they match same color edges
 			after that, they knock balancing pieces over
@@ -37,6 +44,7 @@ todo:
 		go go go
 			chains pop after a certain amount of time, or at the cap (currently 5). Crucially, you can drop other pieces in between.
 			time limit
+			dropping pieces costs a tiny amount of points, but more matches is still better! Try to make big matches to score big!
 		dig deep
 			same as go go go but you start with three rows of garbage
 			dig out all but the bottom row to get more. Whenever you do, you get 50000 points!
@@ -45,9 +53,12 @@ todo:
 			active/sequential chain
 			chain length
 				Can circumvent cap with double trouble, hat trick, brain chain
+			lucky chain
+				worth only 1 point, counts toward cap
 			double trouble
 			hat trick
 			simulchaineous
+				just for fun because I like the name, worth only 1 point
 			brain chain
 	custom mode
 		Chain mode
@@ -58,6 +69,7 @@ todo:
 		time limit
 		move limit
 		force drop
+		garbage
 	settings
 		DAS
 		ARR
@@ -66,6 +78,9 @@ todo:
 		double drop prevention
 		are you sure? on restart on/off
 		are you sure? on back to menu on/off
+		confine mouse to window
+		hide cursor
+		device select
 		button config
 			pause
 			quick reset
@@ -76,6 +91,7 @@ todo:
 			move left
 			move right
 			ui accept
+			ui escape
 			ui back
 			ui up
 			ui down
@@ -196,14 +212,5 @@ Titles:
 	Twist and Shout
 	Chain Train
 	Triple Threat
-
-Credits  
-Joe  
-Timo (Sound blaster, loud boy)  
-Crimefighter, Shadow President Illuminati Beta Government (playtesting, came up with idea of edge match clear)  
-Jackie Clam (office pet)
-Birdie (chief executive in charge of being a cutie patootie)
-Amy Rose Gronkowski (Had numerous sick ideas) (credit for Japanese localization that doesn't exist, or as a kickstarter backer which also does not exist) (Good opinion haver (likes Daikatana)) (balancing, no, the other kind of balancing)  
-BethBat (playtesting)
-FMod license  
-Godot license  
+	Triangle
+	Untitled Untriangle

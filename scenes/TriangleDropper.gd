@@ -137,7 +137,7 @@ func set_color_count(value):
 
 func draw_ghost_pieces():
 	ghostLinePoints = PoolVector2Array()
-	ghostLinePoints.append(activePiece.position)
+	ghostLinePoints.append(Vector2(activePiece.position[0], activePiece.position[1] + activePiece.size * sqrt(3) / 6))
 	if gameGrid.drop_piece(activePiece, false):
 		ghostPiece.init(gameGrid.cellSize, activePiece.rowIndex - 1, activePiece.columnIndex,
 			gameGrid.get_position_for_cell(activePiece.rowIndex - 1, activePiece.columnIndex,
