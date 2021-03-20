@@ -5,10 +5,15 @@ must do:
 	sound
 
 nice:
+	saving
+		config
+		scores
+		seen tutorial
 	mouse support
 	button config
 	device select
 	nicer visuals
+	colorblind mode
 
 todo:
 	"are you sure?" on quit
