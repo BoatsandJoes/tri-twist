@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scenes/ui/mainMenu/ModeSelect.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/agane/Agane╠Ç 55 (roman).ttf" type="DynamicFontData" id=2]
@@ -39,6 +39,14 @@ size = 48
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=10]
+size = 48
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=11]
+size = 48
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=12]
 size = 48
 font_data = ExtResource( 2 )
 
@@ -89,31 +97,38 @@ custom_constants/separation = 5
 alignment = 1
 
 [node name="TakeYourTime" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 364.0
+margin_top = 335.0
 margin_right = 348.0
-margin_bottom = 418.0
+margin_bottom = 389.0
 custom_fonts/font = SubResource( 3 )
 text = "Take your time"
 
 [node name="GoGoGo" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 423.0
+margin_top = 394.0
 margin_right = 348.0
-margin_bottom = 477.0
+margin_bottom = 448.0
 custom_fonts/font = SubResource( 4 )
 text = "Go go go"
 
 [node name="DigMode" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 482.0
+margin_top = 453.0
 margin_right = 348.0
-margin_bottom = 536.0
+margin_bottom = 507.0
 custom_fonts/font = SubResource( 5 )
 text = "Dig deep"
 
-[node name="Back" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 541.0
+[node name="Triathalon" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+margin_top = 512.0
 margin_right = 348.0
-margin_bottom = 595.0
+margin_bottom = 566.0
 custom_fonts/font = SubResource( 6 )
+text = "Triathalon"
+
+[node name="Back" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+margin_top = 571.0
+margin_right = 348.0
+margin_bottom = 625.0
+custom_fonts/font = SubResource( 7 )
 text = "Back"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
@@ -124,30 +139,37 @@ custom_constants/separation = 13
 alignment = 1
 
 [node name="TakeYourTimeArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
-margin_top = 364.0
+margin_top = 334.0
 margin_right = 29.0
-margin_bottom = 412.0
-custom_fonts/font = SubResource( 7 )
+margin_bottom = 382.0
+custom_fonts/font = SubResource( 8 )
 text = "<"
 
 [node name="GoGoGoArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
-margin_top = 425.0
+margin_top = 395.0
 margin_right = 29.0
-margin_bottom = 473.0
-custom_fonts/font = SubResource( 8 )
-
-[node name="DigModeArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
-margin_top = 486.0
-margin_right = 29.0
-margin_bottom = 534.0
+margin_bottom = 443.0
 custom_fonts/font = SubResource( 9 )
 
-[node name="BackArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
-margin_top = 547.0
+[node name="DigModeArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+margin_top = 456.0
 margin_right = 29.0
-margin_bottom = 595.0
+margin_bottom = 504.0
 custom_fonts/font = SubResource( 10 )
+
+[node name="TriathalonArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+margin_top = 517.0
+margin_right = 29.0
+margin_bottom = 565.0
+custom_fonts/font = SubResource( 11 )
+
+[node name="BackArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+margin_top = 578.0
+margin_right = 29.0
+margin_bottom = 626.0
+custom_fonts/font = SubResource( 12 )
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/TakeYourTime" to="." method="_on_TakeYourTime_pressed"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/GoGoGo" to="." method="_on_GoGoGo_pressed"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/DigMode" to="." method="_on_DigMode_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Triathalon" to="." method="_on_Triathalon_pressed"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Back" to="." method="_on_Back_pressed"]

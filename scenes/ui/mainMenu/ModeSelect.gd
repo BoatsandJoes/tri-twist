@@ -5,6 +5,7 @@ signal back
 signal take_your_time
 signal gogogo
 signal dig_mode
+signal triathalon
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -32,9 +33,12 @@ func _input(event):
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = ""
 				$MarginContainer/HBoxContainer/VBoxContainer2/GoGoGoArrow.text = "<"
+			elif $MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text == "<":
+				$MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text = ""
+				$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = "<"
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = "<"
+				$MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text = "<"
 		elif event.is_action_pressed("ui_down"):
 			if $MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text = ""
@@ -44,6 +48,9 @@ func _input(event):
 				$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = "<"
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = ""
+				$MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text = "<"
+			elif $MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text == "<":
+				$MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text = ""
 				$MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text = "<"
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text = ""
@@ -55,20 +62,22 @@ func _input(event):
 				_on_GoGoGo_pressed()
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text == "<":
 				_on_DigMode_pressed()
+			elif $MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text == "<":
+				_on_Triathalon_pressed()
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text == "<":
 				_on_Back_pressed()
 
 func _on_Back_pressed():
 	emit_signal("back")
 
-
 func _on_TakeYourTime_pressed():
 	emit_signal("take_your_time")
-
 
 func _on_GoGoGo_pressed():
 	emit_signal("gogogo")
 
-
 func _on_DigMode_pressed():
 	emit_signal("dig_mode")
+
+func _on_Triathalon_pressed():
+	emit_signal("triathalon")

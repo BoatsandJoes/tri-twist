@@ -93,6 +93,11 @@ _global_script_classes=[ {
 "class": "TriangleDropper",
 "language": "GDScript",
 "path": "res://scenes/TriangleDropper.gd"
+}, {
+"base": "GameScene",
+"class": "Triathalon",
+"language": "GDScript",
+"path": "res://scenes/modes/Triathalon.gd"
 } ]
 _global_script_class_icons={
 "ComboDisplay": "",
@@ -111,7 +116,8 @@ _global_script_class_icons={
 "TakeYourTime": "",
 "TitleScreen": "",
 "TriangleCell": "",
-"TriangleDropper": ""
+"TriangleDropper": "",
+"Triathalon": ""
 }
 
 [application]

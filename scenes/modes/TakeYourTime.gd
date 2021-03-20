@@ -3,13 +3,7 @@ class_name TakeYourTime
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	triangleDropper.gameGrid.toggle_chain_mode(false)
-	triangleDropper.gameGrid.set_gravity(0.2)
-	hud.set_move_limit(90)
-
-func restart():
-	.parent_restart()
-	_ready()
+	prep_take_your_time()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

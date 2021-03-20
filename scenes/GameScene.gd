@@ -31,6 +31,29 @@ func _ready():
 	pausePopup.connect("restart", self, "_on_PausePopup_restart")
 	pausePopup.connect("back_to_menu", self, "_on_PausePopup_back_to_menu")
 
+func prep_take_your_time():
+	triangleDropper.gameGrid.toggle_chain_mode(false)
+	triangleDropper.gameGrid.set_gravity(0.2)
+	hud.set_move_limit(60)
+	hud.set_time_limit(0, 0)
+
+func prep_gogogo():
+	triangleDropper.gameGrid.toggle_chain_mode(true)
+	triangleDropper.gameGrid.set_gravity(0.2)
+	triangleDropper.connect("piece_sequence_advanced", self, "_on_triangleDropper_piece_sequence_advanced")
+	hud.set_move_limit(0)
+	hud.set_time_limit(2, 0)
+	triangleDropper.enable_dropping()
+
+func prep_dig():
+	triangleDropper.gameGrid.toggle_chain_mode(true)
+	triangleDropper.gameGrid.set_gravity(0.2)
+	hud.set_time_limit(2, 0)
+	triangleDropper.gameGrid.fill_bottom_rows(3)
+	triangleDropper.gameGrid.digMode = true
+	triangleDropper.gameGrid.connect("garbage_rows", self, "_on_gameGrid_garbage_rows")
+	triangleDropper.enable_dropping()
+
 func _input(event):
 	if ((event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton)
 	&& event.is_action_pressed("pause")):

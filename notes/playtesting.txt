@@ -7,6 +7,32 @@ Beth
 	she turned arr from 0.05 up to 0.1 instead of down  
 	1 frame gravity was too fast   
 
+Beth 2:
+	didn't see move limit and was surprised when the game ended
+	gravitated towards take your time, would never have played go go go if I didn't ask her to, probably
+	liked simulchaineous
+	immediately noticed new bar in gogogo
+	moved piece 1 to the left and immediately placed without looking; thought the yellow would go on the right but it actually went on the left
+	in dig deep didn't realize that you want to clear out all rows above the bottom, thought the goal was to get an all clear in the lowest amount of moves or time
+		nice thing about this would be that it wouldn't matter if you're slow, you could still make it in time (and get fewer points or whatever)
+		bad thing is the game has to advance towards an end state somehow: there is no reason to not stay at the top making 3 chains for 1000 moves and 7 hours
+	likes the bar
+	didn't know the triathalon order
+	never did a brain chain
+	sequential chain has no bar and maybe that's a little weird
+	doesn't balance pieces ever, doesn't intuit that it's possible
+	extends chains in dig as much as possible even though it's counterproductive to digging
+	would probably say that it's easier than Catherine
+	sometimes, move rotates, so it's a little weird to say "no, THIS is rotate"
+	never looks at previews
+	after getting to the bottom in dig, Beth just stops like "I did it yay"
+	thinks of google drive logo with these colors (maybe I should replace blue with a very blue purple
+	kind of abandons chains as they get big (3+) instead of pushing them to the limit.
+	I don't think I've ever seen her start a new chain but then go back to an old chain: once a new one starts, this is the new thing
+	only didn't dig to the bottom successfully maybe once
+	didn't think anything at all of hitting the chain cap
+	likes dig mode
+
 jackie
 	high pitched whine
 	ui is on top of board a little (still applies to pause menu)

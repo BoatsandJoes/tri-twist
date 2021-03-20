@@ -62,6 +62,15 @@ func set_grid_height(value):
 	gridHeight = value
 	initialize_grid()
 
+func has_no_filled_cells_above_row_index(index: int) -> bool:
+	index = index + 1
+	while(index < grid.size()):
+		for cell in grid[index]:
+			if !cell.is_empty():
+				return false
+		index = index + 1
+	return true
+
 func fill_bottom_rows(rows: int):
 	for rowIndex in range(rows):
 		for cell in grid[rowIndex]:
@@ -157,34 +166,36 @@ func _process(delta):
 					break
 			digRowIndex = digRowIndex - 1
 		if rowsEmpty:
-			digRowIndex = grid.size() - 1
-			while digRowIndex > 1:
-				for cellIndex in grid[digRowIndex].size():
-					grid[digRowIndex][cellIndex].set_colors(grid[digRowIndex - 2][cellIndex].leftColor,
-					grid[digRowIndex - 2][cellIndex].rightColor, grid[digRowIndex - 2][cellIndex].verticalColor)
-					grid[digRowIndex][cellIndex].wasHardDroppedMostRecently = (
-					grid[digRowIndex - 2][cellIndex].wasHardDroppedMostRecently)
-					if grid[digRowIndex - 2][cellIndex].is_marked_for_clear():
-						# Highlights.
-						if (grid[digRowIndex - 2][cellIndex].get_node("LeftEdge").get_color() ==
-						grid[digRowIndex][cellIndex].highlightColors[grid[digRowIndex][cellIndex].leftColor]):
-							grid[digRowIndex][cellIndex].highlight_edge(grid[digRowIndex][cellIndex].Direction.LEFT)
-						if (grid[digRowIndex - 2][cellIndex].get_node("RightEdge").get_color() ==
-						grid[digRowIndex][cellIndex].highlightColors[grid[digRowIndex][cellIndex].rightColor]):
-							grid[digRowIndex][cellIndex].highlight_edge(grid[digRowIndex][cellIndex].Direction.RIGHT)
-						if (grid[digRowIndex - 2][cellIndex].get_node("VerticalEdge").get_color() ==
-						grid[digRowIndex][cellIndex].highlightColors[grid[digRowIndex][cellIndex].verticalColor]):
-							grid[digRowIndex][cellIndex].highlight_edge(grid[digRowIndex][cellIndex].Direction.VERTICAL)
-						grid[digRowIndex][cellIndex].get_node("ClearTimer").start(
-						grid[digRowIndex - 2][cellIndex].get_node("ClearTimer").get_time_left())
-					grid[digRowIndex][cellIndex].fallType = grid[digRowIndex - 2][cellIndex].fallType
-					grid[digRowIndex][cellIndex].tumbleDirection = grid[digRowIndex - 2][cellIndex].tumbleDirection
-					if grid[digRowIndex - 2][cellIndex].is_falling():
-						grid[digRowIndex][cellIndex].get_node("GravityTimer").start(
-						grid[digRowIndex - 2][cellIndex].get_node("GravityTimer").get_time_left())
-				digRowIndex = digRowIndex - 1
+			move_up_rows(grid.size() - 1)
 			fill_bottom_rows(2)
 			emit_signal("garbage_rows")
+
+func move_up_rows(digRowIndex: int):
+	while digRowIndex > 1:
+		for cellIndex in grid[digRowIndex].size():
+			grid[digRowIndex][cellIndex].set_colors(grid[digRowIndex - 2][cellIndex].leftColor,
+			grid[digRowIndex - 2][cellIndex].rightColor, grid[digRowIndex - 2][cellIndex].verticalColor)
+			grid[digRowIndex][cellIndex].wasHardDroppedMostRecently = (
+			grid[digRowIndex - 2][cellIndex].wasHardDroppedMostRecently)
+			if grid[digRowIndex - 2][cellIndex].is_marked_for_clear():
+				# Highlights.
+				if (grid[digRowIndex - 2][cellIndex].get_node("LeftEdge").get_modulate() ==
+				Color(1.75, 1.75, 1.75)):
+					grid[digRowIndex][cellIndex].highlight_edge(grid[digRowIndex][cellIndex].Direction.LEFT)
+				if (grid[digRowIndex - 2][cellIndex].get_node("RightEdge").get_modulate() ==
+				Color(1.75, 1.75, 1.75)):
+					grid[digRowIndex][cellIndex].highlight_edge(grid[digRowIndex][cellIndex].Direction.RIGHT)
+				if (grid[digRowIndex - 2][cellIndex].get_node("VerticalEdge").get_modulate() ==
+				Color(1.75, 1.75, 1.75)):
+					grid[digRowIndex][cellIndex].highlight_edge(grid[digRowIndex][cellIndex].Direction.VERTICAL)
+				grid[digRowIndex][cellIndex].get_node("ClearTimer").start(
+				grid[digRowIndex - 2][cellIndex].get_node("ClearTimer").get_time_left())
+			grid[digRowIndex][cellIndex].fallType = grid[digRowIndex - 2][cellIndex].fallType
+			grid[digRowIndex][cellIndex].tumbleDirection = grid[digRowIndex - 2][cellIndex].tumbleDirection
+			if grid[digRowIndex - 2][cellIndex].is_falling():
+				grid[digRowIndex][cellIndex].get_node("GravityTimer").start(
+				grid[digRowIndex - 2][cellIndex].get_node("GravityTimer").get_time_left())
+		digRowIndex = digRowIndex - 1
 
 func _on_TriangleCell_tumble():
 	emit_signal("tumble")

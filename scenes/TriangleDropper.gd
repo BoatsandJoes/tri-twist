@@ -15,6 +15,7 @@ var dropTimer = false
 var leftPressed = false
 var rightPressed = false
 var previews = []
+var droppingAllowed = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -44,6 +45,12 @@ func _ready():
 	ghostPiece = TriangleCell.instance()
 	ghostPiece.set_modulate(Color(1,1,1,0.5))
 	add_child(ghostPiece)
+
+func enable_dropping():
+	droppingAllowed = true
+
+func disable_dropping():
+	droppingAllowed = false
 
 func set_previews_visible(value):
 	for i in range(previews.size()):
@@ -89,13 +96,14 @@ func _input(event):
 			activePiece.set_colors(activePiece.verticalColor, activePiece.leftColor, activePiece.rightColor)
 		elif event.is_action_pressed("counterclockwise"):
 			activePiece.set_colors(activePiece.rightColor, activePiece.verticalColor, activePiece.leftColor)
-		elif event.is_action_pressed("soft_drop"):
-			var accepted = gameGrid.drop_piece(activePiece, true)
-			if accepted:
+		elif droppingAllowed:
+			if event.is_action_pressed("soft_drop"):
+				var accepted = gameGrid.drop_piece(activePiece, true)
+				if accepted:
+					advance_piece()
+			elif event.is_action_pressed("hard_drop") && ghostPiece.visible:
+				gameGrid.hard_drop(ghostPiece)
 				advance_piece()
-		elif event.is_action_pressed("hard_drop") && ghostPiece.visible:
-			gameGrid.hard_drop(ghostPiece)
-			advance_piece()
 
 func set_drop_timer(value):
 	if value == 0:

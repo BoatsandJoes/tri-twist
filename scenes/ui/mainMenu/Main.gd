@@ -11,6 +11,7 @@ var Credits = load("res://scenes/ui/mainMenu/Credits.tscn")
 var TakeYourTime = load("res://scenes/modes/TakeYourTime.tscn")
 var GoGoGo = load("res://scenes/modes/GoGoGo.tscn")
 var DigMode = load("res://scenes/modes/DigMode.tscn")
+var Triathalon = load("res://scenes/modes/Triathalon.tscn")
 var menu
 var game
 
@@ -63,6 +64,7 @@ func go_to_mode_select():
 	menu.connect("take_your_time", self, "_on_ModeSelect_take_your_time")
 	menu.connect("gogogo", self, "_on_ModeSelect_gogogo")
 	menu.connect("dig_mode", self, "_on_ModeSelect_dig_mode")
+	menu.connect("triathalon", self, "_on_ModeSelect_triathalon")
 	menu.connect("back", self, "_on_ModeSelect_back")
 
 func go_to_take_your_time_mode():
@@ -94,6 +96,16 @@ func go_to_dig_mode():
 	add_child(game)
 	game.connect("back_to_menu", self, "_on_game_back_to_menu")
 	game.connect("restart", self, "go_to_dig_mode")
+
+func go_to_triathalon_mode():
+	if menu != null && weakref(menu).get_ref():
+		menu.queue_free()
+	if game != null && weakref(game).get_ref():
+		game.queue_free()
+	game = Triathalon.instance()
+	add_child(game)
+	game.connect("back_to_menu", self, "_on_game_back_to_menu")
+	game.connect("restart", self, "go_to_triathalon_mode")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -131,6 +143,9 @@ func _on_ModeSelect_gogogo():
 
 func _on_ModeSelect_dig_mode():
 	go_to_dig_mode()
+
+func _on_ModeSelect_triathalon():
+	go_to_triathalon_mode()
 
 func _on_ModeSelect_back():
 	go_to_main_menu()

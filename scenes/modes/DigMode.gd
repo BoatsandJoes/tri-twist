@@ -7,12 +7,7 @@ class_name DigMode
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	triangleDropper.gameGrid.toggle_chain_mode(true)
-	triangleDropper.gameGrid.set_gravity(0.2)
-	hud.set_time_limit(2, 0)
-	triangleDropper.gameGrid.fill_bottom_rows(3)
-	triangleDropper.gameGrid.digMode = true
-	triangleDropper.gameGrid.connect("garbage_rows", self, "_on_gameGrid_garbage_rows")
+	prep_dig()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

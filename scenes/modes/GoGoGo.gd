@@ -3,10 +3,7 @@ class_name GoGoGo
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	triangleDropper.gameGrid.toggle_chain_mode(true)
-	triangleDropper.gameGrid.set_gravity(0.2)
-	triangleDropper.connect("piece_sequence_advanced", self, "_on_triangleDropper_piece_sequence_advanced")
-	hud.set_time_limit(2, 0)
+	prep_gogogo()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

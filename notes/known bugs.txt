@@ -1,6 +1,11 @@
 * pieces clearing pushes pieces in non-deterministic directions depending on clear order (move clear vertical_point into new method that clears the chain without pushing, and then write a second method that checks the whole grid for pieces that should fall and how, which will be called in a pair with clear())
 * got a gravity bug on video
-* game end has odd behavior (doesn't clear all sequential chains, not on video, maybe it was a lucky chain?), seems to clear too many things in go go go (on video), ended game too early in go go go one time (on video)
+* game end has odd behavior (doesn't clear lucky chains), seems to clear too many things in go go go (on video), ended game too early in go go go one time (on video)
+* saw a triangle clear with point facing up, balancing triangle above tumbled to the right
+* dig mode transition in triathalon unconditionally overwrites rows instead of conditionally moving them up
+* clicking buttons doesn't work on pause menu
+* in triathalon dig, there was a piece that cleared individually somehow
+* 4:3 monitor + 16:9 monitor = huhhh???
 
 might be fixed
 * saw a case where it looked like two chains didn't combine properly in active chain mode (only one chain actually active, it got stuck in "other chains" while the displayed chain "simulchaineous" kept counting up)

@@ -347,33 +347,33 @@ func highlight_edge(edge: int):
 		particleColor = leftColor
 		var leftEdgeVectorArray = PoolVector2Array()
 		leftEdgeVectorArray.append(Vector2(0, 0))
-		leftEdgeVectorArray.append(Vector2((size + 4)/2, (size + 4) * sqrt(3) / 2))
-		leftEdgeVectorArray.append(Vector2((size + 4)/2, (size + 4) * sqrt(3) / 6))
+		leftEdgeVectorArray.append(Vector2((size + 6)/2, (size + 6) * sqrt(3) / 2))
+		leftEdgeVectorArray.append(Vector2((size + 6)/2, (size + 6) * sqrt(3) / 6))
 		$LeftEdge.set_polygon(leftEdgeVectorArray)
 		# Move polygon to center on our position.
-		$LeftEdge.position = Vector2((-1) * (size + 4)/2, (-1) * (size + 4) * sqrt(3) / 6)
+		$LeftEdge.position = Vector2((-1) * (size + 6)/2, (-1) * (size + 6) * sqrt(3) / 6)
 	if Direction.RIGHT == edge:
 		$RightEdge.set_modulate(Color(1.75,1.75,1.75))
 		particleColor = rightColor
 		# right
 		var rightEdgeVectorArray = PoolVector2Array()
-		rightEdgeVectorArray.append(Vector2((size + 4), 0))
-		rightEdgeVectorArray.append(Vector2((size + 4)/2, (size + 4) * sqrt(3) / 2))
-		rightEdgeVectorArray.append(Vector2((size + 4)/2, (size + 4) * sqrt(3) / 6))
+		rightEdgeVectorArray.append(Vector2((size + 6), 0))
+		rightEdgeVectorArray.append(Vector2((size + 6)/2, (size + 6) * sqrt(3) / 2))
+		rightEdgeVectorArray.append(Vector2((size + 6)/2, (size + 6) * sqrt(3) / 6))
 		$RightEdge.set_polygon(rightEdgeVectorArray)
 		# Move polygon to center on our position.
-		$RightEdge.position = Vector2((-1) * (size + 4)/2, (-1) * (size + 4) * sqrt(3) / 6)
+		$RightEdge.position = Vector2((-1) * (size + 6)/2, (-1) * (size + 6) * sqrt(3) / 6)
 	elif Direction.VERTICAL == edge:
 		$VerticalEdge.set_modulate(Color(1.75,1.75,1.75))
 		particleColor = verticalColor
 		# vertical
 		var verticalEdgeVectorArray = PoolVector2Array()
 		verticalEdgeVectorArray.append(Vector2(0, 0))
-		verticalEdgeVectorArray.append(Vector2((size + 4), 0))
-		verticalEdgeVectorArray.append(Vector2((size + 4)/2, (size + 4) * sqrt(3) / 6))
+		verticalEdgeVectorArray.append(Vector2((size + 6), 0))
+		verticalEdgeVectorArray.append(Vector2((size + 6)/2, (size + 6) * sqrt(3) / 6))
 		$VerticalEdge.set_polygon(verticalEdgeVectorArray)
 		# Move polygon to center on our position.
-		$VerticalEdge.position = Vector2((-1) * (size + 4)/2, (-1) * (size + 4) * sqrt(3) / 6)
+		$VerticalEdge.position = Vector2((-1) * (size + 6)/2, (-1) * (size + 6) * sqrt(3) / 6)
 	# Set particle color XXX else block to handle split color case
 	if !is_marked_for_clear():
 		$CPUParticles2D.color = highlightColors[particleColor]

@@ -18,7 +18,9 @@ func init(startValue: int):
 	incrementing = startValue == 0
 	$HBoxContainer/MovesValue.text = String(startValue)
 	if !incrementing:
-		$HBoxContainer/MovesLabel.text = "Moves Left:"
+		$HBoxContainer/MovesLabel.text = "Moves Left "
+	else:
+		$HBoxContainer/MovesLabel.text = "Moves "
 
 func make_move():
 	if incrementing:
