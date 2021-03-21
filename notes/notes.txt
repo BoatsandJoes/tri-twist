@@ -20,7 +20,8 @@ todo:
 	adjust chain length bonus (logorithmic, or keep current system but cap the per link score at some point)
 	undo in brain mode
 	hook up sound events
-	visuals:  
+	visuals:
+		horizontal line for dig mode
 		make score - display not shunt the number to the side
 		fix ghost line visibility (maybe 2nd ghost piece)
 		light up ghost piece if it will match?  

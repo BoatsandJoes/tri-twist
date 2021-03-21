@@ -14,6 +14,7 @@ func _ready():
 	pass # Replace with function body.
 
 func init(startValue: int):
+	$HBoxContainer/MovesValue.set_modulate(Color(1,1,1))
 	startingValue = startValue
 	currentValue = startValue
 	incrementing = startValue == 0
@@ -34,6 +35,7 @@ func make_move():
 			emit_signal("out_of_moves")
 		elif currentValue <= 10:
 				if warningsLeft == 6:
+					$HBoxContainer/MovesValue.set_modulate(Color(0.870588, 0.4, 0.117647))
 					warningsLeft = 5
 					#TODO sound sfx "10 moves left"
 				elif currentValue <= warningsLeft:

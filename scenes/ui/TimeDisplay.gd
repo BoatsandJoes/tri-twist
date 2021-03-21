@@ -14,6 +14,7 @@ func _ready():
 	pass # Replace with function body.
 
 func init(minutes: int, seconds: int):
+	$VBoxContainer/TimeValue.set_modulate(Color(1,1,1))
 	incrementing = minutes == 0 && seconds == 0
 	if !incrementing:
 		currentTime = minutes * 60.0 + seconds
@@ -44,6 +45,7 @@ func _process(delta):
 			update_time_string()
 			if currentTime <= 10.0:
 				if warningsLeft == 6:
+					$VBoxContainer/TimeValue.set_modulate(Color(0.870588, 0.4, 0.117647))
 					warningsLeft = 5
 					#TODO sound sfx "10 seconds left"
 				elif currentTime <= warningsLeft:
