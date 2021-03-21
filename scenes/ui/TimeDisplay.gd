@@ -7,6 +7,7 @@ signal out_of_time
 
 var currentTime: float = 0.0
 var incrementing: bool = true
+var warningsLeft = 6
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -41,3 +42,10 @@ func _process(delta):
 			emit_signal("out_of_time")
 		else:
 			update_time_string()
+			if currentTime <= 10.0:
+				if warningsLeft == 6:
+					warningsLeft = 5
+					#TODO sound sfx "10 seconds left"
+				elif currentTime <= warningsLeft:
+					warningsLeft = warningsLeft - 1
+					#TODO sound sfx "5 4 3 2 1 seconds left"

@@ -256,6 +256,7 @@ func end_combo_if_exists(comboKey):
 		# emit combo score.
 		emit_signal("combo_done", combos.get(comboKey).get("scoreTotal"))
 		combos.erase(comboKey)
+		#TODO sound sfx "pieces clearing"
 
 func _on_CompleteScorecardTimer_timeout():
 	displayedComboKey = null

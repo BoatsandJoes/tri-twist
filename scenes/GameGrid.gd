@@ -72,6 +72,7 @@ func has_no_filled_cells_above_row_index(index: int) -> bool:
 	return true
 
 func fill_bottom_rows(rows: int):
+	#TODO sound sfx "incoming garbage"
 	for rowIndex in range(rows):
 		for cell in grid[rowIndex]:
 			cell.fill_without_matching_neighbors()
@@ -103,6 +104,7 @@ func hard_drop(piece: TriangleCell):
 		for columnIndex in range(grid[rowIndex].size()):
 			grid[rowIndex][columnIndex].wasHardDroppedMostRecently = false
 	grid[piece.rowIndex][piece.columnIndex].spawn_piece(piece)
+	# TODO sound sfx optional "hard drop"
 
 # Gets the position in which to draw the cell with the passed indices
 func get_position_for_cell(rowIndex: int, columnIndex: int, flipped: bool) -> Vector2:

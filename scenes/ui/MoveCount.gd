@@ -7,6 +7,7 @@ signal out_of_moves
 var startingValue: int = 0
 var currentValue: int = 0
 var incrementing = true
+var warningsLeft = 6
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -31,6 +32,13 @@ func make_move():
 		$HBoxContainer/MovesValue.text = String(currentValue)
 		if currentValue < 1:
 			emit_signal("out_of_moves")
+		elif currentValue <= 10:
+				if warningsLeft == 6:
+					warningsLeft = 5
+					#TODO sound sfx "10 moves left"
+				elif currentValue <= warningsLeft:
+					warningsLeft = warningsLeft - 1
+					#TODO sound sfx "5 4 3 2 1 moves left"
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

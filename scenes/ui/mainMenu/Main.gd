@@ -17,6 +17,7 @@ var game
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	# TODO sound music start playing menu music
 	go_to_title()
 
 func exit_game():
@@ -59,6 +60,8 @@ func go_to_mode_select():
 		menu.queue_free()
 	if game != null && weakref(game).get_ref():
 		game.queue_free()
+		#TODO sound music if gogogo music is playing, stop playing it
+		#TODO sound music if take your time/menu music is not already playing, start playing menu music
 	menu = ModeSelect.instance()
 	add_child(menu)
 	menu.connect("take_your_time", self, "_on_ModeSelect_take_your_time")
@@ -70,6 +73,7 @@ func go_to_mode_select():
 func go_to_take_your_time_mode():
 	if menu != null && weakref(menu).get_ref():
 		menu.queue_free()
+		# We would start playing take your time music here, but currently thinking it will be the same as the menu music
 	if game != null && weakref(game).get_ref():
 		game.queue_free()
 	game = TakeYourTime.instance()
@@ -80,6 +84,8 @@ func go_to_take_your_time_mode():
 func go_to_gogogo_mode():
 	if menu != null && weakref(menu).get_ref():
 		menu.queue_free()
+		#TODO sound music stop playing menu music
+		#TODO sound music start playing gogogo music
 	if game != null && weakref(game).get_ref():
 		game.queue_free()
 	game = GoGoGo.instance()
@@ -90,6 +96,8 @@ func go_to_gogogo_mode():
 func go_to_dig_mode():
 	if menu != null && weakref(menu).get_ref():
 		menu.queue_free()
+		#TODO sound music stop playing menu music
+		#TODO sound music start playing dig mode music
 	if game != null && weakref(game).get_ref():
 		game.queue_free()
 	game = DigMode.instance()
@@ -100,6 +108,7 @@ func go_to_dig_mode():
 func go_to_triathalon_mode():
 	if menu != null && weakref(menu).get_ref():
 		menu.queue_free()
+		# We would start playing take your time music here, but currently thinking it will be the same as the menu music
 	if game != null && weakref(game).get_ref():
 		game.queue_free()
 	game = Triathalon.instance()

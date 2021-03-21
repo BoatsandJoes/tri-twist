@@ -212,6 +212,7 @@ func after_fill_checks(leftNeighbor, rightNeighbor):
 					else:
 						# Pushing.
 						leftNeighbor.enter_falling_state(Direction.LEFT, FallType.PUSH)
+						#TODO sound sfx optional "toppling balancing piece"
 			if rightNeighbor != null && !rightNeighbor.is_empty():
 				var neighborsNeighbor = get_parent().get_neighbor(
 					rightNeighbor.rowIndex, rightNeighbor.columnIndex, Direction.RIGHT)
@@ -222,6 +223,7 @@ func after_fill_checks(leftNeighbor, rightNeighbor):
 					else:
 						# Pushing.
 						rightNeighbor.enter_falling_state(Direction.RIGHT, FallType.PUSH)
+						#TODO sound sfx optional "toppling balancing piece"
 	if !is_marked_for_clear() && !is_falling() && !activeChainMode && fallType == FallType.DROP:
 		# Don't set off if we just hit the sequential chain cap
 		if sequentialChainCapFlag:
@@ -574,6 +576,7 @@ func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Diction
 			existingBrainChainCount = existingChain.get("brainChainCount")
 		existingBrainChainCount = existingBrainChainCount + 1
 		existingChain["brainChainCount"] = existingBrainChainCount
+		#TODO sound sfx "extra points match"
 	elif fallType == FallType.CLEAR:
 		# Lucky chain (fewer points, to make mashing weaker)
 		var existingLuckyChainCount: int = 0
@@ -581,8 +584,8 @@ func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Diction
 			existingLuckyChainCount = existingChain.get("luckyChainCount")
 		existingLuckyChainCount = existingLuckyChainCount + 1
 		existingChain["luckyChainCount"] = existingLuckyChainCount
+		#TODO sound sfx optional "this match is worth like 1 point"
 	else:
-		# TODO make piece falling down from above a pushed piece count as a push, not a clear
 		if !activeChainMode:
 			# Sequential chain
 			var existingSequentialChainCount: int = 0
@@ -590,6 +593,7 @@ func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Diction
 				existingSequentialChainCount = existingChain.get("sequentialChainCount")
 			existingSequentialChainCount = existingSequentialChainCount + 1
 			existingChain["sequentialChainCount"] = existingSequentialChainCount
+		#TODO sound sfx "normal match, changes pitch depending on 'sequentialChainCount' 1 through 5"
 		else:
 			if lowestTimeLeft > $ClearTimer.wait_time - quickChainCutoff:
 				# Quick chain
@@ -605,6 +609,7 @@ func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Diction
 					existingActiveChainCount = existingChain.get("activeChainCount")
 				existingActiveChainCount = existingActiveChainCount + 1
 				existingChain["activeChainCount"] = existingActiveChainCount
+				#TODO sound sfx "normal match, changes pitch depending on 'activeChainCount' 1 through 5"
 	return existingChain
 
 func clear_self_and_matching_neighbors(alreadyCheckedCoordinates: Array):

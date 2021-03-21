@@ -5,7 +5,7 @@
 * dig mode transition in triathalon unconditionally overwrites rows instead of conditionally moving them up
 * clicking buttons doesn't work on pause menu
 * in triathalon dig, there was a piece that cleared individually somehow
-* 4:3 monitor + 16:9 monitor = huhhh???
+* 4:3 + 16:9 dual monitor = strange behavior when 4:3 is the primary display
 
 might be fixed
 * saw a case where it looked like two chains didn't combine properly in active chain mode (only one chain actually active, it got stuck in "other chains" while the displayed chain "simulchaineous" kept counting up)

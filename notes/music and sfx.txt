@@ -4,10 +4,10 @@ go go go mode, dig deep mode (current time limit is 2 minutes, this might change
 
 core sfx:
 piece matching
-ascending pitch sfx for connected matches of ascending quantity, capping at some number (currently 4 in Go mode and 10 in Take Your Time) (reference Petal Crash)
-"match that is worth extra points" sfx (one piece matching multiple other pieces at once, tumbling a piece into a match)
+ascending pitch sfx for connected matches of ascending quantity, capping at some number (currently 5) (reference Petal Crash)
+"match that is worth extra points" sfx (tumbling a piece into a match)
 piece actually clearing (could cascade, may also cascade visually, idk yet)
-You're close to the time/move limit (one sfx for 10 away, and another repeated for 5 4 3 2 1)
+You're close to the time/move limit (one sfx for 10 away, and repeated for 5 4 3 2 1)
 game end (I think of an annoying whistle? It doesn't need to be an annoying whistle)
 
 extra sfx:

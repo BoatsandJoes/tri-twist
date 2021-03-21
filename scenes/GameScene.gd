@@ -99,6 +99,7 @@ func _on_gameGrid_garbage_rows():
 	hud.get_node("HBoxContainer/VBoxContainer/HBoxContainer/ComboDisplay").move_combos_up()
 
 func _on_HUD_end_game():
+	#TODO sound sfx "game finished"
 	# Freeze input
 	triangleDropper.set_process_input(false)
 	triangleDropper.leftPressed = false
