@@ -8,9 +8,6 @@ var gameGrid: GameGrid
 var activePiece: TriangleCell
 var ghostPiece: TriangleCell
 var ghostLinePoints: PoolVector2Array
-const colors = [Color.royalblue, Color.crimson, Color.goldenrod, Color.webgreen, Color.orchid, Color.black]
-const focusColors = [Color.dodgerblue, Color.indianred, Color.orange, Color.seagreen, Color.magenta, Color.darkslategray]
-const highlightColors = [Color.deepskyblue, Color.deeppink, Color.gold, Color.green, Color.fuchsia]
 var dropTimer = false
 var leftPressed = false
 var rightPressed = false
@@ -113,35 +110,6 @@ func set_drop_timer(value):
 		dropTimer = true
 		$DropTimer.wait_time = value
 		$DropTimer.start()
-
-func set_color_count(value):
-	var tempColors = []
-	var tempFocusColors = []
-	var tempHighlightColors = []
-	for i in range(value):
-		tempColors.append(colors[i])
-		tempFocusColors.append(focusColors[i])
-		tempHighlightColors.append(highlightColors[i])
-	tempColors.append(colors[-1])
-	tempFocusColors.append(focusColors[-1])
-	activePiece.colors = tempColors
-	activePiece.focusColors = tempFocusColors
-	activePiece.highlightColors = tempHighlightColors
-	activePiece.set_colors(tempColors.size() - 1,tempColors.size() - 1,tempColors.size() - 1)
-	for preview in previews:
-		preview.colors = tempColors
-		preview.focusColors = tempFocusColors
-		preview.highlightColors = tempHighlightColors
-	ghostPiece.colors = tempColors
-	ghostPiece.focusColors = tempFocusColors
-	ghostPiece.highlightColors = tempHighlightColors
-	ghostPiece.set_colors(tempColors.size() - 1,tempColors.size() - 1,tempColors.size() - 1)
-	for row in gameGrid.grid:
-		for cell in row:
-			cell.colors = tempColors
-			cell.focusColors = focusColors
-			cell.highlightColors = highlightColors
-			cell.clear(tempColors.size() - 1)
 
 func draw_ghost_pieces():
 	ghostLinePoints = PoolVector2Array()

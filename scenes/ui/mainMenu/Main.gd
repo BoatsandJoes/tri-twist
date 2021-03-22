@@ -12,6 +12,7 @@ var TakeYourTime = load("res://scenes/modes/TakeYourTime.tscn")
 var GoGoGo = load("res://scenes/modes/GoGoGo.tscn")
 var DigMode = load("res://scenes/modes/DigMode.tscn")
 var Triathalon = load("res://scenes/modes/Triathalon.tscn")
+var background: ColorRect
 var menu
 var game
 
@@ -47,18 +48,18 @@ func go_to_main_menu():
 	menu.connect("exit", self, "_on_MainMenu_exit")
 
 func go_to_credits():
-	if menu != null && weakref(menu).get_ref():
+	if is_instance_valid(menu):
 		menu.queue_free()
-	if game != null && weakref(game).get_ref():
+	if is_instance_valid(game):
 		game.queue_free()
 	menu = Credits.instance()
 	add_child(menu)
 	menu.connect("back_to_menu", self, "_on_Credits_back_to_menu")
 
 func go_to_mode_select():
-	if menu != null && weakref(menu).get_ref():
+	if is_instance_valid(menu):
 		menu.queue_free()
-	if game != null && weakref(game).get_ref():
+	if is_instance_valid(game):
 		game.queue_free()
 		#TODO sound music if gogogo music is playing, stop playing it
 		#TODO sound music if take your time/menu music is not already playing, start playing menu music
@@ -71,10 +72,10 @@ func go_to_mode_select():
 	menu.connect("back", self, "_on_ModeSelect_back")
 
 func go_to_take_your_time_mode():
-	if menu != null && weakref(menu).get_ref():
+	if is_instance_valid(menu):
 		menu.queue_free()
 		# We would start playing take your time music here, but currently thinking it will be the same as the menu music
-	if game != null && weakref(game).get_ref():
+	if is_instance_valid(game):
 		game.queue_free()
 	game = TakeYourTime.instance()
 	add_child(game)
@@ -82,11 +83,11 @@ func go_to_take_your_time_mode():
 	game.connect("restart", self, "go_to_take_your_time_mode")
 
 func go_to_gogogo_mode():
-	if menu != null && weakref(menu).get_ref():
+	if is_instance_valid(menu):
 		menu.queue_free()
 		#TODO sound music stop playing menu music
 		#TODO sound music start playing gogogo music
-	if game != null && weakref(game).get_ref():
+	if is_instance_valid(game):
 		game.queue_free()
 	game = GoGoGo.instance()
 	add_child(game)
@@ -94,11 +95,11 @@ func go_to_gogogo_mode():
 	game.connect("restart", self, "go_to_gogogo_mode")
 
 func go_to_dig_mode():
-	if menu != null && weakref(menu).get_ref():
+	if is_instance_valid(menu):
 		menu.queue_free()
 		#TODO sound music stop playing menu music
 		#TODO sound music start playing dig mode music
-	if game != null && weakref(game).get_ref():
+	if is_instance_valid(game):
 		game.queue_free()
 	game = DigMode.instance()
 	add_child(game)
@@ -106,10 +107,10 @@ func go_to_dig_mode():
 	game.connect("restart", self, "go_to_dig_mode")
 
 func go_to_triathalon_mode():
-	if menu != null && weakref(menu).get_ref():
+	if is_instance_valid(menu):
 		menu.queue_free()
 		# We would start playing take your time music here, but currently thinking it will be the same as the menu music
-	if game != null && weakref(game).get_ref():
+	if is_instance_valid(game):
 		game.queue_free()
 	game = Triathalon.instance()
 	add_child(game)

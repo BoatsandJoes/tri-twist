@@ -8,9 +8,8 @@ var size: int
 enum Direction {LEFT, RIGHT, VERTICAL, VERTICAL_POINT}
 enum Rotation {CLOCKWISE, COUNTERCLOCKWISE}
 enum FallType {DROP, CLEAR, PUSH}
-var colors = [Color.royalblue, Color.crimson, Color.goldenrod, Color.webgreen, Color.black]
-var focusColors = [Color.dodgerblue, Color.indianred, Color.orange, Color.seagreen, Color.darkslategray]
-var highlightColors = [Color.deepskyblue, Color.deeppink, Color.gold, Color.green]
+var colors = [Color.darkorchid, Color.crimson, Color.goldenrod, Color.webgreen, Color.black]
+var highlightColors = [Color.fuchsia, Color.deeppink, Color.gold, Color.green]
 var leftColor: int = colors.size() - 1
 var rightColor: int = colors.size() - 1
 var verticalColor: int = colors.size() - 1
@@ -232,14 +231,9 @@ func after_fill_checks(leftNeighbor, rightNeighbor):
 			get_parent().set_off_chains()
 
 func update_colors_visually():
-	if cellFocused:
-		$LeftEdge.set_color(focusColors[leftColor])
-		$RightEdge.set_color(focusColors[rightColor])
-		$VerticalEdge.set_color(focusColors[verticalColor])
-	else:
-		$LeftEdge.set_color(colors[leftColor])
-		$RightEdge.set_color(colors[rightColor])
-		$VerticalEdge.set_color(colors[verticalColor])
+	$LeftEdge.set_color(colors[leftColor])
+	$RightEdge.set_color(colors[rightColor])
+	$VerticalEdge.set_color(colors[verticalColor])
 
 func spin(rotation: int) -> bool:
 	if !is_marked_for_clear():
@@ -345,7 +339,7 @@ func clear(edge: int):
 func highlight_edge(edge: int):
 	var particleColor: int = 0
 	if Direction.LEFT == edge:
-		$LeftEdge.set_modulate(Color(1.75,1.75,1.75))
+		$LeftEdge.set_modulate(Color(1.9,1.9,1.9))
 		particleColor = leftColor
 		var leftEdgeVectorArray = PoolVector2Array()
 		leftEdgeVectorArray.append(Vector2(0, 0))
@@ -355,7 +349,7 @@ func highlight_edge(edge: int):
 		# Move polygon to center on our position.
 		$LeftEdge.position = Vector2((-1) * (size + 6)/2, (-1) * (size + 6) * sqrt(3) / 6)
 	if Direction.RIGHT == edge:
-		$RightEdge.set_modulate(Color(1.75,1.75,1.75))
+		$RightEdge.set_modulate(Color(1.9,1.9,1.9))
 		particleColor = rightColor
 		# right
 		var rightEdgeVectorArray = PoolVector2Array()
@@ -366,7 +360,7 @@ func highlight_edge(edge: int):
 		# Move polygon to center on our position.
 		$RightEdge.position = Vector2((-1) * (size + 6)/2, (-1) * (size + 6) * sqrt(3) / 6)
 	elif Direction.VERTICAL == edge:
-		$VerticalEdge.set_modulate(Color(1.75,1.75,1.75))
+		$VerticalEdge.set_modulate(Color(1.9,1.9,1.9))
 		particleColor = verticalColor
 		# vertical
 		var verticalEdgeVectorArray = PoolVector2Array()

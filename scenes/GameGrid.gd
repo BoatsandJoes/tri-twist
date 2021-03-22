@@ -182,13 +182,13 @@ func move_up_rows(digRowIndex: int):
 			if grid[digRowIndex - 2][cellIndex].is_marked_for_clear():
 				# Highlights.
 				if (grid[digRowIndex - 2][cellIndex].get_node("LeftEdge").get_modulate() ==
-				Color(1.75, 1.75, 1.75)):
+				Color(1.9, 1.9, 1.9)):
 					grid[digRowIndex][cellIndex].highlight_edge(grid[digRowIndex][cellIndex].Direction.LEFT)
 				if (grid[digRowIndex - 2][cellIndex].get_node("RightEdge").get_modulate() ==
-				Color(1.75, 1.75, 1.75)):
+				Color(1.9, 1.9, 1.9)):
 					grid[digRowIndex][cellIndex].highlight_edge(grid[digRowIndex][cellIndex].Direction.RIGHT)
 				if (grid[digRowIndex - 2][cellIndex].get_node("VerticalEdge").get_modulate() ==
-				Color(1.75, 1.75, 1.75)):
+				Color(1.9, 1.9, 1.9)):
 					grid[digRowIndex][cellIndex].highlight_edge(grid[digRowIndex][cellIndex].Direction.VERTICAL)
 				grid[digRowIndex][cellIndex].get_node("ClearTimer").start(
 				grid[digRowIndex - 2][cellIndex].get_node("ClearTimer").get_time_left())
