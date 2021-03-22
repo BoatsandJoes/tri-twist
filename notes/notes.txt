@@ -38,34 +38,6 @@ todo:
 	mouse support
 		hover to move active piece
 		mouse buttons are bound same way as keyboard keys
-	how to play screens
-		core mechanics
-			controls (left, right, rotate, soft drop, hard drop, pause)
-			triangles tumble and balance
-			when they settle, they match same color edges
-			after that, they knock balancing pieces over
-		take your time
-			chains stay forever and pop when a piece settles and doesn't match, or at the cap (currently 10)
-			move limit
-		go go go
-			chains pop after a certain amount of time, or at the cap (currently 5). Crucially, you can drop other pieces in between.
-			time limit
-			dropping pieces costs a tiny amount of points, but more matches is still better! Try to make big matches to score big!
-		dig deep
-			same as go go go but you start with three rows of garbage
-			dig out all but the bottom row to get more. Whenever you do, you get 50000 points!
-			get more points from chains, and if you're feeling fast, use chain cap to dig down faster!
-		scoring
-			active/sequential chain
-			chain length
-				Can circumvent cap with double trouble, hat trick, brain chain
-			lucky chain
-				worth only 1 point, counts toward cap
-			double trouble
-			hat trick
-			simulchaineous
-				just for fun because I like the name, worth only 1 point
-			brain chain
 	custom mode
 		Chain mode
 		Chain cap

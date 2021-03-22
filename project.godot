@@ -44,6 +44,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/ui/HUD.gd"
 }, {
+"base": "PanelContainer",
+"class": "HowToPlay",
+"language": "GDScript",
+"path": "res://scenes/ui/mainMenu/HowToPlay.gd"
+}, {
 "base": "Control",
 "class": "Main",
 "language": "GDScript",
@@ -59,7 +64,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/ui/mainMenu/ModeSelect.gd"
 }, {
-"base": "Panel",
+"base": "PanelContainer",
 "class": "PausePopup",
 "language": "GDScript",
 "path": "res://scenes/ui/PausePopup.gd"
@@ -107,6 +112,7 @@ _global_script_class_icons={
 "GameScene": "",
 "GoGoGo": "",
 "HUD": "",
+"HowToPlay": "",
 "Main": "",
 "MainMenu": "",
 "ModeSelect": "",

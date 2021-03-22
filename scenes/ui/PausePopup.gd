@@ -1,4 +1,4 @@
-extends Panel
+extends PanelContainer
 class_name PausePopup
 
 signal back_to_menu

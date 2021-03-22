@@ -1,0 +1,34 @@
+core mechanics
+	when triangles settle, they match same color edges
+	triangles tumble and balance, too!
+
+modes
+	take your time
+		chains stay forever and pop when a piece settles and doesn't match
+		move limit
+	go go go
+		chains pop after a certain amount of time. Crucially, you can drop other pieces in between.
+		time limit
+	dig deep
+		same as go go go but you start with three rows of garbage. Dig 2 out to get points!
+		time limit
+	triathalon
+		Take your time, go go go, and dig deep back to back: get the best score you can!
+
+scoring
+	active/sequential chain
+	chain length
+		cap exists
+		Can circumvent cap with double trouble, hat trick, brain chain
+	lucky chain
+		worth only 1 point, counts toward cap
+	double trouble
+	hat trick
+	simulchaineous
+		just for fun because I like the name, worth only 1 point
+	brain chain
+		push
+		tower
+		double dominoes
+		Zangimove
+	deduct nominal points for matching

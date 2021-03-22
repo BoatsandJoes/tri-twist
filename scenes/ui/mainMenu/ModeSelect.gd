@@ -13,11 +13,35 @@ signal triathalon
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	select_exit()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+func select_take_your_time():
+	$MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text = "<"
+	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("Chains end after dropping a\npiece that matches nothing",
+	"60 moves to score big!")
+
+func select_gogogo():
+	$MarginContainer/HBoxContainer/VBoxContainer2/GoGoGoArrow.text = "<"
+	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("4 seconds to extend chains",
+	"2 minutes to score big!")
+
+func select_dig_deep():
+	$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = "<"
+	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("Get below the line for points",
+	"2 minutes to score big!")
+
+func select_triathalon():
+	$MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text = "<"
+	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("Play all 3 modes back to back!", "")
+
+func select_exit():
+	$MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text = "<"
+	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("Match colors to clear triangles",
+	"Keep matching to make chains!")
 
 func _input(event):
 	if (event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton):
@@ -26,35 +50,35 @@ func _input(event):
 		elif event.is_action_pressed("ui_up"):
 			if $MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text = "<"
+				select_exit()
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/GoGoGoArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/GoGoGoArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text = "<"
+				select_take_your_time()
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/GoGoGoArrow.text = "<"
+				select_gogogo()
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = "<"
+				select_dig_deep()
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text = "<"
+				select_triathalon()
 		elif event.is_action_pressed("ui_down"):
 			if $MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/GoGoGoArrow.text = "<"
+				select_gogogo()
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/GoGoGoArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/GoGoGoArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = "<"
+				select_dig_deep()
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text = "<"
+				select_triathalon()
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text = "<"
+				select_exit()
 			elif $MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text == "<":
 				$MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text = "<"
+				select_take_your_time()
 		elif event.is_action_pressed("ui_accept") || event.is_action_pressed("ui_select"):
 			if $MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text == "<":
 				_on_TakeYourTime_pressed()
