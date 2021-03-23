@@ -8,7 +8,7 @@ var size: int
 enum Direction {LEFT, RIGHT, VERTICAL, VERTICAL_POINT}
 enum Rotation {CLOCKWISE, COUNTERCLOCKWISE}
 enum FallType {DROP, CLEAR, PUSH}
-var colors = [Color.darkorchid, Color.crimson, Color.goldenrod, Color.webgreen, Color.black]
+var colors = [Color.darkorchid, Color.crimson, Color.gold, Color(0, 0.75, 0), Color.black]
 var highlightColors = [Color.fuchsia, Color.deeppink, Color.gold, Color.green]
 var leftColor: int = colors.size() - 1
 var rightColor: int = colors.size() - 1
@@ -339,7 +339,7 @@ func clear(edge: int):
 func highlight_edge(edge: int):
 	var particleColor: int = 0
 	if Direction.LEFT == edge:
-		$LeftEdge.set_modulate(Color(1.9,1.9,1.9))
+		$LeftEdge.set_modulate(Color(2.5,2.5,2.5))
 		particleColor = leftColor
 		var leftEdgeVectorArray = PoolVector2Array()
 		leftEdgeVectorArray.append(Vector2(0, 0))
@@ -349,7 +349,7 @@ func highlight_edge(edge: int):
 		# Move polygon to center on our position.
 		$LeftEdge.position = Vector2((-1) * (size + 6)/2, (-1) * (size + 6) * sqrt(3) / 6)
 	if Direction.RIGHT == edge:
-		$RightEdge.set_modulate(Color(1.9,1.9,1.9))
+		$RightEdge.set_modulate(Color(2.5,2.5,2.5))
 		particleColor = rightColor
 		# right
 		var rightEdgeVectorArray = PoolVector2Array()
@@ -360,7 +360,7 @@ func highlight_edge(edge: int):
 		# Move polygon to center on our position.
 		$RightEdge.position = Vector2((-1) * (size + 6)/2, (-1) * (size + 6) * sqrt(3) / 6)
 	elif Direction.VERTICAL == edge:
-		$VerticalEdge.set_modulate(Color(1.9,1.9,1.9))
+		$VerticalEdge.set_modulate(Color(2.5,2.5,2.5))
 		particleColor = verticalColor
 		# vertical
 		var verticalEdgeVectorArray = PoolVector2Array()

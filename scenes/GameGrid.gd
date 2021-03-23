@@ -11,17 +11,15 @@ export var gridHeight: int
 export var margin: int
 var cellSize: int
 var grid: Array = []
-var window: Rect2
 var digMode: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	window = OS.get_window_safe_area()
 	initialize_grid()
 
 # create grid and fill it with cells
 func initialize_grid():
-	cellSize = ((window.size[1] / (gridHeight + 2)) - margin) / (sqrt(3) / 2)
+	cellSize = ((get_tree().get_root().size[1] / (gridHeight + 2)) - margin) / (sqrt(3) / 2)
 	for rowIndex in gridHeight:
 		grid.append([])
 		for columnIndex in gridWidth:
@@ -106,10 +104,18 @@ func hard_drop(piece: TriangleCell):
 	grid[piece.rowIndex][piece.columnIndex].spawn_piece(piece)
 	# TODO sound sfx optional "hard drop"
 
+func draw_dig_line():
+	var line_points: PoolVector2Array = []
+	var cell1Position: Vector2 = get_position_for_cell(0, 0, false)
+	var cellFinalPosition: Vector2 = get_position_for_cell(0, grid[0].size() - 1, false)
+	line_points.append(Vector2(cell1Position[0] - cellSize / 4, cell1Position[1] - cellSize * sqrt(3) / 6 - 1))
+	line_points.append(Vector2(cellFinalPosition[0] + cellSize / 4, cellFinalPosition[1] - cellSize * sqrt(3) / 6 - 1))
+	$Line2D.points = line_points
+
 # Gets the position in which to draw the cell with the passed indices
 func get_position_for_cell(rowIndex: int, columnIndex: int, flipped: bool) -> Vector2:
-	var result = Vector2(columnIndex * (cellSize/2 + margin) + window.size[0]/5,
-				window.size[1] - cellSize - (rowIndex * ((cellSize * sqrt(3) / 2) + margin)))
+	var result = Vector2(columnIndex * (cellSize/2 + margin) + get_tree().get_root().size[0]/5,
+				get_tree().get_root().size[1] - cellSize - (rowIndex * ((cellSize * sqrt(3) / 2) + margin)))
 	if flipped:
 		result = Vector2(result[0], result[1] + cellSize * sqrt(3) / 6)
 	return result
@@ -182,13 +188,13 @@ func move_up_rows(digRowIndex: int):
 			if grid[digRowIndex - 2][cellIndex].is_marked_for_clear():
 				# Highlights.
 				if (grid[digRowIndex - 2][cellIndex].get_node("LeftEdge").get_modulate() ==
-				Color(1.9, 1.9, 1.9)):
+				Color(2.5, 2.5, 2.5)):
 					grid[digRowIndex][cellIndex].highlight_edge(grid[digRowIndex][cellIndex].Direction.LEFT)
 				if (grid[digRowIndex - 2][cellIndex].get_node("RightEdge").get_modulate() ==
-				Color(1.9, 1.9, 1.9)):
+				Color(2.5, 2.5, 2.5)):
 					grid[digRowIndex][cellIndex].highlight_edge(grid[digRowIndex][cellIndex].Direction.RIGHT)
 				if (grid[digRowIndex - 2][cellIndex].get_node("VerticalEdge").get_modulate() ==
-				Color(1.9, 1.9, 1.9)):
+				Color(2.5, 2.5, 2.5)):
 					grid[digRowIndex][cellIndex].highlight_edge(grid[digRowIndex][cellIndex].Direction.VERTICAL)
 				grid[digRowIndex][cellIndex].get_node("ClearTimer").start(
 				grid[digRowIndex - 2][cellIndex].get_node("ClearTimer").get_time_left())

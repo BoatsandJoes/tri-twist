@@ -21,7 +21,7 @@ func _ready():
 
 func select_take_your_time():
 	$MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text = "<"
-	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("Chains end after dropping a\npiece that matches nothing",
+	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("If no colors match, all chains end",
 	"60 moves to score big!")
 
 func select_gogogo():

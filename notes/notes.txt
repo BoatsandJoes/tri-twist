@@ -8,36 +8,25 @@ nice:
 	saving
 		config
 		scores
-		seen tutorial
 	mouse support
 	button config
 	device select
-	nicer visuals
 	colorblind mode
-
-todo:
 	"are you sure?" on quit
-	adjust chain length bonus (logorithmic, or keep current system but cap the per link score at some point)
 	undo in brain mode
-	hook up sound events
 	visuals:
-		horizontal line for dig mode
 		make score - display not shunt the number to the side
 		fix ghost line visibility (maybe 2nd ghost piece)
 		light up ghost piece if it will match?  
 		show if ghost will disturb other pieces?
-		solid colors should no longer be contiguous, because it looks like they belong together, but they don't
-		less subtle chain group effect
-		spruce up chain timer effect
+		fix corners of chain group effect
 		Hard drop effect on ghost line
 		Hard drop effect on stack surface
 		trick effect
 		topple effect
 		backgrounds
 		ui panels
-	mouse support
-		hover to move active piece
-		mouse buttons are bound same way as keyboard keys
+		buttons + arrow
 	custom mode
 		Chain mode
 		Chain cap

@@ -9,3 +9,8 @@ TriangleCell = ExtResource( 2 )
 gridWidth = 11
 gridHeight = 5
 margin = 3
+
+[node name="Line2D" type="Line2D" parent="."]
+z_index = 1
+default_color = Color( 1, 1, 1, 0.588235 )
+texture_mode = 1044957385

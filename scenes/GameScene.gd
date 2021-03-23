@@ -51,6 +51,7 @@ func prep_dig():
 	hud.set_time_limit(2, 0)
 	triangleDropper.gameGrid.fill_bottom_rows(3)
 	triangleDropper.gameGrid.digMode = true
+	triangleDropper.gameGrid.draw_dig_line()
 	triangleDropper.gameGrid.connect("garbage_rows", self, "_on_gameGrid_garbage_rows")
 	triangleDropper.enable_dropping()
 
