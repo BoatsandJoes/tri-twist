@@ -142,7 +142,7 @@ func set_off_chains():
 		for cell in row:
 			if cell.is_marked_for_clear():
 				cell.fallType = cell.FallType.CLEAR
-				cell.get_node("CPUParticles2D").emitting = true
+				cell.emit_particles()
 				cell.clear(cell.Direction.VERTICAL_POINT)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

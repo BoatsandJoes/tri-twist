@@ -63,12 +63,13 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 		# Postion adjust.
 		if (!isGhost):
 			position = Vector2(position[0], position[1] + size * sqrt(3) / 6 )
-		# Flip particle emitter back over
-		$CPUParticles2D.scale = Vector2(1, -1)
 		pointFacingUp = true
+		# Point the particles' gravity down.
+		$LeftParticles.gravity = -($LeftParticles.gravity)
+		$RightParticles.gravity = -($RightParticles.gravity)
+		$VerticalParticles.gravity = -($VerticalParticles.gravity)
 	elif (columnIndex + rowIndex) % 2 != 0:
 		scale = Vector2(1, 1)
-		$CPUParticles2D.scale = Vector2(1, 1)
 		pointFacingUp = false
 	# Chain timer bar.
 	$ChainTimerBar.max_value = clearDelay
@@ -80,29 +81,35 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 func become_default_size():
 	# left
 	var leftEdgeVectorArray = PoolVector2Array()
+	leftEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 6))
 	leftEdgeVectorArray.append(Vector2(0, 0))
 	leftEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 2))
-	leftEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 6))
 	$LeftEdge.set_polygon(leftEdgeVectorArray)
 	$LeftEdge.set_modulate(Color(1,1,1))
+	$LeftParticles.emission_points = leftEdgeVectorArray
 	# right
 	var rightEdgeVectorArray = PoolVector2Array()
+	rightEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 6))
 	rightEdgeVectorArray.append(Vector2(size, 0))
 	rightEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 2))
-	rightEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 6))
 	$RightEdge.set_polygon(rightEdgeVectorArray)
 	$RightEdge.set_modulate(Color(1,1,1))
+	$RightParticles.emission_points = rightEdgeVectorArray
 	# vertical
 	var verticalEdgeVectorArray = PoolVector2Array()
+	verticalEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 6))
 	verticalEdgeVectorArray.append(Vector2(0, 0))
 	verticalEdgeVectorArray.append(Vector2(size, 0))
-	verticalEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 6))
 	$VerticalEdge.set_polygon(verticalEdgeVectorArray)
 	$VerticalEdge.set_modulate(Color(1,1,1))
+	$VerticalParticles.emission_points = verticalEdgeVectorArray
 	# Move polygons to center on our position.
 	$LeftEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 	$RightEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 	$VerticalEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
+	$LeftParticles.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
+	$RightParticles.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
+	$VerticalParticles.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 
 func fill_randomly():
 	leftColor = randi() % (colors.size() - 1)
@@ -231,9 +238,39 @@ func after_fill_checks(leftNeighbor, rightNeighbor):
 			get_parent().set_off_chains()
 
 func update_colors_visually():
-	$LeftEdge.set_color(colors[leftColor])
-	$RightEdge.set_color(colors[rightColor])
-	$VerticalEdge.set_color(colors[verticalColor])
+	var leftArray: PoolColorArray = PoolColorArray()
+	if pointFacingUp:
+		leftArray.append(Color(colors[leftColor][0] / 1.25, colors[leftColor][1] / 1.25, colors[leftColor][2] / 1.25))
+		leftArray.append(Color(colors[leftColor][0] / 1.5, colors[leftColor][1] / 1.5, colors[leftColor][2] / 1.5))
+		leftArray.append(Color(colors[leftColor][0] / 1.2, colors[leftColor][1] / 1.2, colors[leftColor][2] / 1.2))
+	else:
+		leftArray.append(Color(colors[leftColor][0] / 1.5, colors[leftColor][1] / 1.5, colors[leftColor][2] / 1.5))
+		leftArray.append(Color(colors[leftColor][0] / 1.75, colors[leftColor][1] / 1.75, colors[leftColor][2] / 1.75))
+		leftArray.append(Color(colors[leftColor][0] / 1.75, colors[leftColor][1] / 1.75, colors[leftColor][2] / 1.75))
+	$LeftEdge.set_vertex_colors(leftArray)
+	$LeftEdge.color = colors[leftColor]
+	var rightArray: PoolColorArray = PoolColorArray()
+	if pointFacingUp:
+		rightArray.append(colors[rightColor])
+		rightArray.append(Color(colors[rightColor][0] / 1.1, colors[rightColor][1] / 1.1, colors[rightColor][2] / 1.1))
+		rightArray.append(Color(colors[rightColor][0] / 1.1, colors[rightColor][1] / 1.1, colors[rightColor][2] / 1.1))
+	else:
+		rightArray.append(Color(colors[rightColor][0] / 1.1, colors[rightColor][1] / 1.1, colors[rightColor][2] / 1.1))
+		rightArray.append(Color(colors[rightColor][0] / 1.1, colors[rightColor][1] / 1.1, colors[rightColor][2] / 1.1))
+		rightArray.append(Color(colors[rightColor][0] / 1.5, colors[rightColor][1] / 1.5, colors[rightColor][2] / 1.5))
+	$RightEdge.set_vertex_colors(rightArray)
+	$RightEdge.color = colors[rightColor]
+	var verticalArray: PoolColorArray = PoolColorArray()
+	if pointFacingUp:
+		verticalArray.append(Color(colors[verticalColor][0] / 1.5, colors[verticalColor][1] / 1.5, colors[verticalColor][2] / 1.5))
+		verticalArray.append(Color(colors[verticalColor][0] / 1.75, colors[verticalColor][1] / 1.75, colors[verticalColor][2] / 1.75))
+		verticalArray.append(Color(colors[verticalColor][0] / 1.4, colors[verticalColor][1] / 1.4, colors[verticalColor][2] / 1.4))
+	else:
+		verticalArray.append(colors[verticalColor])
+		verticalArray.append(Color(colors[verticalColor][0] / 1.5, colors[verticalColor][1] / 1.5, colors[verticalColor][2] / 1.5))
+		verticalArray.append(Color(colors[verticalColor][0] / 1.1, colors[verticalColor][1] / 1.1, colors[verticalColor][2] / 1.1))
+	$VerticalEdge.set_vertex_colors(verticalArray)
+	$VerticalEdge.color = colors[verticalColor]
 
 func spin(rotation: int) -> bool:
 	if !is_marked_for_clear():
@@ -337,10 +374,9 @@ func clear(edge: int):
 			isMarkedForInactiveClear = true
 
 func highlight_edge(edge: int):
-	var particleColor: int = 0
 	if Direction.LEFT == edge:
 		$LeftEdge.set_modulate(Color(2.5,2.5,2.5))
-		particleColor = leftColor
+		$LeftParticles.color = Color($LeftEdge.color[0] * 2.5, $LeftEdge.color[1] * 2.5, $LeftEdge.color[2] * 2.5)
 		var leftEdgeVectorArray = PoolVector2Array()
 		leftEdgeVectorArray.append(Vector2(0, 0))
 		leftEdgeVectorArray.append(Vector2((size + 6)/2, (size + 6) * sqrt(3) / 2))
@@ -350,7 +386,7 @@ func highlight_edge(edge: int):
 		$LeftEdge.position = Vector2((-1) * (size + 6)/2, (-1) * (size + 6) * sqrt(3) / 6)
 	if Direction.RIGHT == edge:
 		$RightEdge.set_modulate(Color(2.5,2.5,2.5))
-		particleColor = rightColor
+		$RightParticles.color = Color($RightEdge.color[0] * 2.5, $RightEdge.color[1] * 2.5, $RightEdge.color[2] * 2.5)
 		# right
 		var rightEdgeVectorArray = PoolVector2Array()
 		rightEdgeVectorArray.append(Vector2((size + 6), 0))
@@ -361,7 +397,7 @@ func highlight_edge(edge: int):
 		$RightEdge.position = Vector2((-1) * (size + 6)/2, (-1) * (size + 6) * sqrt(3) / 6)
 	elif Direction.VERTICAL == edge:
 		$VerticalEdge.set_modulate(Color(2.5,2.5,2.5))
-		particleColor = verticalColor
+		$VerticalParticles.color = Color($VerticalEdge.color[0] * 2.5, $VerticalEdge.color[1] * 2.5, $VerticalEdge.color[2] * 2.5)
 		# vertical
 		var verticalEdgeVectorArray = PoolVector2Array()
 		verticalEdgeVectorArray.append(Vector2(0, 0))
@@ -370,9 +406,6 @@ func highlight_edge(edge: int):
 		$VerticalEdge.set_polygon(verticalEdgeVectorArray)
 		# Move polygon to center on our position.
 		$VerticalEdge.position = Vector2((-1) * (size + 6)/2, (-1) * (size + 6) * sqrt(3) / 6)
-	# Set particle color XXX else block to handle split color case
-	if !is_marked_for_clear():
-		$CPUParticles2D.color = highlightColors[particleColor]
 
 # find neighbors that match with this cell, and mark both for clear.
 func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
@@ -609,7 +642,7 @@ func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Diction
 func clear_self_and_matching_neighbors(alreadyCheckedCoordinates: Array):
 	if !alreadyCheckedCoordinates.has([rowIndex, columnIndex]):
 		fallType = FallType.CLEAR
-		$CPUParticles2D.emitting = true
+		emit_particles()
 		alreadyCheckedCoordinates.append([rowIndex, columnIndex])
 		var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
 		var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
@@ -621,6 +654,14 @@ func clear_self_and_matching_neighbors(alreadyCheckedCoordinates: Array):
 		if verticalNeighbor != null && verticalNeighbor.verticalColor == verticalColor && verticalNeighbor.is_marked_for_clear():
 			verticalNeighbor.clear_self_and_matching_neighbors(alreadyCheckedCoordinates)
 		clear(Direction.VERTICAL_POINT)
+
+func emit_particles():
+	if $LeftEdge.get_modulate() == Color(2.5,2.5,2.5):
+		$LeftParticles.emitting = true
+	if $RightEdge.get_modulate() == Color(2.5,2.5,2.5):
+		$RightParticles.emitting = true
+	if $VerticalEdge.get_modulate() == Color(2.5,2.5,2.5):
+		$VerticalParticles.emitting = true
 
 func is_empty() -> bool:
 	return leftColor == colors.size() - 1
@@ -694,7 +735,7 @@ func _process(delta):
 
 func _on_ClearTimer_timeout():
 	# visual effect
-	$CPUParticles2D.emitting = true
+	emit_particles()
 	fallType = FallType.CLEAR
 	clear(Direction.VERTICAL_POINT)
 

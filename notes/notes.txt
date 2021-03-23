@@ -1,10 +1,5 @@
 # tri-twist
-must do:
-	support different resolutions
-	how to play
-	sound
-
-nice:
+	title
 	saving
 		config
 		scores
@@ -13,8 +8,10 @@ nice:
 	device select
 	colorblind mode
 	"are you sure?" on quit
+	how to play pictures
 	undo in brain mode
 	visuals:
+		particles
 		make score - display not shunt the number to the side
 		fix ghost line visibility (maybe 2nd ghost piece)
 		light up ghost piece if it will match?  
