@@ -1,5 +1,6 @@
 # tri-twist
 	title
+	hide stuff on pause
 	saving
 		config
 		scores
@@ -35,10 +36,7 @@
 		force drop
 		garbage
 	settings
-		DAS
-		ARR
 		Gravity
-		num previews
 		double drop prevention
 		are you sure? on restart on/off
 		are you sure? on back to menu on/off
@@ -66,8 +64,8 @@
 			sfx
 			music
 		display
-			windowed/fullscreen/borderless
 			resolution
+			monitor
 
 on store page, advertise millions of polygons (my idea)
 

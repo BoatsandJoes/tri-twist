@@ -240,13 +240,13 @@ func after_fill_checks(leftNeighbor, rightNeighbor):
 func update_colors_visually():
 	var leftArray: PoolColorArray = PoolColorArray()
 	if pointFacingUp:
-		leftArray.append(Color(colors[leftColor][0] / 1.25, colors[leftColor][1] / 1.25, colors[leftColor][2] / 1.25))
+		leftArray.append(Color(colors[leftColor][0] / 1.1, colors[leftColor][1] / 1.1, colors[leftColor][2] / 1.1))
 		leftArray.append(Color(colors[leftColor][0] / 1.5, colors[leftColor][1] / 1.5, colors[leftColor][2] / 1.5))
 		leftArray.append(Color(colors[leftColor][0] / 1.2, colors[leftColor][1] / 1.2, colors[leftColor][2] / 1.2))
 	else:
+		leftArray.append(Color(colors[leftColor][0] / 1.25, colors[leftColor][1] / 1.25, colors[leftColor][2] / 1.25))
 		leftArray.append(Color(colors[leftColor][0] / 1.5, colors[leftColor][1] / 1.5, colors[leftColor][2] / 1.5))
-		leftArray.append(Color(colors[leftColor][0] / 1.75, colors[leftColor][1] / 1.75, colors[leftColor][2] / 1.75))
-		leftArray.append(Color(colors[leftColor][0] / 1.75, colors[leftColor][1] / 1.75, colors[leftColor][2] / 1.75))
+		leftArray.append(Color(colors[leftColor][0] / 1.5, colors[leftColor][1] / 1.5, colors[leftColor][2] / 1.5))
 	$LeftEdge.set_vertex_colors(leftArray)
 	$LeftEdge.color = colors[leftColor]
 	var rightArray: PoolColorArray = PoolColorArray()
@@ -256,14 +256,14 @@ func update_colors_visually():
 		rightArray.append(Color(colors[rightColor][0] / 1.1, colors[rightColor][1] / 1.1, colors[rightColor][2] / 1.1))
 	else:
 		rightArray.append(Color(colors[rightColor][0] / 1.1, colors[rightColor][1] / 1.1, colors[rightColor][2] / 1.1))
-		rightArray.append(Color(colors[rightColor][0] / 1.1, colors[rightColor][1] / 1.1, colors[rightColor][2] / 1.1))
-		rightArray.append(Color(colors[rightColor][0] / 1.5, colors[rightColor][1] / 1.5, colors[rightColor][2] / 1.5))
+		rightArray.append(Color(colors[rightColor][0] / 1.2, colors[rightColor][1] / 1.2, colors[rightColor][2] / 1.2))
+		rightArray.append(Color(colors[rightColor][0] / 1.6, colors[rightColor][1] / 1.6, colors[rightColor][2] / 1.6))
 	$RightEdge.set_vertex_colors(rightArray)
 	$RightEdge.color = colors[rightColor]
 	var verticalArray: PoolColorArray = PoolColorArray()
 	if pointFacingUp:
+		verticalArray.append(Color(colors[verticalColor][0] / 1.2, colors[verticalColor][1] / 1.2, colors[verticalColor][2] / 1.2))
 		verticalArray.append(Color(colors[verticalColor][0] / 1.5, colors[verticalColor][1] / 1.5, colors[verticalColor][2] / 1.5))
-		verticalArray.append(Color(colors[verticalColor][0] / 1.75, colors[verticalColor][1] / 1.75, colors[verticalColor][2] / 1.75))
 		verticalArray.append(Color(colors[verticalColor][0] / 1.4, colors[verticalColor][1] / 1.4, colors[verticalColor][2] / 1.4))
 	else:
 		verticalArray.append(colors[verticalColor])

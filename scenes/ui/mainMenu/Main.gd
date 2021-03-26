@@ -7,6 +7,7 @@ class_name Main
 var TitleScreen = load("res://scenes/ui/mainMenu/TitleScreen.tscn")
 var MainMenu = load("res://scenes/ui/mainMenu/MainMenu.tscn")
 var ModeSelect = load("res://scenes/ui/mainMenu/ModeSelect.tscn")
+var Settings = load("res://scenes/ui/mainMenu/Settings.tscn")
 var Credits = load("res://scenes/ui/mainMenu/Credits.tscn")
 var TakeYourTime = load("res://scenes/modes/TakeYourTime.tscn")
 var GoGoGo = load("res://scenes/modes/GoGoGo.tscn")
@@ -17,6 +18,8 @@ var menu
 var game
 var vp
 var base_size = Vector2(1920, 1080)
+var das = 12
+var arr = 3
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -62,13 +65,19 @@ func set_windowed():
 	OS.set_window_size(scaled_size)
 	vp.set_size(scaled_size)
 
+func set_das(das: int):
+	self.das = das
+
+func set_arr(arr: int):
+	self.arr = arr
+
 func exit_game():
 	get_tree().quit()
 
 func go_to_title():
-	if menu != null && weakref(menu).get_ref():
+	if is_instance_valid(menu):
 		menu.queue_free()
-	if game != null && weakref(game).get_ref():
+	if is_instance_valid(game):
 		game.queue_free()
 	menu = TitleScreen.instance()
 	add_child(menu)
@@ -76,9 +85,9 @@ func go_to_title():
 	menu.connect("exit", self, "_on_TitleScreen_exit")
 
 func go_to_main_menu():
-	if menu != null && weakref(menu).get_ref():
+	if is_instance_valid(menu):
 		menu.queue_free()
-	if game != null && weakref(game).get_ref():
+	if is_instance_valid(game):
 		game.queue_free()
 	menu = MainMenu.instance()
 	add_child(menu)
@@ -87,6 +96,19 @@ func go_to_main_menu():
 	menu.connect("credits", self, "_on_MainMenu_credits")
 	menu.connect("back_to_title", self, "_on_MainMenu_back_to_title")
 	menu.connect("exit", self, "_on_MainMenu_exit")
+
+func go_to_settings():
+	if is_instance_valid(menu):
+		menu.queue_free()
+	if is_instance_valid(game):
+		game.queue_free()
+	menu = Settings.instance()
+	add_child(menu)
+	menu.connect("back_to_menu", self, "_on_Settings_back_to_menu")
+	menu.connect("windowed", self, "set_windowed")
+	menu.connect("fullscreen", self, "set_fullscreen")
+	menu.connect("das_changed", self, "set_das")
+	menu.connect("arr_changed", self, "set_arr")
 
 func go_to_credits():
 	if is_instance_valid(menu):
@@ -120,6 +142,7 @@ func go_to_take_your_time_mode():
 		game.queue_free()
 	game = TakeYourTime.instance()
 	add_child(game)
+	set_config()
 	game.connect("back_to_menu", self, "_on_game_back_to_menu")
 	game.connect("restart", self, "go_to_take_your_time_mode")
 
@@ -132,6 +155,7 @@ func go_to_gogogo_mode():
 		game.queue_free()
 	game = GoGoGo.instance()
 	add_child(game)
+	set_config()
 	game.connect("back_to_menu", self, "_on_game_back_to_menu")
 	game.connect("restart", self, "go_to_gogogo_mode")
 
@@ -144,6 +168,7 @@ func go_to_dig_mode():
 		game.queue_free()
 	game = DigMode.instance()
 	add_child(game)
+	set_config()
 	game.connect("back_to_menu", self, "_on_game_back_to_menu")
 	game.connect("restart", self, "go_to_dig_mode")
 
@@ -155,8 +180,13 @@ func go_to_triathalon_mode():
 		game.queue_free()
 	game = Triathalon.instance()
 	add_child(game)
+	set_config()
 	game.connect("back_to_menu", self, "_on_game_back_to_menu")
 	game.connect("restart", self, "go_to_triathalon_mode")
+
+func set_config():
+	game.set_das(das)
+	game.set_arr(arr)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -175,13 +205,16 @@ func _on_MainMenu_play():
 	go_to_mode_select()
 
 func _on_MainMenu_settings():
-	pass
+	go_to_settings()
 
 func _on_MainMenu_credits():
 	go_to_credits()
 
 func _on_MainMenu_back_to_title():
 	go_to_title()
+
+func _on_Settings_back_to_menu():
+	go_to_main_menu()
 
 func _on_Credits_back_to_menu():
 	go_to_main_menu()

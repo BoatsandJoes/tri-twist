@@ -43,6 +43,13 @@ func _ready():
 	ghostPiece.set_modulate(Color(1,1,1,0.5))
 	add_child(ghostPiece)
 
+func set_das(das: int):
+	$DasTimer.wait_time = das / 60.0
+
+func set_arr(arr: int):
+	$ArrTimer.wait_time = arr / 60.0
+	print(String($ArrTimer.wait_time))
+
 func enable_dropping():
 	droppingAllowed = true
 

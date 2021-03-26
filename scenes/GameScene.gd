@@ -55,6 +55,12 @@ func prep_dig():
 	triangleDropper.gameGrid.connect("garbage_rows", self, "_on_gameGrid_garbage_rows")
 	triangleDropper.enable_dropping()
 
+func set_das(das: int):
+	triangleDropper.set_das(das)
+
+func set_arr(arr: int):
+	triangleDropper.set_arr(arr)
+
 func _input(event):
 	if ((event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton)
 	&& event.is_action_pressed("pause")):
