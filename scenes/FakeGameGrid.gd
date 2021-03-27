@@ -16,7 +16,7 @@ func initialize_grid():
 	var margin = 3
 	var gridHeight = 5
 	var gridWidth = 11
-	cellSize = ((get_tree().get_root().size[1] / (gridHeight + 2)) - margin) / (sqrt(3) / 2)
+	cellSize = ((1080 / (gridHeight + 2)) - margin) / (sqrt(3) / 2)
 	for rowIndex in range(gridHeight):
 		for columnIndex in range(gridWidth):
 			var polygon = Polygon2D.new()
@@ -25,8 +25,8 @@ func initialize_grid():
 			polygonVectorArray.append(Vector2(cellSize/2 + (-1) * cellSize/2, cellSize * sqrt(3) / 3))
 			polygonVectorArray.append(Vector2(cellSize + (-1) * cellSize/2, (-1) * cellSize * sqrt(3) / 6))
 			polygon.set_polygon(polygonVectorArray)
-			polygon.position = Vector2(columnIndex * (cellSize/2 + margin) + get_tree().get_root().size[0]/5,
-				get_tree().get_root().size[1] - cellSize - (rowIndex * ((cellSize * sqrt(3) / 2) + margin)))
+			polygon.position = Vector2(columnIndex * (cellSize/2 + margin) + 1920/5,
+				1080 - cellSize - (rowIndex * ((cellSize * sqrt(3) / 2) + margin)))
 			# Flip cell if needed
 			if ((rowIndex + columnIndex) % 2 == 0):
 				polygon.scale = Vector2(1,-1)

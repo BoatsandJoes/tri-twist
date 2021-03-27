@@ -19,7 +19,7 @@ func _ready():
 
 # create grid and fill it with cells
 func initialize_grid():
-	cellSize = ((get_tree().get_root().size[1] / (gridHeight + 2)) - margin) / (sqrt(3) / 2)
+	cellSize = ((1080 / (gridHeight + 2)) - margin) / (sqrt(3) / 2)
 	for rowIndex in gridHeight:
 		grid.append([])
 		for columnIndex in gridWidth:
@@ -114,8 +114,8 @@ func draw_dig_line():
 
 # Gets the position in which to draw the cell with the passed indices
 func get_position_for_cell(rowIndex: int, columnIndex: int, flipped: bool) -> Vector2:
-	var result = Vector2(columnIndex * (cellSize/2 + margin) + get_tree().get_root().size[0]/5,
-				get_tree().get_root().size[1] - cellSize - (rowIndex * ((cellSize * sqrt(3) / 2) + margin)))
+	var result = Vector2(columnIndex * (cellSize/2 + margin) + 1920/5,
+				1080 - cellSize - (rowIndex * ((cellSize * sqrt(3) / 2) + margin)))
 	if flipped:
 		result = Vector2(result[0], result[1] + cellSize * sqrt(3) / 6)
 	return result

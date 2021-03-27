@@ -208,7 +208,7 @@ func score_sequential_chain(count: int) -> int:
 func score_chain_length(count: int) -> int:
 	var result = 0
 	for i in range(count):
-		result = result + min(i, 10) * chainLengthBonusScore
+		result = result + min(i, 9) * chainLengthBonusScore
 	return result
 
 func score_two_trick(count: int) -> int:
