@@ -25,6 +25,11 @@ _global_script_classes=[ {
 "path": "res://scenes/modes/DigMode.gd"
 }, {
 "base": "Node2D",
+"class": "FakeGameGrid",
+"language": "GDScript",
+"path": "res://scenes/FakeGameGrid.gd"
+}, {
+"base": "Node2D",
 "class": "GameGrid",
 "language": "GDScript",
 "path": "res://scenes/GameGrid.gd"
@@ -64,7 +69,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/ui/mainMenu/ModeSelect.gd"
 }, {
-"base": "PanelContainer",
+"base": "Node2D",
 "class": "PausePopup",
 "language": "GDScript",
 "path": "res://scenes/ui/PausePopup.gd"
@@ -108,6 +113,7 @@ _global_script_class_icons={
 "ComboDisplay": "",
 "Credits": "",
 "DigMode": "",
+"FakeGameGrid": "",
 "GameGrid": "",
 "GameScene": "",
 "GoGoGo": "",

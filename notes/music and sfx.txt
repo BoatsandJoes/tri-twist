@@ -11,15 +11,16 @@ You're close to the time/move limit (one sfx for 10 away, and repeated for 5 4 3
 game end (I think of an annoying whistle? It doesn't need to be an annoying whistle)
 
 extra sfx:
+piece knocking another piece over*
+piece settling from hard drop (I think whoosh and thump)*
 piece settling into place without matching (I think of a click)
-special piece settling from hard drop (I think whoosh and thump)
-piece knocking another piece over
 pause
 menu button click (could reuse piece settling sounds)
 game is about to start jingle
 countdown/start
 "can't drop there"
 incoming garbage (can reuse "lots of points piece match" sound effect since it grants 50000 points)
+match that is worth few points (lucky match)
 
 potentially annoying sounds but maybe they'd be neat:
 moving piece edge contacting another piece edge (maybe only if one is stationary, or quiet them down if many are tumbling at once?)

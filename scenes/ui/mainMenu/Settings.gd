@@ -4,26 +4,20 @@ class_name Settings
 signal fullscreen
 signal windowed
 signal back_to_menu
-signal das_changed
-signal arr_changed
 
-var das: int = 12
-var arr: int = 3
+var config: ConfigFile
+var isConfigChanged: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
 
-func set_das(das: int):
-	self.das = das
-	$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/DAS.text = String(das)
-
-func set_arr(arr: int):
-	self.arr = arr
-	$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/ARR.text = String(arr)
-
-func set_fullscreen(fullscreen: bool):
-	$VBoxContainer/TabContainer/Video/HBoxContainer/Fullscreen.pressed = fullscreen
+func set_config(config: ConfigFile):
+	self.config = config
+	$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/DAS.text = String(config.get_value("tuning", "das"))
+	$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/ARR.text = String(config.get_value("tuning", "arr"))
+	$VBoxContainer/TabContainer/Video/HBoxContainer/Fullscreen.pressed = config.get_value("video", "fullscreen")
+	$VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text = config.get_value("controls", "device")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -35,9 +29,12 @@ func _input(event):
 			_on_Back_pressed()
 
 func _on_Back_pressed():
-	emit_signal("back_to_menu")
+	# save config
+	config.save("user://settings.cfg")
+	emit_signal("back_to_menu", isConfigChanged, config)
 
 func _on_Fullscreen_toggled(button_pressed):
+	isConfigChanged = true
 	if button_pressed:
 		print("fullscreen")
 		emit_signal("fullscreen")
@@ -46,25 +43,57 @@ func _on_Fullscreen_toggled(button_pressed):
 		emit_signal("windowed")
 
 func _on_DecreaseDAS_pressed():
+	var das = config.get_value("tuning", "das")
 	if das > 2:
+		isConfigChanged = true
 		das = das - 1
 		$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/DAS.text = String(das)
-		emit_signal("das_changed", das)
+		config.set_value("tuning", "das", das)
 
 func _on_IncreaseDAS_pressed():
+	var das = config.get_value("tuning", "das")
 	if das < 99:
+		isConfigChanged = true
 		das = das + 1
 		$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/DAS.text = String(das)
-		emit_signal("das_changed", das)
+		config.set_value("tuning", "das", das)
 
 func _on_DecreaseARR_pressed():
+	var arr = config.get_value("tuning", "arr")
 	if arr > 1:
+		isConfigChanged = true
 		arr = arr - 1
 		$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/ARR.text = String(arr)
-		emit_signal("arr_changed", arr)
+		config.set_value("tuning", "arr", arr)
 
 func _on_IncreaseARR_pressed():
+	var arr = config.get_value("tuning", "arr")
 	if arr < 9:
+		isConfigChanged = true
 		arr = arr + 1
 		$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/ARR.text = String(arr)
-		emit_signal("arr_changed", arr)
+		config.set_value("tuning", "arr", arr)
+
+func _on_DeviceBack_pressed():
+	isConfigChanged = true
+	if $VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text == "Keyboard":
+		$VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text = "Controller"
+		config.set_value("controls", "device", "Controller")
+	elif $VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text == "Controller":
+		$VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text = "Keyboard&Mouse"
+		config.set_value("controls", "device", "Keyboard&Mouse")
+	else:
+		$VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text = "Keyboard"
+		config.set_value("controls", "device", "Keyboard")
+
+func _on_DeviceForward_pressed():
+	isConfigChanged = true
+	if $VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text == "Keyboard&Mouse":
+		$VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text = "Controller"
+		config.set_value("controls", "device", "Controller")
+	elif $VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text == "Keyboard":
+		$VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text = "Keyboard&Mouse"
+		config.set_value("controls", "device", "Keyboard&Mouse")
+	else:
+		$VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text = "Keyboard"
+		config.set_value("controls", "device", "Keyboard")

@@ -18,21 +18,46 @@ var menu
 var game
 var vp
 var base_size = Vector2(1920, 1080)
-var das = 12
-var arr = 3
-var fullscreen = true
+var config: ConfigFile
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	# Set resolution
-	vp = get_tree().get_root()
-	set_fullscreen()
+	load_config_from_filesystem()
+	initialize_display()
 	# TODO sound music start playing menu music
 	go_to_title()
 
+func initialize_display():
+	# Set resolution
+	vp = get_tree().get_root()
+	if config.get_value("video", "fullscreen"):
+		set_fullscreen()
+	else:
+		set_windowed()
+
+func load_config_from_filesystem():
+	config = ConfigFile.new()
+	var err = config.load("user://settings.cfg")
+	if !config.has_section_key("video", "fullscreen"):
+		config.set_value("video", "fullscreen", true)
+	if !config.has_section_key("tuning", "das"):
+		config.set_value("tuning", "das", 12)
+	if !config.has_section_key("tuning", "arr"):
+		config.set_value("tuning", "arr", 3)
+	if !config.has_section_key("controls", "device"):
+		config.set_value("controls", "device", "Keyboard")
+	if err != OK: # If not, something went wrong with the file loading
+		# Save to filesystem for the first time.
+		config.save("user://settings.cfg")
+
+func set_config(config: ConfigFile):
+	self.config = config
+	if is_instance_valid(game):
+		game.set_config(config)
+
 # Got these methods from reddit user leanderish: thanks!
 func set_fullscreen():
-	fullscreen = true
+	config.set_value("video", "fullscreen", true)
 	var window_size = OS.get_screen_size()
 	
 	if OS.get_name() == 'Windows' && window_size == base_size:
@@ -54,7 +79,7 @@ func set_fullscreen():
 		vp.set_attach_to_screen_rect(screen_rect)
 
 func set_windowed():
-	fullscreen = false
+	config.set_value("video", "fullscreen", false)
 	var window_size = OS.get_screen_size()
         # I set the windowed version to an arbitrary 80% of screen size here
 	var scale = min(window_size.x / base_size.x, window_size.y / base_size.y) * 0.8
@@ -67,16 +92,6 @@ func set_windowed():
 	OS.set_window_position(Vector2(window_x, window_y))
 	OS.set_window_size(scaled_size)
 	vp.set_size(scaled_size)
-
-func set_das(das: int):
-	self.das = das
-	if is_instance_valid(game):
-		game.set_das(das)
-
-func set_arr(arr: int):
-	self.arr = arr
-	if is_instance_valid(game):
-		game.set_arr(arr)
 
 func exit_game():
 	get_tree().quit()
@@ -111,14 +126,10 @@ func go_to_settings():
 		game.queue_free()
 	menu = Settings.instance()
 	add_child(menu)
-	menu.set_das(das)
-	menu.set_arr(arr)
-	menu.set_fullscreen(fullscreen)
+	menu.set_config(config)
 	menu.connect("back_to_menu", self, "_on_Settings_back_to_menu")
 	menu.connect("windowed", self, "set_windowed")
 	menu.connect("fullscreen", self, "set_fullscreen")
-	menu.connect("das_changed", self, "set_das")
-	menu.connect("arr_changed", self, "set_arr")
 
 func go_to_credits():
 	if is_instance_valid(menu):
@@ -152,7 +163,7 @@ func go_to_take_your_time_mode():
 		game.queue_free()
 	game = TakeYourTime.instance()
 	add_child(game)
-	set_config()
+	set_config_for_game_scene()
 	game.connect("back_to_menu", self, "_on_game_back_to_menu")
 	game.connect("restart", self, "go_to_take_your_time_mode")
 
@@ -165,7 +176,7 @@ func go_to_gogogo_mode():
 		game.queue_free()
 	game = GoGoGo.instance()
 	add_child(game)
-	set_config()
+	set_config_for_game_scene()
 	game.connect("back_to_menu", self, "_on_game_back_to_menu")
 	game.connect("restart", self, "go_to_gogogo_mode")
 
@@ -178,7 +189,7 @@ func go_to_dig_mode():
 		game.queue_free()
 	game = DigMode.instance()
 	add_child(game)
-	set_config()
+	set_config_for_game_scene()
 	game.connect("back_to_menu", self, "_on_game_back_to_menu")
 	game.connect("restart", self, "go_to_dig_mode")
 
@@ -190,13 +201,12 @@ func go_to_triathalon_mode():
 		game.queue_free()
 	game = Triathalon.instance()
 	add_child(game)
-	set_config()
+	set_config_for_game_scene()
 	game.connect("back_to_menu", self, "_on_game_back_to_menu")
 	game.connect("restart", self, "go_to_triathalon_mode")
 
-func set_config():
-	game.set_das(das)
-	game.set_arr(arr)
+func set_config_for_game_scene():
+	game.set_config(config)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -223,7 +233,9 @@ func _on_MainMenu_credits():
 func _on_MainMenu_back_to_title():
 	go_to_title()
 
-func _on_Settings_back_to_menu():
+func _on_Settings_back_to_menu(updateConfig: bool, config: ConfigFile):
+	if updateConfig:
+		self.config = config
 	go_to_main_menu()
 
 func _on_Credits_back_to_menu():

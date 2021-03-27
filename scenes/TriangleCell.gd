@@ -8,8 +8,7 @@ var size: int
 enum Direction {LEFT, RIGHT, VERTICAL, VERTICAL_POINT}
 enum Rotation {CLOCKWISE, COUNTERCLOCKWISE}
 enum FallType {DROP, CLEAR, PUSH}
-var colors = [Color.darkorchid, Color.crimson, Color.gold, Color(0, 0.75, 0), Color.black]
-var highlightColors = [Color.fuchsia, Color.deeppink, Color.gold, Color.green]
+var colors = [Color.darkorchid, Color.crimson, Color.yellow, Color(0, 0.75, 0), Color.black]
 var leftColor: int = colors.size() - 1
 var rightColor: int = colors.size() - 1
 var verticalColor: int = colors.size() - 1
@@ -375,8 +374,8 @@ func clear(edge: int):
 
 func highlight_edge(edge: int):
 	if Direction.LEFT == edge:
-		$LeftEdge.set_modulate(Color(2.5,2.5,2.5))
-		$LeftParticles.color = Color($LeftEdge.color[0] * 2.5, $LeftEdge.color[1] * 2.5, $LeftEdge.color[2] * 2.5)
+		$LeftEdge.set_modulate(Color(3,3,3))
+		$LeftParticles.color = Color($LeftEdge.color[0] * 3, $LeftEdge.color[1] * 3, $LeftEdge.color[2] * 3)
 		var leftEdgeVectorArray = PoolVector2Array()
 		leftEdgeVectorArray.append(Vector2(0, 0))
 		leftEdgeVectorArray.append(Vector2((size + 6)/2, (size + 6) * sqrt(3) / 2))
@@ -385,8 +384,8 @@ func highlight_edge(edge: int):
 		# Move polygon to center on our position.
 		$LeftEdge.position = Vector2((-1) * (size + 6)/2, (-1) * (size + 6) * sqrt(3) / 6)
 	if Direction.RIGHT == edge:
-		$RightEdge.set_modulate(Color(2.5,2.5,2.5))
-		$RightParticles.color = Color($RightEdge.color[0] * 2.5, $RightEdge.color[1] * 2.5, $RightEdge.color[2] * 2.5)
+		$RightEdge.set_modulate(Color(3,3,3))
+		$RightParticles.color = Color($RightEdge.color[0] * 3, $RightEdge.color[1] * 3, $RightEdge.color[2] * 3)
 		# right
 		var rightEdgeVectorArray = PoolVector2Array()
 		rightEdgeVectorArray.append(Vector2((size + 6), 0))
@@ -396,8 +395,8 @@ func highlight_edge(edge: int):
 		# Move polygon to center on our position.
 		$RightEdge.position = Vector2((-1) * (size + 6)/2, (-1) * (size + 6) * sqrt(3) / 6)
 	elif Direction.VERTICAL == edge:
-		$VerticalEdge.set_modulate(Color(2.5,2.5,2.5))
-		$VerticalParticles.color = Color($VerticalEdge.color[0] * 2.5, $VerticalEdge.color[1] * 2.5, $VerticalEdge.color[2] * 2.5)
+		$VerticalEdge.set_modulate(Color(3,3,3))
+		$VerticalParticles.color = Color($VerticalEdge.color[0] * 3, $VerticalEdge.color[1] * 3, $VerticalEdge.color[2] * 3)
 		# vertical
 		var verticalEdgeVectorArray = PoolVector2Array()
 		verticalEdgeVectorArray.append(Vector2(0, 0))
@@ -656,11 +655,11 @@ func clear_self_and_matching_neighbors(alreadyCheckedCoordinates: Array):
 		clear(Direction.VERTICAL_POINT)
 
 func emit_particles():
-	if $LeftEdge.get_modulate() == Color(2.5,2.5,2.5):
+	if $LeftEdge.get_modulate() == Color(3,3,3):
 		$LeftParticles.emitting = true
-	if $RightEdge.get_modulate() == Color(2.5,2.5,2.5):
+	if $RightEdge.get_modulate() == Color(3,3,3):
 		$RightParticles.emitting = true
-	if $VerticalEdge.get_modulate() == Color(2.5,2.5,2.5):
+	if $VerticalEdge.get_modulate() == Color(3,3,3):
 		$VerticalParticles.emitting = true
 
 func is_empty() -> bool:
