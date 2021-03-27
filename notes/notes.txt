@@ -1,17 +1,19 @@
 # tri-twist
 	title
-	hide stuff on pause
-	saving
-		scores
-	mouse support
 	button config
-	device select
+	controller device select
 	colorblind mode
+	saving scores + displaying best scores
+	rework mode select to clearly group how to play and show scores and maybe allow some settings changes, like button config/device select
 	"are you sure?" on quit
 	how to play pictures
+	how to play scoring
 	undo in brain mode
+	save/resume brain mode
+		replays?
 	visuals:
 		particles
+		persist matched area and then apply some effect to it (even though actual pieces have cleared)
 		make score - display not shunt the number to the side
 		fix ghost line visibility (maybe 2nd ghost piece)
 		light up ghost piece if it will match?  
@@ -22,7 +24,6 @@
 		trick effect
 		topple effect
 		backgrounds
-		ui panels
 		buttons + arrow
 	custom mode
 		Chain mode

@@ -7,9 +7,11 @@ signal restart
 var TriangleDropper = load("res://scenes/TriangleDropper.tscn")
 var HUD = load("res://scenes/ui/HUD.tscn")
 var PausePopup = load("res://scenes/ui/PausePopup.tscn")
+var FakeGameGrid = load("res://scenes/FakeGameGrid.tscn")
 var triangleDropper: TriangleDropper
 var hud: HUD
 var pausePopup: PausePopup
+var fakeGrid: FakeGameGrid
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -30,6 +32,10 @@ func _ready():
 	add_child(pausePopup)
 	pausePopup.connect("restart", self, "_on_PausePopup_restart")
 	pausePopup.connect("back_to_menu", self, "_on_PausePopup_back_to_menu")
+	fakeGrid = FakeGameGrid.instance()
+	add_child(fakeGrid)
+	fakeGrid.visible = false
+	fakeGrid.initialize_grid()
 
 func prep_take_your_time():
 	triangleDropper.gameGrid.toggle_chain_mode(false)
@@ -65,6 +71,17 @@ func _input(event):
 	&& event.is_action_pressed("pause")):
 		# Set pause menu to pause mode
 		pausePopup.set_mode_pause()
+		show_fake_grid()
+
+func show_fake_grid():
+	triangleDropper.visible = false
+	hud.get_node("HBoxContainer/VBoxContainer/HBoxContainer").visible = false
+	fakeGrid.visible = true
+
+func show_real_grid():
+	triangleDropper.visible = true
+	hud.get_node("HBoxContainer/VBoxContainer/HBoxContainer").visible = true
+	fakeGrid.visible = false
 
 func get_chains():
 	return hud.get_node("HBoxContainer/VBoxContainer/HBoxContainer/ComboDisplay").combos
