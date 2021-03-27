@@ -108,16 +108,14 @@ func _on_Settings_pressed():
 	$VBoxContainer.visible = false
 	settings_menu = Settings.instance()
 	add_child(settings_menu)
-	settings_menu.set_das(get_parent().get_parent().das)
-	settings_menu.set_arr(get_parent().get_parent().arr)
-	settings_menu.set_fullscreen(get_parent().get_parent().fullscreen)
+	settings_menu.set_config(get_parent().get_parent().config)
 	settings_menu.connect("back_to_menu", self, "_on_settings_menu_back_to_menu")
 	settings_menu.connect("fullscreen", get_parent().get_parent(), "set_fullscreen")
 	settings_menu.connect("windowed", get_parent().get_parent(), "set_windowed")
-	settings_menu.connect("das_changed", get_parent().get_parent(), "set_das")
-	settings_menu.connect("arr_changed", get_parent().get_parent(), "set_arr")
 
-func _on_settings_menu_back_to_menu():
+func _on_settings_menu_back_to_menu(updateConfig: bool, config: ConfigFile):
+	if updateConfig:
+		get_parent().get_parent().set_config(config)
 	settings_menu.queue_free()
 	$VBoxContainer.visible = true
 
