@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scenes/ui/mainMenu/Settings.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/agane/Agane╠Ç 55 (roman).ttf" type="DynamicFontData" id=2]
@@ -9,6 +9,18 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=2]
 size = 64
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=9]
+size = 48
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=10]
+size = 48
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=11]
+size = 48
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=3]
@@ -63,11 +75,53 @@ text = "Settings"
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 margin_top = 84.0
 margin_right = 1800.0
-margin_bottom = 348.0
+margin_bottom = 228.0
 custom_fonts/font = SubResource( 2 )
 tab_align = 0
 
+[node name="Controls" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 82.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Controls"]
+margin_right = 1792.0
+margin_bottom = 58.0
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Controls/HBoxContainer"]
+margin_top = 5.0
+margin_right = 150.0
+margin_bottom = 53.0
+custom_fonts/font = SubResource( 9 )
+text = "Device"
+
+[node name="DeviceBack" type="Button" parent="VBoxContainer/TabContainer/Controls/HBoxContainer"]
+margin_left = 154.0
+margin_right = 195.0
+margin_bottom = 58.0
+custom_fonts/font = SubResource( 10 )
+text = "<"
+
+[node name="Device" type="LineEdit" parent="VBoxContainer/TabContainer/Controls/HBoxContainer"]
+margin_left = 199.0
+margin_right = 623.0
+margin_bottom = 58.0
+rect_min_size = Vector2( 424, 0 )
+custom_fonts/font = SubResource( 11 )
+editable = false
+
+[node name="DeviceForward" type="Button" parent="VBoxContainer/TabContainer/Controls/HBoxContainer"]
+margin_left = 627.0
+margin_right = 668.0
+margin_bottom = 58.0
+custom_fonts/font = SubResource( 10 )
+text = ">"
+
 [node name="Tuning" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -194,6 +248,8 @@ margin_right = 116.0
 margin_bottom = 54.0
 custom_fonts/font = SubResource( 8 )
 text = "Back"
+[connection signal="pressed" from="VBoxContainer/TabContainer/Controls/HBoxContainer/DeviceBack" to="." method="_on_DeviceBack_pressed"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/Controls/HBoxContainer/DeviceForward" to="." method="_on_DeviceForward_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer2/DecreaseDAS" to="." method="_on_DecreaseDAS_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer2/DecreaseARR" to="." method="_on_DecreaseARR_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer4/IncreaseDAS" to="." method="_on_IncreaseDAS_pressed"]

@@ -17,6 +17,7 @@ func set_config(config: ConfigFile):
 	$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/DAS.text = String(config.get_value("tuning", "das"))
 	$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/ARR.text = String(config.get_value("tuning", "arr"))
 	$VBoxContainer/TabContainer/Video/HBoxContainer/Fullscreen.pressed = config.get_value("video", "fullscreen")
+	$VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text = config.get_value("controls", "device")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -72,3 +73,27 @@ func _on_IncreaseARR_pressed():
 		arr = arr + 1
 		$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/ARR.text = String(arr)
 		config.set_value("tuning", "arr", arr)
+
+func _on_DeviceBack_pressed():
+	isConfigChanged = true
+	if $VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text == "Keyboard":
+		$VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text = "Controller"
+		config.set_value("controls", "device", "Controller")
+	elif $VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text == "Controller":
+		$VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text = "Keyboard&Mouse"
+		config.set_value("controls", "device", "Keyboard&Mouse")
+	else:
+		$VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text = "Keyboard"
+		config.set_value("controls", "device", "Keyboard")
+
+func _on_DeviceForward_pressed():
+	isConfigChanged = true
+	if $VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text == "Keyboard&Mouse":
+		$VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text = "Controller"
+		config.set_value("controls", "device", "Controller")
+	elif $VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text == "Keyboard":
+		$VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text = "Keyboard&Mouse"
+		config.set_value("controls", "device", "Keyboard&Mouse")
+	else:
+		$VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text = "Keyboard"
+		config.set_value("controls", "device", "Keyboard")

@@ -44,6 +44,8 @@ func load_config_from_filesystem():
 		config.set_value("tuning", "das", 12)
 	if !config.has_section_key("tuning", "arr"):
 		config.set_value("tuning", "arr", 3)
+	if !config.has_section_key("controls", "device"):
+		config.set_value("controls", "device", "Keyboard")
 	if err != OK: # If not, something went wrong with the file loading
 		# Save to filesystem for the first time.
 		config.save("user://settings.cfg")
