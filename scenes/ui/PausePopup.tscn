@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scenes/ui/PausePopup.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/agane/Agane╠Ç 55 (roman).ttf" type="DynamicFontData" id=2]
@@ -31,7 +31,16 @@ font_data = ExtResource( 2 )
 size = 48
 font_data = ExtResource( 2 )
 
+[sub_resource type="DynamicFont" id=8]
+size = 48
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=9]
+size = 48
+font_data = ExtResource( 2 )
+
 [node name="PausePopup" type="PanelContainer"]
+pause_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 60.0
@@ -44,7 +53,7 @@ script = ExtResource( 1 )
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 523.0
-margin_bottom = 247.0
+margin_bottom = 306.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 margin_right = 516.0
@@ -61,12 +70,12 @@ text = "Paused"
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
 margin_top = 68.0
 margin_right = 516.0
-margin_bottom = 240.0
+margin_bottom = 299.0
 custom_constants/separation = 20
 
 [node name="Buttons" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2"]
 margin_right = 293.0
-margin_bottom = 172.0
+margin_bottom = 231.0
 size_flags_horizontal = 0
 custom_constants/separation = 5
 
@@ -85,37 +94,51 @@ size_flags_horizontal = 0
 custom_fonts/font = SubResource( 3 )
 text = "Restart"
 
-[node name="BackToMain" type="Button" parent="VBoxContainer/HBoxContainer2/Buttons"]
+[node name="Settings" type="Button" parent="VBoxContainer/HBoxContainer2/Buttons"]
 margin_top = 118.0
-margin_right = 293.0
+margin_right = 197.0
 margin_bottom = 172.0
+size_flags_horizontal = 0
 custom_fonts/font = SubResource( 4 )
+text = "Settings"
+
+[node name="BackToMain" type="Button" parent="VBoxContainer/HBoxContainer2/Buttons"]
+margin_top = 177.0
+margin_right = 293.0
+margin_bottom = 231.0
+custom_fonts/font = SubResource( 5 )
 text = "Mode Select"
 
 [node name="SelectArrow" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2"]
 margin_left = 313.0
 margin_right = 342.0
-margin_bottom = 172.0
+margin_bottom = 231.0
 custom_constants/separation = 13
 
 [node name="Resume" type="Label" parent="VBoxContainer/HBoxContainer2/SelectArrow"]
 margin_right = 29.0
 margin_bottom = 48.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 6 )
 text = "<"
 
 [node name="Restart" type="Label" parent="VBoxContainer/HBoxContainer2/SelectArrow"]
 margin_top = 61.0
 margin_right = 29.0
 margin_bottom = 109.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
 text = "<"
 
-[node name="BackToMain" type="Label" parent="VBoxContainer/HBoxContainer2/SelectArrow"]
+[node name="Settings" type="Label" parent="VBoxContainer/HBoxContainer2/SelectArrow"]
 margin_top = 122.0
 margin_right = 29.0
 margin_bottom = 170.0
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 8 )
+
+[node name="BackToMain" type="Label" parent="VBoxContainer/HBoxContainer2/SelectArrow"]
+margin_top = 183.0
+margin_right = 29.0
+margin_bottom = 231.0
+custom_fonts/font = SubResource( 9 )
 text = "<"
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/Buttons/Resume" to="." method="_on_Resume_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/Buttons/Restart" to="." method="_on_Restart_pressed"]

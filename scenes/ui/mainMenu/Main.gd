@@ -20,6 +20,7 @@ var vp
 var base_size = Vector2(1920, 1080)
 var das = 12
 var arr = 3
+var fullscreen = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -31,6 +32,7 @@ func _ready():
 
 # Got these methods from reddit user leanderish: thanks!
 func set_fullscreen():
+	fullscreen = true
 	var window_size = OS.get_screen_size()
 	
 	if OS.get_name() == 'Windows' && window_size == base_size:
@@ -52,6 +54,7 @@ func set_fullscreen():
 		vp.set_attach_to_screen_rect(screen_rect)
 
 func set_windowed():
+	fullscreen = false
 	var window_size = OS.get_screen_size()
         # I set the windowed version to an arbitrary 80% of screen size here
 	var scale = min(window_size.x / base_size.x, window_size.y / base_size.y) * 0.8
@@ -67,9 +70,13 @@ func set_windowed():
 
 func set_das(das: int):
 	self.das = das
+	if is_instance_valid(game):
+		game.set_das(das)
 
 func set_arr(arr: int):
 	self.arr = arr
+	if is_instance_valid(game):
+		game.set_arr(arr)
 
 func exit_game():
 	get_tree().quit()
@@ -104,6 +111,9 @@ func go_to_settings():
 		game.queue_free()
 	menu = Settings.instance()
 	add_child(menu)
+	menu.set_das(das)
+	menu.set_arr(arr)
+	menu.set_fullscreen(fullscreen)
 	menu.connect("back_to_menu", self, "_on_Settings_back_to_menu")
 	menu.connect("windowed", self, "set_windowed")
 	menu.connect("fullscreen", self, "set_fullscreen")
