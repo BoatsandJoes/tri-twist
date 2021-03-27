@@ -23,6 +23,10 @@ font_data = ExtResource( 2 )
 size = 48
 font_data = ExtResource( 2 )
 
+[sub_resource type="DynamicFont" id=8]
+size = 48
+font_data = ExtResource( 2 )
+
 [sub_resource type="DynamicFont" id=3]
 size = 48
 font_data = ExtResource( 2 )
@@ -40,10 +44,6 @@ size = 48
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=7]
-size = 48
-font_data = ExtResource( 2 )
-
-[sub_resource type="DynamicFont" id=8]
 size = 48
 font_data = ExtResource( 2 )
 
@@ -75,7 +75,7 @@ text = "Settings"
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 margin_top = 84.0
 margin_right = 1800.0
-margin_bottom = 228.0
+margin_bottom = 286.0
 custom_fonts/font = SubResource( 2 )
 tab_align = 0
 
@@ -119,6 +119,17 @@ margin_right = 668.0
 margin_bottom = 58.0
 custom_fonts/font = SubResource( 10 )
 text = ">"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/TabContainer/Controls"]
+margin_top = 62.0
+margin_right = 1792.0
+margin_bottom = 116.0
+
+[node name="Back" type="Button" parent="VBoxContainer/TabContainer/Controls/HBoxContainer3"]
+margin_right = 116.0
+margin_bottom = 54.0
+custom_fonts/font = SubResource( 8 )
+text = "Back"
 
 [node name="Tuning" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
 visible = false
@@ -250,6 +261,7 @@ custom_fonts/font = SubResource( 8 )
 text = "Back"
 [connection signal="pressed" from="VBoxContainer/TabContainer/Controls/HBoxContainer/DeviceBack" to="." method="_on_DeviceBack_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Controls/HBoxContainer/DeviceForward" to="." method="_on_DeviceForward_pressed"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/Controls/HBoxContainer3/Back" to="." method="_on_Back_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer2/DecreaseDAS" to="." method="_on_DecreaseDAS_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer2/DecreaseARR" to="." method="_on_DecreaseARR_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer4/IncreaseDAS" to="." method="_on_IncreaseDAS_pressed"]

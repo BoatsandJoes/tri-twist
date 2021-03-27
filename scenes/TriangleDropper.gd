@@ -90,7 +90,9 @@ func move_piece_left():
 				activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
 
 func _input(event):
-	if (event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton):
+	if ((event is InputEventKey && (device == "Keyboard" || device == "Keyboard&Mouse"))
+	|| ((event is InputEventJoypadButton || event is InputEventJoypadMotion) && device == "Controller")
+	|| (event is InputEventMouseButton && device == "Keyboard&Mouse")):
 		if event.is_action_pressed("left"):
 			leftPressed = true
 			rightPressed = false
