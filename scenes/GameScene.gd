@@ -58,6 +58,7 @@ func prep_dig():
 func set_config(config: ConfigFile):
 	triangleDropper.set_das(config.get_value("tuning", "das"))
 	triangleDropper.set_arr(config.get_value("tuning", "arr"))
+	triangleDropper.set_device(config.get_value("controls", "device"))
 
 func _input(event):
 	if ((event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton)

@@ -13,6 +13,7 @@ var leftPressed = false
 var rightPressed = false
 var previews = []
 var droppingAllowed = true
+var device: String
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -29,6 +30,7 @@ func _ready():
 	activePiece.fill_randomly()
 	activePiece.update_colors_visually()
 	add_child(activePiece)
+	set_active_piece_position_based_on_mouse(get_global_mouse_position()[0])
 	# Previews
 	for i in range(3):
 		var preview: TriangleCell = TriangleCell.instance()
@@ -43,12 +45,29 @@ func _ready():
 	ghostPiece.set_modulate(Color(1,1,1,0.5))
 	add_child(ghostPiece)
 
+func set_active_piece_position_based_on_mouse(horizontalMousePosition: int):
+	for cell in gameGrid.grid[0]:
+		#TODO remove horizontal areas between cells that neither the left nor right cell will claim, but only for game start/unpause
+		if ((horizontalMousePosition < cell.position[0] + cell.size / 4
+		&& horizontalMousePosition > cell.position[0] - cell.size / 4)
+		|| (cell.columnIndex == 0 && horizontalMousePosition < cell.position[0])
+		|| (cell.columnIndex == gameGrid.grid[0].size() - 1 && horizontalMousePosition > cell.position[0])):
+			activePiece.columnIndex = cell.columnIndex
+			activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
+
+func update_active_piece_position():
+	if device == "Keyboard&Mouse":
+		set_active_piece_position_based_on_mouse(get_global_mouse_position()[0])
+
 func set_das(das: int):
 	$DasTimer.wait_time = das / 60.0
 
 func set_arr(arr: int):
 	$ArrTimer.wait_time = arr / 60.0
 	print(String($ArrTimer.wait_time))
+
+func set_device(device: String):
+	self.device = device
 
 func enable_dropping():
 	droppingAllowed = true
@@ -108,6 +127,8 @@ func _input(event):
 			elif event.is_action_pressed("hard_drop") && ghostPiece.visible:
 				gameGrid.hard_drop(ghostPiece)
 				advance_piece()
+	elif event is InputEventMouseMotion && device == "Keyboard&Mouse":
+		set_active_piece_position_based_on_mouse(event.position[0])
 
 func set_drop_timer(value):
 	if value == 0:

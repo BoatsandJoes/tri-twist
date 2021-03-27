@@ -98,6 +98,7 @@ func _on_Resume_pressed():
 	self.visible = false
 	get_tree().paused = false
 	get_parent().set_process_input(true)
+	get_parent().triangleDropper.update_active_piece_position()
 
 func _on_Restart_pressed():
 	get_tree().paused = false
