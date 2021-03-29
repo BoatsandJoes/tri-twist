@@ -2,6 +2,7 @@ extends Control
 class_name MainMenu
 
 signal play
+signal multiplayer
 signal settings
 signal credits
 signal back_to_title
@@ -95,3 +96,7 @@ func _on_Settings_pressed():
 
 func _on_Credits_pressed():
 	emit_signal("credits")
+
+
+func _on_Multiplayer_pressed():
+	emit_signal("multiplayer")

@@ -15,6 +15,9 @@ func _ready():
 #func _process(delta):
 #	pass
 
+func set_multiplayer():
+	visible = false
+
 func set_move_limit(value: int):
 	$HBoxContainer/VBoxContainer2/MoveCount.init(value)
 

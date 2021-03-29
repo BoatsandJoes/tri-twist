@@ -17,7 +17,9 @@ func set_config(config: ConfigFile):
 	$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/DAS.text = String(config.get_value("tuning", "das"))
 	$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/ARR.text = String(config.get_value("tuning", "arr"))
 	$VBoxContainer/TabContainer/Video/HBoxContainer/Fullscreen.pressed = config.get_value("video", "fullscreen")
-	$VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text = config.get_value("controls", "device")
+	#$VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text = config.get_value("controls", "device")
+	$VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text = config.get_value("controls", "p1_device")
+	$VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text = config.get_value("controls", "p2_device")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -97,3 +99,52 @@ func _on_DeviceForward_pressed():
 	else:
 		$VBoxContainer/TabContainer/Controls/HBoxContainer/Device.text = "Keyboard"
 		config.set_value("controls", "device", "Keyboard")
+
+func _on_P1DeviceBack_pressed():
+	isConfigChanged = true
+	if $VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text == "Keyboard":
+		$VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text = "Controller"
+		config.set_value("controls", "p1_device", "Controller")
+	elif $VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text == "Controller":
+		$VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text = "Keyboard&Mouse"
+		config.set_value("controls", "p1_device", "Keyboard&Mouse")
+	else:
+		$VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text = "Keyboard"
+		config.set_value("controls", "p1_device", "Keyboard")
+
+func _on_P2DeviceBack_pressed():
+	isConfigChanged = true
+	if $VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text == "Keyboard":
+		$VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text = "Controller"
+		config.set_value("controls", "p2_device", "Controller")
+	elif $VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text == "Controller":
+		$VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text = "Keyboard&Mouse"
+		config.set_value("controls", "p2_device", "Keyboard&Mouse")
+	else:
+		$VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text = "Keyboard"
+		config.set_value("controls", "p2_device", "Keyboard")
+
+
+func _on_P1DeviceForward_pressed():
+	isConfigChanged = true
+	if $VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text == "Keyboard&Mouse":
+		$VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text = "Controller"
+		config.set_value("controls", "p1_device", "Controller")
+	elif $VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text == "Keyboard":
+		$VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text = "Keyboard&Mouse"
+		config.set_value("controls", "p1_device", "Keyboard&Mouse")
+	else:
+		$VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text = "Keyboard"
+		config.set_value("controls", "p1_device", "Keyboard")
+
+func _on_P2DeviceForward_pressed():
+	isConfigChanged = true
+	if $VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text == "Keyboard&Mouse":
+		$VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text = "Controller"
+		config.set_value("controls", "p2_device", "Controller")
+	elif $VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text == "Keyboard":
+		$VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text = "Keyboard&Mouse"
+		config.set_value("controls", "p2_device", "Keyboard&Mouse")
+	else:
+		$VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text = "Keyboard"
+		config.set_value("controls", "p2_device", "Keyboard")

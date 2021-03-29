@@ -69,6 +69,18 @@ func has_no_filled_cells_above_row_index(index: int) -> bool:
 		index = index + 1
 	return true
 
+func spawn_garbage(score: int):
+	var piecesToSpawn = score / 1000
+	for row in grid:
+		for cell in row:
+			if piecesToSpawn == 0:
+				break
+			if cell.is_empty():
+				cell.fill_without_matching_neighbors()
+				piecesToSpawn = piecesToSpawn - 1
+	if piecesToSpawn > 0:
+		emit_signal("grid_full")
+
 func fill_bottom_rows(rows: int):
 	#TODO sound sfx "incoming garbage"
 	for rowIndex in range(rows):

@@ -34,8 +34,8 @@ func _ready():
 	# Previews
 	for i in range(3):
 		var preview: TriangleCell = TriangleCell.instance()
-		preview.init(activePiece.size, -1, -1, Vector2(gameGrid.grid[-1][-1].position[0] + (i + 1.1) * activePiece.size,
-		activePiece.position[1]), false, false)
+		preview.init(activePiece.size, -1, -1, Vector2(gameGrid.grid[-1][-8].position[0] + (i + 1.1) * activePiece.size,
+		activePiece.position[1] - activePiece.size * 1.5), false, false)
 		preview.fill_randomly()
 		previews.append(preview)
 		add_child(preview)
