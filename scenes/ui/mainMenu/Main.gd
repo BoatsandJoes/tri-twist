@@ -45,12 +45,10 @@ func load_config_from_filesystem():
 		config.set_value("tuning", "das", 12)
 	if !config.has_section_key("tuning", "arr"):
 		config.set_value("tuning", "arr", 3)
-	if !config.has_section_key("controls", "device"):
-		config.set_value("controls", "device", "Keyboard")
 	if !config.has_section_key("controls", "p1_device"):
-		config.set_value("controls", "p1_device", "Controller")
+		config.set_value("controls", "p1_device", "Keyboard")
 	if !config.has_section_key("controls", "p2_device"):
-		config.set_value("controls", "p2_device", "Keyboard")
+		config.set_value("controls", "p2_device", "Controller")
 	if err != OK: # If not, something went wrong with the file loading
 		# Save to filesystem for the first time.
 		config.save("user://settings.cfg")
@@ -169,9 +167,9 @@ func go_to_multiplayer():
 	game = MultiplayerScene.instance()
 	add_child(game)
 	set_config_for_game_scene()
-	game.player1Scene.connect("back_to_menu", self, "_on_game_back_to_menu")
+	game.player1Scene.connect("back_to_menu", self, "go_to_main_menu")
 	game.player1Scene.connect("restart", self, "go_to_multiplayer")
-	game.player2Scene.connect("back_to_menu", self, "_on_game_back_to_menu")
+	game.player2Scene.connect("back_to_menu", self, "go_to_main_menu")
 	game.player2Scene.connect("restart", self, "go_to_multiplayer")
 
 func go_to_take_your_time_mode():

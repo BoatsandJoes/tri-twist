@@ -34,8 +34,8 @@ func _ready():
 	# Previews
 	for i in range(3):
 		var preview: TriangleCell = TriangleCell.instance()
-		preview.init(activePiece.size, -1, -1, Vector2(gameGrid.grid[-1][-8].position[0] + (i + 1.1) * activePiece.size,
-		activePiece.position[1] - activePiece.size * 1.5), false, false)
+		preview.init(activePiece.size, -1, -1, Vector2(gameGrid.grid[-1][-1].position[0] + (i + 1.1) * activePiece.size,
+		activePiece.position[1]), false, false)
 		preview.fill_randomly()
 		previews.append(preview)
 		add_child(preview)
@@ -44,6 +44,12 @@ func _ready():
 	ghostPiece = TriangleCell.instance()
 	ghostPiece.set_modulate(Color(1,1,1,0.5))
 	add_child(ghostPiece)
+
+func set_multiplayer():
+	for i in range(previews.size()):
+		previews[i].init(activePiece.size, -1, -1, Vector2(gameGrid.grid[-1][-8].position[0] + (i + 1.1) * activePiece.size,
+		activePiece.position[1] - activePiece.size * 1.5), false, false)
+		previews[i].fill_randomly()
 
 func set_active_piece_position_based_on_mouse(horizontalMousePosition: int):
 	for cell in gameGrid.grid[0]:

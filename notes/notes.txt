@@ -13,6 +13,9 @@
 	save/resume brain mode
 		replays?
 	multiplayer
+		clean up
+			pause menu
+			main menu
 		shared board local coop
 			ghost piece different color, active/ghost piece that color outline and also p2's active is upside-down
 		two boards can move ui to above to make room

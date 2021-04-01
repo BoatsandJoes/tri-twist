@@ -43,6 +43,7 @@ func set_player(player: int):
 
 func set_multiplayer():
 	scale = Vector2(0.8, 0.8)
+	triangleDropper.set_multiplayer()
 	hud.set_multiplayer()
 
 func prep_take_your_time():
@@ -72,12 +73,10 @@ func prep_dig():
 func set_config(config: ConfigFile):
 	triangleDropper.set_das(config.get_value("tuning", "das"))
 	triangleDropper.set_arr(config.get_value("tuning", "arr"))
-	if player == 1:
-		triangleDropper.set_device(config.get_value("controls", "p1_device"))
-	elif player == 2:
+	if player == 2:
 		triangleDropper.set_device(config.get_value("controls", "p2_device"))
 	else:
-		triangleDropper.set_device(config.get_value("controls", "device"))
+		triangleDropper.set_device(config.get_value("controls", "p1_device"))
 
 func _input(event):
 	if ((event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton)
