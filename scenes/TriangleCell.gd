@@ -236,8 +236,6 @@ func after_fill_checks(leftNeighbor, rightNeighbor):
 				sequentialChainCapFlag = false
 			else:
 				get_parent().set_off_chains()
-		else:
-			get_parent().spawn_garbage()
 
 func update_colors_visually():
 	var leftArray: PoolColorArray = PoolColorArray()

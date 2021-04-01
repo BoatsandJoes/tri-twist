@@ -1,57 +1,42 @@
 # tri-twist
 	title
 	button config
+	clean up multiplayer double pause menu
 	controller device select
 	color selection
 	reset settings on this tab to defaults button
 	saving scores + displaying best scores
-	rework mode select to clearly group how to play and show scores and maybe allow some settings changes, like button config/device select
+	rework all menus, particularly mode select to clearly group how to play and show scores and maybe allow some settings changes, like button config/device select
 	"are you sure?" on quit
 	how to play pictures
 	how to play scoring
+	how to play multiplayer + advanced how to play multiplayer
 	undo in brain mode
+	mouse only mode (may be handled by button config)
+	try to adjust dig deep to be good for new players and then make it the main mode (current problem is if you can't make it to the bottom in 2 minutes then that kind of sucks)
 	save/resume brain mode
 		replays?
-	multiplayer design
-		incoming garbage only after non-matches causes some problems
-			infinite stall
-			maybe just spamming 5 chains is too good, since brain chains dig more slowly and get disrupted way more easily and 5 chains accept damage way less often
 	multiplayer
-		clean up
-			pause menu
-			main menu
 		shared board local coop
 			ghost piece different color, active/ghost piece that color outline and also p2's active is upside-down
-		two boards can move ui to above to make room
-		single player score competition
-		garbage gogogo/dig deep vs mode
-			piece sequence generated ahead of time and shared (1000 pieces then loops)
-			you don't lose points for making a move in either mode
-			fill up opponent's board to win
-			1000 points = 1 sent garbage (including dig deep bonus, which will cause you to instantly win if not offset.)
-			incoming garbage delayed by at least a few frames, mostly to account for latency, but should help the defender a tiny bit
-			offset allowed
-			garbage comes in after an active-dropped piece lands and does not clear anything
-				consider a player who deliberately builds up high (or is sent garbage) and then they have a lot they can dig through without being sent garbage: maybe this is okay because if you mess up you die?
-			if you cannot accept all garbage, you lose
-			garbage spawns bottom to top left to right in the first available spaces
-			Go Go Go needs margin time
+		single player score competition (two boards can move ui to above grid and remove non-essential elements to make room)
 	online play
-		GGPO approach
-			make game 100% deterministic
-			serialize opponent game state every frame
-			use prediction to guess what opponent is doing now based on what they were doing a second ago
-			if their real inputs differ, roll back their board
-			our board is unaffected and never has to be saved or changed in any way
-			sent garbage is on a delay to help with latency (making our board unaffected)
-			selecting piece colors and garbage colors before they're shown to the player will help the visuals (color selection may have to be rewound and redone if our opponent actually spawned a bunch of garbage)
-			
+		piece sequence generated ahead of time and shared (1000 pieces then loops)
+		incoming garbage delayed by at least a few frames on time out to account for latency (maybe the attacker extended at the last moment) (attack can no longer be extended, but can still be offset)
+		make game 100% deterministic
+		serialize opponent game state every frame
+		use prediction to guess what opponent is doing now based on what they were doing a second ago
+		if their real inputs differ, roll back their board
+		our board is unaffected and never has to be saved or changed in any way except for garbage prediction, particularly on time up
+		selecting piece colors and garbage colors before they're shown to the player will help the visuals (color selection may have to be rewound and redone if our opponent actually spawned a bunch of garbage)
 	ais (can vary thinking/pause time)
 		random drop
 		1 deep match search
 		1 deep match search with board evaluation (can limit branches to check)
 		2 deep match search
 	visuals:
+		grid background
+		show incoming garbage on top of ghost piece
 		particles
 		persist matched area and then apply some effect to it (even though actual pieces have cleared)
 		make score - display not shunt the number to the side

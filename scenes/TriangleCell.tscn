@@ -7,6 +7,7 @@ bg_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0, 0, 0, 1 )
+shadow_size = 2
 
 [node name="TriangleCell" type="Area2D"]
 script = ExtResource( 1 )
