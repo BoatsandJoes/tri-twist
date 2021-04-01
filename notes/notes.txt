@@ -12,6 +12,10 @@
 	undo in brain mode
 	save/resume brain mode
 		replays?
+	multiplayer design
+		incoming garbage only after non-matches causes some problems
+			infinite stall
+			maybe just spamming 5 chains is too good, since brain chains dig more slowly and get disrupted way more easily and 5 chains accept damage way less often
 	multiplayer
 		clean up
 			pause menu
@@ -28,7 +32,7 @@
 			incoming garbage delayed by at least a few frames, mostly to account for latency, but should help the defender a tiny bit
 			offset allowed
 			garbage comes in after an active-dropped piece lands and does not clear anything
-				consider a player who deliberately builds up high (or is sent garbage) and then they have a lot they can dig through without being sent garbage: this is okay because if you mess up you die
+				consider a player who deliberately builds up high (or is sent garbage) and then they have a lot they can dig through without being sent garbage: maybe this is okay because if you mess up you die?
 			if you cannot accept all garbage, you lose
 			garbage spawns bottom to top left to right in the first available spaces
 			Go Go Go needs margin time

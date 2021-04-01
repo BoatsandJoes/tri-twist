@@ -6,12 +6,17 @@ signal grid_full
 signal garbage_rows
 
 export (PackedScene) var TriangleCell
+var FakeGameGrid = load("res://scenes/FakeGameGrid.tscn")
 export var gridWidth: int
 export var gridHeight: int
 export var margin: int
 var cellSize: int
 var grid: Array = []
+var fakeGameGrid: FakeGameGrid
 var digMode: bool = false
+var piecesToSpawn: int = 0
+var ghostRow
+var ghostColumn
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -28,6 +33,14 @@ func initialize_grid():
 			get_position_for_cell(rowIndex, columnIndex, false), true, false)
 			add_child(grid[rowIndex][columnIndex])
 			grid[rowIndex][columnIndex].connect("tumble", self, "_on_TriangleCell_tumble")
+
+func set_dig_mode():
+	digMode = true
+
+func set_multiplayer():
+	fakeGameGrid = FakeGameGrid.instance()
+	add_child(fakeGameGrid)
+	fakeGameGrid.initialize_grid(false)
 
 func toggle_chain_mode(active):
 	for row in grid:
@@ -69,8 +82,21 @@ func has_no_filled_cells_above_row_index(index: int) -> bool:
 		index = index + 1
 	return true
 
-func spawn_garbage(score: int):
-	var piecesToSpawn = score / 1000
+func queue_garbage(score: int):
+	piecesToSpawn = piecesToSpawn + score / 1000
+
+func offset_garbage(score: int) -> int:
+	score = score / 1000
+	if score >= piecesToSpawn:
+		score = score - piecesToSpawn
+		piecesToSpawn = 0
+	else:
+		piecesToSpawn = piecesToSpawn - score
+		score = 0
+	return score * 1000
+
+func spawn_garbage():
+	#TODO sound sfx "incoming garbage"
 	for row in grid:
 		for cell in row:
 			if piecesToSpawn == 0:
@@ -159,33 +185,32 @@ func set_off_chains():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	var rowIndex: int = grid.size() - 1
 	var isGridFull = true
+	var rowsEmpty = true
 	var isAnyCellMarkedForClear = false
-	while isGridFull && rowIndex >= 0:
+	var ghostGarbageCount = 0
+	for rowIndex in range(grid.size()):
 		for cell in grid[rowIndex]:
 			if cell.is_empty():
 				isGridFull = false
-				break
+				if digMode:
+					if ghostGarbageCount < piecesToSpawn && !(rowIndex == ghostRow && ghostColumn == cell.columnIndex):
+						fakeGameGrid.cells[rowIndex][cell.columnIndex].visible = true
+						ghostGarbageCount = ghostGarbageCount + 1
+					else:
+						fakeGameGrid.cells[rowIndex][cell.columnIndex].visible = false
+			elif digMode:
+				fakeGameGrid.cells[rowIndex][cell.columnIndex].visible = false
+				if rowIndex > 0:
+					rowsEmpty = false
 			if cell.is_marked_for_clear():
 				isAnyCellMarkedForClear = true
-		rowIndex = rowIndex - 1
 	if isGridFull:
 		if !grid[0][0].activeChainMode && isAnyCellMarkedForClear:
 			set_off_chains()
 		elif !isAnyCellMarkedForClear:
 			emit_signal("grid_full")
-	# Dig mode
-	if digMode:
-		var rowsEmpty = true
-		var digRowIndex = grid.size() - 1
-		while digRowIndex > 0:
-			for cell in grid[digRowIndex]:
-				if !cell.is_empty():
-					rowsEmpty = false
-					break
-			digRowIndex = digRowIndex - 1
-		if rowsEmpty:
+	if digMode && rowsEmpty:
 			move_up_rows(grid.size() - 1)
 			fill_bottom_rows(2)
 			emit_signal("garbage_rows")

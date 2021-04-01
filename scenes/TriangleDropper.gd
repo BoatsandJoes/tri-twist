@@ -50,6 +50,7 @@ func set_multiplayer():
 		previews[i].init(activePiece.size, -1, -1, Vector2(gameGrid.grid[-1][-8].position[0] + (i + 1.1) * activePiece.size,
 		activePiece.position[1] - activePiece.size * 1.5), false, false)
 		previews[i].fill_randomly()
+	gameGrid.set_multiplayer()
 
 func set_active_piece_position_based_on_mouse(horizontalMousePosition: int):
 	for cell in gameGrid.grid[0]:
@@ -202,10 +203,14 @@ func draw_ghost_pieces():
 		ghostPiece.visible = true
 		$GhostLine.points = ghostLinePoints
 		$GhostLine.visible = true
+		gameGrid.ghostRow = ghostPiece.rowIndex
+		gameGrid.ghostColumn = ghostPiece.columnIndex
 	else:
 		# We can't drop into the grid from here.
 		ghostPiece.visible = false
 		$GhostLine.visible = false
+		gameGrid.ghostColumn = null
+		gameGrid.ghostRow = null
 
 func advance_piece():
 	activePiece.set_colors(previews[0].leftColor, previews[0].rightColor, previews[0].verticalColor)

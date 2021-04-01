@@ -36,7 +36,7 @@ func _ready():
 	fakeGrid = FakeGameGrid.instance()
 	add_child(fakeGrid)
 	fakeGrid.visible = false
-	fakeGrid.initialize_grid()
+	fakeGrid.initialize_grid(true)
 
 func set_player(player: int):
 	self.player = player
@@ -65,7 +65,7 @@ func prep_dig():
 	triangleDropper.gameGrid.set_gravity(0.2)
 	hud.set_time_limit(0, 0)
 	triangleDropper.gameGrid.fill_bottom_rows(3)
-	triangleDropper.gameGrid.digMode = true
+	triangleDropper.gameGrid.set_dig_mode()
 	triangleDropper.gameGrid.draw_dig_line()
 	triangleDropper.gameGrid.connect("garbage_rows", self, "_on_gameGrid_garbage_rows")
 	triangleDropper.enable_dropping()

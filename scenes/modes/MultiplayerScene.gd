@@ -18,9 +18,9 @@ func _ready():
 	player1Scene.position = Vector2(-200, 200)
 	player2Scene.position = Vector2((get_tree().get_root().size[0] - 400) / 2, 200)
 	player1Scene.hud.get_node("HBoxContainer/VBoxContainer/HBoxContainer/ComboDisplay").connect("combo_done",
-	player2Scene.triangleDropper.gameGrid, "spawn_garbage")
+	self, "player1_attack")
 	player2Scene.hud.get_node("HBoxContainer/VBoxContainer/HBoxContainer/ComboDisplay").connect("combo_done",
-	player1Scene.triangleDropper.gameGrid, "spawn_garbage")
+	self, "player2_attack")
 	player1Scene.triangleDropper.gameGrid.connect("garbage_rows", self, "_on_scene1_garbage_rows")
 	player2Scene.triangleDropper.gameGrid.connect("garbage_rows", self, "_on_scene2_garbage_rows")
 
@@ -34,11 +34,17 @@ func set_config(config):
 #func _process(delta):
 #	pass
 
+func player1_attack(score: int):
+	player2Scene.triangleDropper.gameGrid.queue_garbage(player1Scene.triangleDropper.gameGrid.offset_garbage(score))
+
+func player2_attack(score: int):
+	player1Scene.triangleDropper.gameGrid.queue_garbage(player2Scene.triangleDropper.gameGrid.offset_garbage(score))
+
 func _on_scene1_garbage_rows():
-	player2Scene.triangleDropper.gameGrid.spawn_garbage(50000)
+	player1_attack(50000)
 
 func _on_scene2_garbage_rows():
-	player1Scene.triangleDropper.gameGrid.spawn_garbage(50000)
+	player2_attack(50000)
 
 func _on_scene_restart():
 	emit_signal("restart")

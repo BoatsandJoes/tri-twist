@@ -6,6 +6,7 @@
 * clicking buttons doesn't work on pause menu
 * in triathalon dig, there was a piece that cleared individually somehow
 * multiplayer settings crash
+* garbage breaks tumbling gravity rules
 
 might be fixed
 * saw a case where it looked like two chains didn't combine properly in active chain mode (only one chain actually active, it got stuck in "other chains" while the displayed chain "simulchaineous" kept counting up)

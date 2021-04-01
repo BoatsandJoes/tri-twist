@@ -229,12 +229,15 @@ func after_fill_checks(leftNeighbor, rightNeighbor):
 						# Pushing.
 						rightNeighbor.enter_falling_state(Direction.RIGHT, FallType.PUSH)
 						#TODO sound sfx optional "toppling balancing piece"
-	if !is_marked_for_clear() && !is_falling() && !activeChainMode && fallType == FallType.DROP:
-		# Don't set off if we just hit the sequential chain cap
-		if sequentialChainCapFlag:
-			sequentialChainCapFlag = false
+	if !is_marked_for_clear() && !is_falling() && fallType == FallType.DROP:
+		if !activeChainMode:
+			# Don't set off if we just hit the sequential chain cap
+			if sequentialChainCapFlag:
+				sequentialChainCapFlag = false
+			else:
+				get_parent().set_off_chains()
 		else:
-			get_parent().set_off_chains()
+			get_parent().spawn_garbage()
 
 func update_colors_visually():
 	var leftArray: PoolColorArray = PoolColorArray()
