@@ -108,6 +108,8 @@ func lock_in_garbage():
 		lastDefenseChainGroup["chainKeys"] = existingChainKeys
 		lastDefenseChainGroup["garbageCount"] = piecesToSpawn
 		lastDefenseChains.append(lastDefenseChainGroup)
+		for key in existingChainKeys:
+			grid[key[0]][key[1]].get_node("ChainTimerBar").set_modulate(Color(0.870588, 0.4, 0.117647))
 	piecesToSpawn = 0
 
 func offset_garbage(score: int, chainKey) -> int:

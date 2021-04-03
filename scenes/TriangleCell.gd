@@ -316,6 +316,7 @@ func clear(edge: int):
 	if (edge == Direction.VERTICAL_POINT):
 		# Immediately blank tile.
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
+		$ChainTimerBar.set_modulate(Color(1,1,1))
 		become_default_size()
 		isMarkedForInactiveClear = false
 		emit_signal("end_combo_if_exists", [rowIndex, columnIndex])
