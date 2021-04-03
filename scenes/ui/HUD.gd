@@ -17,6 +17,7 @@ func _ready():
 
 func set_multiplayer():
 	visible = false
+	set_time_limit(0,0)
 
 func set_move_limit(value: int):
 	$HBoxContainer/VBoxContainer2/MoveCount.init(value)

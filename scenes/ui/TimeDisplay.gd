@@ -16,8 +16,7 @@ func _ready():
 func init(minutes: int, seconds: int):
 	$VBoxContainer/TimeValue.set_modulate(Color(1,1,1))
 	incrementing = minutes == 0 && seconds == 0
-	if !incrementing:
-		currentTime = minutes * 60.0 + seconds
+	currentTime = minutes * 60.0 + seconds
 	update_time_string()
 
 func update_time_string():

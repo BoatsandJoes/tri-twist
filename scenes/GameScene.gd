@@ -59,13 +59,13 @@ func prep_gogogo():
 	triangleDropper.gameGrid.set_gravity(0.2)
 	triangleDropper.connect("piece_sequence_advanced", self, "_on_triangleDropper_piece_sequence_advanced")
 	hud.set_move_limit(0)
-	hud.set_time_limit(0, 0)
+	hud.set_time_limit(2, 0)
 	triangleDropper.enable_dropping()
 
 func prep_dig():
 	triangleDropper.gameGrid.toggle_chain_mode(true)
 	triangleDropper.gameGrid.set_gravity(0.2)
-	hud.set_time_limit(0, 0)
+	hud.set_time_limit(2, 0)
 	triangleDropper.gameGrid.fill_bottom_rows(3)
 	triangleDropper.gameGrid.set_dig_mode()
 	triangleDropper.gameGrid.draw_dig_line()
