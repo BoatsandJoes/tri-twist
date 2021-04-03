@@ -30,5 +30,5 @@ func _on_MoveCount_out_of_moves():
 func _on_TimeDisplay_out_of_time():
 	emit_signal("end_game")
 
-func _on_ComboDisplay_combo_done(score):
+func _on_ComboDisplay_combo_done(score, key):
 	$HBoxContainer/VBoxContainer/ScoreDisplay.increment_score(score, true)

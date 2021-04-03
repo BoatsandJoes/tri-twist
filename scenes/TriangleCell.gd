@@ -2,6 +2,8 @@ extends Area2D
 class_name TriangleCell
 
 signal tumble
+signal erase_chain
+signal end_combo_if_exists
 
 var size: int
 # last color is the null color, for empty cells
@@ -316,7 +318,7 @@ func clear(edge: int):
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 		become_default_size()
 		isMarkedForInactiveClear = false
-		get_parent().get_parent().get_parent().end_combo_if_exists([rowIndex, columnIndex])
+		emit_signal("end_combo_if_exists", [rowIndex, columnIndex])
 		# Check to see if any neighbors should enter falling state.
 		if !pointFacingUp:
 			# Primarily, we have to check above.
@@ -578,7 +580,7 @@ func combine_chains(chainRoots: Array, numMatches, lowestTimeLeft) -> Dictionary
 					+ contributingChain.get("simulchaineousCount"))
 				else:
 					combinedChain["simulchaineousCount"] = contributingChain.get("simulchaineousCount")
-			get_parent().get_parent().get_parent().delete_chain(chainRoots[chainRootIndex])
+			emit_signal("erase_chain", chainRoots[chainRootIndex])
 	return update_existing_chain(combinedChain, numMatches, lowestTimeLeft)
 
 func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Dictionary:

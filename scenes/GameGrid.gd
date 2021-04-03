@@ -4,6 +4,8 @@ class_name GameGrid
 signal tumble
 signal grid_full
 signal garbage_rows
+signal erase_chain
+signal end_combo_if_exists
 
 export (PackedScene) var TriangleCell
 var FakeGameGrid = load("res://scenes/FakeGameGrid.tscn")
@@ -15,6 +17,7 @@ var grid: Array = []
 var fakeGameGrid: FakeGameGrid
 var digMode: bool = false
 var piecesToSpawn: int = 0
+var lastDefenseChains: Array = []
 var ghostRow
 var ghostColumn
 
@@ -32,6 +35,8 @@ func initialize_grid():
 			grid[rowIndex][columnIndex].init(cellSize, rowIndex, columnIndex,
 			get_position_for_cell(rowIndex, columnIndex, false), true, false)
 			add_child(grid[rowIndex][columnIndex])
+			grid[rowIndex][columnIndex].connect("erase_chain", self, "_on_TriangleCell_erase_chain")
+			grid[rowIndex][columnIndex].connect("end_combo_if_exists", self, "_on_TriangleCell_end_combo_if_exists")
 			grid[rowIndex][columnIndex].connect("tumble", self, "_on_TriangleCell_tumble")
 	# Garbage timer.
 	$GarbageTimerBar.max_value = $GarbageTimer.wait_time
@@ -92,11 +97,33 @@ func queue_garbage(score: int):
 	var initialPiecesToSpawn = piecesToSpawn
 	piecesToSpawn = piecesToSpawn + score / 1000
 	if initialPiecesToSpawn < piecesToSpawn:
-		$GarbageTimerBar.set_modulate(Color(1,1,1))
 		$GarbageTimer.start()
 
-func offset_garbage(score: int) -> int:
+func lock_in_garbage():
+	var existingChainKeys = get_parent().get_parent().get_chains().keys()
+	if existingChainKeys.empty():
+		spawn_garbage(piecesToSpawn)
+	else:
+		var lastDefenseChainGroup = {}
+		lastDefenseChainGroup["chainKeys"] = existingChainKeys
+		lastDefenseChainGroup["garbageCount"] = piecesToSpawn
+		lastDefenseChains.append(lastDefenseChainGroup)
+	piecesToSpawn = 0
+
+func offset_garbage(score: int, chainKey) -> int:
 	score = score / 1000
+	var lastDefenseChainsToRemove: Array = []
+	for lastDefenseChain in lastDefenseChains:
+		var lockedInPiecesToSpawn = lastDefenseChain.get("garbageCount")
+		if score >= lockedInPiecesToSpawn:
+			score = score - lockedInPiecesToSpawn
+			lastDefenseChainsToRemove.append(lastDefenseChain)
+		else:
+			lastDefenseChain["garbageCount"] = lockedInPiecesToSpawn - score
+			score = 0
+			break
+	for chain in lastDefenseChainsToRemove:
+		lastDefenseChains.erase(chain)
 	if score >= piecesToSpawn:
 		score = score - piecesToSpawn
 		piecesToSpawn = 0
@@ -104,24 +131,41 @@ func offset_garbage(score: int) -> int:
 	else:
 		piecesToSpawn = piecesToSpawn - score
 		score = 0
+	var chainGroupsToErase = []
+	for chainGroup in lastDefenseChains:
+		var keysToRemove: Array = []
+		var chainKeys = chainGroup.get("chainKeys")
+		for key in chainKeys:
+			if key == chainKey:
+				keysToRemove.append(key)
+		for key in keysToRemove:
+			chainKeys.erase(key)
+		# check for no more chains in group
+		if chainKeys.empty():
+			spawn_garbage(chainGroup.get("garbageCount"))
+			chainGroupsToErase.append(chainGroup)
+		else:
+			chainGroup["chainKeys"] = chainKeys
+	for group in chainGroupsToErase:
+		lastDefenseChains.erase(group)
 	return score * 1000
 
-func spawn_garbage():
+func spawn_garbage(lockedInPiecesToSpawn: int):
 	#TODO sound sfx "incoming garbage"
 	for row in grid:
 		for cell in row:
-			if piecesToSpawn == 0:
+			if lockedInPiecesToSpawn == 0:
 				break
 			if cell.is_empty():
-				if piecesToSpawn == 1 && !cell.pointFacingUp:
+				if lockedInPiecesToSpawn == 1 && !cell.pointFacingUp:
 					var rightNeighbor = get_neighbor(cell.rowIndex, cell.columnIndex, cell.Direction.RIGHT)
 					if rightNeighbor == null || !rightNeighbor.is_empty():
 						cell.fill_without_matching_neighbors()
-						piecesToSpawn = piecesToSpawn - 1
+						lockedInPiecesToSpawn = lockedInPiecesToSpawn - 1
 				else:
 					cell.fill_without_matching_neighbors()
-					piecesToSpawn = piecesToSpawn - 1
-	if piecesToSpawn > 0:
+					lockedInPiecesToSpawn = lockedInPiecesToSpawn - 1
+	if lockedInPiecesToSpawn > 0:
 		emit_signal("grid_full")
 
 func fill_bottom_rows(rows: int):
@@ -206,14 +250,31 @@ func _process(delta):
 	var rowsEmpty = true
 	var isAnyCellMarkedForClear = false
 	var ghostGarbageCount = 0
+	# TODO temp for testing; ghost garbage currently only half functional and needs rework.
+	var lockedInPiecesToSpawn = 0
 	for rowIndex in range(grid.size()):
 		for cell in grid[rowIndex]:
 			if cell.is_empty():
 				isGridFull = false
 				if digMode:
-					if ghostGarbageCount < piecesToSpawn:
+					if ghostGarbageCount < lockedInPiecesToSpawn:
 						var ghostGarbageAdded: bool = false
-						if piecesToSpawn - ghostGarbageCount == 1 && !cell.pointFacingUp:
+						if lockedInPiecesToSpawn - ghostGarbageCount == 1 && !cell.pointFacingUp:
+							var rightNeighbor = get_neighbor(cell.rowIndex, cell.columnIndex, cell.Direction.RIGHT)
+							if (rightNeighbor == null || !rightNeighbor.is_empty()):
+								ghostGarbageAdded = true
+						else:
+							ghostGarbageAdded = true
+						if ghostGarbageAdded:
+							ghostGarbageCount = ghostGarbageCount + 1
+							if ghostRow != rowIndex || ghostColumn != cell.columnIndex:
+								fakeGameGrid.cells[rowIndex][cell.columnIndex].set_modulate(Color(0.870588, 0.4, 0.117647))
+								fakeGameGrid.cells[rowIndex][cell.columnIndex].visible = true
+						else:
+							fakeGameGrid.cells[rowIndex][cell.columnIndex].visible = false
+					elif ghostGarbageCount - lockedInPiecesToSpawn < piecesToSpawn:
+						var ghostGarbageAdded: bool = false
+						if piecesToSpawn - (ghostGarbageCount - lockedInPiecesToSpawn) == 1 && !cell.pointFacingUp:
 							var rightNeighbor = get_neighbor(cell.rowIndex, cell.columnIndex, cell.Direction.RIGHT)
 							if (rightNeighbor == null || !rightNeighbor.is_empty()):
 								ghostGarbageAdded = true
@@ -223,6 +284,7 @@ func _process(delta):
 							ghostGarbageCount = ghostGarbageCount + 1
 							if ghostRow != rowIndex || ghostColumn != cell.columnIndex:
 								fakeGameGrid.cells[rowIndex][cell.columnIndex].visible = true
+								fakeGameGrid.cells[rowIndex][cell.columnIndex].set_modulate(Color(1,1,1))
 						else:
 							fakeGameGrid.cells[rowIndex][cell.columnIndex].visible = false
 					else:
@@ -246,8 +308,6 @@ func _process(delta):
 		# apply effect.
 		$GarbageTimerBar.show()
 		$GarbageTimerBar.value = $GarbageTimer.time_left
-		if $GarbageTimerBar.value < grid[0][0].clearDelay:
-			$GarbageTimerBar.set_modulate(Color(0.870588, 0.4, 0.117647))
 	else:
 		$GarbageTimerBar.hide()
 
@@ -281,5 +341,11 @@ func move_up_rows(digRowIndex: int):
 func _on_TriangleCell_tumble():
 	emit_signal("tumble")
 
+func _on_TriangleCell_end_combo_if_exists(chainKey):
+	emit_signal("end_combo_if_exists", chainKey)
+
+func _on_TriangleCell_erase_chain(chainKey):
+	emit_signal("erase_chain", chainKey)
+
 func _on_GarbageTimer_timeout():
-	spawn_garbage()
+	lock_in_garbage()

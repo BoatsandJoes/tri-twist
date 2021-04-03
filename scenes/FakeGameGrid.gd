@@ -38,7 +38,7 @@ func initialize_grid(childrenVisible: bool):
 				polygon.color = Color(0,0,0)
 			else:
 				polygon.visible = false
-				polygon.color = Color(0.2,0.2,0.2)
+				polygon.color = Color(0.25,0.25,0.25)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

@@ -24,6 +24,8 @@ func _ready():
 	triangleDropper.gameGrid.connect("tumble", self, "_on_gameGrid_tumble")
 	triangleDropper.gameGrid.connect("grid_full", self, "_on_gameGrid_grid_full")
 	triangleDropper.gameGrid.connect("garbage_rows", self, "_on_gameGrid_garbage_rows")
+	triangleDropper.gameGrid.connect("erase_chain", self, "delete_chain")
+	triangleDropper.gameGrid.connect("end_combo_if_exists", self, "end_combo_if_exists")
 	hud = HUD.instance()
 	hud.set_position(Vector2(10, 100))
 	hud.set_size(Vector2(1900, 780))

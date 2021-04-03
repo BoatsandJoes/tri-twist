@@ -34,17 +34,17 @@ func set_config(config):
 #func _process(delta):
 #	pass
 
-func player1_attack(score: int):
-	player2Scene.triangleDropper.gameGrid.queue_garbage(player1Scene.triangleDropper.gameGrid.offset_garbage(score))
+func player1_attack(score: int, comboKey):
+	player2Scene.triangleDropper.gameGrid.queue_garbage(player1Scene.triangleDropper.gameGrid.offset_garbage(score, comboKey))
 
-func player2_attack(score: int):
-	player1Scene.triangleDropper.gameGrid.queue_garbage(player2Scene.triangleDropper.gameGrid.offset_garbage(score))
+func player2_attack(score: int, comboKey):
+	player1Scene.triangleDropper.gameGrid.queue_garbage(player2Scene.triangleDropper.gameGrid.offset_garbage(score, comboKey))
 
 func _on_scene1_garbage_rows():
-	player1_attack(50000)
+	player1_attack(50000, [])
 
 func _on_scene2_garbage_rows():
-	player2_attack(50000)
+	player2_attack(50000, [])
 
 func _on_scene_restart():
 	emit_signal("restart")

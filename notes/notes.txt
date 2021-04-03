@@ -1,4 +1,5 @@
 # tri-twist
+	design all menus
 	title
 	button config
 	clean up multiplayer double pause menu
@@ -103,17 +104,8 @@ Scope Creep:
 		VFX  
 		Music  
 		SFX  
-		color choices (in menu or per character or both)  
-	mode ideas:
-		Purify/dig race/Dr mario, just focus on downstacking  
-			maybe have some incentive to make small chains, idk what  
-			could fill board with unmatched pieces and mark some as "clear these" so you have to dig to them (like purify), and big chain marks more as "clear these". Something like that  
-			could fill board with garbage instead of normal pieces. Idk if this would be fun so it's worth testing, especially since garbage might make a good versus mode some day.  
-		Shared board local coop seems pretty easy to implement compared to all other forms of multiplayer.
-	button configuration  
-	controller support  
-	mobile port  
-	Tutorials  
+		color choices (in menu or per character or both)
+	mobile port
 
 Things that I want but will have to cut:  
 	steam leaderboards  
@@ -140,11 +132,10 @@ Things that I want but will have to cut:
 			Analysis paralysis is a problem  
 			Can have no possible moves although it's rareish; need board shakeup like bejewled  
 		Literally just Carcassonne  
-	Multiplayer:  
-		vs cpu  
+	Multiplayer:
 		GGPO is a C++ module so I could compile the engine with both modules, or remove FMod, or change to FMod GDNative  
-		When searching/connecting it should say "Triangulating an opponent"  
-		Could have people play 2 single player games side by side and see who wins, either playing a game to completion and seeing who did better, or going over a certain score differential  
+		When searching/connecting it should say "Triangulating an opponent"
+		Could have people play 2 single player games side by side and see who wins, either playing a game to completion and seeing who did better, or going over a certain score differential
 		Could have item attacks/buffs like:  
 			match anything and whatever matches, mass replace that color with a random other color (probably making a big clear)  
 			explode when matched, either in a line or in an area  
@@ -154,22 +145,12 @@ Things that I want but will have to cut:
 			Piece pairs (this is horrifying)  
 			Ice (pieces slide down w/o tumbling and then slide sideways too)  
 			Garbage (see garbage)  
-		Garbage:  
-			come in like:  
-				Petal Crash?  
-				Tetris (kind of like changing grid size but you can dig out in chunks) (I think I like this one. Only thing I don't like about it is you have to send a FULL line every time. Would need to make the grid big so one line is nbd)  
-					another thing: does it do a full diagonal line, putting it lots of extra useless pieces, or mirror stack height but that means you get more if you're doing worse?
-						if grid is flat, you just get two lines of garbage, easy
+		Garbage:
 			cleared like:  
 				puyo (I think I like this one, because it changes the way you play to shorter chains if you want to dig through multiple lines)  
 				Petal Crash garbage attack  
 				puzzle fighter (normal piece but unclearable for some moves/time, they're still really not that different from ordinary pieces so idk)  
-				tofu (gives opponent points when cleared)  
-			Counter like:  
-				T99 with garbage limit/delay, better for new players but too easy to defend against when you're good  
-				Puyo/guideline  
-			Damage formula:  
-				same as guideline tetris; include petal crash tug of war for new players since they can't do chains to do damage  
+				tofu (gives opponent points when cleared)
 		Each player could do different kinds of attacks, potentially tied to a character (do you pick your attack, or your opponent's attack?)  
 		Coop:  
 			shared board coop  
@@ -201,3 +182,4 @@ Titles:
 	Triple Threat
 	Triangle
 	Untitled Untriangle
+	Triceradrops

@@ -31,7 +31,7 @@ func select_gogogo():
 
 func select_dig_deep():
 	$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = "<"
-	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("Get below the line for points",
+	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("Clear all pieces above the line for points",
 	"2 minutes to score big!")
 
 func select_triathalon():
