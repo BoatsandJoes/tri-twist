@@ -68,29 +68,28 @@ custom_constants/separation = 20
 alignment = 1
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 406.0
-margin_right = 1049.0
+margin_left = 353.0
+margin_right = 1103.0
 margin_bottom = 960.0
 alignment = 1
 
 [node name="Title" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer3"]
-margin_top = 340.0
-margin_right = 643.0
-margin_bottom = 599.0
+margin_top = 406.0
+margin_right = 750.0
+margin_bottom = 534.0
 custom_fonts/font = SubResource( 1 )
-text = "Untitled
-Untriangle"
+text = "Triceradrops"
 
 [node name="Tagline" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer3"]
-margin_top = 603.0
-margin_right = 643.0
-margin_bottom = 619.0
+margin_top = 538.0
+margin_right = 750.0
+margin_bottom = 554.0
 custom_fonts/font = SubResource( 2 )
 text = "Tagline goes here"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 1069.0
-margin_right = 1344.0
+margin_left = 1123.0
+margin_right = 1398.0
 margin_bottom = 960.0
 custom_constants/separation = 5
 alignment = 1
@@ -131,8 +130,8 @@ custom_fonts/font = SubResource( 7 )
 text = "Multiplayer"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 1364.0
-margin_right = 1393.0
+margin_left = 1418.0
+margin_right = 1447.0
 margin_bottom = 960.0
 custom_constants/separation = 13
 alignment = 1

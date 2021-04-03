@@ -34,8 +34,8 @@ var sequentialChainCapFlag = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$ChainTimerBar.set_percent_visible(false)
-	$ChainTimerBar.hide()
+	$ChainTimerBarContainer/ChainTimerBar.set_percent_visible(false)
+	$ChainTimerBarContainer/ChainTimerBar.hide()
 	$ClearTimer.wait_time = clearDelay
 
 func set_clear_scaling(value):
@@ -58,6 +58,14 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	#baseVectorArray.append(Vector2(size/2, size * sqrt(3) / 2))
 	# Define vertices of children
 	become_default_size()
+	
+	# create garbage preview shape
+	var garbagePreviewVectorArray = PoolVector2Array()
+	garbagePreviewVectorArray.append(Vector2(0, -size * sqrt(3) / 6))
+	garbagePreviewVectorArray.append(Vector2(size/4, size/2 * sqrt(3) / 2 - size * sqrt(3) / 6))
+	garbagePreviewVectorArray.append(Vector2(-size/4, size/2 * sqrt(3) / 2 - size * sqrt(3) / 6))
+	$GarbagePreview.set_polygon(garbagePreviewVectorArray)
+	
 	# flip every even triangle cell and cells outside the grid
 	if ((columnIndex + rowIndex) % 2 == 0 && !pointFacingUp) || (!inGrid && !isGhost):
 		scale = Vector2(1, -1)
@@ -73,9 +81,10 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 		scale = Vector2(1, 1)
 		pointFacingUp = false
 	# Chain timer bar.
-	$ChainTimerBar.max_value = clearDelay
-	$ChainTimerBar.rect_size = Vector2(size / 2, size / 10)
-	$ChainTimerBar.rect_position = Vector2($ChainTimerBar.rect_position[0] - size / 4, $ChainTimerBar.rect_position[1] - size / 20)
+	$ChainTimerBarContainer/ChainTimerBar.max_value = clearDelay
+	$ChainTimerBarContainer/ChainTimerBar.rect_size = Vector2(size / 2, size / 10)
+	$ChainTimerBarContainer/ChainTimerBar.rect_position = Vector2($ChainTimerBarContainer/ChainTimerBar.rect_position[0] - size / 4,
+	$ChainTimerBarContainer/ChainTimerBar.rect_position[1] - size / 20)
 	# make empty
 	set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 
@@ -316,7 +325,7 @@ func clear(edge: int):
 	if (edge == Direction.VERTICAL_POINT):
 		# Immediately blank tile.
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
-		$ChainTimerBar.set_modulate(Color(1,1,1))
+		$ChainTimerBarContainer/ChainTimerBar.set_modulate(Color(1,1,1))
 		become_default_size()
 		isMarkedForInactiveClear = false
 		emit_signal("end_combo_if_exists", [rowIndex, columnIndex])
@@ -729,12 +738,12 @@ func _process(delta):
 	if inGrid && get_parent().get_parent().get_parent().has_chain([rowIndex, columnIndex]):
 		if !$ClearTimer.is_stopped():
 			# apply effect.
-			$ChainTimerBar.show()
-			$ChainTimerBar.value = $ClearTimer.time_left
+			$ChainTimerBarContainer/ChainTimerBar.show()
+			$ChainTimerBarContainer/ChainTimerBar.value = $ClearTimer.time_left
 		else:
-			$ChainTimerBar.hide()
+			$ChainTimerBarContainer/ChainTimerBar.hide()
 	else:
-		$ChainTimerBar.hide()
+		$ChainTimerBarContainer/ChainTimerBar.hide()
 
 func _on_ClearTimer_timeout():
 	# visual effect
