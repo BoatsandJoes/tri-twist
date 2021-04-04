@@ -59,13 +59,6 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	# Define vertices of children
 	become_default_size()
 	
-	# create garbage preview shape
-	var garbagePreviewVectorArray = PoolVector2Array()
-	garbagePreviewVectorArray.append(Vector2(0, -size * sqrt(3) / 6))
-	garbagePreviewVectorArray.append(Vector2(size/4, size/2 * sqrt(3) / 2 - size * sqrt(3) / 6))
-	garbagePreviewVectorArray.append(Vector2(-size/4, size/2 * sqrt(3) / 2 - size * sqrt(3) / 6))
-	$GarbagePreview.set_polygon(garbagePreviewVectorArray)
-	
 	# flip every even triangle cell and cells outside the grid
 	if ((columnIndex + rowIndex) % 2 == 0 && !pointFacingUp) || (!inGrid && !isGhost):
 		scale = Vector2(1, -1)
@@ -158,6 +151,26 @@ func set_colors(left: int, right: int, vertical: int):
 	rightColor = right
 	verticalColor = vertical
 	update_colors_visually()
+
+func show_garbage_preview(color: Color):
+	var garbagePreviewVectorArray = PoolVector2Array()
+	garbagePreviewVectorArray.append(Vector2(0, -size * sqrt(3) / 6))
+	garbagePreviewVectorArray.append(Vector2(size/4, size * sqrt(3) / 12))
+	garbagePreviewVectorArray.append(Vector2(-size/4, size * sqrt(3) / 12))
+	$GarbagePreview.set_polygon(garbagePreviewVectorArray)
+	$GarbagePreview.set_color(color)
+	$GarbagePreview.visible = true
+
+func show_garbage_spawn_animation(ratio: float):
+	var previewPoints: PoolVector2Array = PoolVector2Array()
+	previewPoints.append(Vector2(ratio * size/2, -size * sqrt(3) / 6))
+	previewPoints.append(Vector2(size/4 - ratio * size/4, size * sqrt(3) / 12 +
+	ratio * size * sqrt(3) / 4))
+	previewPoints.append(Vector2(-size/4 - ratio * size/4, size * sqrt(3) / 12 -
+	ratio * size * sqrt(3) / 4))
+	$GarbagePreview.set_polygon(previewPoints)
+	$GarbagePreview.set_color(Color(0.870588, 0.4, 0.117647, 0.8 + ratio))
+	$GarbagePreview.visible = true
 
 func spawn_piece(piece: TriangleCell):
 	fallType = FallType.DROP

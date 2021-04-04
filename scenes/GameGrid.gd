@@ -19,6 +19,7 @@ var lastDefenseChains: Array = []
 var ghostRow
 var ghostColumn
 var garbageHitstopTimers: Array = []
+var digVersus = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -48,8 +49,7 @@ func set_dig_mode():
 	digMode = true
 
 func set_multiplayer():
-	# TODO
-	pass
+	digVersus = true
 
 func toggle_chain_mode(active):
 	for row in grid:
@@ -163,8 +163,9 @@ func spawn_garbage(lockedInPiecesToSpawn: int):
 		var garbageHitstopTimer: Timer = Timer.new()
 		add_child(garbageHitstopTimer)
 		garbageHitstopTimer.one_shot = true
+		garbageHitstopTimer.wait_time = 0.15
 		garbageHitstopTimer.connect("timeout", self, "_on_garbageHitstopTimer_timeout")
-		garbageHitstopTimer.start(0.15)
+		garbageHitstopTimer.start()
 		var record: Dictionary = {}
 		record["timer"] = garbageHitstopTimer
 		record["garbageCount"] = lockedInPiecesToSpawn
@@ -251,8 +252,6 @@ func _process(delta):
 	var isGridFull = true
 	var rowsEmpty = true
 	var isAnyCellMarkedForClear = false
-	# TODO temp for testing; ghost garbage currently only half functional and needs rework.
-	var lockedInPiecesToSpawn = 0
 	for rowIndex in range(grid.size()):
 		for cell in grid[rowIndex]:
 			if cell.is_empty():
@@ -271,6 +270,36 @@ func _process(delta):
 			move_up_rows(grid.size() - 1)
 			fill_bottom_rows(2)
 			emit_signal("garbage_rows")
+	if digVersus:
+		var cellsPreviewingGarbage: Array = []
+		# Preview spawning garbage.
+		if !garbageHitstopTimers.empty():
+			for garbageGroup in garbageHitstopTimers:
+				var garbageCount = garbageGroup.get("garbageCount")
+				for row in grid:
+					for cell in row:
+						if (cell.is_empty() && garbageCount > 0 && !cellsPreviewingGarbage.has([cell.rowIndex, cell.columnIndex])):
+							if garbageCount == 1 && !cell.pointFacingUp:
+								var rightNeighbor = get_neighbor(cell.rowIndex, cell.columnIndex, cell.Direction.RIGHT)
+								if rightNeighbor == null || !rightNeighbor.is_empty():
+									var timer: Timer = garbageGroup.get("timer")
+									cell.show_garbage_spawn_animation(1 - timer.time_left / timer.wait_time)
+									cellsPreviewingGarbage.append([cell.rowIndex, cell.columnIndex])
+									garbageCount = garbageCount - 1
+							else:
+								var timer: Timer = garbageGroup.get("timer")
+								cell.show_garbage_spawn_animation(1 - timer.time_left / timer.wait_time)
+								cellsPreviewingGarbage.append([cell.rowIndex, cell.columnIndex])
+								garbageCount = garbageCount - 1
+		# TODO preview last defense garbage
+		# TODO preview normal garbage
+		# TODO preview offset normal garbage
+		# TODO preview offset last defense garbage and blank other cells
+		for row in grid:
+			for cell in row:
+				if !cellsPreviewingGarbage.has([cell.rowIndex, cell.columnIndex]):
+					cell.get_node("GarbagePreview").visible = false
+		# TODO preview outgoing attacks
 	if !$GarbageTimer.is_stopped():
 		$GarbageTimerBar.show()
 		if ($GarbageTimer.wait_time - $GarbageTimer.time_left < 0.1 &&
