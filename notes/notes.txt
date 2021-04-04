@@ -7,8 +7,9 @@
 		during last defense, same thing, but the preview garbage turns orange and only goes in active chains that are part of THAT defense.
 			keep a record of all cells that are part of the defense, not just the one showing the timer
 				add to record when a piece is added to a chain. store it next to score info
-			if last defense chains for this defense will cancel garbage, turn the preview garbage ghostly and move it to the end of the garbage queue (order is solid orange, solid white, ghost white, ghost orange)
+			if last defense chains for this defense will cancel garbage, turn the preview garbage ghostly and move it to the end of the garbage queue (order is 9f garbage, solid orange, solid white, ghost white, ghost orange)
 				if any is left over, apply to offet attack that has not landed
+		during garbage delay, idk what I'm doing exactly but probably some animation. This goes into empty cells only
 	attack preview:
 		after offset previews are applied, show remaining attack preview above and to the left for ongoing chains
 		different iconography for 1, 10. bottom row is 1-9, then 10s appear on 2nd+ rows
@@ -72,7 +73,10 @@
 		time limit
 		move limit
 		force drop
-		garbage
+		garbage on/off
+		garbage timer
+		dig on/off
+		initial dig rows
 	settings
 		Gravity
 		double drop prevention
@@ -183,7 +187,8 @@ Tri words for mechanics or modes or titles:
 	tricky  
 	triouts  
 	tribute  
-	tri not to die  
+	tri not to die
+	Triangle Rex
 
 Titles:  
 	Trillion Trippy Triangles  

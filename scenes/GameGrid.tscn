@@ -23,7 +23,7 @@ default_color = Color( 1, 1, 1, 0.588235 )
 texture_mode = 1044957385
 
 [node name="GarbageTimer" type="Timer" parent="."]
-wait_time = 8.0
+wait_time = 4.0
 one_shot = true
 
 [node name="GarbageTimerBar" type="ProgressBar" parent="."]

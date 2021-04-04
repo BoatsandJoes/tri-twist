@@ -18,6 +18,7 @@ var piecesToSpawn: int = 0
 var lastDefenseChains: Array = []
 var ghostRow
 var ghostColumn
+var garbageHitstopTimers: Array = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -111,6 +112,14 @@ func lock_in_garbage():
 
 func offset_garbage(score: int, chainKey) -> int:
 	score = score / 1000
+	for i in range(garbageHitstopTimers.size()):
+		if score == 0:
+			break
+		var garbageCount = garbageHitstopTimers[i].get("garbageCount")
+		while score > 0 && garbageCount > 0:
+			garbageCount = garbageCount - 1
+			score = score - 1
+		garbageHitstopTimers[i]["garbageCount"] = garbageCount
 	var lastDefenseChainsToRemove: Array = []
 	for lastDefenseChain in lastDefenseChains:
 		var lockedInPiecesToSpawn = lastDefenseChain.get("garbageCount")
@@ -150,22 +159,16 @@ func offset_garbage(score: int, chainKey) -> int:
 	return score * 1000
 
 func spawn_garbage(lockedInPiecesToSpawn: int):
-	#TODO sound sfx "incoming garbage"
-	for row in grid:
-		for cell in row:
-			if lockedInPiecesToSpawn == 0:
-				break
-			if cell.is_empty():
-				if lockedInPiecesToSpawn == 1 && !cell.pointFacingUp:
-					var rightNeighbor = get_neighbor(cell.rowIndex, cell.columnIndex, cell.Direction.RIGHT)
-					if rightNeighbor == null || !rightNeighbor.is_empty():
-						cell.fill_without_matching_neighbors()
-						lockedInPiecesToSpawn = lockedInPiecesToSpawn - 1
-				else:
-					cell.fill_without_matching_neighbors()
-					lockedInPiecesToSpawn = lockedInPiecesToSpawn - 1
 	if lockedInPiecesToSpawn > 0:
-		emit_signal("grid_full")
+		var garbageHitstopTimer: Timer = Timer.new()
+		add_child(garbageHitstopTimer)
+		garbageHitstopTimer.one_shot = true
+		garbageHitstopTimer.connect("timeout", self, "_on_garbageHitstopTimer_timeout")
+		garbageHitstopTimer.start(0.15)
+		var record: Dictionary = {}
+		record["timer"] = garbageHitstopTimer
+		record["garbageCount"] = lockedInPiecesToSpawn
+		garbageHitstopTimers.append(record)
 
 func fill_bottom_rows(rows: int):
 	#TODO sound sfx "incoming garbage"
@@ -317,3 +320,26 @@ func _on_TriangleCell_erase_chain(chainKey):
 
 func _on_GarbageTimer_timeout():
 	lock_in_garbage()
+
+func _on_garbageHitstopTimer_timeout():
+	#TODO This might crash the game if a single chain is the last defense against two attacks
+	garbageHitstopTimers[0].get("timer").queue_free()
+	var lockedInPiecesToSpawn = garbageHitstopTimers[0].get("garbageCount")
+	garbageHitstopTimers.remove(0)
+	if lockedInPiecesToSpawn > 0:
+		#TODO sound sfx "incoming garbage"
+		for row in grid:
+			for cell in row:
+				if lockedInPiecesToSpawn <= 0:
+					break
+				if cell.is_empty():
+					if lockedInPiecesToSpawn == 1 && !cell.pointFacingUp:
+						var rightNeighbor = get_neighbor(cell.rowIndex, cell.columnIndex, cell.Direction.RIGHT)
+						if rightNeighbor == null || !rightNeighbor.is_empty():
+							cell.fill_without_matching_neighbors()
+							lockedInPiecesToSpawn = lockedInPiecesToSpawn - 1
+					else:
+						cell.fill_without_matching_neighbors()
+						lockedInPiecesToSpawn = lockedInPiecesToSpawn - 1
+	if lockedInPiecesToSpawn > 0:
+		emit_signal("grid_full")

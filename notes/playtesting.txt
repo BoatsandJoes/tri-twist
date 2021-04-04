@@ -54,3 +54,6 @@ andrew multiplayer
 	if both people always get to the bottom at the same time, neither will ever die
 	maybe when an attack timer finshes, any chains that are active at that time need to finish before the attack connects
 		the chains and garbage should have an effect to indicate this. New chains and garbage work as normal. Marked garbage is cancelled first
+
+beth multiplayer
+	feels kind of bad that my big attack doesn't kill until 10 seconds later

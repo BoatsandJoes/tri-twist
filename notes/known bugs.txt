@@ -6,6 +6,8 @@
 * clicking buttons doesn't work on pause menu
 * in triathalon dig, there was a piece that cleared individually somehow
 * multiplayer settings crash
+* active piece starting position depends on mouse even if device is not mouse
+* single piece stays highlighted after board moves up? (check video)
 
 might be fixed
 * saw a case where it looked like two chains didn't combine properly in active chain mode (only one chain actually active, it got stuck in "other chains" while the displayed chain "simulchaineous" kept counting up)
