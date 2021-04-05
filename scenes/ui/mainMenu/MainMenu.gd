@@ -12,7 +12,7 @@ signal exit
 # var a = 2
 # var b = "text"
 const taglines: Array = [
-"Ah, I see you are a Windows user", #Someone online's opening line of evangelism about how great open source software is (name witheld)
+"Ah, I see you are a Windows user", #Someone online's opening line of open source software evangelism (name witheld)
 "Open source https://github.com/BoatsandJoes", #This game is open source! You're reading it right now!
 "Like putting too much air in a balloon!", #Futurama: Where No Fan Has Gone Before 
 "Think of shipping channels in the ocean", #Numb3rs: Shadow Markets
@@ -23,14 +23,17 @@ const taglines: Array = [
 "Chugga chugga chugga chugga CHOO CHOO", # Snowpiercer is a work that examines class divide, but also takes place on a train
 "Might be a roguelike", # Some purist roguelike fans get upset when someone (INCORRECTLY :O ) categorizes a game in their genre
 "Not a fighting game", # Some purist fighting game fans get upset when someone (INCORRECTLY :O ) categorizes a game in their genre
-"Contains arbitrary execution and artificial difficulty", # Video game players often complain about these things. Some people like them
+"Contains arbitrary execution and artificial difficulty", # Video game players often complain about these things. Some like them
 "I can be your angle... or yuor devil", #Meme, often associated with Egoraptor/Game Grumps. Also, triangles
 "I've always wanted to feel like my puzzle game had the vibe of a teen romance novel", #My sister's response to I can be your angle...
 "Oh no! It's boiling acid!", #Security guard from near the beginning of Batman Forever
 "A wagon full of pancakes? In the championship? I'd like to see it try", #Homestar Runner: Strong Bad Email #117 "Montage"
 "I wanna take you for a ride", #Lyrics from the Marvel vs Capcom 2: New Age of Heroes character select theme
 "I don't know who it is, but it probably is fhqwhgads", #Homestar Runner: Everybody to the Limit
-"No copyright infringement intended, all rights to their original owners" #Often posted under blatantly infringing Youtube videos
+"No copyright infringement intended, all rights to their original owners", #Often posted under blatantly infringing Youtube videos
+"When I see a triangle I turn 300 degrees and walk away", #300 degrees is the angle outside an equilateral triangle (inside is 60)
+"The juice is hypotenuse", #"The juice is loose" is something that people used to say about OJ Simpson
+"No obtuse mechanics" #Obtuse is a type of angle that a triangle can have, but not in this game.
 ]
 
 # Called when the node enters the scene tree for the first time.

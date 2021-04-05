@@ -125,6 +125,7 @@ func fill_without_matching_neighbors():
 	$GravityTimer.stop()
 	tumbleDirection = Direction.VERTICAL
 	wasHardDroppedMostRecently = false
+	fallType = FallType.DROP
 	var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
 	var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
 	var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
@@ -145,6 +146,8 @@ func fill_without_matching_neighbors():
 	verticalColor = colors.find(tempColors[randi() % (tempColors.size() - 1)])
 	update_colors_visually()
 	become_default_size()
+	after_fill_checks(get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT),
+	get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT))
 
 func set_colors(left: int, right: int, vertical: int):
 	leftColor = left
@@ -169,7 +172,7 @@ func show_garbage_spawn_animation(ratio: float):
 	previewPoints.append(Vector2(-size/4 - ratio * size/4, size * sqrt(3) / 12 -
 	ratio * size * sqrt(3) / 4))
 	$GarbagePreview.set_polygon(previewPoints)
-	$GarbagePreview.set_color(Color(0.870588, 0.4, 0.117647, 0.8 + ratio))
+	$GarbagePreview.set_color(Color(0.870588, 0.4, 0.117647, 0.8 + ratio / 5))
 	$GarbagePreview.visible = true
 
 func spawn_piece(piece: TriangleCell):

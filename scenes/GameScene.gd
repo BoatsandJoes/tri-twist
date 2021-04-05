@@ -38,7 +38,7 @@ func _ready():
 	fakeGrid = FakeGameGrid.instance()
 	add_child(fakeGrid)
 	fakeGrid.visible = false
-	fakeGrid.initialize_grid(true)
+	fakeGrid.initialize_grid(1920, 1080)
 
 func set_player(player: int):
 	self.player = player

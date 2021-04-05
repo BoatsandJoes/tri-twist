@@ -11,6 +11,7 @@ export (PackedScene) var TriangleCell
 export var gridWidth: int
 export var gridHeight: int
 export var margin: int
+var FakeGameGrid = load("res://scenes/FakeGameGrid.tscn")
 var cellSize: int
 var grid: Array = []
 var digMode: bool = false
@@ -20,6 +21,7 @@ var ghostRow
 var ghostColumn
 var garbageHitstopTimers: Array = []
 var digVersus = false
+var queuedAttacks: FakeGameGrid
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -50,6 +52,11 @@ func set_dig_mode():
 
 func set_multiplayer():
 	digVersus = true
+	queuedAttacks = FakeGameGrid.instance()
+	add_child(queuedAttacks)
+	queuedAttacks.initialize_grid(384, 360)
+	queuedAttacks.set_position(Vector2(queuedAttacks.position[0] + 300, queuedAttacks.position[1] - 309))
+	queuedAttacks.set_cells_visible(0)
 
 func toggle_chain_mode(active):
 	for row in grid:
@@ -281,7 +288,8 @@ func _process(delta):
 						if (cell.is_empty() && garbageCount > 0 && !cellsPreviewingGarbage.has([cell.rowIndex, cell.columnIndex])):
 							if garbageCount == 1 && !cell.pointFacingUp:
 								var rightNeighbor = get_neighbor(cell.rowIndex, cell.columnIndex, cell.Direction.RIGHT)
-								if rightNeighbor == null || !rightNeighbor.is_empty():
+								if (rightNeighbor == null || !rightNeighbor.is_empty()
+								|| cellsPreviewingGarbage.has([rightNeighbor.rowIndex, rightNeighbor.columnIndex])):
 									var timer: Timer = garbageGroup.get("timer")
 									cell.show_garbage_spawn_animation(1 - timer.time_left / timer.wait_time)
 									cellsPreviewingGarbage.append([cell.rowIndex, cell.columnIndex])
@@ -291,15 +299,115 @@ func _process(delta):
 								cell.show_garbage_spawn_animation(1 - timer.time_left / timer.wait_time)
 								cellsPreviewingGarbage.append([cell.rowIndex, cell.columnIndex])
 								garbageCount = garbageCount - 1
-		# TODO preview last defense garbage
-		# TODO preview normal garbage
-		# TODO preview offset normal garbage
-		# TODO preview offset last defense garbage and blank other cells
+		# Calculate size of attack that we're building
+		var chainsInProgress: Dictionary = get_parent().get_parent().get_chains()
+		var totalPendingOutgoingGarbage: int = 0
+		var totalGarbageUsedToOffsetLastDefense: int = 0
+		var alreadyOffsetGarbageForEachLastDefense: PoolIntArray = PoolIntArray()
+		var highestTimerForEachLastDefense: PoolRealArray = PoolRealArray()
+		for chainKey in chainsInProgress.keys():
+			var chainInProgress = chainsInProgress.get(chainKey)
+			var chainGarbage: int = 0
+			var offsetChainGarbage: int = 0
+			if chainInProgress.has("scoreTotal"):
+				chainGarbage = chainInProgress.get("scoreTotal") / 1000
+				# Check to see if this attack is part of a last defense.
+				for lastDefenseChainGroupIndex in range(lastDefenseChains.size()):
+					var defenseChainKeys: Array = lastDefenseChains[lastDefenseChainGroupIndex].get("chainKeys")
+					if alreadyOffsetGarbageForEachLastDefense.size() == lastDefenseChainGroupIndex:
+						# Save some info to use later.
+						alreadyOffsetGarbageForEachLastDefense.append(0)
+						highestTimerForEachLastDefense.append(0.0)
+						for defenseChainKey in defenseChainKeys:
+							var timeLeft = grid[defenseChainKey[0]][defenseChainKey[1]].get_node("ClearTimer").time_left
+							if timeLeft > highestTimerForEachLastDefense[lastDefenseChainGroupIndex]:
+								highestTimerForEachLastDefense[lastDefenseChainGroupIndex] = timeLeft
+					if defenseChainKeys.has(
+					chainKey) && offsetChainGarbage < chainGarbage:
+						# Prevent offsetting from multiple chains in the same defense
+						var newOffsetChainGarbage: int = min(lastDefenseChains[lastDefenseChainGroupIndex].get("garbageCount")
+						- alreadyOffsetGarbageForEachLastDefense[lastDefenseChainGroupIndex], (chainGarbage - offsetChainGarbage))
+						offsetChainGarbage = offsetChainGarbage + newOffsetChainGarbage
+						alreadyOffsetGarbageForEachLastDefense[lastDefenseChainGroupIndex] = (
+						alreadyOffsetGarbageForEachLastDefense[lastDefenseChainGroupIndex] + newOffsetChainGarbage)
+			totalPendingOutgoingGarbage = totalPendingOutgoingGarbage + chainGarbage
+			totalGarbageUsedToOffsetLastDefense = totalGarbageUsedToOffsetLastDefense + offsetChainGarbage
+		# Preview last defense garbage
+		for defenseIndex in range(lastDefenseChains.size()):
+			var garbage = lastDefenseChains[defenseIndex].get("garbageCount") - alreadyOffsetGarbageForEachLastDefense[defenseIndex]
+			for row in grid:
+				for cell in row:
+					if (garbage > 0 && (cell.is_empty() || (cell.is_marked_for_clear()
+					&& cell.get_node("ClearTimer").time_left <= highestTimerForEachLastDefense[defenseIndex]))
+					&& !cellsPreviewingGarbage.has([cell.rowIndex, cell.columnIndex])):
+						if garbage == 1 && !cell.pointFacingUp:
+								var rightNeighbor = get_neighbor(cell.rowIndex, cell.columnIndex, cell.Direction.RIGHT)
+								if (rightNeighbor == null || cellsPreviewingGarbage.has([rightNeighbor.rowIndex, rightNeighbor.columnIndex])
+								|| (!rightNeighbor.is_empty() && !(rightNeighbor.is_marked_for_clear()
+								&& rightNeighbor.get_node("ClearTimer").time_left <= highestTimerForEachLastDefense[defenseIndex]))):
+									cell.show_garbage_preview(Color(0.870588, 0.4, 0.117647, 0.8))
+									cellsPreviewingGarbage.append([cell.rowIndex, cell.columnIndex])
+									garbage = garbage - 1
+						else:
+							cell.show_garbage_preview(Color(0.870588, 0.4, 0.117647, 0.8))
+							cellsPreviewingGarbage.append([cell.rowIndex, cell.columnIndex])
+							garbage = garbage - 1
+		# Preview normal garbage
+		var garbage = piecesToSpawn - (totalPendingOutgoingGarbage - totalGarbageUsedToOffsetLastDefense)
 		for row in grid:
 			for cell in row:
+				if (garbage > 0 && (cell.is_empty() || cell.is_marked_for_clear())
+				&& !cellsPreviewingGarbage.has([cell.rowIndex, cell.columnIndex])):
+					if garbage == 1 && !cell.pointFacingUp:
+							var rightNeighbor = get_neighbor(cell.rowIndex, cell.columnIndex, cell.Direction.RIGHT)
+							if (rightNeighbor == null || cellsPreviewingGarbage.has([rightNeighbor.rowIndex, rightNeighbor.columnIndex])
+							|| (!rightNeighbor.is_empty() && !rightNeighbor.is_marked_for_clear())):
+								cell.show_garbage_preview(Color(1, 1, 1, 0.8))
+								cellsPreviewingGarbage.append([cell.rowIndex, cell.columnIndex])
+								garbage = garbage - 1
+					else:
+						cell.show_garbage_preview(Color(1, 1, 1, 0.8))
+						cellsPreviewingGarbage.append([cell.rowIndex, cell.columnIndex])
+						garbage = garbage - 1
+		# Preview offset normal garbage
+		garbage = min(piecesToSpawn, totalPendingOutgoingGarbage - totalGarbageUsedToOffsetLastDefense)
+		for row in grid:
+			for cell in row:
+				if (garbage > 0 && (cell.is_empty() || cell.is_marked_for_clear())
+				&& !cellsPreviewingGarbage.has([cell.rowIndex, cell.columnIndex])):
+					if garbage == 1 && !cell.pointFacingUp:
+							var rightNeighbor = get_neighbor(cell.rowIndex, cell.columnIndex, cell.Direction.RIGHT)
+							if (rightNeighbor == null || cellsPreviewingGarbage.has([rightNeighbor.rowIndex, rightNeighbor.columnIndex])
+							|| (!rightNeighbor.is_empty() && !rightNeighbor.is_marked_for_clear())):
+								cell.show_garbage_preview(Color(1, 1, 1, 0.1))
+								cellsPreviewingGarbage.append([cell.rowIndex, cell.columnIndex])
+								garbage = garbage - 1
+					else:
+						cell.show_garbage_preview(Color(1, 1, 1, 0.1))
+						cellsPreviewingGarbage.append([cell.rowIndex, cell.columnIndex])
+						garbage = garbage - 1
+		# Preview offset last defense garbage and blank other cells
+		garbage = totalGarbageUsedToOffsetLastDefense
+		for row in grid:
+			for cell in row:
+				if (garbage > 0 && (cell.is_empty() || cell.is_marked_for_clear())
+				&& !cellsPreviewingGarbage.has([cell.rowIndex, cell.columnIndex])):
+					if garbage == 1 && !cell.pointFacingUp:
+							var rightNeighbor = get_neighbor(cell.rowIndex, cell.columnIndex, cell.Direction.RIGHT)
+							if (rightNeighbor == null || cellsPreviewingGarbage.has([rightNeighbor.rowIndex, rightNeighbor.columnIndex])
+							|| (!rightNeighbor.is_empty() && !rightNeighbor.is_marked_for_clear())):
+								cell.show_garbage_preview(Color(0.870588, 0.4, 0.117647, 0.1))
+								cellsPreviewingGarbage.append([cell.rowIndex, cell.columnIndex])
+								garbage = garbage - 1
+					else:
+						cell.show_garbage_preview(Color(0.870588, 0.4, 0.117647, 0.1))
+						cellsPreviewingGarbage.append([cell.rowIndex, cell.columnIndex])
+						garbage = garbage - 1
 				if !cellsPreviewingGarbage.has([cell.rowIndex, cell.columnIndex]):
 					cell.get_node("GarbagePreview").visible = false
 		# TODO preview outgoing attacks
+		queuedAttacks.set_cells_visible(totalPendingOutgoingGarbage - totalGarbageUsedToOffsetLastDefense - piecesToSpawn)
+		
 	if !$GarbageTimer.is_stopped():
 		$GarbageTimerBar.show()
 		if ($GarbageTimer.wait_time - $GarbageTimer.time_left < 0.1 &&

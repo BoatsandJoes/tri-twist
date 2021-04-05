@@ -37,10 +37,8 @@ func _on_Back_pressed():
 func _on_Fullscreen_toggled(button_pressed):
 	isConfigChanged = true
 	if button_pressed:
-		print("fullscreen")
 		emit_signal("fullscreen")
 	else:
-		print("windowed")
 		emit_signal("windowed")
 
 func _on_DecreaseDAS_pressed():

@@ -1,18 +1,4 @@
 # tri-twist
-	design all menus
-	garbage preview:
-		when attack bar is active, show inverted triangle preview (cell is responsible for drawing it)
-			goes in empty cells or active chains
-			if active chains will cancel garbage, turn the preview garbage at the end ghostly
-		during last defense, same thing, but the preview garbage turns orange and only goes in active chains that are part of THAT defense.
-			keep a record of all cells that are part of the defense, not just the one showing the timer
-				add to record when a piece is added to a chain. store it next to score info
-			if last defense chains for this defense will cancel garbage, turn the preview garbage ghostly and move it to the end of the garbage queue (order is 9f garbage, solid orange, solid white, ghost white, ghost orange)
-				if any is left over, apply to offet attack that has not landed
-		garbage 9f animation, empty cells only
-	attack preview:
-		after offset previews are applied, show remaining attack preview above and to the left for ongoing chains
-		different iconography for 1, 10. bottom row is 1-9, then 10s appear on 2nd+ rows
 	title
 	button config
 	clean up multiplayer double pause menu
@@ -50,7 +36,6 @@
 		2 deep match search
 	visuals:
 		grid background
-		show incoming garbage on top of ghost piece
 		particles
 		persist matched area and then apply some effect to it (even though actual pieces have cleared)
 		make score - display not shunt the number to the side
@@ -62,6 +47,8 @@
 		Hard drop effect on stack surface
 		trick effect
 		topple effect
+		animation when sending an attack, including when reaching the bottom of the grid
+		some kind of effect on reaching the bottom of the grid in dig mode
 		backgrounds
 		buttons + arrow
 	custom mode
@@ -188,7 +175,8 @@ Tri words for mechanics or modes or titles:
 	triouts  
 	tribute  
 	tri not to die
-	Triangle Rex
+	Trianglesaurus Rex
+	Ptriaerodactyl
 
 Titles:  
 	Trillion Trippy Triangles  

@@ -71,7 +71,6 @@ func set_das(das: int):
 
 func set_arr(arr: int):
 	$ArrTimer.wait_time = arr / 60.0
-	print(String($ArrTimer.wait_time))
 
 func set_device(device: String):
 	self.device = device
