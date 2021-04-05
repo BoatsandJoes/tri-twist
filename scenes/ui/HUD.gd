@@ -15,6 +15,10 @@ func _ready():
 #func _process(delta):
 #	pass
 
+func set_multiplayer():
+	visible = false
+	set_time_limit(0,0)
+
 func set_move_limit(value: int):
 	$HBoxContainer/VBoxContainer2/MoveCount.init(value)
 
@@ -27,5 +31,5 @@ func _on_MoveCount_out_of_moves():
 func _on_TimeDisplay_out_of_time():
 	emit_signal("end_game")
 
-func _on_ComboDisplay_combo_done(score):
+func _on_ComboDisplay_combo_done(score, key):
 	$HBoxContainer/VBoxContainer/ScoreDisplay.increment_score(score, true)

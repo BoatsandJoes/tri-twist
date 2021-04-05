@@ -2,6 +2,8 @@ extends Area2D
 class_name TriangleCell
 
 signal tumble
+signal erase_chain
+signal end_combo_if_exists
 
 var size: int
 # last color is the null color, for empty cells
@@ -32,8 +34,8 @@ var sequentialChainCapFlag = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$ChainTimerBar.set_percent_visible(false)
-	$ChainTimerBar.hide()
+	$ChainTimerBarContainer/ChainTimerBar.set_percent_visible(false)
+	$ChainTimerBarContainer/ChainTimerBar.hide()
 	$ClearTimer.wait_time = clearDelay
 
 func set_clear_scaling(value):
@@ -56,6 +58,7 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	#baseVectorArray.append(Vector2(size/2, size * sqrt(3) / 2))
 	# Define vertices of children
 	become_default_size()
+	
 	# flip every even triangle cell and cells outside the grid
 	if ((columnIndex + rowIndex) % 2 == 0 && !pointFacingUp) || (!inGrid && !isGhost):
 		scale = Vector2(1, -1)
@@ -71,9 +74,10 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 		scale = Vector2(1, 1)
 		pointFacingUp = false
 	# Chain timer bar.
-	$ChainTimerBar.max_value = clearDelay
-	$ChainTimerBar.rect_size = Vector2(size / 2, size / 10)
-	$ChainTimerBar.rect_position = Vector2($ChainTimerBar.rect_position[0] - size / 4, $ChainTimerBar.rect_position[1] - size / 20)
+	$ChainTimerBarContainer/ChainTimerBar.max_value = clearDelay
+	$ChainTimerBarContainer/ChainTimerBar.rect_size = Vector2(size / 2, size / 10)
+	$ChainTimerBarContainer/ChainTimerBar.rect_position = Vector2($ChainTimerBarContainer/ChainTimerBar.rect_position[0] - size / 4,
+	$ChainTimerBarContainer/ChainTimerBar.rect_position[1] - size / 20)
 	# make empty
 	set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 
@@ -121,6 +125,7 @@ func fill_without_matching_neighbors():
 	$GravityTimer.stop()
 	tumbleDirection = Direction.VERTICAL
 	wasHardDroppedMostRecently = false
+	fallType = FallType.DROP
 	var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
 	var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
 	var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
@@ -141,12 +146,34 @@ func fill_without_matching_neighbors():
 	verticalColor = colors.find(tempColors[randi() % (tempColors.size() - 1)])
 	update_colors_visually()
 	become_default_size()
+	after_fill_checks(get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT),
+	get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT))
 
 func set_colors(left: int, right: int, vertical: int):
 	leftColor = left
 	rightColor = right
 	verticalColor = vertical
 	update_colors_visually()
+
+func show_garbage_preview(color: Color):
+	var garbagePreviewVectorArray = PoolVector2Array()
+	garbagePreviewVectorArray.append(Vector2(0, -size * sqrt(3) / 6))
+	garbagePreviewVectorArray.append(Vector2(size/4, size * sqrt(3) / 12))
+	garbagePreviewVectorArray.append(Vector2(-size/4, size * sqrt(3) / 12))
+	$GarbagePreview.set_polygon(garbagePreviewVectorArray)
+	$GarbagePreview.set_color(color)
+	$GarbagePreview.visible = true
+
+func show_garbage_spawn_animation(ratio: float):
+	var previewPoints: PoolVector2Array = PoolVector2Array()
+	previewPoints.append(Vector2(ratio * size/2, -size * sqrt(3) / 6))
+	previewPoints.append(Vector2(size/4 - ratio * size/4, size * sqrt(3) / 12 +
+	ratio * size * sqrt(3) / 4))
+	previewPoints.append(Vector2(-size/4 - ratio * size/4, size * sqrt(3) / 12 -
+	ratio * size * sqrt(3) / 4))
+	$GarbagePreview.set_polygon(previewPoints)
+	$GarbagePreview.set_color(Color(0.870588, 0.4, 0.117647, 0.8 + ratio / 5))
+	$GarbagePreview.visible = true
 
 func spawn_piece(piece: TriangleCell):
 	fallType = FallType.DROP
@@ -229,12 +256,13 @@ func after_fill_checks(leftNeighbor, rightNeighbor):
 						# Pushing.
 						rightNeighbor.enter_falling_state(Direction.RIGHT, FallType.PUSH)
 						#TODO sound sfx optional "toppling balancing piece"
-	if !is_marked_for_clear() && !is_falling() && !activeChainMode && fallType == FallType.DROP:
-		# Don't set off if we just hit the sequential chain cap
-		if sequentialChainCapFlag:
-			sequentialChainCapFlag = false
-		else:
-			get_parent().set_off_chains()
+	if !is_marked_for_clear() && !is_falling() && fallType == FallType.DROP:
+		if !activeChainMode:
+			# Don't set off if we just hit the sequential chain cap
+			if sequentialChainCapFlag:
+				sequentialChainCapFlag = false
+			else:
+				get_parent().set_off_chains()
 
 func update_colors_visually():
 	var leftArray: PoolColorArray = PoolColorArray()
@@ -313,9 +341,10 @@ func clear(edge: int):
 	if (edge == Direction.VERTICAL_POINT):
 		# Immediately blank tile.
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
+		$ChainTimerBarContainer/ChainTimerBar.set_modulate(Color(1,1,1))
 		become_default_size()
 		isMarkedForInactiveClear = false
-		get_parent().get_parent().get_parent().end_combo_if_exists([rowIndex, columnIndex])
+		emit_signal("end_combo_if_exists", [rowIndex, columnIndex])
 		# Check to see if any neighbors should enter falling state.
 		if !pointFacingUp:
 			# Primarily, we have to check above.
@@ -577,7 +606,7 @@ func combine_chains(chainRoots: Array, numMatches, lowestTimeLeft) -> Dictionary
 					+ contributingChain.get("simulchaineousCount"))
 				else:
 					combinedChain["simulchaineousCount"] = contributingChain.get("simulchaineousCount")
-			get_parent().get_parent().get_parent().delete_chain(chainRoots[chainRootIndex])
+			emit_signal("erase_chain", chainRoots[chainRootIndex])
 	return update_existing_chain(combinedChain, numMatches, lowestTimeLeft)
 
 func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Dictionary:
@@ -725,12 +754,12 @@ func _process(delta):
 	if inGrid && get_parent().get_parent().get_parent().has_chain([rowIndex, columnIndex]):
 		if !$ClearTimer.is_stopped():
 			# apply effect.
-			$ChainTimerBar.show()
-			$ChainTimerBar.value = $ClearTimer.time_left
+			$ChainTimerBarContainer/ChainTimerBar.show()
+			$ChainTimerBarContainer/ChainTimerBar.value = $ClearTimer.time_left
 		else:
-			$ChainTimerBar.hide()
+			$ChainTimerBarContainer/ChainTimerBar.hide()
 	else:
-		$ChainTimerBar.hide()
+		$ChainTimerBarContainer/ChainTimerBar.hide()
 
 func _on_ClearTimer_timeout():
 	# visual effect

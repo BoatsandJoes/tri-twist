@@ -7,6 +7,7 @@ bg_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0, 0, 0, 1 )
+shadow_size = 2
 
 [node name="TriangleCell" type="Area2D"]
 script = ExtResource( 1 )
@@ -69,7 +70,13 @@ initial_velocity_random = 0.5
 wait_time = 0.2
 one_shot = true
 
-[node name="ChainTimerBar" type="ProgressBar" parent="."]
+[node name="GarbagePreview" type="Polygon2D" parent="."]
+visible = false
+color = Color( 1, 1, 1, 0.784314 )
+
+[node name="ChainTimerBarContainer" type="Node2D" parent="."]
+
+[node name="ChainTimerBar" type="ProgressBar" parent="ChainTimerBarContainer"]
 margin_right = 4.0
 margin_bottom = 14.0
 custom_styles/fg = SubResource( 1 )

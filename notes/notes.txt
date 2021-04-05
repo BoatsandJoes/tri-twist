@@ -1,17 +1,41 @@
 # tri-twist
 	title
 	button config
+	clean up multiplayer double pause menu
 	controller device select
-	colorblind mode
+	color selection
+	reset settings on this tab to defaults button
 	saving scores + displaying best scores
-	rework mode select to clearly group how to play and show scores and maybe allow some settings changes, like button config/device select
+	rework all menus, particularly mode select to clearly group how to play and show scores and maybe allow some settings changes, like button config/device select
 	"are you sure?" on quit
 	how to play pictures
 	how to play scoring
+	how to play multiplayer + advanced how to play multiplayer
 	undo in brain mode
+	mouse only mode (may be handled by button config)
+	try to adjust dig deep to be good for new players and then make it the main mode (current problem is if you can't make it to the bottom in 2 minutes then that kind of sucks)
 	save/resume brain mode
 		replays?
+	multiplayer
+		shared board local coop
+			ghost piece different color, active/ghost piece that color outline and also p2's active is upside-down
+		single player score competition (two boards can move ui to above grid and remove non-essential elements to make room)
+	online play
+		piece sequence generated ahead of time and shared (1000 pieces then loops)
+		incoming garbage delayed by at least a few frames on time out to account for latency (maybe the attacker extended at the last moment) (attack can no longer be extended, but can still be offset)
+		make game 100% deterministic
+		serialize opponent game state every frame
+		use prediction to guess what opponent is doing now based on what they were doing a second ago
+		if their real inputs differ, roll back their board
+		our board is unaffected and never has to be saved or changed in any way except for garbage prediction, particularly on time up
+		selecting piece colors and garbage colors before they're shown to the player will help the visuals (color selection may have to be rewound and redone if our opponent actually spawned a bunch of garbage)
+	ais (can vary thinking/pause time)
+		random drop
+		1 deep match search
+		1 deep match search with board evaluation (can limit branches to check)
+		2 deep match search
 	visuals:
+		grid background
 		particles
 		persist matched area and then apply some effect to it (even though actual pieces have cleared)
 		make score - display not shunt the number to the side
@@ -23,6 +47,8 @@
 		Hard drop effect on stack surface
 		trick effect
 		topple effect
+		animation when sending an attack, including when reaching the bottom of the grid
+		some kind of effect on reaching the bottom of the grid in dig mode
 		backgrounds
 		buttons + arrow
 	custom mode
@@ -34,7 +60,10 @@
 		time limit
 		move limit
 		force drop
-		garbage
+		garbage on/off
+		garbage timer
+		dig on/off
+		initial dig rows
 	settings
 		Gravity
 		double drop prevention
@@ -78,17 +107,8 @@ Scope Creep:
 		VFX  
 		Music  
 		SFX  
-		color choices (in menu or per character or both)  
-	mode ideas:
-		Purify/dig race/Dr mario, just focus on downstacking  
-			maybe have some incentive to make small chains, idk what  
-			could fill board with unmatched pieces and mark some as "clear these" so you have to dig to them (like purify), and big chain marks more as "clear these". Something like that  
-			could fill board with garbage instead of normal pieces. Idk if this would be fun so it's worth testing, especially since garbage might make a good versus mode some day.  
-		Shared board local coop seems pretty easy to implement compared to all other forms of multiplayer.
-	button configuration  
-	controller support  
-	mobile port  
-	Tutorials  
+		color choices (in menu or per character or both)
+	mobile port
 
 Things that I want but will have to cut:  
 	steam leaderboards  
@@ -115,11 +135,10 @@ Things that I want but will have to cut:
 			Analysis paralysis is a problem  
 			Can have no possible moves although it's rareish; need board shakeup like bejewled  
 		Literally just Carcassonne  
-	Multiplayer:  
-		vs cpu  
+	Multiplayer:
 		GGPO is a C++ module so I could compile the engine with both modules, or remove FMod, or change to FMod GDNative  
-		When searching/connecting it should say "Triangulating an opponent"  
-		Could have people play 2 single player games side by side and see who wins, either playing a game to completion and seeing who did better, or going over a certain score differential  
+		When searching/connecting it should say "Triangulating an opponent"
+		Could have people play 2 single player games side by side and see who wins, either playing a game to completion and seeing who did better, or going over a certain score differential
 		Could have item attacks/buffs like:  
 			match anything and whatever matches, mass replace that color with a random other color (probably making a big clear)  
 			explode when matched, either in a line or in an area  
@@ -129,22 +148,12 @@ Things that I want but will have to cut:
 			Piece pairs (this is horrifying)  
 			Ice (pieces slide down w/o tumbling and then slide sideways too)  
 			Garbage (see garbage)  
-		Garbage:  
-			come in like:  
-				Petal Crash?  
-				Tetris (kind of like changing grid size but you can dig out in chunks) (I think I like this one. Only thing I don't like about it is you have to send a FULL line every time. Would need to make the grid big so one line is nbd)  
-					another thing: does it do a full diagonal line, putting it lots of extra useless pieces, or mirror stack height but that means you get more if you're doing worse?
-						if grid is flat, you just get two lines of garbage, easy
+		Garbage:
 			cleared like:  
 				puyo (I think I like this one, because it changes the way you play to shorter chains if you want to dig through multiple lines)  
 				Petal Crash garbage attack  
 				puzzle fighter (normal piece but unclearable for some moves/time, they're still really not that different from ordinary pieces so idk)  
-				tofu (gives opponent points when cleared)  
-			Counter like:  
-				T99 with garbage limit/delay, better for new players but too easy to defend against when you're good  
-				Puyo/guideline  
-			Damage formula:  
-				same as guideline tetris; include petal crash tug of war for new players since they can't do chains to do damage  
+				tofu (gives opponent points when cleared)
 		Each player could do different kinds of attacks, potentially tied to a character (do you pick your attack, or your opponent's attack?)  
 		Coop:  
 			shared board coop  
@@ -165,7 +174,9 @@ Tri words for mechanics or modes or titles:
 	tricky  
 	triouts  
 	tribute  
-	tri not to die  
+	tri not to die
+	Trianglesaurus Rex
+	Ptriaerodactyl
 
 Titles:  
 	Trillion Trippy Triangles  
@@ -176,3 +187,4 @@ Titles:
 	Triple Threat
 	Triangle
 	Untitled Untriangle
+	Triceradrops

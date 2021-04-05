@@ -46,3 +46,14 @@ not doing brain chains
 thinks it's odd that chains don't share a timer (may be able to make a visual cue that makes that clear, along with the timer)
 no hat tricks although they did do some neat balancing
 faster gravity would be good even in brain mode (down to 0.1 from 0.2 now), hard drop
+
+andrew multiplayer
+	weird that pieces can come in the middle of a chain
+	hard to know how much damage will be negated by the chain that is being built currently
+	hard to compare chain timer to garbage timer
+	if both people always get to the bottom at the same time, neither will ever die
+	maybe when an attack timer finshes, any chains that are active at that time need to finish before the attack connects
+		the chains and garbage should have an effect to indicate this. New chains and garbage work as normal. Marked garbage is cancelled first
+
+beth multiplayer
+	feels kind of bad that my big attack doesn't kill until 10 seconds later

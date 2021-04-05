@@ -12,6 +12,7 @@ var triangleDropper: TriangleDropper
 var hud: HUD
 var pausePopup: PausePopup
 var fakeGrid: FakeGameGrid
+var player: int
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -23,6 +24,8 @@ func _ready():
 	triangleDropper.gameGrid.connect("tumble", self, "_on_gameGrid_tumble")
 	triangleDropper.gameGrid.connect("grid_full", self, "_on_gameGrid_grid_full")
 	triangleDropper.gameGrid.connect("garbage_rows", self, "_on_gameGrid_garbage_rows")
+	triangleDropper.gameGrid.connect("erase_chain", self, "delete_chain")
+	triangleDropper.gameGrid.connect("end_combo_if_exists", self, "end_combo_if_exists")
 	hud = HUD.instance()
 	hud.set_position(Vector2(10, 100))
 	hud.set_size(Vector2(1900, 780))
@@ -35,7 +38,15 @@ func _ready():
 	fakeGrid = FakeGameGrid.instance()
 	add_child(fakeGrid)
 	fakeGrid.visible = false
-	fakeGrid.initialize_grid()
+	fakeGrid.initialize_grid(1920, 1080)
+
+func set_player(player: int):
+	self.player = player
+
+func set_multiplayer():
+	scale = Vector2(0.8, 0.8)
+	triangleDropper.set_multiplayer()
+	hud.set_multiplayer()
 
 func prep_take_your_time():
 	triangleDropper.gameGrid.toggle_chain_mode(false)
@@ -56,7 +67,7 @@ func prep_dig():
 	triangleDropper.gameGrid.set_gravity(0.2)
 	hud.set_time_limit(2, 0)
 	triangleDropper.gameGrid.fill_bottom_rows(3)
-	triangleDropper.gameGrid.digMode = true
+	triangleDropper.gameGrid.set_dig_mode()
 	triangleDropper.gameGrid.draw_dig_line()
 	triangleDropper.gameGrid.connect("garbage_rows", self, "_on_gameGrid_garbage_rows")
 	triangleDropper.enable_dropping()
@@ -64,7 +75,10 @@ func prep_dig():
 func set_config(config: ConfigFile):
 	triangleDropper.set_das(config.get_value("tuning", "das"))
 	triangleDropper.set_arr(config.get_value("tuning", "arr"))
-	triangleDropper.set_device(config.get_value("controls", "device"))
+	if player == 2:
+		triangleDropper.set_device(config.get_value("controls", "p2_device"))
+	else:
+		triangleDropper.set_device(config.get_value("controls", "p1_device"))
 
 func _input(event):
 	if ((event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton)

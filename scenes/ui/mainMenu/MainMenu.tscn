@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scenes/ui/mainMenu/MainMenu.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/agane/Agane╠Ç 55 (roman).ttf" type="DynamicFontData" id=2]
@@ -42,6 +42,14 @@ font_data = ExtResource( 2 )
 size = 48
 font_data = ExtResource( 2 )
 
+[sub_resource type="DynamicFont" id=11]
+size = 48
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=12]
+size = 48
+font_data = ExtResource( 2 )
+
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -60,93 +68,106 @@ custom_constants/separation = 20
 alignment = 1
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 423.0
-margin_right = 1066.0
+margin_left = 353.0
+margin_right = 1103.0
 margin_bottom = 960.0
 alignment = 1
 
 [node name="Title" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer3"]
-margin_top = 340.0
-margin_right = 643.0
-margin_bottom = 599.0
+margin_top = 406.0
+margin_right = 750.0
+margin_bottom = 534.0
 custom_fonts/font = SubResource( 1 )
-text = "Untitled
-Untriangle"
+text = "Triceradrops"
 
 [node name="Tagline" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer3"]
-margin_top = 603.0
-margin_right = 643.0
-margin_bottom = 619.0
+margin_top = 538.0
+margin_right = 750.0
+margin_bottom = 554.0
 custom_fonts/font = SubResource( 2 )
 text = "Tagline goes here"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 1086.0
-margin_right = 1327.0
+margin_left = 1123.0
+margin_right = 1398.0
 margin_bottom = 960.0
 custom_constants/separation = 5
 alignment = 1
 
 [node name="Play" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 364.0
-margin_right = 241.0
-margin_bottom = 418.0
+margin_top = 335.0
+margin_right = 275.0
+margin_bottom = 389.0
 custom_fonts/font = SubResource( 3 )
 text = "Play!"
 
 [node name="Settings" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 423.0
-margin_right = 241.0
-margin_bottom = 477.0
+margin_top = 394.0
+margin_right = 275.0
+margin_bottom = 448.0
 custom_fonts/font = SubResource( 4 )
 text = "Settings"
 
 [node name="Credits" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 482.0
-margin_right = 241.0
-margin_bottom = 536.0
+margin_top = 453.0
+margin_right = 275.0
+margin_bottom = 507.0
 custom_fonts/font = SubResource( 5 )
 text = "Credits"
 
 [node name="Exit" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 541.0
-margin_right = 241.0
-margin_bottom = 595.0
+margin_top = 512.0
+margin_right = 275.0
+margin_bottom = 566.0
 custom_fonts/font = SubResource( 6 )
 text = "Exit Game"
 
+[node name="Multiplayer" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+margin_top = 571.0
+margin_right = 275.0
+margin_bottom = 625.0
+custom_fonts/font = SubResource( 7 )
+text = "Multiplayer"
+
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 1347.0
-margin_right = 1376.0
+margin_left = 1418.0
+margin_right = 1447.0
 margin_bottom = 960.0
 custom_constants/separation = 13
 alignment = 1
 
 [node name="PlayArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
-margin_top = 364.0
+margin_top = 334.0
 margin_right = 29.0
-margin_bottom = 412.0
-custom_fonts/font = SubResource( 7 )
+margin_bottom = 382.0
+custom_fonts/font = SubResource( 8 )
 text = "<"
 
 [node name="SettingsArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
-margin_top = 425.0
+margin_top = 395.0
 margin_right = 29.0
-margin_bottom = 473.0
-custom_fonts/font = SubResource( 8 )
-
-[node name="CreditsArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
-margin_top = 486.0
-margin_right = 29.0
-margin_bottom = 534.0
+margin_bottom = 443.0
 custom_fonts/font = SubResource( 9 )
 
-[node name="ExitArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
-margin_top = 547.0
+[node name="CreditsArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+margin_top = 456.0
 margin_right = 29.0
-margin_bottom = 595.0
+margin_bottom = 504.0
 custom_fonts/font = SubResource( 10 )
+
+[node name="ExitArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+margin_top = 517.0
+margin_right = 29.0
+margin_bottom = 565.0
+custom_fonts/font = SubResource( 11 )
+
+[node name="MultiplayerArrow" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+margin_top = 578.0
+margin_right = 29.0
+margin_bottom = 626.0
+custom_fonts/font = SubResource( 12 )
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Play" to="." method="_on_Play_pressed"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Settings" to="." method="_on_Settings_pressed"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Credits" to="." method="_on_Credits_pressed"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Exit" to="." method="_on_Exit_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Multiplayer" to="." method="_on_Multiplayer_pressed"]

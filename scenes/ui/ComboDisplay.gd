@@ -254,7 +254,7 @@ func end_combo_if_exists(comboKey):
 			$CompleteScorecardTimer.start()
 			$Scorecard.set_modulate(Color(0.483521, 0.690471, 0.910156))
 		# emit combo score.
-		emit_signal("combo_done", combos.get(comboKey).get("scoreTotal"))
+		emit_signal("combo_done", combos.get(comboKey).get("scoreTotal"), comboKey)
 		combos.erase(comboKey)
 		#TODO sound sfx "pieces clearing"
 

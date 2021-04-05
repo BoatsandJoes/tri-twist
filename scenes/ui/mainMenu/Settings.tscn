@@ -11,22 +11,6 @@ font_data = ExtResource( 2 )
 size = 64
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=7]
-size = 48
-font_data = ExtResource( 2 )
-
-[sub_resource type="DynamicFont" id=8]
-size = 48
-font_data = ExtResource( 2 )
-
-[sub_resource type="DynamicFont" id=9]
-size = 48
-font_data = ExtResource( 2 )
-
-[sub_resource type="DynamicFont" id=10]
-size = 48
-font_data = ExtResource( 2 )
-
 [sub_resource type="DynamicFont" id=3]
 size = 48
 font_data = ExtResource( 2 )
@@ -40,6 +24,22 @@ size = 48
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=6]
+size = 48
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=7]
+size = 48
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 48
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=9]
+size = 48
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=10]
 size = 48
 font_data = ExtResource( 2 )
 
@@ -98,14 +98,14 @@ margin_bottom = 120.0
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer"]
 margin_right = 515.0
 margin_bottom = 48.0
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 3 )
 text = "Autoshift delay (DAS)"
 
 [node name="Label2" type="Label" parent="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer"]
 margin_top = 52.0
 margin_right = 515.0
 margin_bottom = 100.0
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 3 )
 text = "Autorepeat Rate (ARR)"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/TabContainer/Tuning/Tuning"]
@@ -116,14 +116,14 @@ margin_bottom = 120.0
 [node name="DecreaseDAS" type="Button" parent="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer2"]
 margin_right = 41.0
 margin_bottom = 54.0
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 4 )
 text = "<"
 
 [node name="DecreaseARR" type="Button" parent="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer2"]
 margin_top = 58.0
 margin_right = 41.0
 margin_bottom = 112.0
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 4 )
 text = "<"
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="VBoxContainer/TabContainer/Tuning/Tuning"]
@@ -134,7 +134,7 @@ margin_bottom = 120.0
 [node name="DAS" type="LineEdit" parent="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3"]
 margin_right = 166.0
 margin_bottom = 58.0
-custom_fonts/font = SubResource( 9 )
+custom_fonts/font = SubResource( 5 )
 align = 1
 max_length = 2
 
@@ -142,7 +142,7 @@ max_length = 2
 margin_top = 62.0
 margin_right = 166.0
 margin_bottom = 120.0
-custom_fonts/font = SubResource( 9 )
+custom_fonts/font = SubResource( 5 )
 align = 1
 max_length = 1
 
@@ -154,14 +154,14 @@ margin_bottom = 120.0
 [node name="IncreaseDAS" type="Button" parent="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer4"]
 margin_right = 41.0
 margin_bottom = 54.0
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 4 )
 text = ">"
 
 [node name="IncreaseARR" type="Button" parent="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer4"]
 margin_top = 58.0
 margin_right = 41.0
 margin_bottom = 112.0
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 4 )
 text = ">"
 
 [node name="Back" type="Button" parent="VBoxContainer/TabContainer/Tuning"]
@@ -169,7 +169,7 @@ margin_top = 124.0
 margin_right = 116.0
 margin_bottom = 178.0
 size_flags_horizontal = 0
-custom_fonts/font = SubResource( 10 )
+custom_fonts/font = SubResource( 6 )
 text = "Back"
 
 [node name="Controls" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
@@ -181,48 +181,82 @@ margin_top = 82.0
 margin_right = -4.0
 margin_bottom = -4.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Controls"]
+[node name="P1HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Controls"]
 margin_right = 1792.0
 margin_bottom = 58.0
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Controls/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Controls/P1HBoxContainer"]
 margin_top = 5.0
-margin_right = 150.0
+margin_right = 218.0
 margin_bottom = 53.0
-custom_fonts/font = SubResource( 3 )
-text = "Device"
+custom_fonts/font = SubResource( 7 )
+text = "P1 Device"
 
-[node name="DeviceBack" type="Button" parent="VBoxContainer/TabContainer/Controls/HBoxContainer"]
-margin_left = 154.0
-margin_right = 195.0
+[node name="P1DeviceBack" type="Button" parent="VBoxContainer/TabContainer/Controls/P1HBoxContainer"]
+margin_left = 222.0
+margin_right = 263.0
 margin_bottom = 58.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 8 )
 text = "<"
 
-[node name="Device" type="LineEdit" parent="VBoxContainer/TabContainer/Controls/HBoxContainer"]
-margin_left = 199.0
-margin_right = 623.0
+[node name="Device" type="LineEdit" parent="VBoxContainer/TabContainer/Controls/P1HBoxContainer"]
+margin_left = 267.0
+margin_right = 691.0
 margin_bottom = 58.0
 rect_min_size = Vector2( 424, 0 )
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 9 )
 editable = false
 
-[node name="DeviceForward" type="Button" parent="VBoxContainer/TabContainer/Controls/HBoxContainer"]
-margin_left = 627.0
-margin_right = 668.0
+[node name="P1DeviceForward" type="Button" parent="VBoxContainer/TabContainer/Controls/P1HBoxContainer"]
+margin_left = 695.0
+margin_right = 736.0
 margin_bottom = 58.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 8 )
+text = ">"
+
+[node name="P2HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Controls"]
+margin_top = 62.0
+margin_right = 1792.0
+margin_bottom = 120.0
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Controls/P2HBoxContainer"]
+margin_top = 5.0
+margin_right = 217.0
+margin_bottom = 53.0
+custom_fonts/font = SubResource( 7 )
+text = "P2 Device"
+
+[node name="P2DeviceBack" type="Button" parent="VBoxContainer/TabContainer/Controls/P2HBoxContainer"]
+margin_left = 221.0
+margin_right = 262.0
+margin_bottom = 58.0
+custom_fonts/font = SubResource( 8 )
+text = "<"
+
+[node name="Device" type="LineEdit" parent="VBoxContainer/TabContainer/Controls/P2HBoxContainer"]
+margin_left = 266.0
+margin_right = 690.0
+margin_bottom = 58.0
+rect_min_size = Vector2( 424, 0 )
+custom_fonts/font = SubResource( 9 )
+editable = false
+
+[node name="P2DeviceForward" type="Button" parent="VBoxContainer/TabContainer/Controls/P2HBoxContainer"]
+margin_left = 694.0
+margin_right = 735.0
+margin_bottom = 58.0
+custom_fonts/font = SubResource( 8 )
 text = ">"
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/TabContainer/Controls"]
-margin_top = 62.0
+margin_top = 124.0
 margin_right = 1792.0
-margin_bottom = 116.0
+margin_bottom = 178.0
 
 [node name="Back" type="Button" parent="VBoxContainer/TabContainer/Controls/HBoxContainer3"]
 margin_right = 116.0
 margin_bottom = 54.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 10 )
 text = "Back"
 
 [node name="Video" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
@@ -257,15 +291,17 @@ margin_bottom = 106.0
 [node name="Back" type="Button" parent="VBoxContainer/TabContainer/Video/HBoxContainer2"]
 margin_right = 116.0
 margin_bottom = 54.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 10 )
 text = "Back"
 [connection signal="pressed" from="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer2/DecreaseDAS" to="." method="_on_DecreaseDAS_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer2/DecreaseARR" to="." method="_on_DecreaseARR_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer4/IncreaseDAS" to="." method="_on_IncreaseDAS_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer4/IncreaseARR" to="." method="_on_IncreaseARR_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Tuning/Back" to="." method="_on_Back_pressed"]
-[connection signal="pressed" from="VBoxContainer/TabContainer/Controls/HBoxContainer/DeviceBack" to="." method="_on_DeviceBack_pressed"]
-[connection signal="pressed" from="VBoxContainer/TabContainer/Controls/HBoxContainer/DeviceForward" to="." method="_on_DeviceForward_pressed"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/Controls/P1HBoxContainer/P1DeviceBack" to="." method="_on_P1DeviceBack_pressed"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/Controls/P1HBoxContainer/P1DeviceForward" to="." method="_on_P1DeviceForward_pressed"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/Controls/P2HBoxContainer/P2DeviceBack" to="." method="_on_P2DeviceBack_pressed"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/Controls/P2HBoxContainer/P2DeviceForward" to="." method="_on_P2DeviceForward_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Controls/HBoxContainer3/Back" to="." method="_on_Back_pressed"]
 [connection signal="toggled" from="VBoxContainer/TabContainer/Video/HBoxContainer/Fullscreen" to="." method="_on_Fullscreen_toggled"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Video/HBoxContainer2/Back" to="." method="_on_Back_pressed"]

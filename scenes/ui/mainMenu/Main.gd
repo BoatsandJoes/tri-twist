@@ -10,6 +10,7 @@ var ModeSelect = load("res://scenes/ui/mainMenu/ModeSelect.tscn")
 var Settings = load("res://scenes/ui/mainMenu/Settings.tscn")
 var Credits = load("res://scenes/ui/mainMenu/Credits.tscn")
 var TakeYourTime = load("res://scenes/modes/TakeYourTime.tscn")
+var MultiplayerScene = load("res://scenes/modes/MultiplayerScene.tscn")
 var GoGoGo = load("res://scenes/modes/GoGoGo.tscn")
 var DigMode = load("res://scenes/modes/DigMode.tscn")
 var Triathalon = load("res://scenes/modes/Triathalon.tscn")
@@ -44,8 +45,10 @@ func load_config_from_filesystem():
 		config.set_value("tuning", "das", 12)
 	if !config.has_section_key("tuning", "arr"):
 		config.set_value("tuning", "arr", 3)
-	if !config.has_section_key("controls", "device"):
-		config.set_value("controls", "device", "Keyboard")
+	if !config.has_section_key("controls", "p1_device"):
+		config.set_value("controls", "p1_device", "Keyboard")
+	if !config.has_section_key("controls", "p2_device"):
+		config.set_value("controls", "p2_device", "Controller")
 	if err != OK: # If not, something went wrong with the file loading
 		# Save to filesystem for the first time.
 		config.save("user://settings.cfg")
@@ -114,6 +117,7 @@ func go_to_main_menu():
 	menu = MainMenu.instance()
 	add_child(menu)
 	menu.connect("play", self, "_on_MainMenu_play")
+	menu.connect("multiplayer", self, "_on_MainMenu_multiplayer")
 	menu.connect("settings", self, "_on_MainMenu_settings")
 	menu.connect("credits", self, "_on_MainMenu_credits")
 	menu.connect("back_to_title", self, "_on_MainMenu_back_to_title")
@@ -154,6 +158,19 @@ func go_to_mode_select():
 	menu.connect("dig_mode", self, "_on_ModeSelect_dig_mode")
 	menu.connect("triathalon", self, "_on_ModeSelect_triathalon")
 	menu.connect("back", self, "_on_ModeSelect_back")
+
+func go_to_multiplayer():
+	if is_instance_valid(menu):
+		menu.queue_free()
+	if is_instance_valid(game):
+		game.queue_free()
+	game = MultiplayerScene.instance()
+	add_child(game)
+	set_config_for_game_scene()
+	game.player1Scene.connect("back_to_menu", self, "go_to_main_menu")
+	game.player1Scene.connect("restart", self, "go_to_multiplayer")
+	game.player2Scene.connect("back_to_menu", self, "go_to_main_menu")
+	game.player2Scene.connect("restart", self, "go_to_multiplayer")
 
 func go_to_take_your_time_mode():
 	if is_instance_valid(menu):
@@ -258,3 +275,6 @@ func _on_ModeSelect_back():
 
 func _on_game_back_to_menu():
 	go_to_mode_select()
+
+func _on_MainMenu_multiplayer():
+	go_to_multiplayer()
