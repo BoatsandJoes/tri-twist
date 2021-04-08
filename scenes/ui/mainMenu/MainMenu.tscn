@@ -79,7 +79,7 @@ margin_top = 335.0
 margin_right = 197.0
 margin_bottom = 389.0
 custom_fonts/font = SubResource( 3 )
-text = "Play!"
+text = "Solo"
 
 [node name="Multiplayer" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 394.0

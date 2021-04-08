@@ -48,12 +48,13 @@ func _ready():
 	$MarginContainer/HBoxContainer/VBoxContainer3/Tagline.text = taglines[randi() % taglines.size()]
 	selectArrow = SelectArrow.instance()
 	add_child(selectArrow)
+	selectArrow.visible = false
 	timer = Timer.new()
 	add_child(timer)
 	timer.one_shot = true
 	timer.connect("timeout", self, "_on_timer_timeout")
 	# Wait to make sure that buttons have resized.
-	timer.start(0.1)
+	timer.start(0.01)
 
 func _on_timer_timeout():
 	var playButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Play.rect_global_position
@@ -68,6 +69,7 @@ func _on_timer_timeout():
 	creditsArrowPosition = Vector2(creditsButtonPosition[0] + buttonWidthHeight[0], creditsButtonPosition[1]+buttonWidthHeight[1] / 2)
 	exitArrowPosition = Vector2(exitButtonPosition[0] + buttonWidthHeight[0], exitButtonPosition[1] + buttonWidthHeight[1] / 2)
 	select_play()
+	selectArrow.visible = true
 	timer.queue_free()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

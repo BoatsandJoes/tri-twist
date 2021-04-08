@@ -1,7 +1,8 @@
 extends Node2D
 class_name SelectArrow
 
-var movingRight = true
+var movingRight: bool = true
+var animationTime: float = 0
 var size: int = 32
 var leftMargin: int = 10
 
@@ -22,6 +23,14 @@ func set_points(point1: Vector2, point2: Vector2, point3: Vector2):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if movingRight:
-		pass
+		animationTime = animationTime + delta
+		if animationTime >= 1:
+			animationTime = 1
+			movingRight = false
 	else:
-		pass
+		animationTime = animationTime - delta
+		if animationTime <= 0:
+			animationTime = 0
+			movingRight = true
+	$Arrow.set_position(Vector2(log(animationTime), 0))
+	$Outline.set_position(Vector2(log(animationTime), 0))

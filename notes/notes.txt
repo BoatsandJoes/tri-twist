@@ -16,6 +16,7 @@
 	mouse only mode (may be handled by button config)
 	try to adjust dig deep to be good for new players and then make it the main mode (current problem is if you can't make it to the bottom in 2 minutes then that kind of sucks)
 	confine mouse to window if mouse is selected. otherwise, hide mouse when unpaused and in game
+	menu selection follows mouse on button hover
 	save/resume brain mode
 		replays?
 	multiplayer
@@ -52,7 +53,6 @@
 		animation when sending an attack, including when reaching the bottom of the grid
 		some kind of effect on reaching the bottom of the grid in dig mode
 		backgrounds
-		buttons + arrow
 	Versus menu item
 		settings -> controls side select (implicit vs cpu) and button config
 			mode popup with buttons "start" and "back" along with these items (both players have cursors):

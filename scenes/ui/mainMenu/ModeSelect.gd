@@ -7,89 +7,125 @@ signal gogogo
 signal dig_mode
 signal triathalon
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+var SelectArrow = load("res://scenes/ui/elements/SelectArrow.tscn")
+var selectArrow: SelectArrow
+var timer: Timer
+var digArrowPosition: Vector2
+var timeArrowPosition: Vector2
+var goArrowPosition: Vector2
+var triathalonArrowPosition: Vector2
+var backArrowPosition: Vector2
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	select_exit()
+	$MarginContainer/HBoxContainer/VBoxContainer2/HowToPlayBasic.set_text("Match colors to clear triangles",
+	"Keep matching to make chains!")
+	selectArrow = SelectArrow.instance()
+	add_child(selectArrow)
+	selectArrow.visible = false
+	timer = Timer.new()
+	add_child(timer)
+	timer.one_shot = true
+	timer.connect("timeout", self, "_on_timer_timeout")
+	# Wait to make sure that buttons have resized.
+	timer.start(0.01)
+
+func _on_timer_timeout():
+	var digButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/DigMode.rect_global_position
+	var timeButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/TakeYourTime.rect_global_position
+	var goButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/GoGoGo.rect_global_position
+	var triathalonButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Triathalon.rect_global_position
+	var backButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Back.rect_global_position
+	var buttonWidthHeight = $MarginContainer/HBoxContainer/VBoxContainer/DigMode.get_rect().size
+	digArrowPosition = Vector2(digButtonPosition[0] + buttonWidthHeight[0], digButtonPosition[1] + buttonWidthHeight[1] / 2)
+	timeArrowPosition = Vector2(timeButtonPosition[0] + buttonWidthHeight[0], timeButtonPosition[1] + buttonWidthHeight[1] / 2)
+	goArrowPosition = Vector2(goButtonPosition[0] + buttonWidthHeight[0], goButtonPosition[1] + buttonWidthHeight[1] / 2)
+	triathalonArrowPosition = Vector2(triathalonButtonPosition[0] + buttonWidthHeight[0],
+	triathalonButtonPosition[1] + buttonWidthHeight[1] / 2)
+	backArrowPosition = Vector2(backButtonPosition[0] + buttonWidthHeight[0], backButtonPosition[1] + buttonWidthHeight[1] / 2)
+	select_dig_deep()
+	selectArrow.visible = true
+	timer.queue_free()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
 
+func select_dig_deep():
+	selectArrow.position = digArrowPosition
+	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("Clear all pieces above the line for points",
+	"2 minutes to score big!")
+
 func select_take_your_time():
-	$MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text = "<"
+	selectArrow.position = timeArrowPosition
 	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("If no colors match, all chains end",
 	"60 moves to score big!")
 
 func select_gogogo():
-	$MarginContainer/HBoxContainer/VBoxContainer2/GoGoGoArrow.text = "<"
+	selectArrow.position = goArrowPosition
 	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("4 seconds to extend chains",
 	"2 minutes to score big!")
 
-func select_dig_deep():
-	$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = "<"
-	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("Clear all pieces above the line for points",
-	"2 minutes to score big!")
-
 func select_triathalon():
-	$MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text = "<"
+	selectArrow.position = triathalonArrowPosition
 	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("Play all 3 modes back to back!", "")
 
 func select_exit():
-	$MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text = "<"
-	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("Match colors to clear triangles",
-	"Keep matching to make chains!")
+	selectArrow.position = backArrowPosition
+	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("Back to main menu", "")
 
 func _input(event):
 	if (event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton):
 		if event.is_action_pressed("ui_escape") || event.is_action_pressed("ui_cancel"):
 			_on_Back_pressed()
 		elif event.is_action_pressed("ui_up"):
-			if $MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text = ""
+			if dig_selected():
 				select_exit()
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/GoGoGoArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/GoGoGoArrow.text = ""
-				select_take_your_time()
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = ""
-				select_gogogo()
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text = ""
+			elif time_selected():
 				select_dig_deep()
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text = ""
+			elif go_selected():
+				select_take_your_time()
+			elif triathalon_selected():
+				select_gogogo()
+			elif back_selected():
 				select_triathalon()
 		elif event.is_action_pressed("ui_down"):
-			if $MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text = ""
-				select_gogogo()
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/GoGoGoArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/GoGoGoArrow.text = ""
-				select_dig_deep()
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text = ""
-				select_triathalon()
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text = ""
-				select_exit()
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text = ""
+			if dig_selected():
 				select_take_your_time()
+			elif time_selected():
+				select_gogogo()
+			elif go_selected():
+				select_triathalon()
+			elif triathalon_selected():
+				select_exit()
+			elif back_selected():
+				select_dig_deep()
 		elif event.is_action_pressed("ui_accept") || event.is_action_pressed("ui_select"):
-			if $MarginContainer/HBoxContainer/VBoxContainer2/TakeYourTimeArrow.text == "<":
+			if time_selected():
 				_on_TakeYourTime_pressed()
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/GoGoGoArrow.text == "<":
+			elif go_selected():
 				_on_GoGoGo_pressed()
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/DigModeArrow.text == "<":
+			elif dig_selected():
 				_on_DigMode_pressed()
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/TriathalonArrow.text == "<":
+			elif triathalon_selected():
 				_on_Triathalon_pressed()
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/BackArrow.text == "<":
+			elif back_selected():
 				_on_Back_pressed()
+
+func dig_selected():
+	return selectArrow.position == digArrowPosition
+
+func time_selected():
+	return selectArrow.position == timeArrowPosition
+
+func go_selected():
+	return selectArrow.position == goArrowPosition
+
+func triathalon_selected():
+	return selectArrow.position == triathalonArrowPosition
+
+func back_selected():
+	return selectArrow.position == backArrowPosition
 
 func _on_Back_pressed():
 	emit_signal("back")
