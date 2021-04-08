@@ -1,5 +1,6 @@
 # tri-twist
 	title
+	some way to break multiplayer stalemates
 	button config
 	clean up multiplayer double pause menu
 	controller device select
@@ -7,13 +8,14 @@
 	reset settings on this tab to defaults button
 	saving scores + displaying best scores
 	rework all menus, particularly mode select to clearly group how to play and show scores and maybe allow some settings changes, like button config/device select
-	"are you sure?" on quit
+	"are you sure?" on quit, restart, back to menu
 	how to play pictures
 	how to play scoring
 	how to play multiplayer + advanced how to play multiplayer
 	undo in brain mode
 	mouse only mode (may be handled by button config)
 	try to adjust dig deep to be good for new players and then make it the main mode (current problem is if you can't make it to the bottom in 2 minutes then that kind of sucks)
+	confine mouse to window if mouse is selected. otherwise, hide mouse when unpaused and in game
 	save/resume brain mode
 		replays?
 	multiplayer
@@ -51,63 +53,99 @@
 		some kind of effect on reaching the bottom of the grid in dig mode
 		backgrounds
 		buttons + arrow
-	custom mode
-		Chain mode
-		Chain cap
-		chain timer
-		Color count
-		score values
-		time limit
-		move limit
-		force drop
-		garbage on/off
-		garbage timer
-		dig on/off
-		initial dig rows
+	Versus menu item
+		settings -> controls side select (implicit vs cpu) and button config
+			mode popup with buttons "start" and "back" along with these items (both players have cursors):
+				tutorial text and pictures
+					chains and clearing above the line sends/defends garbage; top out = lose
+				CPU wait time (if vs cpu)
+				clear/garbage timer setting
+				last defense on/off
+				chain cap setting
+				score values setting
+				time limit (higher score wins)
+	Online
+		name edit, if not on steam
+		list of open rooms, if on steam (with ping)
+		direct connect input box and button
+		create room
+			room name (with profanity filter)
+			slots
+			private slots
+			mode settings from above
+			winner stays/loser stays/newest stays/player 1 stays
+			consecutive games limit
+			max rematches
+			password
+			room itself
+				copy ip
+				invite friend
+				player list (with ping)
+					win/game count
+					change name (self only, non-steam only)
+					view player
+					mute player
+					kick (owner only)
+				chat box and send button (with profanity filter)
+				"cabinets" to sit down at (equal to # of slots / 2)
+				can get in line at a cab for spectate, or spectate and play
+					if sitting, set delay or "auto/manual set delay" or ready up
+					if sitting, can play other modes while waiting (including vs cpu)
+				room settings (from above, owner only)
+				settings (controls etc)
+				leave room
 	settings
-		Gravity
-		double drop prevention
-		are you sure? on restart on/off
-		are you sure? on back to menu on/off
-		confine mouse to window
-		hide cursor
-		device select
-		button config
-			pause
-			quick reset
-			soft drop
-			hard drop
-			rotate right
-			rotate left
-			move left
-			move right
-			ui accept
-			ui escape
-			ui back
-			ui up
-			ui down
-			ui left
-			ui right
-		volume
-			master
-			sfx
-			music
-		display
-			resolution
+		Controls
+			device/side select (hit pause for button config on your side)
+				button config (add as many mappings to one button as you want, each button only accepted once per gameplay and once per menu) (split left/right like skullgirls) (can clear all bindings for each button)
+					set all
+					set all gameplay
+					set all menus
+					tuning
+						DAS
+						ARR
+						Gravity
+						double drop prevention
+						default online delay
+					restore defaults
+				
+					soft drop
+					hard drop
+					rotate right
+					rotate left
+					move left
+					move right
+					
+					pause (becomes skip)
+					ui accept
+					ui back
+					ui up
+					ui down
+					ui left
+					ui right
+		Video
+			fullscreen
 			monitor
-
+			color selection x4
+			restore defaults
+		Audio
+			master volume
+			sfx volume
+			music volume
+			restore defaults
+		How to play
+			basic
+			take your time
+			go
+			dig
+			multiplayer
+			advanced scoring
+			advanced garbage defense multiplayer
 on store page, advertise millions of polygons (my idea)
 
 Scope Creep:  
 	Character who instead of 4 says 3
 		how unthreetunate three you
-	Juice in gameplay and menus and characters:  
-		Art  
-		animations  
-		VFX  
-		Music  
-		SFX  
-		color choices (in menu or per character or both)
 	mobile port
 
 Things that I want but will have to cut:  

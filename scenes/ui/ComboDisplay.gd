@@ -15,7 +15,7 @@ var sequentialChainLinkScore = 100
 var chainLengthBonusScore = 500
 var twoTrickScore = 300
 var hatTrickScore = 900
-var simulchaineousScore = 1
+var simulchaineousScore = 0
 var displayedComboKey
 var activeChainOn: bool = true
 
@@ -43,10 +43,13 @@ func update_scorecard():
 			nonDisplayedScoreTotal = nonDisplayedScoreTotal + thisCombo.get("scoreTotal")
 	if comboToDisplay != null:
 		if (comboToDisplay.has("brainChainCount")):
-			$Scorecard/ComboCounter/GalaxyBrainChain.text = "Brain Chain! x" + String(comboToDisplay.get("brainChainCount"))
+			var text: String
+			if comboToDisplay.get("brainChainCount") < 5:
+				text = "Brain Chain! x"
+			else:
+				text = "GALAXY Chain! x"
+			$Scorecard/ComboCounter/GalaxyBrainChain.text = text + String(comboToDisplay.get("brainChainCount"))
 			$Scorecard/ComboCounter/GalaxyBrainChain.visible = true
-			if comboToDisplay.get("brainChainCount") >= 5:
-				$Scorecard/ComboCounter/GalaxyBrainChain.text = "GALAXY " + $Scorecard/ComboCounter/GalaxyBrainChain.text
 			$Scorecard/ComboScore/BrainChainScore.text = String(comboToDisplay.get("brainChainScore"))
 			$Scorecard/ComboScore/BrainChainScore.visible = true
 		else:
@@ -60,14 +63,6 @@ func update_scorecard():
 		else:
 			$Scorecard/ComboCounter/QuickChain.visible = false
 			$Scorecard/ComboScore/QuickChainScore.visible = false
-		if (comboToDisplay.has("luckyChainCount")):
-			$Scorecard/ComboCounter/LuckyChain.text = "Lucky Chain x" + String(comboToDisplay.get("luckyChainCount"))
-			$Scorecard/ComboCounter/LuckyChain.visible = true
-			$Scorecard/ComboScore/LuckyChainScore.text = String(comboToDisplay.get("luckyChainScore"))
-			$Scorecard/ComboScore/LuckyChainScore.visible = true
-		else:
-			$Scorecard/ComboCounter/LuckyChain.visible = false
-			$Scorecard/ComboScore/LuckyChainScore.visible = false
 		if (comboToDisplay.has("activeChainCount")):
 			$Scorecard/ComboCounter/ActiveChain.text = "Active Chain x" + String(comboToDisplay.get("activeChainCount"))
 			$Scorecard/ComboCounter/ActiveChain.visible = true
@@ -85,6 +80,14 @@ func update_scorecard():
 		else:
 			$Scorecard/ComboCounter/SequentialChain.visible = false
 			$Scorecard/ComboScore/SequentialChainScore.visible = false
+		if (comboToDisplay.has("luckyChainCount")):
+			$Scorecard/ComboCounter/LuckyChain.text = "Lucky Chain x" + String(comboToDisplay.get("luckyChainCount"))
+			$Scorecard/ComboCounter/LuckyChain.visible = true
+			$Scorecard/ComboScore/LuckyChainScore.text = String(comboToDisplay.get("luckyChainScore"))
+			$Scorecard/ComboScore/LuckyChainScore.visible = true
+		else:
+			$Scorecard/ComboCounter/LuckyChain.visible = false
+			$Scorecard/ComboScore/LuckyChainScore.visible = false
 		if (comboToDisplay.has("chainLengthBonus") && comboToDisplay.get("chainLengthBonus") > 0):
 			$Scorecard/ComboCounter/ChainLength.text = "Chain Length x" + String(comboToDisplay.get("chainLengthBonus"))
 			$Scorecard/ComboCounter/ChainLength.visible = true
@@ -111,9 +114,9 @@ func update_scorecard():
 			$Scorecard/ComboScore/HatTrickScore.visible = false
 		if (comboToDisplay.has("simulchaineousCount")):
 			$Scorecard/ComboCounter/SimulChaineous.text = "Simulchaineous x" + String(comboToDisplay.get("simulchaineousCount"))
-			$Scorecard/ComboCounter/SimulChaineous.visible = true
+			#$Scorecard/ComboCounter/SimulChaineous.visible = true
 			$Scorecard/ComboScore/SimulChaineousScore.text = String(comboToDisplay.get("simulchaineousScore"))
-			$Scorecard/ComboScore/SimulChaineousScore.visible = true
+			#$Scorecard/ComboScore/SimulChaineousScore.visible = true
 		else:
 			$Scorecard/ComboCounter/SimulChaineous.visible = false
 			$Scorecard/ComboScore/SimulChaineousScore.visible = false

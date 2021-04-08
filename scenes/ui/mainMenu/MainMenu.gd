@@ -8,9 +8,6 @@ signal credits
 signal back_to_title
 signal exit
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 const taglines: Array = [
 "Ah, I see you are a Windows user", #Someone online's opening line of open source software evangelism (name witheld)
 "Open source https://github.com/BoatsandJoes", #This game is open source! You're reading it right now!
@@ -36,10 +33,42 @@ const taglines: Array = [
 "No obtuse mechanics" #Obtuse is a type of angle that a triangle can have, but not in this game.
 ]
 
+var SelectArrow = load("res://scenes/ui/elements/SelectArrow.tscn")
+var selectArrow: SelectArrow
+var playArrowPosition: Vector2
+var versusArrowPosition: Vector2
+var settingsArrowPosition: Vector2
+var creditsArrowPosition: Vector2
+var exitArrowPosition: Vector2
+var timer: Timer
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
 	$MarginContainer/HBoxContainer/VBoxContainer3/Tagline.text = taglines[randi() % taglines.size()]
+	selectArrow = SelectArrow.instance()
+	add_child(selectArrow)
+	timer = Timer.new()
+	add_child(timer)
+	timer.one_shot = true
+	timer.connect("timeout", self, "_on_timer_timeout")
+	# Wait to make sure that buttons have resized.
+	timer.start(0.1)
+
+func _on_timer_timeout():
+	var playButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Play.rect_global_position
+	var versusButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Multiplayer.rect_global_position
+	var settingsButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Settings.rect_global_position
+	var creditsButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Credits.rect_global_position
+	var exitButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Exit.rect_global_position
+	var buttonWidthHeight = $MarginContainer/HBoxContainer/VBoxContainer/Play.get_rect().size
+	playArrowPosition = Vector2(playButtonPosition[0] + buttonWidthHeight[0], playButtonPosition[1] + buttonWidthHeight[1] / 2)
+	versusArrowPosition = Vector2(versusButtonPosition[0] + buttonWidthHeight[0], versusButtonPosition[1] + buttonWidthHeight[1] / 2)
+	settingsArrowPosition = Vector2(settingsButtonPosition[0]+buttonWidthHeight[0],settingsButtonPosition[1]+buttonWidthHeight[1] / 2)
+	creditsArrowPosition = Vector2(creditsButtonPosition[0] + buttonWidthHeight[0], creditsButtonPosition[1]+buttonWidthHeight[1] / 2)
+	exitArrowPosition = Vector2(exitButtonPosition[0] + buttonWidthHeight[0], exitButtonPosition[1] + buttonWidthHeight[1] / 2)
+	select_play()
+	timer.queue_free()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -48,58 +77,82 @@ func _ready():
 func _input(event):
 	if (event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton):
 		if event.is_action_pressed("ui_escape") || event.is_action_pressed("ui_cancel"):
-			emit_signal("back_to_title")
+			emit_signal("exit")
 		elif event.is_action_pressed("ui_up"):
-			if $MarginContainer/HBoxContainer/VBoxContainer2/PlayArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/PlayArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/ExitArrow.text = "<"
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/SettingsArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/SettingsArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/PlayArrow.text = "<"
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/CreditsArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/CreditsArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/SettingsArrow.text = "<"
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/ExitArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/ExitArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/CreditsArrow.text = "<"
+			if play_selected():
+				select_exit()
+			elif versus_selected():
+				select_play()
+			elif settings_selected():
+				select_versus()
+			elif credits_selected():
+				select_settings()
+			elif exit_selected():
+				select_credits()
 		elif event.is_action_pressed("ui_down"):
-			if $MarginContainer/HBoxContainer/VBoxContainer2/PlayArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/PlayArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/SettingsArrow.text = "<"
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/SettingsArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/SettingsArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/CreditsArrow.text = "<"
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/CreditsArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/CreditsArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/ExitArrow.text = "<"
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/ExitArrow.text == "<":
-				$MarginContainer/HBoxContainer/VBoxContainer2/ExitArrow.text = ""
-				$MarginContainer/HBoxContainer/VBoxContainer2/PlayArrow.text = "<"
+			if play_selected():
+				select_versus()
+			elif versus_selected():
+				select_settings()
+			elif settings_selected():
+				select_credits()
+			elif credits_selected():
+				select_exit()
+			elif exit_selected():
+				select_play()
 		elif event.is_action_pressed("ui_accept") || event.is_action_pressed("ui_select"):
-			if $MarginContainer/HBoxContainer/VBoxContainer2/PlayArrow.text == "<":
+			if play_selected():
 				_on_Play_pressed()
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/SettingsArrow.text == "<":
+			elif versus_selected():
+				_on_Multiplayer_pressed()
+			elif settings_selected():
 				_on_Settings_pressed()
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/CreditsArrow.text == "<":
+			elif credits_selected():
 				_on_Credits_pressed()
-			elif $MarginContainer/HBoxContainer/VBoxContainer2/ExitArrow.text == "<":
+			elif exit_selected():
 				_on_Exit_pressed()
 
-func _on_Exit_pressed():
-	emit_signal("exit")
+func play_selected():
+	return selectArrow.position == playArrowPosition
 
+func versus_selected():
+	return selectArrow.position == versusArrowPosition
+
+func settings_selected():
+	return selectArrow.position == settingsArrowPosition
+
+func credits_selected():
+	return selectArrow.position == creditsArrowPosition
+
+func exit_selected():
+	return selectArrow.position == exitArrowPosition
+
+func select_play():
+	selectArrow.position = playArrowPosition
+	
+func select_versus():
+	selectArrow.position = versusArrowPosition
+	
+func select_settings():
+	selectArrow.position = settingsArrowPosition
+	
+func select_credits():
+	selectArrow.position = creditsArrowPosition
+	
+func select_exit():
+	selectArrow.position = exitArrowPosition
 
 func _on_Play_pressed():
 	emit_signal("play")
 
+func _on_Multiplayer_pressed():
+	emit_signal("multiplayer")
 
 func _on_Settings_pressed():
 	emit_signal("settings")
 
-
 func _on_Credits_pressed():
 	emit_signal("credits")
 
-
-func _on_Multiplayer_pressed():
-	emit_signal("multiplayer")
+func _on_Exit_pressed():
+	emit_signal("exit")

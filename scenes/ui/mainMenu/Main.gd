@@ -26,7 +26,7 @@ func _ready():
 	load_config_from_filesystem()
 	initialize_display()
 	# TODO sound music start playing menu music
-	go_to_title()
+	go_to_main_menu()
 
 func initialize_display():
 	# Set resolution

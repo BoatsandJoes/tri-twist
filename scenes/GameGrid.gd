@@ -410,10 +410,10 @@ func _process(delta):
 		
 	if !$GarbageTimer.is_stopped():
 		$GarbageTimerBar.show()
-		if ($GarbageTimer.wait_time - $GarbageTimer.time_left < 0.1 &&
-		$GarbageTimerBar.value < $GarbageTimerBar.max_value - 0.1):
+		if ($GarbageTimer.wait_time - $GarbageTimer.time_left < 0.15 &&
+		$GarbageTimerBar.value < $GarbageTimerBar.max_value - 0.15):
 			# Filling effect
-			$GarbageTimerBar.value = $GarbageTimerBar.value + (delta / 0.1) * ($GarbageTimer.wait_time - 0.1)
+			$GarbageTimerBar.value = $GarbageTimerBar.value + (delta / 0.15) * ($GarbageTimer.wait_time - 0.15)
 		else:
 			$GarbageTimerBar.value = $GarbageTimer.time_left
 	else:
