@@ -1,13 +1,15 @@
 extends PanelContainer
 class_name HowToPlay
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+var demoPosition: Vector2
+var demoWidthHeight: Vector2
+var DemoBoard = load("res://scenes/ui/elements/DemoBoard.tscn")
+var demoBoard: DemoBoard
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	demoBoard = DemoBoard.instance()
+	add_child(demoBoard)
 
 func set_text(string1: String, string2: String):
 	$VBoxContainer/Text1.text = string1

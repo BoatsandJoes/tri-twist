@@ -8,8 +8,10 @@ signal erase_chain
 signal end_combo_if_exists
 
 export (PackedScene) var TriangleCell
-export var gridWidth: int
-export var gridHeight: int
+var screenWidth: int
+var screenHeight: int
+var gridWidth: int
+var gridHeight: int
 export var margin: int
 var FakeGameGrid = load("res://scenes/FakeGameGrid.tscn")
 var cellSize: int
@@ -25,11 +27,15 @@ var queuedAttacks: FakeGameGrid
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	initialize_grid()
+	pass
 
 # create grid and fill it with cells
-func initialize_grid():
-	cellSize = ((1080 / (gridHeight + 2)) - margin) / (sqrt(3) / 2)
+func initialize_grid(gridWidth: int, gridHeight: int, screenHeight: int, screenWidth: int):
+	self.gridWidth = gridWidth
+	self.gridHeight = gridHeight
+	self.screenHeight = screenHeight
+	self.screenWidth = screenWidth
+	cellSize = ((screenHeight / (gridHeight + 2)) - margin) / (sqrt(3) / 2)
 	for rowIndex in gridHeight:
 		grid.append([])
 		for columnIndex in gridWidth:
@@ -80,14 +86,6 @@ func set_clear_scaling(value):
 	for row in grid:
 		for cell in row:
 			cell.clearScaling = value
-
-func set_grid_height(value):
-	for row in grid:
-		for cell in row:
-			cell.free()
-	grid = []
-	gridHeight = value
-	initialize_grid()
 
 func has_no_filled_cells_above_row_index(index: int) -> bool:
 	index = index + 1
@@ -223,8 +221,8 @@ func draw_dig_line():
 
 # Gets the position in which to draw the cell with the passed indices
 func get_position_for_cell(rowIndex: int, columnIndex: int, flipped: bool) -> Vector2:
-	var result = Vector2(columnIndex * (cellSize/2 + margin) + 1920/5,
-				1080 - cellSize - (rowIndex * ((cellSize * sqrt(3) / 2) + margin)))
+	var result = Vector2(columnIndex * (cellSize/2 + margin) + screenWidth/5,
+				screenHeight - cellSize - (rowIndex * ((cellSize * sqrt(3) / 2) + margin)))
 	if flipped:
 		result = Vector2(result[0], result[1] + cellSize * sqrt(3) / 6)
 	return result

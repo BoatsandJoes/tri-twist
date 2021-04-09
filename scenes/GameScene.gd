@@ -13,12 +13,14 @@ var hud: HUD
 var pausePopup: PausePopup
 var fakeGrid: FakeGameGrid
 var player: int
+var pieceSequence: Array = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
 	triangleDropper = TriangleDropper.instance()
 	add_child(triangleDropper)
+	triangleDropper.init()
 	triangleDropper.set_previews_visible(3)
 	triangleDropper.connect("piece_sequence_advanced", self, "_on_triangleDropper_piece_sequence_advanced")
 	triangleDropper.gameGrid.connect("tumble", self, "_on_gameGrid_tumble")

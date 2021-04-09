@@ -22,9 +22,9 @@ func initialize_grid(horizontalPixels:int, verticalPixels:int):
 		for columnIndex in range(gridWidth):
 			var polygon = Polygon2D.new()
 			var polygonVectorArray = PoolVector2Array()
-			polygonVectorArray.append(Vector2((-1) * cellSize/2, (-1) * cellSize * sqrt(3) / 6))
-			polygonVectorArray.append(Vector2(cellSize/2 + (-1) * cellSize/2, cellSize * sqrt(3) / 3))
-			polygonVectorArray.append(Vector2(cellSize + (-1) * cellSize/2, (-1) * cellSize * sqrt(3) / 6))
+			polygonVectorArray.append(Vector2(-cellSize/2, -cellSize * sqrt(3) / 6))
+			polygonVectorArray.append(Vector2(0, cellSize * sqrt(3) / 3))
+			polygonVectorArray.append(Vector2(cellSize/2, (-1) * cellSize * sqrt(3) / 6))
 			polygon.set_polygon(polygonVectorArray)
 			polygon.position = Vector2(columnIndex * (cellSize/2 + margin) + horizontalPixels/5,
 				verticalPixels - cellSize - (rowIndex * ((cellSize * sqrt(3) / 2) + margin)))
