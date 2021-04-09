@@ -20,7 +20,13 @@ func _ready():
 	randomize()
 	triangleDropper = TriangleDropper.instance()
 	add_child(triangleDropper)
+	var pieceSequence: PoolIntArray = []
+	for i in range(1000):
+		pieceSequence.append(randi() % 4)
+		pieceSequence.append(randi() % 4)
+		pieceSequence.append(randi() % 4)
 	triangleDropper.init()
+	triangleDropper.set_piece_sequence(pieceSequence)
 	triangleDropper.set_previews_visible(3)
 	triangleDropper.connect("piece_sequence_advanced", self, "_on_triangleDropper_piece_sequence_advanced")
 	triangleDropper.gameGrid.connect("tumble", self, "_on_gameGrid_tumble")
