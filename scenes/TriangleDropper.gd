@@ -14,12 +14,22 @@ var rightPressed = false
 var previews = []
 var droppingAllowed = true
 var device: String
+var gridWidth: int = 11
+var gridHeight: int = 5
+var screenHeight: int = 1080
+var screenWidth: int = 1920
+var pieceSequence: PoolIntArray
+var currentPieceIndex: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	pieceSequence = PoolIntArray()
 	show_on_top = true
+
+func init():
 	gameGrid = GameGrid.instance()
 	add_child(gameGrid)
+	gameGrid.initialize_grid(gridWidth, gridHeight, screenHeight, screenWidth)
 	activePiece = TriangleCell.instance()
 	# draw active piece as though it were one row higher than the top row
 	# Draw it on the left where it will always be oriented correctly, and then slide it into place.
@@ -28,9 +38,9 @@ func _ready():
 	activePiece.columnIndex = gameGrid.gridWidth / 2
 	activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
 	activePiece.fill_randomly()
-	activePiece.update_colors_visually()
 	add_child(activePiece)
-	set_active_piece_position_based_on_mouse(get_global_mouse_position()[0])
+	if (device == "Keyboard&Mouse"):
+		set_active_piece_position_based_on_mouse(get_global_mouse_position()[0])
 	# Previews
 	for i in range(3):
 		var preview: TriangleCell = TriangleCell.instance()
@@ -49,7 +59,10 @@ func set_multiplayer():
 	for i in range(previews.size()):
 		previews[i].init(activePiece.size, -1, -1, Vector2(gameGrid.grid[-1][-8].position[0] + (i + 1.1) * activePiece.size,
 		activePiece.position[1] - activePiece.size * 1.5), false, false)
-		previews[i].fill_randomly()
+		if pieceSequence.size() == 0:
+			previews[i].fill_randomly()
+		else:
+			previews[i].set_colors(pieceSequence[(i+1)*3], pieceSequence[(i+1)*3 + 1], pieceSequence[(i+1)*3 + 2])
 	gameGrid.set_multiplayer()
 
 func set_active_piece_position_based_on_mouse(horizontalMousePosition: int):
@@ -59,8 +72,11 @@ func set_active_piece_position_based_on_mouse(horizontalMousePosition: int):
 		&& horizontalMousePosition > cell.position[0] - cell.size / 4)
 		|| (cell.columnIndex == 0 && horizontalMousePosition < cell.position[0])
 		|| (cell.columnIndex == gameGrid.grid[0].size() - 1 && horizontalMousePosition > cell.position[0])):
-			activePiece.columnIndex = cell.columnIndex
-			activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
+			set_active_piece_position(cell.columnIndex)
+
+func set_active_piece_position(positionIndex: int):
+	activePiece.columnIndex = positionIndex
+	activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, positionIndex, true)
 
 func update_active_piece_position():
 	if device == "Keyboard&Mouse":
@@ -85,6 +101,40 @@ func set_previews_visible(value):
 	for i in range(previews.size()):
 		previews[i].visible = i < value
 
+func serialize() -> Dictionary:
+	var result: Dictionary = {}
+	result["currentPieceIndex"] = currentPieceIndex
+	result["activePieceColumnIndex"] = activePiece.columnIndex
+	var colors: PoolIntArray = []
+	for row in gameGrid.grid:
+		for cell in row:
+			colors.append(cell.leftColor)
+			colors.append(cell.rightColor)
+			colors.append(cell.verticalColor)
+	result["boardColors"] = colors
+	return result
+
+func deserialize(state: Dictionary):
+	currentPieceIndex = state.get("currentPieceIndex")
+	# Set active and preview colors
+	var previousPieceIndex = currentPieceIndex - 1 - previews.size()
+	if previousPieceIndex < 0:
+		previousPieceIndex = pieceSequence.size() / 3 - 1 + previousPieceIndex
+	activePiece.set_colors(pieceSequence[previousPieceIndex*3], pieceSequence[previousPieceIndex*3 + 1],
+	pieceSequence[previousPieceIndex*3 + 2])
+	for i in range(previews.size()):
+		previousPieceIndex = previousPieceIndex + 1
+		if previousPieceIndex >= pieceSequence.size():
+			previousPieceIndex = 0
+		previews[i].set_colors(pieceSequence[previousPieceIndex*3], pieceSequence[previousPieceIndex*3 + 1],
+		pieceSequence[previousPieceIndex*3 + 2])
+	set_active_piece_position(state.get("activePieceColumnIndex"))
+	var colors: PoolIntArray = state.get("boardColors")
+	for rowIndex in range(gameGrid.grid.size()):
+		for columnIndex in range(gameGrid.gridWidth):
+			gameGrid.grid[rowIndex][columnIndex].set_colors(colors[rowIndex*gameGrid.gridWidth*3 + columnIndex*3],
+			colors[rowIndex*gameGrid.gridWidth*3 + columnIndex*3+1], colors[rowIndex*gameGrid.gridWidth*3 + columnIndex*3+2])
+
 func move_piece_right():
 	if activePiece.columnIndex < gameGrid.grid[-1].size() - 1:
 				activePiece.columnIndex = activePiece.columnIndex + 1
@@ -94,6 +144,21 @@ func move_piece_left():
 	if activePiece.columnIndex > 0:
 				activePiece.columnIndex = activePiece.columnIndex - 1
 				activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
+
+func rotate_clockwise():
+	activePiece.set_colors(activePiece.verticalColor, activePiece.leftColor, activePiece.rightColor)
+
+func rotate_counterclockwise():
+	activePiece.set_colors(activePiece.rightColor, activePiece.verticalColor, activePiece.leftColor)
+
+func soft_drop():
+	var accepted = gameGrid.drop_piece(activePiece, true)
+	if accepted:
+		advance_piece()
+
+func hard_drop():
+	gameGrid.hard_drop(ghostPiece)
+	advance_piece()
 
 func _input(event):
 	if ((event is InputEventKey && (device == "Keyboard" || device == "Keyboard&Mouse"))
@@ -124,19 +189,23 @@ func _input(event):
 			if leftPressed:
 				$DasTimer.start()
 		elif event.is_action_pressed("clockwise"):
-			activePiece.set_colors(activePiece.verticalColor, activePiece.leftColor, activePiece.rightColor)
+			rotate_clockwise()
 		elif event.is_action_pressed("counterclockwise"):
-			activePiece.set_colors(activePiece.rightColor, activePiece.verticalColor, activePiece.leftColor)
+			rotate_counterclockwise()
 		elif droppingAllowed:
 			if event.is_action_pressed("soft_drop"):
-				var accepted = gameGrid.drop_piece(activePiece, true)
-				if accepted:
-					advance_piece()
+				soft_drop()
 			elif event.is_action_pressed("hard_drop") && ghostPiece.visible:
-				gameGrid.hard_drop(ghostPiece)
-				advance_piece()
+				hard_drop()
 	elif event is InputEventMouseMotion && device == "Keyboard&Mouse":
 		set_active_piece_position_based_on_mouse(event.position[0])
+
+func set_piece_sequence(pieceSequence: PoolIntArray):
+	self.pieceSequence = pieceSequence
+	activePiece.set_colors(pieceSequence[0], pieceSequence[1], pieceSequence[2])
+	for i in range(previews.size()):
+		previews[i].set_colors(pieceSequence[(i+1) * 3], pieceSequence[(i+1) * 3 + 1], pieceSequence[(i+1) * 3 + 2])
+	currentPieceIndex = previews.size() + 1
 
 func set_drop_timer(value):
 	if value == 0:
@@ -215,7 +284,11 @@ func advance_piece():
 	activePiece.set_colors(previews[0].leftColor, previews[0].rightColor, previews[0].verticalColor)
 	for i in range(previews.size() - 1):
 		previews[i].set_colors(previews[i+1].leftColor, previews[i+1].rightColor, previews[i+1].verticalColor)
-	previews[-1].fill_randomly()
+	previews[-1].set_colors(pieceSequence[currentPieceIndex * 3], pieceSequence[currentPieceIndex * 3 + 1],
+	pieceSequence[currentPieceIndex * 3 + 2])
+	currentPieceIndex = currentPieceIndex + 1
+	if currentPieceIndex >= pieceSequence.size() / 3:
+		currentPieceIndex = 0
 	if dropTimer:
 		$DropTimer.start()
 	emit_signal("piece_sequence_advanced")

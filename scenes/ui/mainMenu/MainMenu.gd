@@ -10,7 +10,6 @@ signal exit
 
 const taglines: Array = [
 "Ah, I see you are a Windows user", #Someone online's opening line of open source software evangelism (name witheld)
-"Open source https://github.com/BoatsandJoes", #This game is open source! You're reading it right now!
 "Like putting too much air in a balloon!", #Futurama: Where No Fan Has Gone Before 
 "Think of shipping channels in the ocean", #Numb3rs: Shadow Markets
 "It's how hackers talk when they don't want to be overheard", #Numb3rs: Shadow Markets

@@ -18,8 +18,36 @@ var backArrowPosition: Vector2
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$MarginContainer/HBoxContainer/VBoxContainer2/HowToPlayBasic.set_text("Match colors to clear triangles",
+	$MarginContainer/HBoxContainer/VBoxContainer2/HowToPlayBasic.set_text("Match colors to clear triangles\n\n\n\n\n\n\n\n\n\n\n\n\n",
 	"Keep matching to make chains!")
+	var startingDemoState: Dictionary = {}
+	startingDemoState["currentPieceIndex"] = 4
+	startingDemoState["activePieceColumnIndex"] = 2
+	var colors: PoolIntArray = []
+	for rowIndex in range(3):
+		for cellIndex in range(7):
+			colors.append(4)
+			colors.append(4)
+			colors.append(4)
+	startingDemoState["boardColors"] = colors
+	var pieceSequence: PoolIntArray = PoolIntArray()
+	pieceSequence.append(2)
+	pieceSequence.append(1)
+	pieceSequence.append(1)
+	pieceSequence.append(0)
+	pieceSequence.append(1)
+	pieceSequence.append(0)
+	pieceSequence.append(1)
+	pieceSequence.append(3)
+	pieceSequence.append(3)
+	pieceSequence.append(2)
+	pieceSequence.append(3)
+	pieceSequence.append(0)
+	pieceSequence.append(1)
+	pieceSequence.append(1)
+	pieceSequence.append(1)
+	$MarginContainer/HBoxContainer/VBoxContainer2/HowToPlayBasic.set_demo(startingDemoState,
+	[[1, "soft_drop"],[1, "move_piece_right"],[1, "soft_drop"],[2, "soft_drop"],[2, "rotate_clockwise"],[1, "soft_drop"],[5,"restart"]], pieceSequence)
 	selectArrow = SelectArrow.instance()
 	add_child(selectArrow)
 	selectArrow.visible = false
@@ -53,26 +81,18 @@ func _on_timer_timeout():
 
 func select_dig_deep():
 	selectArrow.position = digArrowPosition
-	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("Clear all pieces above the line for points",
-	"2 minutes to score big!")
 
 func select_take_your_time():
 	selectArrow.position = timeArrowPosition
-	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("If no colors match, all chains end",
-	"60 moves to score big!")
 
 func select_gogogo():
 	selectArrow.position = goArrowPosition
-	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("4 seconds to extend chains",
-	"2 minutes to score big!")
 
 func select_triathalon():
 	selectArrow.position = triathalonArrowPosition
-	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("Play all 3 modes back to back!", "")
 
 func select_exit():
 	selectArrow.position = backArrowPosition
-	$MarginContainer/HBoxContainer/VBoxContainer4/HowToPlayMode.set_text("Back to main menu", "")
 
 func _input(event):
 	if (event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton):

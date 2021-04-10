@@ -7,10 +7,13 @@ var player2Scene
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	randomize()
 	player1Scene = DigMode.instance()
 	player2Scene = DigMode.instance()
 	add_child(player1Scene)
 	add_child(player2Scene)
+	player2Scene.triangleDropper.set_piece_sequence(player1Scene.triangleDropper.pieceSequence)
+	player2Scene.triangleDropper.deserialize(player1Scene.triangleDropper.serialize())
 	player2Scene.connect("restart", self, "_on_scene_restart")
 	player2Scene.connect("back_to_menu", self, "_on_scene_back_to_menu")
 	player1Scene.set_multiplayer()

@@ -1,17 +1,10 @@
 # tri-twist
 	title
 	some way to break multiplayer stalemates
-	button config
 	clean up multiplayer double pause menu
-	controller device select
-	color selection
 	reset settings on this tab to defaults button
 	saving scores + displaying best scores
-	rework all menus, particularly mode select to clearly group how to play and show scores and maybe allow some settings changes, like button config/device select
 	"are you sure?" on quit, restart, back to menu
-	how to play pictures
-	how to play scoring
-	how to play multiplayer + advanced how to play multiplayer
 	undo in brain mode
 	mouse only mode (may be handled by button config)
 	try to adjust dig deep to be good for new players and then make it the main mode (current problem is if you can't make it to the bottom in 2 minutes then that kind of sucks)
@@ -98,16 +91,17 @@
 		Controls
 			device/side select (hit pause for button config on your side)
 				button config (add as many mappings to one button as you want, each button only accepted once per gameplay and once per menu) (split left/right like skullgirls) (can clear all bindings for each button)
-					set all
 					set all gameplay
 					set all menus
+					set all
+					restore defaults
 					tuning
 						DAS
 						ARR
 						Gravity
 						double drop prevention
 						default online delay
-					restore defaults
+						restore defaults
 				
 					soft drop
 					hard drop
@@ -215,6 +209,8 @@ Tri words for mechanics or modes or titles:
 	tri not to die
 	Trianglesaurus Rex
 	Ptriaerodactyl
+	taxidermy
+	taxonomy
 
 Titles:  
 	Trillion Trippy Triangles  
@@ -226,3 +222,4 @@ Titles:
 	Triangle
 	Untitled Untriangle
 	Triceradrops
+	Triangle Temptation
