@@ -119,7 +119,7 @@ func deserialize(state: Dictionary):
 	# Set active and preview colors
 	var previousPieceIndex = currentPieceIndex - 1 - previews.size()
 	if previousPieceIndex < 0:
-		previousPieceIndex = pieceSequence.size() - 1 + previousPieceIndex
+		previousPieceIndex = pieceSequence.size() / 3 - 1 + previousPieceIndex
 	activePiece.set_colors(pieceSequence[previousPieceIndex*3], pieceSequence[previousPieceIndex*3 + 1],
 	pieceSequence[previousPieceIndex*3 + 2])
 	for i in range(previews.size()):
@@ -144,6 +144,21 @@ func move_piece_left():
 	if activePiece.columnIndex > 0:
 				activePiece.columnIndex = activePiece.columnIndex - 1
 				activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
+
+func rotate_clockwise():
+	activePiece.set_colors(activePiece.verticalColor, activePiece.leftColor, activePiece.rightColor)
+
+func rotate_counterclockwise():
+	activePiece.set_colors(activePiece.rightColor, activePiece.verticalColor, activePiece.leftColor)
+
+func soft_drop():
+	var accepted = gameGrid.drop_piece(activePiece, true)
+	if accepted:
+		advance_piece()
+
+func hard_drop():
+	gameGrid.hard_drop(ghostPiece)
+	advance_piece()
 
 func _input(event):
 	if ((event is InputEventKey && (device == "Keyboard" || device == "Keyboard&Mouse"))
@@ -174,17 +189,14 @@ func _input(event):
 			if leftPressed:
 				$DasTimer.start()
 		elif event.is_action_pressed("clockwise"):
-			activePiece.set_colors(activePiece.verticalColor, activePiece.leftColor, activePiece.rightColor)
+			rotate_clockwise()
 		elif event.is_action_pressed("counterclockwise"):
-			activePiece.set_colors(activePiece.rightColor, activePiece.verticalColor, activePiece.leftColor)
+			rotate_counterclockwise()
 		elif droppingAllowed:
 			if event.is_action_pressed("soft_drop"):
-				var accepted = gameGrid.drop_piece(activePiece, true)
-				if accepted:
-					advance_piece()
+				soft_drop()
 			elif event.is_action_pressed("hard_drop") && ghostPiece.visible:
-				gameGrid.hard_drop(ghostPiece)
-				advance_piece()
+				hard_drop()
 	elif event is InputEventMouseMotion && device == "Keyboard&Mouse":
 		set_active_piece_position_based_on_mouse(event.position[0])
 
@@ -272,14 +284,11 @@ func advance_piece():
 	activePiece.set_colors(previews[0].leftColor, previews[0].rightColor, previews[0].verticalColor)
 	for i in range(previews.size() - 1):
 		previews[i].set_colors(previews[i+1].leftColor, previews[i+1].rightColor, previews[i+1].verticalColor)
-	if pieceSequence.size() == 0:
-		previews[-1].fill_randomly()
-	else:
-		previews[-1].set_colors(pieceSequence[currentPieceIndex * 3], pieceSequence[currentPieceIndex * 3 + 1],
-		pieceSequence[currentPieceIndex * 3 + 2])
-		currentPieceIndex = currentPieceIndex + 1
-		if currentPieceIndex >= pieceSequence.size() / 3:
-			currentPieceIndex = 0
+	previews[-1].set_colors(pieceSequence[currentPieceIndex * 3], pieceSequence[currentPieceIndex * 3 + 1],
+	pieceSequence[currentPieceIndex * 3 + 2])
+	currentPieceIndex = currentPieceIndex + 1
+	if currentPieceIndex >= pieceSequence.size() / 3:
+		currentPieceIndex = 0
 	if dropTimer:
 		$DropTimer.start()
 	emit_signal("piece_sequence_advanced")

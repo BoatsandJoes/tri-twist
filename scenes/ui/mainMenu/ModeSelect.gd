@@ -20,6 +20,34 @@ var backArrowPosition: Vector2
 func _ready():
 	$MarginContainer/HBoxContainer/VBoxContainer2/HowToPlayBasic.set_text("Match colors to clear triangles\n\n\n\n\n\n\n\n\n\n\n\n\n",
 	"Keep matching to make chains!")
+	var startingDemoState: Dictionary = {}
+	startingDemoState["currentPieceIndex"] = 4
+	startingDemoState["activePieceColumnIndex"] = 2
+	var colors: PoolIntArray = []
+	for rowIndex in range(3):
+		for cellIndex in range(7):
+			colors.append(4)
+			colors.append(4)
+			colors.append(4)
+	startingDemoState["boardColors"] = colors
+	var pieceSequence: PoolIntArray = PoolIntArray()
+	pieceSequence.append(2)
+	pieceSequence.append(1)
+	pieceSequence.append(1)
+	pieceSequence.append(0)
+	pieceSequence.append(1)
+	pieceSequence.append(0)
+	pieceSequence.append(1)
+	pieceSequence.append(3)
+	pieceSequence.append(3)
+	pieceSequence.append(2)
+	pieceSequence.append(3)
+	pieceSequence.append(0)
+	pieceSequence.append(1)
+	pieceSequence.append(1)
+	pieceSequence.append(1)
+	$MarginContainer/HBoxContainer/VBoxContainer2/HowToPlayBasic.set_demo(startingDemoState,
+	[[1, "soft_drop"],[1, "move_piece_right"],[1, "soft_drop"],[2, "soft_drop"],[2, "rotate_clockwise"],[1, "soft_drop"],[5,"restart"]], pieceSequence)
 	selectArrow = SelectArrow.instance()
 	add_child(selectArrow)
 	selectArrow.visible = false

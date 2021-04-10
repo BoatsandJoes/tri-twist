@@ -15,6 +15,9 @@ func set_text(string1: String, string2: String):
 	$VBoxContainer/Text1.text = string1
 	$VBoxContainer/Text2.text = string2
 
+func set_demo(boardState: Dictionary, instructions: Array, pieceSequence: PoolIntArray):
+	demoBoard.set_demo_instructions(boardState, instructions, pieceSequence)
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
