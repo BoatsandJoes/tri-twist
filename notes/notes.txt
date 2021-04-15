@@ -1,5 +1,6 @@
 # tri-twist
 	title
+	make all later garbage patterns identical between both players in versus (except for top edge, which can change if needed)
 	some way to break multiplayer stalemates
 	clean up multiplayer double pause menu
 	reset settings on this tab to defaults button
@@ -90,7 +91,7 @@
 	settings
 		Controls
 			device/side select (hit pause for button config on your side)
-				button config (add as many mappings to one button as you want, each button only accepted once per gameplay and once per menu) (split left/right like skullgirls) (can clear all bindings for each button)
+				button config (add as many buttons to one action as you want, each button only accepted once for gameplay and once per menu) (split left/right like skullgirls) (can clear all bindings for each button)
 					set all gameplay
 					set all menus
 					set all

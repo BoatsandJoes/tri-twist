@@ -10,7 +10,7 @@ var isConfigChanged: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	$VBoxContainer/TabContainer/DeviceSelect.init(null, null)
 
 func set_config(config: ConfigFile):
 	self.config = config

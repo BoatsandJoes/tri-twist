@@ -1,7 +1,8 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scenes/ui/mainMenu/Settings.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/agane/Agane╠Ç 55 (roman).ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://scenes/ui/mainMenu/settings/controls/DeviceSelect.tscn" type="PackedScene" id=3]
 
 [sub_resource type="DynamicFont" id=1]
 size = 80
@@ -293,6 +294,13 @@ margin_right = 116.0
 margin_bottom = 54.0
 custom_fonts/font = SubResource( 10 )
 text = "Back"
+
+[node name="DeviceSelect" parent="VBoxContainer/TabContainer" instance=ExtResource( 3 )]
+visible = false
+margin_left = 4.0
+margin_top = 82.0
+margin_right = -4.0
+margin_bottom = -4.0
 [connection signal="pressed" from="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer2/DecreaseDAS" to="." method="_on_DecreaseDAS_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer2/DecreaseARR" to="." method="_on_DecreaseARR_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer4/IncreaseDAS" to="." method="_on_IncreaseDAS_pressed"]

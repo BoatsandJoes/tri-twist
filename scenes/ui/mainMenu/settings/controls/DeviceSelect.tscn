@@ -1,0 +1,81 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://scenes/ui/mainMenu/settings/controls/DeviceSelect.gd" type="Script" id=1]
+[ext_resource path="res://assets/fonts/agane/Agane╠Ç 55 (roman).ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://scenes/ui/elements/SelectArrow.tscn" type="PackedScene" id=3]
+
+[sub_resource type="DynamicFont" id=2]
+size = 64
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 64
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=1]
+size = 64
+font_data = ExtResource( 2 )
+
+[node name="DeviceSelect" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 60.0
+margin_top = 60.0
+margin_right = -60.0
+margin_bottom = -60.0
+script = ExtResource( 1 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 1800.0
+margin_bottom = 960.0
+alignment = 1
+
+[node name="Player1Device" type="VBoxContainer" parent="HBoxContainer"]
+margin_left = 674.0
+margin_right = 896.0
+margin_bottom = 960.0
+
+[node name="Label" type="Label" parent="HBoxContainer/Player1Device"]
+margin_right = 222.0
+margin_bottom = 64.0
+custom_fonts/font = SubResource( 2 )
+text = "Player1"
+
+[node name="AllDevices" type="VBoxContainer" parent="HBoxContainer"]
+margin_left = 900.0
+margin_right = 900.0
+margin_bottom = 960.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/AllDevices"]
+margin_bottom = 64.0
+
+[node name="Label" type="Label" parent="HBoxContainer/AllDevices/HBoxContainer2"]
+margin_bottom = 64.0
+custom_fonts/font = SubResource( 3 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/AllDevices"]
+visible = false
+margin_right = 178.0
+margin_bottom = 64.0
+
+[node name="LeftArrow" parent="HBoxContainer/AllDevices/HBoxContainer" instance=ExtResource( 3 )]
+
+[node name="Label" type="Label" parent="HBoxContainer/AllDevices/HBoxContainer"]
+margin_right = 178.0
+margin_bottom = 64.0
+custom_fonts/font = SubResource( 1 )
+text = "Hacky"
+
+[node name="RightArrow" parent="HBoxContainer/AllDevices/HBoxContainer" instance=ExtResource( 3 )]
+scale = Vector2( -1, 1 )
+
+[node name="Player2Device" type="VBoxContainer" parent="HBoxContainer"]
+margin_left = 904.0
+margin_right = 1125.0
+margin_bottom = 960.0
+
+[node name="Label" type="Label" parent="HBoxContainer/Player2Device"]
+margin_right = 221.0
+margin_bottom = 64.0
+custom_fonts/font = SubResource( 2 )
+text = "Player2"
