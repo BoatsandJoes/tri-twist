@@ -5,23 +5,23 @@
 [ext_resource path="res://assets/fonts/agane/Agane╠Ç 55 (roman).ttf" type="DynamicFontData" id=3]
 
 [sub_resource type="DynamicFont" id=1]
-size = 48
+size = 64
 font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=2]
-size = 48
+size = 64
 font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=3]
-size = 48
+size = 64
 font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=4]
-size = 48
+size = 64
 font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=5]
-size = 48
+size = 64
 font_data = ExtResource( 3 )
 
 [node name="ModeSelect" type="Control"]
@@ -44,62 +44,62 @@ custom_constants/separation = 100
 alignment = 1
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 669.0
-margin_right = 683.0
+margin_left = 612.0
+margin_right = 626.0
 margin_bottom = 960.0
 alignment = 1
 
 [node name="HowToPlayBasic" parent="MarginContainer/HBoxContainer/VBoxContainer2" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 439.0
+margin_top = 423.0
 margin_right = 14.0
-margin_bottom = 521.0
+margin_bottom = 537.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 783.0
-margin_right = 1131.0
+margin_left = 726.0
+margin_right = 1187.0
 margin_bottom = 960.0
 custom_constants/separation = 5
 alignment = 1
 
 [node name="DigMode" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 325.0
-margin_right = 348.0
-margin_bottom = 379.0
+margin_top = 285.0
+margin_right = 461.0
+margin_bottom = 355.0
 custom_fonts/font = SubResource( 1 )
 text = "Dig deep"
 
 [node name="TakeYourTime" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 384.0
-margin_right = 348.0
-margin_bottom = 438.0
+margin_top = 360.0
+margin_right = 461.0
+margin_bottom = 430.0
 custom_fonts/font = SubResource( 2 )
 text = "Take your time"
 
 [node name="GoGoGo" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 443.0
-margin_right = 348.0
-margin_bottom = 497.0
+margin_top = 435.0
+margin_right = 461.0
+margin_bottom = 505.0
 custom_fonts/font = SubResource( 3 )
 text = "Go go go"
 
 [node name="Triathalon" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 502.0
-margin_right = 348.0
-margin_bottom = 556.0
+margin_top = 510.0
+margin_right = 461.0
+margin_bottom = 580.0
 custom_fonts/font = SubResource( 4 )
 text = "Triathalon"
 
 [node name="Spacing" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 561.0
-margin_right = 348.0
-margin_bottom = 575.0
+margin_top = 585.0
+margin_right = 461.0
+margin_bottom = 599.0
 
 [node name="Back" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 580.0
-margin_right = 348.0
-margin_bottom = 634.0
+margin_top = 604.0
+margin_right = 461.0
+margin_bottom = 674.0
 custom_fonts/font = SubResource( 5 )
 text = "Back"
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/DigMode" to="." method="_on_DigMode_pressed"]

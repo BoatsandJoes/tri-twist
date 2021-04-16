@@ -7,7 +7,6 @@
 	saving scores + displaying best scores
 	"are you sure?" on quit, restart, back to menu
 	undo in brain mode
-	mouse only mode (may be handled by button config)
 	try to adjust dig deep to be good for new players and then make it the main mode (current problem is if you can't make it to the bottom in 2 minutes then that kind of sucks)
 	confine mouse to window if mouse is selected. otherwise, hide mouse when unpaused and in game
 	menu selection follows mouse on button hover
@@ -94,7 +93,6 @@
 				button config (add as many buttons to one action as you want, each button only accepted once for gameplay and once per menu) (split left/right like skullgirls) (can clear all bindings for each button)
 					set all gameplay
 					set all menus
-					set all
 					restore defaults
 					tuning
 						DAS

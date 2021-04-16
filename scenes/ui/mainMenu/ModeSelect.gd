@@ -47,7 +47,8 @@ func _ready():
 	pieceSequence.append(1)
 	pieceSequence.append(1)
 	$MarginContainer/HBoxContainer/VBoxContainer2/HowToPlayBasic.set_demo(startingDemoState,
-	[[1, "soft_drop"],[1, "move_piece_right"],[1, "soft_drop"],[2, "soft_drop"],[2, "rotate_clockwise"],[1, "soft_drop"],[5,"restart"]], pieceSequence)
+	[[1, "soft_drop"],[1, "move_piece_right"],[1, "soft_drop"],[2, "soft_drop"],[2, "rotate_clockwise"],
+	[1, "soft_drop"],[5,"restart"]], pieceSequence)
 	selectArrow = SelectArrow.instance()
 	add_child(selectArrow)
 	selectArrow.visible = false
@@ -120,7 +121,7 @@ func _input(event):
 				select_exit()
 			elif back_selected():
 				select_dig_deep()
-		elif event.is_action_pressed("ui_accept") || event.is_action_pressed("ui_select"):
+		elif event.is_action_pressed("ui_accept"):
 			if time_selected():
 				_on_TakeYourTime_pressed()
 			elif go_selected():

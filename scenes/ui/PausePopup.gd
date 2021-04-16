@@ -46,7 +46,8 @@ func set_mode_finished():
 func _input(event):
 	if ((event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton) && self.visible &&
 	$PanelContainer/VBoxContainer.visible):
-		get_tree().set_input_as_handled()
+		if !event is InputEventMouseButton:
+			get_tree().set_input_as_handled()
 		if event.is_action_pressed("ui_escape") || event.is_action_pressed("ui_cancel") || event.is_action_pressed("pause"):
 			if $PanelContainer/VBoxContainer/HBoxContainer2/SelectArrow/Resume.visible:
 				_on_Resume_pressed()
@@ -84,7 +85,7 @@ func _input(event):
 					$PanelContainer/VBoxContainer/HBoxContainer2/SelectArrow/Resume.text = "<"
 				else:
 					$PanelContainer/VBoxContainer/HBoxContainer2/SelectArrow/Restart.text = "<"
-		elif event.is_action_pressed("ui_accept") || event.is_action_pressed("ui_select"):
+		elif event.is_action_pressed("ui_accept"):
 			if $PanelContainer/VBoxContainer/HBoxContainer2/SelectArrow/Resume.text == "<":
 				_on_Resume_pressed()
 			elif $PanelContainer/VBoxContainer/HBoxContainer2/SelectArrow/Restart.text == "<":

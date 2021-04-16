@@ -3,7 +3,7 @@ class_name SelectArrow
 
 var movingRight: bool = true
 var animationTime: float = 0
-var size: int = 32
+export var size: int = 64
 var leftMargin: int = 10
 
 # Called when the node enters the scene tree for the first time.

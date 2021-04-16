@@ -7,18 +7,19 @@ signal back_to_menu
 
 var config: ConfigFile
 var isConfigChanged: bool = false
+var Controls = load("res://scenes/ui/mainMenu/settings/controls/DeviceSelect.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$VBoxContainer/TabContainer/DeviceSelect.init(null, null)
+	pass
 
 func set_config(config: ConfigFile):
 	self.config = config
 	$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/DAS.text = String(config.get_value("tuning", "das"))
 	$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/ARR.text = String(config.get_value("tuning", "arr"))
-	$VBoxContainer/TabContainer/Video/HBoxContainer/Fullscreen.pressed = config.get_value("video", "fullscreen")
-	$VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text = config.get_value("controls", "p1_device")
-	$VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text = config.get_value("controls", "p2_device")
+	var fullscreen = config.get_value("video", "fullscreen")
+	if !fullscreen:
+		$VBoxContainer/MainArea/TopOptions/Fullscreen.text = "Windowed"
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -33,13 +34,6 @@ func _on_Back_pressed():
 	# save config
 	config.save("user://settings.cfg")
 	emit_signal("back_to_menu", isConfigChanged, config)
-
-func _on_Fullscreen_toggled(button_pressed):
-	isConfigChanged = true
-	if button_pressed:
-		emit_signal("fullscreen")
-	else:
-		emit_signal("windowed")
 
 func _on_DecreaseDAS_pressed():
 	var das = config.get_value("tuning", "das")
@@ -73,43 +67,6 @@ func _on_IncreaseARR_pressed():
 		$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/ARR.text = String(arr)
 		config.set_value("tuning", "arr", arr)
 
-func _on_P1DeviceBack_pressed():
-	isConfigChanged = true
-	if $VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text == "Keyboard":
-		$VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text = "Controller"
-		config.set_value("controls", "p1_device", "Controller")
-	elif $VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text == "Controller":
-		$VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text = "Keyboard&Mouse"
-		config.set_value("controls", "p1_device", "Keyboard&Mouse")
-	else:
-		$VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text = "Keyboard"
-		config.set_value("controls", "p1_device", "Keyboard")
-
-func _on_P2DeviceBack_pressed():
-	isConfigChanged = true
-	if $VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text == "Keyboard":
-		$VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text = "Controller"
-		config.set_value("controls", "p2_device", "Controller")
-	elif $VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text == "Controller":
-		$VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text = "Keyboard&Mouse"
-		config.set_value("controls", "p2_device", "Keyboard&Mouse")
-	else:
-		$VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text = "Keyboard"
-		config.set_value("controls", "p2_device", "Keyboard")
-
-
-func _on_P1DeviceForward_pressed():
-	isConfigChanged = true
-	if $VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text == "Keyboard&Mouse":
-		$VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text = "Controller"
-		config.set_value("controls", "p1_device", "Controller")
-	elif $VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text == "Keyboard":
-		$VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text = "Keyboard&Mouse"
-		config.set_value("controls", "p1_device", "Keyboard&Mouse")
-	else:
-		$VBoxContainer/TabContainer/Controls/P1HBoxContainer/Device.text = "Keyboard"
-		config.set_value("controls", "p1_device", "Keyboard")
-
 func _on_P2DeviceForward_pressed():
 	isConfigChanged = true
 	if $VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text == "Keyboard&Mouse":
@@ -121,3 +78,20 @@ func _on_P2DeviceForward_pressed():
 	else:
 		$VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text = "Keyboard"
 		config.set_value("controls", "p2_device", "Keyboard")
+
+
+func _on_Fullscreen_pressed():
+	isConfigChanged = true
+	if $VBoxContainer/MainArea/TopOptions/Fullscreen.text == "Windowed":
+		$VBoxContainer/MainArea/TopOptions/Fullscreen.text = "Fullscreen"
+		emit_signal("fullscreen")
+	else:
+		$VBoxContainer/MainArea/TopOptions/Fullscreen.text = "Windowed"
+		emit_signal("windowed")
+
+
+func _on_Controls_pressed():
+	$VBoxContainer/MainArea/TopOptions.visible = false
+	var controls = Controls.instance()
+	$VBoxContainer/MainArea.add_child(controls)
+	controls.init(null, null)

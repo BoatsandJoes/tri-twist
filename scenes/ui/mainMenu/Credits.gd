@@ -9,8 +9,8 @@ func _ready():
 
 func _input(event):
 	if (event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton) && event.is_pressed():
-		if (event.is_action_pressed("ui_accept") || event.is_action_pressed("ui_down") || event.is_action_pressed("ui_right") || 
-		event.is_action_pressed("ui_select") || event.is_action_pressed("hard_drop")):
+		if (event.is_action_pressed("ui_accept") || event.is_action_pressed("ui_down") || event.is_action_pressed("ui_right")
+		|| event.is_action_pressed("hard_drop")):
 			advance()
 		elif (event.is_action_pressed("ui_escape") || event.is_action_pressed("ui_cancel") || event.is_action_pressed("ui_left") ||
 		event.is_action_pressed("ui_up")):

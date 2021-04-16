@@ -26,8 +26,8 @@ func _ready():
 func show_dropper():
 	triangleDropper.gridHeight = 3
 	triangleDropper.gridWidth = 7
-	triangleDropper.screenHeight = 500
-	triangleDropper.screenWidth = 500
+	triangleDropper.screenHeight = 700
+	triangleDropper.screenWidth = 700
 	triangleDropper.init()
 	triangleDropper.set_previews_visible(0)
 	spinner.queue_free()

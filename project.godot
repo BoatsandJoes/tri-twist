@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "PanelContainer",
+"class": "ButtonConfig",
+"language": "GDScript",
+"path": "res://scenes/ui/mainMenu/settings/controls/ButtonConfig.gd"
+}, {
 "base": "MarginContainer",
 "class": "ComboDisplay",
 "language": "GDScript",
@@ -33,6 +38,11 @@ _global_script_classes=[ {
 "class": "DigMode",
 "language": "GDScript",
 "path": "res://scenes/modes/DigMode.gd"
+}, {
+"base": "Label",
+"class": "FadingLabel",
+"language": "GDScript",
+"path": "res://scenes/ui/elements/FadingLabel.gd"
 }, {
 "base": "Node2D",
 "class": "FakeGameGrid",
@@ -130,11 +140,13 @@ _global_script_classes=[ {
 "path": "res://scenes/modes/Triathalon.gd"
 } ]
 _global_script_class_icons={
+"ButtonConfig": "",
 "ComboDisplay": "",
 "Credits": "",
 "DemoBoard": "",
 "DeviceSelect": "",
 "DigMode": "",
+"FadingLabel": "",
 "FakeGameGrid": "",
 "GameGrid": "",
 "GameScene": "",
@@ -184,6 +196,7 @@ ui_accept={
 , Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777222,"unicode":0,"echo":false,"script":null)
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":0,"pressure":0.0,"pressed":false,"script":null)
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":11,"pressure":0.0,"pressed":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":32,"unicode":0,"echo":false,"script":null)
  ]
 }
 ui_select={
