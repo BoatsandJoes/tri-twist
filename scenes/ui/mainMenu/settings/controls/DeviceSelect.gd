@@ -27,8 +27,18 @@ func init(p1Device, p2Device, config: ConfigFile):
 
 func update_device_list():
 	var devices: Array = Input.get_connected_joypads()
-	create_new_label($HBoxContainer/AllDevices, "Keyboard")
-	create_new_label($HBoxContainer/AllDevices, "Keyboard&Mouse")
+	if "Keyboard" == p1Device:
+		create_new_label($HBoxContainer/Player1Device, "Keyboard")
+	elif "Keyboard" == p2Device:
+		create_new_label($HBoxContainer/Player2Device, "Keyboard")
+	else:
+		create_new_label($HBoxContainer/AllDevices, "Keyboard")
+	if "Keyboard&Mouse" == p1Device:
+		create_new_label($HBoxContainer/Player1Device, "Keyboard&Mouse")
+	elif "Keyboard&Mouse" == p2Device:
+		create_new_label($HBoxContainer/Player2Device, "Keyboard&Mouse")
+	else:
+		create_new_label($HBoxContainer/AllDevices, "Keyboard&Mouse")
 	for device in devices:
 		var string: String = "Controller " + String(device + 1)
 		if string == p1Device:
@@ -67,6 +77,14 @@ func create_new_label(container, text):
 		# We are on the right side. Move confirmation text to bottom
 		$HBoxContainer/Player2Device.move_child($HBoxContainer/Player2Device/Confirm, 3)
 		$HBoxContainer/Player2Device/Confirm.visible = true
+
+func has_specific_label(container, label: String):
+	var hasLabel: bool = false
+	for child in container.get_children():
+		if (is_instance_valid(child) && child.has_node("Label") && child.visible && child.get_node("Label").text == label):
+			hasLabel = true
+			break
+	return hasLabel
 
 func has_label(container):
 	var hasLabel: bool = false
@@ -113,7 +131,7 @@ func move_label_right(text: String):
 
 func ready_check():
 	if (p1Ready && p2Ready) || (p1Ready && p2Device == null) || (p2Ready && p1Device == null):
-		emit_signal("everyone_ready")
+		emit_signal("everyone_ready", p1Device, p2Device)
 
 func _input(event):
 	if event.is_action_pressed("left"):
@@ -140,7 +158,7 @@ func _input(event):
 			move_label_left(labelText)
 		else:
 			# Open button config
-			if has_label($HBoxContainer/Player1Device):
+			if has_specific_label($HBoxContainer/Player1Device, labelText):
 				for child in $HBoxContainer/Player1Device.get_children():
 					if !child is Label:
 						child.visible = false
@@ -150,7 +168,7 @@ func _input(event):
 				p1ButtonConfig.connect("ready_pressed", self, "_on_p1ButtonConfig_ready_pressed")
 				p1ButtonConfig.connect("back", self, "_on_p1ButtonConfig_back")
 
-			elif has_label($HBoxContainer/Player2Device):
+			elif has_specific_label($HBoxContainer/Player2Device, labelText):
 				for child in $HBoxContainer/Player2Device.get_children():
 					if !child is Label:
 						child.visible = false

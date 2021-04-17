@@ -1,5 +1,6 @@
 # tri-twist
 	title
+	loading screen
 	make all later garbage patterns identical between both players in versus (except for top edge, which can change if needed)
 	some way to break multiplayer stalemates
 	clean up multiplayer double pause menu
@@ -12,16 +13,12 @@
 	menu selection follows mouse on button hover
 	menu selection is retained when drilling down and coming back
 	add p2 das and p2 arr
-	if the other player is using mouse then disable mouse input on our controls menu
-	process input on button config menu (with arrows and stuff, capturing input from that one device)
-	bubble up side select into main, but remove device setting from config
-	make game with controller devices only take input from selected controller
+	if the other player is using mouse, then disable mouse input on our controls menu
+	process input on button config menu (with arrows and stuff, capturing input from that one device only and setting it as processed)
+	actual button config
+	side select for single player
 	save/resume brain mode
 		replays?
-	multiplayer
-		shared board local coop
-			ghost piece different color, active/ghost piece that color outline and also p2's active is upside-down
-		single player score competition (two boards can move ui to above grid and remove non-essential elements to make room)
 	online play
 		piece sequence generated ahead of time and shared (1000 pieces then loops)
 		incoming garbage delayed by at least a few frames on time out to account for latency (maybe the attacker extended at the last moment) (attack can no longer be extended, but can still be offset)
@@ -216,6 +213,10 @@ Tri words for mechanics or modes or titles:
 	Ptriaerodactyl
 	taxidermy
 	taxonomy
+	tactical
+	tactile
+	trihard
+	typical
 
 Titles:  
 	Trillion Trippy Triangles  

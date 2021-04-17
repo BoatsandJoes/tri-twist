@@ -80,13 +80,13 @@ func prep_dig():
 	triangleDropper.gameGrid.connect("garbage_rows", self, "_on_gameGrid_garbage_rows")
 	triangleDropper.enable_dropping()
 
-func set_config(config: ConfigFile):
+func set_config(config: ConfigFile, p1Device, p2Device):
 	triangleDropper.set_das(config.get_value("tuning", "das"))
 	triangleDropper.set_arr(config.get_value("tuning", "arr"))
 	if player == 2:
-		triangleDropper.set_device(config.get_value("controls", "p2_device"))
+		triangleDropper.set_device(p2Device)
 	else:
-		triangleDropper.set_device(config.get_value("controls", "p1_device"))
+		triangleDropper.set_device(p1Device)
 
 func _input(event):
 	if ((event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton)
@@ -156,7 +156,7 @@ func _on_HUD_end_game():
 	var timer = Timer.new()
 	timer.connect("timeout", self, "_on_timer_timeout")
 	add_child(timer)
-	timer.start(3.1)
+	timer.start(0.5)
 
 func _on_timer_timeout():
 	# Set pause menu to game end mode

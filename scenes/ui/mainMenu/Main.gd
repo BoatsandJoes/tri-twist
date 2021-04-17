@@ -20,6 +20,8 @@ var game
 var vp
 var base_size = Vector2(1920, 1080)
 var config: ConfigFile
+var p1Device = null
+var p2Device = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -45,10 +47,6 @@ func load_config_from_filesystem():
 		config.set_value("tuning", "das", 12)
 	if !config.has_section_key("tuning", "arr"):
 		config.set_value("tuning", "arr", 3)
-	if !config.has_section_key("controls", "p1_device"):
-		config.set_value("controls", "p1_device", "Keyboard")
-	if !config.has_section_key("controls", "p2_device"):
-		config.set_value("controls", "p2_device", "Controller")
 	if err != OK: # If not, something went wrong with the file loading
 		# Save to filesystem for the first time.
 		config.save("user://settings.cfg")
@@ -130,10 +128,11 @@ func go_to_settings():
 		game.queue_free()
 	menu = Settings.instance()
 	add_child(menu)
-	menu.set_config(config)
+	menu.set_config(config, p1Device, p2Device)
 	menu.connect("back_to_menu", self, "_on_Settings_back_to_menu")
 	menu.connect("windowed", self, "set_windowed")
 	menu.connect("fullscreen", self, "set_fullscreen")
+	menu.connect("devices_set", self, "_on_Settings_devices_set")
 
 func go_to_credits():
 	if is_instance_valid(menu):
@@ -223,7 +222,7 @@ func go_to_triathalon_mode():
 	game.connect("restart", self, "go_to_triathalon_mode")
 
 func set_config_for_game_scene():
-	game.set_config(config)
+	game.set_config(config, p1Device, p2Device)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -255,6 +254,10 @@ func _on_Settings_back_to_menu(updateConfig: bool, config: ConfigFile):
 		self.config = config
 		config.save("user://settings.cfg")
 	go_to_main_menu()
+
+func _on_Settings_devices_set(p1Device, p2Device):
+	self.p1Device = p1Device
+	self.p2Device = p2Device
 
 func _on_Credits_back_to_menu():
 	go_to_main_menu()

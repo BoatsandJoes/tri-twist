@@ -4,9 +4,12 @@ class_name Settings
 signal fullscreen
 signal windowed
 signal back_to_menu
+signal devices_set
 
 var config: ConfigFile
 var isConfigChanged: bool = false
+var p1Device = null
+var p2Device = null
 var DeviceSelect = load("res://scenes/ui/mainMenu/settings/controls/DeviceSelect.tscn")
 var deviceSelect: DeviceSelect
 
@@ -14,8 +17,10 @@ var deviceSelect: DeviceSelect
 func _ready():
 	pass
 
-func set_config(config: ConfigFile):
+func set_config(config: ConfigFile, p1Device, p2Device):
 	self.config = config
+	self.p1Device = p1Device
+	self.p2Device = p2Device
 	var fullscreen = config.get_value("video", "fullscreen")
 	if !fullscreen:
 		$VBoxContainer/MainArea/TopOptions/Fullscreen.text = "Windowed"
@@ -46,7 +51,7 @@ func _on_Controls_pressed():
 	$VBoxContainer/MainArea/TopOptions.visible = false
 	deviceSelect = DeviceSelect.instance()
 	$VBoxContainer/MainArea.add_child(deviceSelect)
-	deviceSelect.init(null, null, config)
+	deviceSelect.init(p1Device, p2Device, config)
 	deviceSelect.connect("cancel", self, "_on_DeviceSelect_cancel")
 	deviceSelect.connect("config_changed", self, "_on_DeviceSelect_config_changed")
 	deviceSelect.connect("everyone_ready", self, "_on_DeviceSelect_everyone_ready")
@@ -60,5 +65,8 @@ func _on_DeviceSelect_config_changed(config: ConfigFile):
 	self.config = config
 	isConfigChanged = true
 
-func _on_DeviceSelect_everyone_ready():
+func _on_DeviceSelect_everyone_ready(p1Device, p2Device):
+	self.p1Device = p1Device
+	self.p2Device = p2Device
+	emit_signal("devices_set", p1Device, p2Device)
 	_on_DeviceSelect_cancel()

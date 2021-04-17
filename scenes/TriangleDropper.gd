@@ -162,7 +162,8 @@ func hard_drop():
 
 func _input(event):
 	if ((event is InputEventKey && (device == "Keyboard" || device == "Keyboard&Mouse"))
-	|| ((event is InputEventJoypadButton || event is InputEventJoypadMotion) && device == "Controller")
+	|| ((event is InputEventJoypadButton || event is InputEventJoypadMotion) && device.begins_with("Controller")
+	&& int(device.substr(device.find(" ") + 1, 2)) - 1 == event.device)
 	|| (event is InputEventMouseButton && device == "Keyboard&Mouse")):
 		if event.is_action_pressed("left"):
 			leftPressed = true

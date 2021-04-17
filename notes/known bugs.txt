@@ -10,6 +10,7 @@
 * single piece stays highlighted after board moves up? (check video)
 * left arrows on devices in the middle of device select appear on top of button config panel
 * mouse controls in multiplayer use unscaled board positions for mouse pointer
+* if one player readies and then the other player opens button config, the player is unreadied for some reason
 
 might be fixed
 * saw a case where it looked like two chains didn't combine properly in active chain mode (only one chain actually active, it got stuck in "other chains" while the displayed chain "simulchaineous" kept counting up)

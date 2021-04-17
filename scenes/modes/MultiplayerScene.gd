@@ -27,11 +27,11 @@ func _ready():
 	player1Scene.triangleDropper.gameGrid.connect("garbage_rows", self, "_on_scene1_garbage_rows")
 	player2Scene.triangleDropper.gameGrid.connect("garbage_rows", self, "_on_scene2_garbage_rows")
 
-func set_config(config):
+func set_config(config, p1Device, p2Device):
 	player1Scene.set_player(1)
 	player2Scene.set_player(2)
-	player1Scene.set_config(config)
-	player2Scene.set_config(config)
+	player1Scene.set_config(config, p1Device, p2Device)
+	player2Scene.set_config(config, p1Device, p2Device)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
