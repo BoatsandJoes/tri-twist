@@ -73,7 +73,7 @@ anchor_bottom = 0.0
 margin_right = 546.0
 margin_bottom = 48.0
 custom_fonts/font = SubResource( 3 )
-text = "\"Accept\" to set controls"
+text = "Press \"Accept\""
 animationLength = 1.75
 
 [node name="AllDevices" type="VBoxContainer" parent="HBoxContainer"]
@@ -161,5 +161,5 @@ margin_top = 8.0
 margin_right = 586.0
 margin_bottom = 56.0
 custom_fonts/font = SubResource( 3 )
-text = "\"Accept\" to set controls"
+text = "Press \"Accept\""
 animationLength = 1.75

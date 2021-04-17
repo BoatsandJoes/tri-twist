@@ -253,6 +253,7 @@ func _on_MainMenu_back_to_title():
 func _on_Settings_back_to_menu(updateConfig: bool, config: ConfigFile):
 	if updateConfig:
 		self.config = config
+		config.save("user://settings.cfg")
 	go_to_main_menu()
 
 func _on_Credits_back_to_menu():

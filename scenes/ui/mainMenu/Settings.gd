@@ -7,7 +7,8 @@ signal back_to_menu
 
 var config: ConfigFile
 var isConfigChanged: bool = false
-var Controls = load("res://scenes/ui/mainMenu/settings/controls/DeviceSelect.tscn")
+var DeviceSelect = load("res://scenes/ui/mainMenu/settings/controls/DeviceSelect.tscn")
+var deviceSelect: DeviceSelect
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -15,8 +16,6 @@ func _ready():
 
 func set_config(config: ConfigFile):
 	self.config = config
-	$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/DAS.text = String(config.get_value("tuning", "das"))
-	$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/ARR.text = String(config.get_value("tuning", "arr"))
 	var fullscreen = config.get_value("video", "fullscreen")
 	if !fullscreen:
 		$VBoxContainer/MainArea/TopOptions/Fullscreen.text = "Windowed"
@@ -32,53 +31,7 @@ func _input(event):
 
 func _on_Back_pressed():
 	# save config
-	config.save("user://settings.cfg")
 	emit_signal("back_to_menu", isConfigChanged, config)
-
-func _on_DecreaseDAS_pressed():
-	var das = config.get_value("tuning", "das")
-	if das > 2:
-		isConfigChanged = true
-		das = das - 1
-		$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/DAS.text = String(das)
-		config.set_value("tuning", "das", das)
-
-func _on_IncreaseDAS_pressed():
-	var das = config.get_value("tuning", "das")
-	if das < 99:
-		isConfigChanged = true
-		das = das + 1
-		$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/DAS.text = String(das)
-		config.set_value("tuning", "das", das)
-
-func _on_DecreaseARR_pressed():
-	var arr = config.get_value("tuning", "arr")
-	if arr > 1:
-		isConfigChanged = true
-		arr = arr - 1
-		$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/ARR.text = String(arr)
-		config.set_value("tuning", "arr", arr)
-
-func _on_IncreaseARR_pressed():
-	var arr = config.get_value("tuning", "arr")
-	if arr < 9:
-		isConfigChanged = true
-		arr = arr + 1
-		$VBoxContainer/TabContainer/Tuning/Tuning/VBoxContainer3/ARR.text = String(arr)
-		config.set_value("tuning", "arr", arr)
-
-func _on_P2DeviceForward_pressed():
-	isConfigChanged = true
-	if $VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text == "Keyboard&Mouse":
-		$VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text = "Controller"
-		config.set_value("controls", "p2_device", "Controller")
-	elif $VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text == "Keyboard":
-		$VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text = "Keyboard&Mouse"
-		config.set_value("controls", "p2_device", "Keyboard&Mouse")
-	else:
-		$VBoxContainer/TabContainer/Controls/P2HBoxContainer/Device.text = "Keyboard"
-		config.set_value("controls", "p2_device", "Keyboard")
-
 
 func _on_Fullscreen_pressed():
 	isConfigChanged = true
@@ -89,9 +42,23 @@ func _on_Fullscreen_pressed():
 		$VBoxContainer/MainArea/TopOptions/Fullscreen.text = "Windowed"
 		emit_signal("windowed")
 
-
 func _on_Controls_pressed():
 	$VBoxContainer/MainArea/TopOptions.visible = false
-	var controls = Controls.instance()
-	$VBoxContainer/MainArea.add_child(controls)
-	controls.init(null, null)
+	deviceSelect = DeviceSelect.instance()
+	$VBoxContainer/MainArea.add_child(deviceSelect)
+	deviceSelect.init(null, null, config)
+	deviceSelect.connect("cancel", self, "_on_DeviceSelect_cancel")
+	deviceSelect.connect("config_changed", self, "_on_DeviceSelect_config_changed")
+	deviceSelect.connect("everyone_ready", self, "_on_DeviceSelect_everyone_ready")
+
+func _on_DeviceSelect_cancel():
+	deviceSelect.visible = false
+	deviceSelect.queue_free()
+	$VBoxContainer/MainArea/TopOptions.visible = true
+
+func _on_DeviceSelect_config_changed(config: ConfigFile):
+	self.config = config
+	isConfigChanged = true
+
+func _on_DeviceSelect_everyone_ready():
+	_on_DeviceSelect_cancel()

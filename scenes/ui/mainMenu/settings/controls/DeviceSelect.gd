@@ -1,11 +1,15 @@
 extends MarginContainer
 class_name DeviceSelect
 
-signal accept
 signal cancel
+signal config_changed
+signal everyone_ready
 
 var p1Device = null
 var p2Device = null
+var p1Ready = false
+var p2Ready = false
+var config
 var ButtonConfig = load("res://scenes/ui/mainMenu/settings/controls/ButtonConfig.tscn")
 var p1ButtonConfig
 var p2ButtonConfig
@@ -14,8 +18,11 @@ var p2ButtonConfig
 func _ready():
 	pass
 
-func init(p1Device, p2Device):
+func init(p1Device, p2Device, config: ConfigFile):
 	Input.connect("joy_connection_changed", self, "_on_Input_joy_connection_changed")
+	self.p1Device = p1Device
+	self.p2Device = p2Device
+	self.config = config
 	update_device_list()
 
 func update_device_list():
@@ -23,7 +30,13 @@ func update_device_list():
 	create_new_label($HBoxContainer/AllDevices, "Keyboard")
 	create_new_label($HBoxContainer/AllDevices, "Keyboard&Mouse")
 	for device in devices:
-		create_new_label($HBoxContainer/AllDevices, "Controller " + String(device + 1))
+		var string: String = "Controller " + String(device + 1)
+		if string == p1Device:
+			create_new_label($HBoxContainer/Player1Device, string)
+		elif string == p2Device:
+			create_new_label($HBoxContainer/Player2Device, string)
+		else:
+			create_new_label($HBoxContainer/AllDevices, string)
 
 func create_new_label(container, text):
 	var label
@@ -98,6 +111,10 @@ func move_label_right(text: String):
 		p2Device = text
 		create_new_label($HBoxContainer/Player2Device, text)
 
+func ready_check():
+	if (p1Ready && p2Ready) || (p1Ready && p2Device == null) || (p2Ready && p1Device == null):
+		emit_signal("everyone_ready")
+
 func _input(event):
 	if event.is_action_pressed("left"):
 		# Move device left
@@ -127,16 +144,24 @@ func _input(event):
 				for child in $HBoxContainer/Player1Device.get_children():
 					if !child is Label:
 						child.visible = false
-				var p1ButtonConfig = ButtonConfig.instance()
+				p1ButtonConfig = ButtonConfig.instance()
 				$HBoxContainer/Player1Device.add_child(p1ButtonConfig)
+				p1ButtonConfig.init(p1Device, config)
+				p1ButtonConfig.connect("ready_pressed", self, "_on_p1ButtonConfig_ready_pressed")
+				p1ButtonConfig.connect("back", self, "_on_p1ButtonConfig_back")
+
 			elif has_label($HBoxContainer/Player2Device):
 				for child in $HBoxContainer/Player2Device.get_children():
 					if !child is Label:
 						child.visible = false
-				var p2ButtonConfig = ButtonConfig.instance()
+				p2ButtonConfig = ButtonConfig.instance()
 				$HBoxContainer/Player2Device.add_child(p2ButtonConfig)
+				p2ButtonConfig.init(p2Device, config)
+				p2ButtonConfig.connect("ready_pressed", self, "_on_p2ButtonConfig_ready_pressed")
+				p2ButtonConfig.connect("back", self, "_on_p2ButtonConfig_back")
 			
 	elif event.is_action_pressed("ui_cancel"):
+		get_tree().set_input_as_handled()
 		var labelText: String = ""
 		if (event is InputEventJoypadButton || event is InputEventJoypadMotion):
 			labelText = "Controller " + String(event.device + 1)
@@ -147,11 +172,9 @@ func _input(event):
 		if (find_label($HBoxContainer/Player1Device, labelText)):
 			# Move device to middle if it is not in the middle
 			move_label_right(labelText)
-			get_tree().set_input_as_handled()
 		elif (find_label($HBoxContainer/Player2Device, labelText)):
 			# Move device to middle if it is not in the middle
 			move_label_left(labelText)
-			get_tree().set_input_as_handled()
 		else:
 			# Emit signal otherwise
 			emit_signal("cancel")
@@ -168,3 +191,35 @@ func _on_Input_joy_connection_changed(id,connected):
 			p1Device = null
 		elif delete_label($HBoxContainer/Player2Device, "Controller " + String(id + 1)):
 			p2Device = null
+
+func _on_p1ButtonConfig_ready_pressed(isReadyPressed: bool, config: ConfigFile, isConfigChanged: bool):
+	if isConfigChanged:
+		self.config = config
+		emit_signal("config_changed", config)
+	p1Ready = isReadyPressed
+	ready_check()
+
+func _on_p1ButtonConfig_back(config: ConfigFile, isConfigChanged: bool):
+	p1ButtonConfig.queue_free()
+	for child in $HBoxContainer/Player1Device.get_children():
+		if is_instance_valid(child) && !(child.has_node("Label") && child.get_node("Label").text == "Hacky"):
+			child.visible = true
+	if isConfigChanged:
+		self.config = config
+		emit_signal("config_changed", config)
+
+func _on_p2ButtonConfig_ready_pressed(isReadyPressed:bool, config: ConfigFile, isConfigChanged: bool):
+	if isConfigChanged:
+		self.config = config
+		emit_signal("config_changed", config)
+	p2Ready = isReadyPressed
+	ready_check()
+
+func _on_p2ButtonConfig_back(config: ConfigFile, isConfigChanged: bool):
+	p2ButtonConfig.queue_free()
+	for child in $HBoxContainer/Player2Device.get_children():
+		if is_instance_valid(child) && !(child.has_node("Label") && child.get_node("Label").text == "Hacky"):
+			child.visible = true
+	if isConfigChanged:
+		self.config = config
+		emit_signal("config_changed", config)

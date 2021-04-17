@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scenes/ui/mainMenu/settings/controls/ButtonConfig.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/agane/Agane╠Ç 55 (roman).ttf" type="DynamicFontData" id=2]
@@ -8,6 +8,14 @@ size = 64
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=2]
+size = 64
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 64
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=4]
 size = 64
 font_data = ExtResource( 2 )
 
@@ -24,30 +32,55 @@ margin_bottom = 1073.0
 alignment = 1
 
 [node name="TopMenu" type="VBoxContainer" parent="HBoxContainer"]
-margin_left = 733.0
-margin_right = 1172.0
+margin_left = 724.0
+margin_right = 1182.0
 margin_bottom = 1066.0
+custom_constants/separation = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/TopMenu"]
+margin_right = 458.0
+margin_bottom = 230.0
 custom_constants/separation = 10
 
-[node name="Tuning" type="Button" parent="HBoxContainer/TopMenu"]
-margin_right = 439.0
+[node name="Tuning" type="Button" parent="HBoxContainer/TopMenu/VBoxContainer"]
+margin_right = 458.0
 margin_bottom = 70.0
 custom_fonts/font = SubResource( 1 )
 text = "Tuning"
 
-[node name="GameButtons" type="Button" parent="HBoxContainer/TopMenu"]
+[node name="GameButtons" type="Button" parent="HBoxContainer/TopMenu/VBoxContainer"]
 margin_top = 80.0
-margin_right = 439.0
+margin_right = 458.0
 margin_bottom = 150.0
 custom_fonts/font = SubResource( 1 )
-text = "Game Buttons"
+text = "Game Controls"
 
-[node name="MenuButtons" type="Button" parent="HBoxContainer/TopMenu"]
+[node name="MenuButtons" type="Button" parent="HBoxContainer/TopMenu/VBoxContainer"]
 margin_top = 160.0
-margin_right = 439.0
+margin_right = 458.0
 margin_bottom = 230.0
 custom_fonts/font = SubResource( 1 )
-text = "Menu Buttons"
+text = "Menu Controls"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/TopMenu"]
+margin_top = 260.0
+margin_right = 458.0
+margin_bottom = 410.0
+custom_constants/separation = 10
+
+[node name="TopBack" type="Button" parent="HBoxContainer/TopMenu/VBoxContainer2"]
+margin_right = 458.0
+margin_bottom = 70.0
+custom_fonts/font = SubResource( 1 )
+text = "Back"
+
+[node name="Ready" type="Button" parent="HBoxContainer/TopMenu/VBoxContainer2"]
+margin_top = 80.0
+margin_right = 458.0
+margin_bottom = 150.0
+custom_fonts/font = SubResource( 1 )
+toggle_mode = true
+text = "Ready"
 
 [node name="TuningMenu" type="VBoxContainer" parent="HBoxContainer"]
 visible = false
@@ -64,6 +97,30 @@ text = "Autoshift delay
 (DAS)"
 align = 1
 
+[node name="Das" type="HBoxContainer" parent="HBoxContainer/TuningMenu"]
+margin_right = 40.0
+margin_bottom = 40.0
+alignment = 1
+
+[node name="DasDecrease" type="Button" parent="HBoxContainer/TuningMenu/Das"]
+margin_right = 66.0
+margin_bottom = 70.0
+custom_fonts/font = SubResource( 3 )
+text = "    "
+
+[node name="DasEdit" type="LineEdit" parent="HBoxContainer/TuningMenu/Das"]
+margin_right = 58.0
+margin_bottom = 24.0
+custom_fonts/font = SubResource( 4 )
+align = 1
+max_length = 2
+
+[node name="DasIncrease" type="Button" parent="HBoxContainer/TuningMenu/Das"]
+margin_right = 12.0
+margin_bottom = 20.0
+custom_fonts/font = SubResource( 3 )
+text = "    "
+
 [node name="ArrLabel" type="Label" parent="HBoxContainer/TuningMenu"]
 margin_top = 141.0
 margin_right = 500.0
@@ -73,6 +130,48 @@ text = "Autorepeat Rate
 (ARR)"
 align = 1
 
+[node name="Arr" type="HBoxContainer" parent="HBoxContainer/TuningMenu"]
+margin_right = 366.0
+margin_bottom = 74.0
+alignment = 1
+
+[node name="ArrDecrease" type="Button" parent="HBoxContainer/TuningMenu/Arr"]
+margin_right = 66.0
+margin_bottom = 70.0
+custom_fonts/font = SubResource( 3 )
+text = "    "
+
+[node name="ArrEdit" type="LineEdit" parent="HBoxContainer/TuningMenu/Arr"]
+margin_right = 58.0
+margin_bottom = 24.0
+custom_fonts/font = SubResource( 4 )
+align = 1
+max_length = 1
+
+[node name="ArrIncrease" type="Button" parent="HBoxContainer/TuningMenu/Arr"]
+margin_right = 12.0
+margin_bottom = 20.0
+custom_fonts/font = SubResource( 3 )
+text = "    "
+
+[node name="Label" type="Label" parent="HBoxContainer/TuningMenu"]
+margin_right = 40.0
+margin_bottom = 14.0
+
+[node name="TuningDefault" type="Button" parent="HBoxContainer/TuningMenu"]
+margin_left = -1.0
+margin_right = 502.0
+margin_bottom = 1066.0
+custom_fonts/font = SubResource( 3 )
+text = "Reset to Default"
+
+[node name="TuningBack" type="Button" parent="HBoxContainer/TuningMenu"]
+margin_left = -1.0
+margin_right = 502.0
+margin_bottom = 1066.0
+custom_fonts/font = SubResource( 3 )
+text = "Accept"
+
 [node name="GameButtonConfig" type="VBoxContainer" parent="HBoxContainer"]
 visible = false
 margin_left = 1207.0
@@ -80,11 +179,17 @@ margin_right = 1646.0
 margin_bottom = 1066.0
 custom_constants/separation = 10
 
-[node name="GameButtons" type="Button" parent="HBoxContainer/GameButtonConfig"]
+[node name="Dummy" type="Button" parent="HBoxContainer/GameButtonConfig"]
 margin_right = 439.0
 margin_bottom = 70.0
 custom_fonts/font = SubResource( 1 )
-text = "Game Buttons"
+text = "Dummy"
+
+[node name="GameBack" type="Button" parent="HBoxContainer/GameButtonConfig"]
+margin_right = 439.0
+margin_bottom = 70.0
+custom_fonts/font = SubResource( 1 )
+text = "Back"
 
 [node name="MenuButtonConfig" type="VBoxContainer" parent="HBoxContainer"]
 visible = false
@@ -93,11 +198,33 @@ margin_right = 1867.0
 margin_bottom = 1066.0
 custom_constants/separation = 10
 
-[node name="MenuButtons" type="Button" parent="HBoxContainer/MenuButtonConfig"]
+[node name="Dummy" type="Button" parent="HBoxContainer/MenuButtonConfig"]
 margin_right = 438.0
 margin_bottom = 70.0
 custom_fonts/font = SubResource( 1 )
-text = "Menu Buttons"
-[connection signal="pressed" from="HBoxContainer/TopMenu/Tuning" to="." method="_on_Tuning_pressed"]
-[connection signal="pressed" from="HBoxContainer/TopMenu/GameButtons" to="." method="_on_GameButtons_pressed"]
-[connection signal="pressed" from="HBoxContainer/TopMenu/MenuButtons" to="." method="_on_MenuButtons_pressed"]
+text = "Dummy"
+
+[node name="MenuBack" type="Button" parent="HBoxContainer/MenuButtonConfig"]
+margin_right = 438.0
+margin_bottom = 70.0
+custom_fonts/font = SubResource( 1 )
+text = "Back"
+[connection signal="pressed" from="HBoxContainer/TopMenu/VBoxContainer/Tuning" to="." method="_on_Tuning_pressed"]
+[connection signal="pressed" from="HBoxContainer/TopMenu/VBoxContainer/GameButtons" to="." method="_on_GameButtons_pressed"]
+[connection signal="pressed" from="HBoxContainer/TopMenu/VBoxContainer/MenuButtons" to="." method="_on_MenuButtons_pressed"]
+[connection signal="pressed" from="HBoxContainer/TopMenu/VBoxContainer2/TopBack" to="." method="_on_TopBack_pressed"]
+[connection signal="toggled" from="HBoxContainer/TopMenu/VBoxContainer2/Ready" to="." method="_on_Ready_toggled"]
+[connection signal="mouse_entered" from="HBoxContainer/TuningMenu/Das" to="." method="_on_Das_mouse_entered"]
+[connection signal="pressed" from="HBoxContainer/TuningMenu/Das/DasDecrease" to="." method="_on_DasDecrease_pressed"]
+[connection signal="text_changed" from="HBoxContainer/TuningMenu/Das/DasEdit" to="." method="_on_DasEdit_text_changed"]
+[connection signal="pressed" from="HBoxContainer/TuningMenu/Das/DasIncrease" to="." method="_on_DasIncrease_pressed"]
+[connection signal="mouse_entered" from="HBoxContainer/TuningMenu/Arr" to="." method="_on_Arr_mouse_entered"]
+[connection signal="pressed" from="HBoxContainer/TuningMenu/Arr/ArrDecrease" to="." method="_on_ArrDecrease_pressed"]
+[connection signal="text_changed" from="HBoxContainer/TuningMenu/Arr/ArrEdit" to="." method="_on_ArrEdit_text_changed"]
+[connection signal="pressed" from="HBoxContainer/TuningMenu/Arr/ArrIncrease" to="." method="_on_ArrIncrease_pressed"]
+[connection signal="mouse_entered" from="HBoxContainer/TuningMenu/TuningDefault" to="." method="_on_TuningDefault_mouse_entered"]
+[connection signal="pressed" from="HBoxContainer/TuningMenu/TuningDefault" to="." method="_on_TuningDefault_pressed"]
+[connection signal="mouse_entered" from="HBoxContainer/TuningMenu/TuningBack" to="." method="_on_TuningBack_mouse_entered"]
+[connection signal="pressed" from="HBoxContainer/TuningMenu/TuningBack" to="." method="_on_TuningBack_pressed"]
+[connection signal="pressed" from="HBoxContainer/GameButtonConfig/GameBack" to="." method="_on_GameBack_pressed"]
+[connection signal="pressed" from="HBoxContainer/MenuButtonConfig/MenuBack" to="." method="_on_MenuBack_pressed"]

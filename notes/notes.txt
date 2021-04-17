@@ -10,6 +10,12 @@
 	try to adjust dig deep to be good for new players and then make it the main mode (current problem is if you can't make it to the bottom in 2 minutes then that kind of sucks)
 	confine mouse to window if mouse is selected. otherwise, hide mouse when unpaused and in game
 	menu selection follows mouse on button hover
+	menu selection is retained when drilling down and coming back
+	add p2 das and p2 arr
+	if the other player is using mouse then disable mouse input on our controls menu
+	process input on button config menu (with arrows and stuff, capturing input from that one device)
+	bubble up side select into main, but remove device setting from config
+	make game with controller devices only take input from selected controller
 	save/resume brain mode
 		replays?
 	multiplayer
