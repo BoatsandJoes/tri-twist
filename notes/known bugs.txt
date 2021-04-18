@@ -8,7 +8,6 @@
 * active piece starting position does not go to mouse even if device is mouse
 * p2 versus grid drifts left (relative to p1 board) as horizontal resolution shrinks
 * single piece stays highlighted after board moves up? (check video)
-* left arrows on devices in the middle of device select appear on top of button config panel
 * mouse controls in multiplayer use unscaled board positions for mouse pointer
 * if one player readies and then the other player opens button config, the player is unreadied for some reason
 

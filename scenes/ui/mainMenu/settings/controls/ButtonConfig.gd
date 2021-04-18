@@ -9,6 +9,8 @@ var defaultArr: int = 2
 var device: String
 var isConfigChanged: bool = false
 var config: ConfigFile
+var SelectArrow = load("res://scenes/ui/elements/SelectArrow.tscn")
+var selectArrow: SelectArrow
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -19,28 +21,94 @@ func init(device: String, config: ConfigFile):
 	self.config = config
 	$HBoxContainer/TuningMenu/Das/DasEdit.text = String(config.get_value("tuning", "das"))
 	$HBoxContainer/TuningMenu/Arr/ArrEdit.text = String(config.get_value("tuning", "arr"))
+	for child in $HBoxContainer/TopMenu.get_children():
+		for innerChild in child.get_children():
+			if innerChild.has_node("SelectArrow"):
+				var widthHeight = innerChild.get_child(0).get_rect().size
+				innerChild.get_node("SelectArrow").position = Vector2(widthHeight[0], widthHeight[1] / 2 - 3)
+	for child in $HBoxContainer/TuningMenu.get_children():
+		if child.has_node("SelectArrow"):
+			var widthHeight = child.get_rect().size
+			child.get_node("SelectArrow").position = Vector2(widthHeight[0], widthHeight[1] / 2 - 3)
+		if child.has_node("LeftSelectArrow"):
+			var widthHeight = child.get_rect().size
+			child.get_node("LeftSelectArrow").position = Vector2(50, widthHeight[1] / 2)
+		if child.has_node("RightSelectArrow"):
+			var widthHeight = child.get_rect().size
+			child.get_node("RightSelectArrow").position = Vector2(widthHeight[0] + 48, widthHeight[1] / 2)
+
+func make_all_top_menu_arrows_invisible():
+	for child in $HBoxContainer/TopMenu.get_children():
+		for innerChild in child.get_children():
+			if innerChild.has_node("SelectArrow"):
+				innerChild.get_node("SelectArrow").visible = false
+
+func make_all_tuning_menu_arrows_invisible():
+	for child in $HBoxContainer/TuningMenu.get_children():
+		if child.has_node("SelectArrow"):
+			child.get_node("SelectArrow").visible = false
+		if child.has_node("LeftSelectArrow"):
+			child.get_node("LeftSelectArrow").visible = false
+		if child.has_node("RightSelectArrow"):
+			child.get_node("RightSelectArrow").visible = false
 
 func _input(event: InputEvent):
-	pass
+	if ((event is InputEventKey && device == "Keyboard" || event is InputEventKey && device == "Keyboard&Mouse")
+	|| (event is InputEventMouseButton && device == "Keyboard&Mouse")
+	|| (((event is InputEventJoypadButton || event is InputEventJoypadMotion) && device.begins_with("Controller"))
+	&& event.device == int(device.substr(device.find(" ") + 1, 2)) - 1)):
+		get_tree().set_input_as_handled()
+		if $HBoxContainer/TopMenu.visible:
+			if event.is_action_pressed("up"):
+				pass
+			elif event.is_action_pressed("down"):
+				pass
+			elif event.is_action_pressed("ui_accept"):
+				pass
+			elif event.is_action_pressed("ui_cancel"):
+				pass
+		elif $HBoxContainer/TuningMenu.visible:
+			if event.is_action_pressed("up"):
+				pass
+			elif event.is_action_pressed("down"):
+				pass
+			if event.is_action_pressed("left"):
+				if $HBoxContainer/TuningMenu/Arr/LeftSelectArrow.visible:
+					_on_ArrDecrease_pressed()
+				elif $HBoxContainer/TuningMenu/Das/LeftSelectArrow.visible:
+					_on_DasDecrease_pressed()
+			elif event.is_action_pressed("right"):
+				if $HBoxContainer/TuningMenu/Arr/RightSelectArrow.visible:
+					_on_ArrIncrease_pressed()
+				elif $HBoxContainer/TuningMenu/Das/RightSelectArrow.visible:
+					_on_DasIncrease_pressed()
+			elif event.is_action_pressed("ui_accept"):
+				pass
+			elif event.is_action_pressed("ui_cancel"):
+				pass
+		elif $HBoxContainer/GameButtonConfig.visible:
+			pass
+		elif $HBoxContainer/MenuButtonConfig.visible:
+			pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
 
 func _on_Tuning_pressed():
-	$HBoxContainer/TopMenu/VBoxContainer2/Ready.pressed = false
+	$HBoxContainer/TopMenu/VBoxContainer2/Ready/Ready.pressed = false
 	emit_signal("ready_pressed", false, config, isConfigChanged)
 	$HBoxContainer/TopMenu.visible = false
 	$HBoxContainer/TuningMenu.visible = true
 
 func _on_GameButtons_pressed():
-	$HBoxContainer/TopMenu/VBoxContainer2/Ready.pressed = false
+	$HBoxContainer/TopMenu/VBoxContainer2/Ready/Ready.pressed = false
 	emit_signal("ready_pressed", false, config, isConfigChanged)
 	$HBoxContainer/TopMenu.visible = false
 	$HBoxContainer/GameButtonConfig.visible = true
 
 func _on_MenuButtons_pressed():
-	$HBoxContainer/TopMenu/VBoxContainer2/Ready.pressed = false
+	$HBoxContainer/TopMenu/VBoxContainer2/Ready/Ready.pressed = false
 	emit_signal("ready_pressed", false, config, isConfigChanged)
 	$HBoxContainer/TopMenu.visible = false
 	$HBoxContainer/MenuButtonConfig.visible = true
@@ -62,10 +130,14 @@ func _on_ArrEdit_text_changed(new_text):
 		$HBoxContainer/TuningMenu/Arr/ArrEdit.text = String(config.get_value("tuning", "arr", defaultArr))
 
 func _on_Das_mouse_entered():
-	pass # Replace with function body.
+	make_all_tuning_menu_arrows_invisible()
+	$HBoxContainer/TuningMenu/Das/LeftSelectArrow.visible = true
+	$HBoxContainer/TuningMenu/Das/RightSelectArrow.visible = true
 
 func _on_Arr_mouse_entered():
-	pass # Replace with function body.
+	make_all_tuning_menu_arrows_invisible()
+	$HBoxContainer/TuningMenu/Arr/LeftSelectArrow.visible = true
+	$HBoxContainer/TuningMenu/Arr/RightSelectArrow.visible = true
 
 func _on_DasDecrease_pressed():
 	var das = int($HBoxContainer/TuningMenu/Das/DasEdit.text)
@@ -98,13 +170,15 @@ func _on_TuningBack_pressed():
 	$HBoxContainer/TopMenu.visible = true
 
 func _on_TuningDefault_mouse_entered():
-	pass # Replace with function body.
+	make_all_tuning_menu_arrows_invisible()
+	$HBoxContainer/TuningMenu/TuningDefault/SelectArrow.visible = true
 
 func _on_TuningBack_mouse_entered():
-	pass # Replace with function body.
+	make_all_tuning_menu_arrows_invisible()
+	$HBoxContainer/TuningMenu/TuningBack/SelectArrow.visible = true
 
 func _on_TopBack_pressed():
-	$HBoxContainer/TopMenu/VBoxContainer2/Ready.pressed = false
+	$HBoxContainer/TopMenu/VBoxContainer2/Ready/Ready.pressed = false
 	emit_signal("ready_pressed", false, config, isConfigChanged)
 	emit_signal("back", config, isConfigChanged)
 
@@ -118,3 +192,23 @@ func _on_GameBack_pressed():
 func _on_MenuBack_pressed():
 	$HBoxContainer/MenuButtonConfig.visible = false
 	$HBoxContainer/TopMenu.visible = true
+
+func _on_Tuning_mouse_entered():
+	make_all_top_menu_arrows_invisible()
+	$HBoxContainer/TopMenu/VBoxContainer/Tuning/SelectArrow.visible = true
+
+func _on_GameButtons_mouse_entered():
+	make_all_top_menu_arrows_invisible()
+	$HBoxContainer/TopMenu/VBoxContainer/GameButtonConfig/SelectArrow.visible = true
+
+func _on_MenuButtons_mouse_entered():
+	make_all_top_menu_arrows_invisible()
+	$HBoxContainer/TopMenu/VBoxContainer/MenuButtonConfig/SelectArrow.visible = true
+
+func _on_TopBack_mouse_entered():
+	make_all_top_menu_arrows_invisible()
+	$HBoxContainer/TopMenu/VBoxContainer2/TopBack/SelectArrow.visible = true
+
+func _on_Ready_mouse_entered():
+	make_all_top_menu_arrows_invisible()
+	$HBoxContainer/TopMenu/VBoxContainer2/Ready/SelectArrow.visible = true

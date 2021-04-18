@@ -7,18 +7,15 @@
 	reset settings on this tab to defaults button
 	saving scores + displaying best scores
 	"are you sure?" on quit, restart, back to menu
-	undo in brain mode
 	try to adjust dig deep to be good for new players and then make it the main mode (current problem is if you can't make it to the bottom in 2 minutes then that kind of sucks)
-	confine mouse to window if mouse is selected. otherwise, hide mouse when unpaused and in game
+	allow selection of "Keyboard&Mouse" device
 	menu selection follows mouse on button hover
 	menu selection is retained when drilling down and coming back
 	add p2 das and p2 arr
 	if the other player is using mouse, then disable mouse input on our controls menu
-	process input on button config menu (with arrows and stuff, capturing input from that one device only and setting it as processed)
+	keyboard/controller input on button config menu
 	actual button config
 	side select for single player
-	save/resume brain mode
-		replays?
 	online play
 		piece sequence generated ahead of time and shared (1000 pieces then loops)
 		incoming garbage delayed by at least a few frames on time out to account for latency (maybe the attacker extended at the last moment) (attack can no longer be extended, but can still be offset)
@@ -30,7 +27,6 @@
 		selecting piece colors and garbage colors before they're shown to the player will help the visuals (color selection may have to be rewound and redone if our opponent actually spawned a bunch of garbage)
 	ais (can vary thinking/pause time)
 		random drop
-		1 deep match search
 		1 deep match search with board evaluation (can limit branches to check)
 		2 deep match search
 	visuals:
@@ -192,8 +188,7 @@ Things that I want but will have to cut:
 		Coop:  
 			shared board coop  
 			shared score/ramp separate board coop  
-			Could send each other helpful items  
-			Twist + drop coop  
+			Could send each other helpful items
 
 Tri words for mechanics or modes or titles:  
 	trippy  
@@ -217,6 +212,9 @@ Tri words for mechanics or modes or titles:
 	tactile
 	trihard
 	typical
+	tackle
+	tectonic
+	time
 
 Titles:  
 	Trillion Trippy Triangles  
