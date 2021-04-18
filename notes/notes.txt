@@ -51,11 +51,14 @@
 				tutorial text and pictures
 					chains and clearing above the line sends/defends garbage; top out = lose
 				CPU wait time (if vs cpu)
-				clear/garbage timer setting
-				last defense on/off
-				chain cap setting
-				score values setting
-				time limit (higher score wins)
+				CPU intelligence (if vs cpu)
+				may have these settings idk
+					clear timer setting
+					garbage timer setting
+					last defense on/off
+					chain cap setting
+					score values setting (separate menu)
+					time limit (higher score wins)
 	Online
 		name edit, if not on steam
 		list of open rooms, if on steam (with ping)

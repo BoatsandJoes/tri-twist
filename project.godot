@@ -138,6 +138,11 @@ _global_script_classes=[ {
 "class": "Triathalon",
 "language": "GDScript",
 "path": "res://scenes/modes/Triathalon.gd"
+}, {
+"base": "MarginContainer",
+"class": "VersusMenu",
+"language": "GDScript",
+"path": "res://scenes/ui/mainMenu/VersusMenu.gd"
 } ]
 _global_script_class_icons={
 "ButtonConfig": "",
@@ -165,7 +170,8 @@ _global_script_class_icons={
 "TitleScreen": "",
 "TriangleCell": "",
 "TriangleDropper": "",
-"Triathalon": ""
+"Triathalon": "",
+"VersusMenu": ""
 }
 
 [application]

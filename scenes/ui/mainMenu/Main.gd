@@ -7,6 +7,7 @@ class_name Main
 var TitleScreen = load("res://scenes/ui/mainMenu/TitleScreen.tscn")
 var MainMenu = load("res://scenes/ui/mainMenu/MainMenu.tscn")
 var ModeSelect = load("res://scenes/ui/mainMenu/ModeSelect.tscn")
+var VersusMenu = load("res://scenes/ui/mainMenu/VersusMenu.tscn")
 var Settings = load("res://scenes/ui/mainMenu/Settings.tscn")
 var Credits = load("res://scenes/ui/mainMenu/Credits.tscn")
 var TakeYourTime = load("res://scenes/modes/TakeYourTime.tscn")
@@ -163,6 +164,18 @@ func go_to_multiplayer():
 		menu.queue_free()
 	if is_instance_valid(game):
 		game.queue_free()
+	menu = VersusMenu.instance()
+	add_child(menu)
+	menu.init(p1Device, p2Device, config)
+	menu.connect("back_to_menu", self, "_on_VersusMenu_back_to_menu")
+	menu.connect("everyone_ready", self, "_on_VersusMenu_everyone_ready")
+	menu.connect("start", self, "go_to_multiplayer_game")
+
+func go_to_multiplayer_game():
+	if is_instance_valid(menu):
+		menu.queue_free()
+	if is_instance_valid(game):
+		game.queue_free()
 	game = MultiplayerScene.instance()
 	add_child(game)
 	set_config_for_game_scene()
@@ -282,3 +295,16 @@ func _on_game_back_to_menu():
 
 func _on_MainMenu_multiplayer():
 	go_to_multiplayer()
+
+func _on_VersusMenu_back_to_menu(config, isConfigChanged):
+	if isConfigChanged:
+		self.config = config
+		config.save("user://settings.cfg")
+	go_to_main_menu()
+
+func _on_VersusMenu_everyone_ready(p1Device, p2Device, config, isConfigChanged):
+	self.p1Device = p1Device
+	self.p2Device = p2Device
+	if isConfigChanged:
+		self.config = config
+		config.save("user://settings.cfg")
