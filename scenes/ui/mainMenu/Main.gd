@@ -172,22 +172,34 @@ func go_to_multiplayer():
 	menu.connect("start", self, "go_to_multiplayer_game")
 
 func go_to_multiplayer_game(p1Device, p2Device, config, isConfigChanged):
-	if is_instance_valid(menu):
-		menu.queue_free()
-	if is_instance_valid(game):
-		game.queue_free()
 	self.p1Device = p1Device
 	self.p2Device = p2Device
 	if isConfigChanged:
 		self.config = config
 		config.save("user://settings.cfg")
+	if is_instance_valid(menu):
+		menu.queue_free()
+	if is_instance_valid(game):
+		game.queue_free()
+		restartTimer = Timer.new()
+		add_child(restartTimer)
+		restartTimer.wait_time = 0.01
+		restartTimer.one_shot = true
+		restartTimer.connect("timeout", self, "actually_go_to_multiplayer_game")
+		restartTimer.start()
+	else:
+		actually_go_to_multiplayer_game()
+
+func actually_go_to_multiplayer_game():
+	if is_instance_valid(restartTimer):
+		restartTimer.queue_free()
 	game = MultiplayerScene.instance()
 	add_child(game)
 	set_config_for_game_scene()
 	game.player1Scene.connect("back_to_menu", self, "go_to_main_menu")
-	game.player1Scene.connect("restart", self, "go_to_multiplayer_game")
+	game.player1Scene.connect("restart", self, "_on_versus_restart")
 	game.player2Scene.connect("back_to_menu", self, "go_to_main_menu")
-	game.player2Scene.connect("restart", self, "go_to_multiplayer_game")
+	game.player2Scene.connect("restart", self, "_on_versus_restart")
 
 func go_to_take_your_time_mode():
 	if is_instance_valid(menu):
@@ -320,3 +332,6 @@ func _on_VersusMenu_back_to_menu(config, isConfigChanged, p1Device, p2Device):
 	self.p1Device = p1Device
 	self.p2Device = p2Device
 	go_to_main_menu()
+
+func _on_versus_restart():
+	go_to_multiplayer_game(p1Device, p2Device, config, false)
