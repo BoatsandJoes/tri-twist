@@ -16,7 +16,8 @@ default_color = Color( 1, 1, 1, 0.784314 )
 texture_mode = 111
 
 [node name="DropTimer" type="Timer" parent="."]
-autostart = true
+wait_time = 0.05
+one_shot = true
 
 [node name="Label" type="Label" parent="."]
 visible = false

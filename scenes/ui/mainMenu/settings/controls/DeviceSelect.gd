@@ -5,8 +5,8 @@ signal cancel
 signal config_changed
 signal everyone_ready
 
-var p1Device = null
-var p2Device = null
+var p1Device = "CPU"
+var p2Device = "CPU"
 var p1Ready = false
 var p2Ready = false
 var config
@@ -66,17 +66,19 @@ func create_new_label(container, text):
 			leftPosition = label.get_node("Label").rect_position
 		label.get_node("LeftArrow").position = Vector2(leftPosition[0] - 50, leftPosition[1] + widthHeight[1] / 2 - 3)
 	else:
-		# We are on the left side. Move confirmation text to bottom
-		$HBoxContainer/Player1Device.move_child($HBoxContainer/Player1Device/Confirm, 3)
+		# We are on the left side. Move confirmation text to bottom and hide CPU
+		$HBoxContainer/Player1Device.move_child($HBoxContainer/Player1Device/Confirm, 4)
 		$HBoxContainer/Player1Device/Confirm.visible = true
+		$HBoxContainer/Player1Device/CPULabel.visible = false
 	if label.has_node("RightArrow"):
 		var rightPosition = label.get_node("RightArrow").position
 		label.get_node("RightArrow").position = Vector2(rightPosition[0] + widthHeight[0] + 48,
 		rightPosition[1] + widthHeight[1] / 2 - 3)
 	else:
-		# We are on the right side. Move confirmation text to bottom
-		$HBoxContainer/Player2Device.move_child($HBoxContainer/Player2Device/Confirm, 3)
+		# We are on the right side. Move confirmation text to bottom and hide CPU
+		$HBoxContainer/Player2Device.move_child($HBoxContainer/Player2Device/Confirm, 4)
 		$HBoxContainer/Player2Device/Confirm.visible = true
+		$HBoxContainer/Player2Device/CPULabel.visible = false
 
 func has_specific_label(container, label: String):
 	var hasLabel: bool = false
@@ -97,12 +99,15 @@ func has_label(container):
 func delete_label(container, text: String) -> bool:
 	var found: bool = false
 	for child in container.get_children():
-		if (is_instance_valid(child) && child.has_node("Label") && (text == null || child.get_node("Label").text == text)):
+		if (is_instance_valid(child) && child.has_node("Label") && child.get_node("Label").text == text):
 			child.queue_free()
 			found = true
 			break
-	if found && container.has_node("Confirm"):
-		container.get_node("Confirm").visible = false
+	if found:
+		if container.has_node("Confirm"):
+			container.get_node("Confirm").visible = false
+		if container.has_node("CPULabel"):
+			container.get_node("CPULabel").visible = true
 	return found
 
 func find_label(container, text: String) -> bool:
@@ -115,7 +120,7 @@ func find_label(container, text: String) -> bool:
 
 func move_label_left(text: String):
 	if delete_label($HBoxContainer/Player2Device, text):
-		p2Device = null
+		p2Device = "CPU"
 		create_new_label($HBoxContainer/AllDevices, text)
 	elif !has_label($HBoxContainer/Player1Device) && delete_label($HBoxContainer/AllDevices, text):
 		p1Device = text
@@ -123,14 +128,14 @@ func move_label_left(text: String):
 
 func move_label_right(text: String):
 	if delete_label($HBoxContainer/Player1Device, text):
-		p1Device = null
+		p1Device = "CPU"
 		create_new_label($HBoxContainer/AllDevices, text)
 	elif !has_label($HBoxContainer/Player2Device) && delete_label($HBoxContainer/AllDevices, text):
 		p2Device = text
 		create_new_label($HBoxContainer/Player2Device, text)
 
 func ready_check():
-	if (p1Ready && p2Ready) || (p1Ready && p2Device == null) || (p2Ready && p1Device == null):
+	if (p1Ready && p2Ready) || (p1Ready && p2Device == "CPU") || (p2Ready && p1Device == "CPU"):
 		emit_signal("everyone_ready", p1Device, p2Device)
 
 func _input(event):
@@ -206,9 +211,9 @@ func _on_Input_joy_connection_changed(id,connected):
 		create_new_label($HBoxContainer/AllDevices, "Controller " + String(id + 1))
 	elif !delete_label($HBoxContainer/AllDevices, "Controller " + String(id + 1)):
 		if delete_label($HBoxContainer/Player1Device, "Controller " + String(id + 1)):
-			p1Device = null
+			p1Device = "CPU"
 		elif delete_label($HBoxContainer/Player2Device, "Controller " + String(id + 1)):
-			p2Device = null
+			p2Device = "CPU"
 
 func _on_p1ButtonConfig_ready_pressed(isReadyPressed: bool, config: ConfigFile, isConfigChanged: bool):
 	if isConfigChanged:
@@ -220,7 +225,8 @@ func _on_p1ButtonConfig_ready_pressed(isReadyPressed: bool, config: ConfigFile, 
 func _on_p1ButtonConfig_back(config: ConfigFile, isConfigChanged: bool):
 	p1ButtonConfig.queue_free()
 	for child in $HBoxContainer/Player1Device.get_children():
-		if is_instance_valid(child) && !(child.has_node("Label") && child.get_node("Label").text == "Hacky"):
+		if (is_instance_valid(child) && !((child.has_node("Label") && child.get_node("Label").text == "Hacky")
+		|| (child.get_name() == "CPULabel"))):
 			child.visible = true
 	if isConfigChanged:
 		self.config = config
@@ -236,7 +242,8 @@ func _on_p2ButtonConfig_ready_pressed(isReadyPressed:bool, config: ConfigFile, i
 func _on_p2ButtonConfig_back(config: ConfigFile, isConfigChanged: bool):
 	p2ButtonConfig.queue_free()
 	for child in $HBoxContainer/Player2Device.get_children():
-		if is_instance_valid(child) && !(child.has_node("Label") && child.get_node("Label").text == "Hacky"):
+		if (is_instance_valid(child) && !((child.has_node("Label") && child.get_node("Label").text == "Hacky")
+		|| (child.get_name() == "CPULabel"))):
 			child.visible = true
 	if isConfigChanged:
 		self.config = config

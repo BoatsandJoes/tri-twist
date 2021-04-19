@@ -2,7 +2,6 @@ extends MarginContainer
 class_name VersusMenu
 
 signal back_to_menu
-signal everyone_ready
 signal start
 
 var DeviceSelect = load("res://scenes/ui/mainMenu/settings/controls/DeviceSelect.tscn")
@@ -39,7 +38,7 @@ func initialize_mode_modal():
 #	pass
 
 func _on_DeviceSelect_cancel():
-	emit_signal("back_to_menu", config, isConfigChanged)
+	emit_signal("back_to_menu", config, isConfigChanged, "CPU", "CPU")
 
 func _on_DeviceSelect_config_changed(config: ConfigFile):
 	self.config = config
@@ -48,13 +47,12 @@ func _on_DeviceSelect_config_changed(config: ConfigFile):
 func _on_DeviceSelect_everyone_ready(p1Device, p2Device):
 	self.p1Device = p1Device
 	self.p2Device = p2Device
-	emit_signal("everyone_ready", p1Device, p2Device, config, isConfigChanged)
 	deviceSelect.queue_free()
 	deviceSelect.visible = false
 	initialize_mode_modal()
 
 func _on_Start_pressed():
-	emit_signal("start")
+	emit_signal("start", p1Device, p2Device, config, isConfigChanged)
 
 func _on_Back_pressed():
 	create_device_select()

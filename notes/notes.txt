@@ -16,6 +16,9 @@
 	keyboard/controller input on button config menu
 	actual button config
 	side select for single player
+	store cpu difficulty in config object
+	device selection should be wiped always except when restarting a game or exiting to a place beyond device select
+		rethink settings menu button config idk, maybe it's fine as is
 	online play
 		piece sequence generated ahead of time and shared (1000 pieces then loops)
 		incoming garbage delayed by at least a few frames on time out to account for latency (maybe the attacker extended at the last moment) (attack can no longer be extended, but can still be offset)

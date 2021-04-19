@@ -111,7 +111,7 @@ func _on_Settings_pressed():
 	$PanelContainer/VBoxContainer.visible = false
 	settings_menu = Settings.instance()
 	$PanelContainer.add_child(settings_menu)
-	settings_menu.set_config(get_parent().get_parent().config, null, null)
+	settings_menu.set_config(get_parent().get_parent().config, get_parent().get_parent().p1Device, get_parent().get_parent().p2Device)
 	settings_menu.connect("back_to_menu", self, "_on_settings_menu_back_to_menu")
 	settings_menu.connect("fullscreen", get_parent().get_parent(), "set_fullscreen")
 	settings_menu.connect("windowed", get_parent().get_parent(), "set_windowed")

@@ -8,8 +8,8 @@ signal devices_set
 
 var config: ConfigFile
 var isConfigChanged: bool = false
-var p1Device = null
-var p2Device = null
+var p1Device = "CPU"
+var p2Device = "CPU"
 var DeviceSelect = load("res://scenes/ui/mainMenu/settings/controls/DeviceSelect.tscn")
 var deviceSelect: DeviceSelect
 

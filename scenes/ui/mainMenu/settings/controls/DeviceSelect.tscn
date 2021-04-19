@@ -2,18 +2,18 @@
 
 [ext_resource path="res://scenes/ui/mainMenu/settings/controls/DeviceSelect.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/agane/Agane╠Ç 55 (roman).ttf" type="DynamicFontData" id=2]
-[ext_resource path="res://scenes/ui/elements/SelectArrow.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/ui/elements/FadingLabel.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/ui/elements/FadingLabel.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/ui/elements/SelectArrow.tscn" type="PackedScene" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 size = 64
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=3]
 size = 64
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=2]
 size = 48
 font_data = ExtResource( 2 )
 
@@ -45,6 +45,28 @@ margin_bottom = 64.0
 custom_fonts/font = SubResource( 1 )
 text = "           Player 1           "
 
+[node name="CPULabel" type="HBoxContainer" parent="HBoxContainer/Player1Device"]
+margin_top = 68.0
+margin_right = 636.0
+margin_bottom = 132.0
+
+[node name="LeftSpacing" type="Label" parent="HBoxContainer/Player1Device/CPULabel"]
+margin_right = 252.0
+margin_bottom = 64.0
+custom_fonts/font = SubResource( 3 )
+text = "              "
+
+[node name="FadingLabel" parent="HBoxContainer/Player1Device/CPULabel" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 256.0
+margin_top = 8.0
+margin_right = 346.0
+margin_bottom = 56.0
+custom_fonts/font = SubResource( 2 )
+text = "CPU"
+animationLength = 1.75
+
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Player1Device"]
 visible = false
 margin_left = 406.0
@@ -54,10 +76,10 @@ margin_bottom = 64.0
 [node name="Label" type="Label" parent="HBoxContainer/Player1Device/HBoxContainer"]
 margin_right = 178.0
 margin_bottom = 64.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "Hacky"
 
-[node name="RightArrow" parent="HBoxContainer/Player1Device/HBoxContainer" instance=ExtResource( 3 )]
+[node name="RightArrow" parent="HBoxContainer/Player1Device/HBoxContainer" instance=ExtResource( 4 )]
 scale = Vector2( -1, 1 )
 size = 32
 
@@ -67,12 +89,12 @@ margin_top = 68.0
 margin_right = 636.0
 margin_bottom = 116.0
 
-[node name="FadingLabel" parent="HBoxContainer/Player1Device/Confirm" instance=ExtResource( 4 )]
+[node name="FadingLabel" parent="HBoxContainer/Player1Device/Confirm" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 546.0
 margin_bottom = 48.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "Press \"Accept\""
 animationLength = 1.75
 
@@ -97,17 +119,17 @@ margin_top = 68.0
 margin_right = 540.0
 margin_bottom = 132.0
 
-[node name="LeftArrow" parent="HBoxContainer/AllDevices/HBoxContainer" instance=ExtResource( 3 )]
+[node name="LeftArrow" parent="HBoxContainer/AllDevices/HBoxContainer" instance=ExtResource( 4 )]
 z_index = -1
 size = 32
 
 [node name="Label" type="Label" parent="HBoxContainer/AllDevices/HBoxContainer"]
 margin_right = 178.0
 margin_bottom = 64.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "Hacky"
 
-[node name="RightArrow" parent="HBoxContainer/AllDevices/HBoxContainer" instance=ExtResource( 3 )]
+[node name="RightArrow" parent="HBoxContainer/AllDevices/HBoxContainer" instance=ExtResource( 4 )]
 scale = Vector2( -1, 1 )
 size = 32
 
@@ -122,6 +144,28 @@ margin_bottom = 64.0
 custom_fonts/font = SubResource( 1 )
 text = "          Player 2             "
 
+[node name="CPULabel" type="HBoxContainer" parent="HBoxContainer/Player2Device"]
+margin_top = 68.0
+margin_right = 653.0
+margin_bottom = 132.0
+
+[node name="LeftSpacing" type="Label" parent="HBoxContainer/Player2Device/CPULabel"]
+margin_right = 234.0
+margin_bottom = 64.0
+custom_fonts/font = SubResource( 3 )
+text = "             "
+
+[node name="FadingLabel2" parent="HBoxContainer/Player2Device/CPULabel" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 238.0
+margin_top = 8.0
+margin_right = 328.0
+margin_bottom = 56.0
+custom_fonts/font = SubResource( 2 )
+text = "CPU"
+animationLength = 1.75
+
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Player2Device"]
 visible = false
 margin_left = -4.0
@@ -131,16 +175,16 @@ margin_bottom = 64.0
 [node name="LeftSpacing" type="Label" parent="HBoxContainer/Player2Device/HBoxContainer"]
 margin_right = 178.0
 margin_bottom = 64.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "     "
 
-[node name="LeftArrow" parent="HBoxContainer/Player2Device/HBoxContainer" instance=ExtResource( 3 )]
+[node name="LeftArrow" parent="HBoxContainer/Player2Device/HBoxContainer" instance=ExtResource( 4 )]
 size = 32
 
 [node name="Label" type="Label" parent="HBoxContainer/Player2Device/HBoxContainer"]
 margin_right = 178.0
 margin_bottom = 64.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "Hacky"
 
 [node name="Confirm" type="HBoxContainer" parent="HBoxContainer/Player2Device"]
@@ -152,16 +196,16 @@ margin_bottom = 132.0
 [node name="LeftSpacing" type="Label" parent="HBoxContainer/Player2Device/Confirm"]
 margin_right = 36.0
 margin_bottom = 64.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "  "
 
-[node name="FadingLabel2" parent="HBoxContainer/Player2Device/Confirm" instance=ExtResource( 4 )]
+[node name="FadingLabel2" parent="HBoxContainer/Player2Device/Confirm" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 40.0
 margin_top = 8.0
 margin_right = 586.0
 margin_bottom = 56.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "Press \"Accept\""
 animationLength = 1.75

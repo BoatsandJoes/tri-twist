@@ -13,6 +13,9 @@ var leftPressed = false
 var rightPressed = false
 var previews = []
 var droppingAllowed = true
+var AI = load("res://scenes/ai/AI.tscn")
+var ai: AI
+var aiTimer: Timer
 var device: String
 var gridWidth: int = 11
 var gridHeight: int = 5
@@ -90,6 +93,18 @@ func set_arr(arr: int):
 
 func set_device(device: String):
 	self.device = device
+	if device == "CPU":
+		ai = AI.instance()
+		add_child(ai)
+		aiTimer = Timer.new()
+		add_child(aiTimer)
+		aiTimer.one_shot = true
+		aiTimer.connect("timeout", self, "_on_aiTimer_timeout")
+		ask_ai_for_move()
+
+func ask_ai_for_move():
+	ai.find_best_move()
+	aiTimer.start(1)
 
 func enable_dropping():
 	droppingAllowed = true
@@ -294,21 +309,26 @@ func advance_piece():
 		$DropTimer.start()
 	emit_signal("piece_sequence_advanced")
 
+func perform_best_ai_move():
+	var bestMove = ai.get_best_move()
+	set_active_piece_position(bestMove[0])
+	if bestMove[1] == ai.Direction.LEFT:
+		rotate_counterclockwise()
+	if bestMove[1] == ai.Direction.RIGHT:
+		rotate_clockwise()
+	$DropTimer.start()
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	draw_ghost_pieces()
 
-func _on_DropTimer_timeout():
-	if dropTimer:
-		var accepted = gameGrid.drop_piece(activePiece, true)
-		if accepted:
-			activePiece.set_colors(previews[0].leftColor, previews[0].rightColor, previews[0].verticalColor)
-			for i in range(previews.size() - 1):
-				previews[i].set_colors(previews[i+1].leftColor, previews[i+1].rightColor, previews[i+1].verticalColor)
-			previews[-1].fill_randomly()
-		else:
-			$Label.visible = true
+func _on_aiTimer_timeout():
+	perform_best_ai_move()
+	ask_ai_for_move()
 
+func _on_DropTimer_timeout():
+	if ghostPiece.visible:
+		hard_drop()
 
 func _on_DasTimer_timeout():
 	if rightPressed:
