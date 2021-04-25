@@ -5,43 +5,28 @@ enum Direction {LEFT, RIGHT, VERT}
 var best_move_column: int = 5
 var best_move_rotation: int = Direction.VERT
 var best_move_rating: int = 0
-var threads: Array
-var semaphore: Semaphore
-var threadcount: int = 1
-var exitThreads: bool = false
-var exitThreadsMutex: Mutex
-var bestMoveMutex: Mutex
+var boardColors: Array
+var columnCounter: int = 0
+var activePieceColors: PoolIntArray
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	exitThreadsMutex = Mutex.new()
-	bestMoveMutex = Mutex.new()
-	semaphore = Semaphore.new()
-	for i in range(threadcount):
-		threads.append(Thread.new())
-		threads[i].start(self, "_thread_function")
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
 
-func find_possible_moves(nextFewPieceEdgeColors: Array, boardStateDictionary):
-	boardStateDictionary["activePieceColumnIndex"]
-	#for row in gameGrid.grid:
-	#	for cell in row:
-	#		colors.append(cell.leftColor)
-	#		colors.append(cell.rightColor)
-	#		colors.append(cell.verticalColor)
-	boardStateDictionary["boardColors"]
-
-func find_best_move():
-	semaphore.post()
+func find_best_move(nextFewPieceEdgeColors: Array, boardState: Dictionary):
+	boardColors = boardState["boardColors"]
+	activePieceColors = [nextFewPieceEdgeColors[0], nextFewPieceEdgeColors[1], nextFewPieceEdgeColors[2]]
+	best_move_column = randi() % 11
+	best_move_rotation = randi() % 3
+	_thread_function(null)
 
 func get_best_move():
-	bestMoveMutex.lock()
 	var column = best_move_column
 	var rotation = best_move_rotation
-	bestMoveMutex.unlock()
 	return [column, rotation]
 
 # Run here and exit.
@@ -49,23 +34,52 @@ func get_best_move():
 # If no argument was passed, this one still needs to
 # be here and it will be null.
 func _thread_function(userdata):
-	while true:
-		semaphore.wait() # Wait until posted.
-		exitThreadsMutex.lock()
-		var should_exit = exitThreads # Protect with Mutex.
-		exitThreadsMutex.unlock()
-		if should_exit:
-			break
-		bestMoveMutex.lock()
-		best_move_column = randi() % 11
-		best_move_rotation = randi() % 3
-		bestMoveMutex.unlock()
-
-# Thread must be disposed (or "joined"), for portability.
-func _exit_tree():
-	exitThreadsMutex.lock()
-	exitThreads = true
-	exitThreadsMutex.unlock()
-	semaphore.post()
-	for thread in threads:
-		thread.wait_to_finish()
+	var column: int = 0
+	while column < 11:
+		column = columnCounter
+		if column < 11:
+			columnCounter = columnCounter + 1
+			var topCellInColumnIndex: int = 132 + column * 3
+			if boardColors[topCellInColumnIndex] == 4:
+				while topCellInColumnIndex > 32:
+					if boardColors[topCellInColumnIndex - 33] == 4:
+						topCellInColumnIndex = topCellInColumnIndex - 33
+					else:
+						if ((column + (topCellInColumnIndex / 3) / 11) % 2 == 0):
+							print("point_facing_up " + String(column) + " " + String(topCellInColumnIndex) + " "
+							+ String(activePieceColors) + " " + String(boardColors[topCellInColumnIndex - 31]))
+							if (activePieceColors[2] == boardColors[topCellInColumnIndex - 31]):
+								best_move_column = column
+								best_move_rotation = Direction.VERT
+							elif (activePieceColors[1] == boardColors[topCellInColumnIndex - 31]):
+								best_move_column = column
+								best_move_rotation = Direction.RIGHT
+							elif (activePieceColors[1] == boardColors[topCellInColumnIndex - 31]):
+								best_move_column = column
+								best_move_rotation = Direction.LEFT
+						else:
+							if((column == 0 || boardColors[topCellInColumnIndex - 3] != 4)
+							&& (column == 10 || boardColors[topCellInColumnIndex + 3] != 4)):
+								if column != 0:
+									if boardColors[topCellInColumnIndex - 2] == activePieceColors[1]:
+										best_move_column = column
+										best_move_rotation = Direction.VERT
+									elif boardColors[topCellInColumnIndex - 2] == activePieceColors[0]:
+										best_move_column = column
+										best_move_rotation = Direction.LEFT
+									elif boardColors[topCellInColumnIndex - 2] == activePieceColors[2]:
+										best_move_column = column
+										best_move_rotation = Direction.RIGHT
+								elif column != 10:
+									if boardColors[topCellInColumnIndex + 3] == activePieceColors[1]:
+										best_move_column = column
+										best_move_rotation = Direction.VERT
+									elif boardColors[topCellInColumnIndex + 3] == activePieceColors[2]:
+										best_move_column = column
+										best_move_rotation = Direction.LEFT
+									elif boardColors[topCellInColumnIndex + 3] == activePieceColors[0]:
+										best_move_column = column
+										best_move_rotation = Direction.RIGHT
+						topCellInColumnIndex = -1
+		else:
+			columnCounter = 0

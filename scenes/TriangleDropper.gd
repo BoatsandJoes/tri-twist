@@ -103,7 +103,8 @@ func set_device(device: String):
 		ask_ai_for_move()
 
 func ask_ai_for_move():
-	ai.find_best_move()
+	ai.find_best_move([activePiece.leftColor, activePiece.rightColor, activePiece.verticalColor,
+	previews[0].leftColor, previews[0].rightColor, previews[0].verticalColor], serialize())
 	aiTimer.start(1)
 
 func enable_dropping():
@@ -324,11 +325,11 @@ func _process(delta):
 
 func _on_aiTimer_timeout():
 	perform_best_ai_move()
-	ask_ai_for_move()
 
 func _on_DropTimer_timeout():
 	if ghostPiece.visible:
 		hard_drop()
+	ask_ai_for_move()
 
 func _on_DasTimer_timeout():
 	if rightPressed:

@@ -31,12 +31,33 @@ var activeChainMode = true
 var isMarkedForInactiveClear = false
 var wasHardDroppedMostRecently = false
 var sequentialChainCapFlag = false
+var leftAnimationTimer: Timer
+var rightAnimationTimer: Timer
+var vertAnimationTimer: Timer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$ChainTimerBarContainer/ChainTimerBar.set_percent_visible(false)
 	$ChainTimerBarContainer/ChainTimerBar.hide()
 	$ClearTimer.wait_time = clearDelay
+	leftAnimationTimer = Timer.new()
+	leftAnimationTimer.one_shot = true
+	leftAnimationTimer.wait_time = 0.1
+	leftAnimationTimer.autostart = false
+	add_child(leftAnimationTimer)
+	leftAnimationTimer.connect("timeout", self, "_on_leftAnimationTimer_timeout")
+	rightAnimationTimer = Timer.new()
+	rightAnimationTimer.one_shot = true
+	rightAnimationTimer.wait_time = 0.1
+	rightAnimationTimer.autostart = false
+	add_child(rightAnimationTimer)
+	rightAnimationTimer.connect("timeout", self, "_on_rightAnimationTimer_timeout")
+	vertAnimationTimer = Timer.new()
+	vertAnimationTimer.one_shot = true
+	vertAnimationTimer.wait_time = 0.1
+	vertAnimationTimer.autostart = false
+	add_child(vertAnimationTimer)
+	vertAnimationTimer.connect("timeout", self, "_on_vertAnimationTimer_timeout")
 
 func set_clear_scaling(value):
 	clearScaling = value
@@ -89,7 +110,6 @@ func become_default_size():
 	leftEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 2))
 	$LeftEdge.set_polygon(leftEdgeVectorArray)
 	$LeftEdge.set_modulate(Color(1,1,1))
-	$LeftParticles.emission_points = leftEdgeVectorArray
 	# right
 	var rightEdgeVectorArray = PoolVector2Array()
 	rightEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 6))
@@ -97,7 +117,6 @@ func become_default_size():
 	rightEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 2))
 	$RightEdge.set_polygon(rightEdgeVectorArray)
 	$RightEdge.set_modulate(Color(1,1,1))
-	$RightParticles.emission_points = rightEdgeVectorArray
 	# vertical
 	var verticalEdgeVectorArray = PoolVector2Array()
 	verticalEdgeVectorArray.append(Vector2(size/2, size * sqrt(3) / 6))
@@ -105,14 +124,13 @@ func become_default_size():
 	verticalEdgeVectorArray.append(Vector2(size, 0))
 	$VerticalEdge.set_polygon(verticalEdgeVectorArray)
 	$VerticalEdge.set_modulate(Color(1,1,1))
-	$VerticalParticles.emission_points = verticalEdgeVectorArray
 	# Move polygons to center on our position.
 	$LeftEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 	$RightEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 	$VerticalEdge.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
-	$LeftParticles.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
-	$RightParticles.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
-	$VerticalParticles.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
+	$LeftParticles.position = Vector2(-cos(PI/6) * size * sqrt(3) / 11, sin(PI/6) * size * sqrt(3) / 11)
+	$RightParticles.position = Vector2(cos(PI/6) * size * sqrt(3) / 11, sin(PI/6) * size * sqrt(3) / 11)
+	$VerticalParticles.position = Vector2(0, (-1) * size * sqrt(3) / 11)
 
 func fill_randomly():
 	leftColor = randi() % (colors.size() - 1)
@@ -670,7 +688,7 @@ func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Diction
 func clear_self_and_matching_neighbors(alreadyCheckedCoordinates: Array):
 	if !alreadyCheckedCoordinates.has([rowIndex, columnIndex]):
 		fallType = FallType.CLEAR
-		emit_particles()
+		show_clear_animation()
 		alreadyCheckedCoordinates.append([rowIndex, columnIndex])
 		var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
 		var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
@@ -683,13 +701,13 @@ func clear_self_and_matching_neighbors(alreadyCheckedCoordinates: Array):
 			verticalNeighbor.clear_self_and_matching_neighbors(alreadyCheckedCoordinates)
 		clear(Direction.VERTICAL_POINT)
 
-func emit_particles():
+func show_clear_animation():
 	if $LeftEdge.get_modulate() == Color(3,3,3):
-		$LeftParticles.emitting = true
+		leftAnimationTimer.start()
 	if $RightEdge.get_modulate() == Color(3,3,3):
-		$RightParticles.emitting = true
+		rightAnimationTimer.start()
 	if $VerticalEdge.get_modulate() == Color(3,3,3):
-		$VerticalParticles.emitting = true
+		vertAnimationTimer.start()
 
 func is_empty() -> bool:
 	return leftColor == colors.size() - 1
@@ -763,7 +781,7 @@ func _process(delta):
 
 func _on_ClearTimer_timeout():
 	# visual effect
-	emit_particles()
+	show_clear_animation()
 	fallType = FallType.CLEAR
 	clear(Direction.VERTICAL_POINT)
 
@@ -791,3 +809,12 @@ func _on_GravityTimer_timeout():
 			tumbleDirection = Direction.VERTICAL
 			# We may be the victim of a Zangimove
 			check_for_clear([])
+
+func _on_leftAnimationTimer_timeout():
+	$LeftParticles.emitting = true
+
+func _on_rightAnimationTimer_timeout():
+	$RightParticles.emitting = true
+
+func _on_vertAnimationTimer_timeout():
+	$VerticalParticles.emitting = true
