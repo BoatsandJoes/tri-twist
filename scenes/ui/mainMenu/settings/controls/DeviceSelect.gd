@@ -26,27 +26,39 @@ func init(p1Device, p2Device, config: ConfigFile):
 	update_device_list()
 
 func update_device_list():
+	var p1DeviceFound: bool = false
+	var p2DeviceFound: bool = false
 	var devices: Array = Input.get_connected_joypads()
 	if "Keyboard" == p1Device:
+		p1DeviceFound = true
 		create_new_label($HBoxContainer/Player1Device, "Keyboard")
 	elif "Keyboard" == p2Device:
+		p2DeviceFound = true
 		create_new_label($HBoxContainer/Player2Device, "Keyboard")
 	else:
 		create_new_label($HBoxContainer/AllDevices, "Keyboard")
 	if "Keyboard&Mouse" == p1Device:
+		p1DeviceFound = true
 		create_new_label($HBoxContainer/Player1Device, "Keyboard&Mouse")
 	elif "Keyboard&Mouse" == p2Device:
+		p2DeviceFound = true
 		create_new_label($HBoxContainer/Player2Device, "Keyboard&Mouse")
 	else:
 		create_new_label($HBoxContainer/AllDevices, "Keyboard&Mouse")
 	for device in devices:
 		var string: String = "Controller " + String(device + 1)
 		if string == p1Device:
+			p1DeviceFound = true
 			create_new_label($HBoxContainer/Player1Device, string)
 		elif string == p2Device:
+			p2DeviceFound = true
 			create_new_label($HBoxContainer/Player2Device, string)
 		else:
 			create_new_label($HBoxContainer/AllDevices, string)
+	if !p1DeviceFound:
+		p1Device = "CPU"
+	if !p2DeviceFound:
+		p2Device = "CPU"
 
 func create_new_label(container, text):
 	var label

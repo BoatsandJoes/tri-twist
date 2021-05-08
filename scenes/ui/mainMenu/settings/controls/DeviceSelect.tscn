@@ -9,11 +9,11 @@
 size = 64
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=2]
 size = 64
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=3]
 size = 48
 font_data = ExtResource( 2 )
 
@@ -53,7 +53,7 @@ margin_bottom = 132.0
 [node name="LeftSpacing" type="Label" parent="HBoxContainer/Player1Device/CPULabel"]
 margin_right = 252.0
 margin_bottom = 64.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "              "
 
 [node name="FadingLabel" parent="HBoxContainer/Player1Device/CPULabel" instance=ExtResource( 3 )]
@@ -63,7 +63,7 @@ margin_left = 256.0
 margin_top = 8.0
 margin_right = 346.0
 margin_bottom = 56.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "CPU"
 animationLength = 1.75
 
@@ -76,7 +76,7 @@ margin_bottom = 64.0
 [node name="Label" type="Label" parent="HBoxContainer/Player1Device/HBoxContainer"]
 margin_right = 178.0
 margin_bottom = 64.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "Hacky"
 
 [node name="RightArrow" parent="HBoxContainer/Player1Device/HBoxContainer" instance=ExtResource( 4 )]
@@ -94,7 +94,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 546.0
 margin_bottom = 48.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "Press \"Accept\""
 animationLength = 1.75
 
@@ -126,7 +126,7 @@ size = 32
 [node name="Label" type="Label" parent="HBoxContainer/AllDevices/HBoxContainer"]
 margin_right = 178.0
 margin_bottom = 64.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "Hacky"
 
 [node name="RightArrow" parent="HBoxContainer/AllDevices/HBoxContainer" instance=ExtResource( 4 )]
@@ -152,7 +152,7 @@ margin_bottom = 132.0
 [node name="LeftSpacing" type="Label" parent="HBoxContainer/Player2Device/CPULabel"]
 margin_right = 234.0
 margin_bottom = 64.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "             "
 
 [node name="FadingLabel2" parent="HBoxContainer/Player2Device/CPULabel" instance=ExtResource( 3 )]
@@ -162,7 +162,7 @@ margin_left = 238.0
 margin_top = 8.0
 margin_right = 328.0
 margin_bottom = 56.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "CPU"
 animationLength = 1.75
 
@@ -175,7 +175,7 @@ margin_bottom = 64.0
 [node name="LeftSpacing" type="Label" parent="HBoxContainer/Player2Device/HBoxContainer"]
 margin_right = 178.0
 margin_bottom = 64.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "     "
 
 [node name="LeftArrow" parent="HBoxContainer/Player2Device/HBoxContainer" instance=ExtResource( 4 )]
@@ -184,7 +184,7 @@ size = 32
 [node name="Label" type="Label" parent="HBoxContainer/Player2Device/HBoxContainer"]
 margin_right = 178.0
 margin_bottom = 64.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "Hacky"
 
 [node name="Confirm" type="HBoxContainer" parent="HBoxContainer/Player2Device"]
@@ -196,7 +196,7 @@ margin_bottom = 132.0
 [node name="LeftSpacing" type="Label" parent="HBoxContainer/Player2Device/Confirm"]
 margin_right = 36.0
 margin_bottom = 64.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "  "
 
 [node name="FadingLabel2" parent="HBoxContainer/Player2Device/Confirm" instance=ExtResource( 3 )]
@@ -206,6 +206,6 @@ margin_left = 40.0
 margin_top = 8.0
 margin_right = 586.0
 margin_bottom = 56.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "Press \"Accept\""
 animationLength = 1.75

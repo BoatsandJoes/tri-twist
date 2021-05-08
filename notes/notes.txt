@@ -15,7 +15,7 @@
 	if the other player is using mouse, then disable mouse input on our controls menu
 	keyboard/controller input on button config menu
 	actual button config
-	side select for single player
+	improved ai
 	store cpu difficulty in config object
 	device selection should be wiped always except when restarting a game or exiting to a place beyond device select
 		rethink settings menu button config idk, maybe it's fine as is
@@ -28,14 +28,9 @@
 		if their real inputs differ, roll back their board
 		our board is unaffected and never has to be saved or changed in any way except for garbage prediction, particularly on time up
 		selecting piece colors and garbage colors before they're shown to the player will help the visuals (color selection may have to be rewound and redone if our opponent actually spawned a bunch of garbage)
-	ais (can vary thinking/pause time)
-		random drop
-		1 deep match search with board evaluation (can limit branches to check)
-		2 deep match search
 	visuals:
 		grid background
 		particles
-		persist matched area and then apply some effect to it (even though actual pieces have cleared)
 		make score - display not shunt the number to the side
 		fix ghost line visibility (maybe 2nd ghost piece)
 		light up ghost piece if it will match?  
@@ -145,8 +140,6 @@ Scope Creep:
 	Character who instead of 4 says 3
 		how unthreetunate three you
 	mobile port
-
-Things that I want but will have to cut:  
 	steam leaderboards  
 	steam achievements  
 	Daily challenge  
