@@ -89,6 +89,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/ui/mainMenu/MainMenu.gd"
 }, {
+"base": "MarginContainer",
+"class": "ModeMenu",
+"language": "GDScript",
+"path": "res://scenes/ui/mainMenu/ModeMenu.gd"
+}, {
 "base": "Control",
 "class": "ModeSelect",
 "language": "GDScript",
@@ -143,11 +148,6 @@ _global_script_classes=[ {
 "class": "Triathalon",
 "language": "GDScript",
 "path": "res://scenes/modes/Triathalon.gd"
-}, {
-"base": "MarginContainer",
-"class": "VersusMenu",
-"language": "GDScript",
-"path": "res://scenes/ui/mainMenu/VersusMenu.gd"
 } ]
 _global_script_class_icons={
 "AI": "",
@@ -166,6 +166,7 @@ _global_script_class_icons={
 "HowToPlay": "",
 "Main": "",
 "MainMenu": "",
+"ModeMenu": "",
 "ModeSelect": "",
 "PausePopup": "",
 "ScoreDisplay": "",
@@ -176,8 +177,7 @@ _global_script_class_icons={
 "TitleScreen": "",
 "TriangleCell": "",
 "TriangleDropper": "",
-"Triathalon": "",
-"VersusMenu": ""
+"Triathalon": ""
 }
 
 [application]

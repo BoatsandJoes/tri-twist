@@ -1,5 +1,5 @@
 extends MarginContainer
-class_name VersusMenu
+class_name ModeMenu
 
 signal back_to_menu
 signal start
@@ -32,6 +32,9 @@ func create_device_select():
 
 func initialize_mode_modal():
 	$VBoxContainer/MainArea/ModeModal.visible = true
+
+func set_label(string: String):
+	$VBoxContainer/HBoxContainer/Label.text = string
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

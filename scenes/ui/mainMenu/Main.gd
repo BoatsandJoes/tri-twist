@@ -7,7 +7,7 @@ class_name Main
 var TitleScreen = load("res://scenes/ui/mainMenu/TitleScreen.tscn")
 var MainMenu = load("res://scenes/ui/mainMenu/MainMenu.tscn")
 var ModeSelect = load("res://scenes/ui/mainMenu/ModeSelect.tscn")
-var VersusMenu = load("res://scenes/ui/mainMenu/VersusMenu.tscn")
+var ModeMenu = load("res://scenes/ui/mainMenu/ModeMenu.tscn")
 var Settings = load("res://scenes/ui/mainMenu/Settings.tscn")
 var Credits = load("res://scenes/ui/mainMenu/Credits.tscn")
 var TakeYourTime = load("res://scenes/modes/TakeYourTime.tscn")
@@ -154,6 +154,7 @@ func go_to_mode_select():
 		#TODO sound music if take your time/menu music is not already playing, start playing menu music
 	menu = ModeSelect.instance()
 	add_child(menu)
+	menu.init(p1Device, p2Device, config)
 	menu.connect("take_your_time", self, "_on_ModeSelect_take_your_time")
 	menu.connect("gogogo", self, "_on_ModeSelect_gogogo")
 	menu.connect("dig_mode", self, "_on_ModeSelect_dig_mode")
@@ -165,10 +166,10 @@ func go_to_multiplayer():
 		menu.queue_free()
 	if is_instance_valid(game):
 		game.queue_free()
-	menu = VersusMenu.instance()
+	menu = ModeMenu.instance()
 	add_child(menu)
 	menu.init(p1Device, p2Device, config)
-	menu.connect("back_to_menu", self, "_on_VersusMenu_back_to_menu")
+	menu.connect("back_to_menu", self, "_on_Versus_back_to_menu")
 	menu.connect("start", self, "go_to_multiplayer_game")
 
 func go_to_multiplayer_game(p1Device, p2Device, config, isConfigChanged):
@@ -304,19 +305,40 @@ func _on_Settings_devices_set(p1Device, p2Device):
 func _on_Credits_back_to_menu():
 	go_to_main_menu()
 
-func _on_ModeSelect_take_your_time():
+func _on_ModeSelect_take_your_time(p1Device, config, isConfigChanged):
+	self.p1Device = p1Device
+	if isConfigChanged:
+		self.config = config
+		config.save("user://settings.cfg")
 	go_to_take_your_time_mode()
 
-func _on_ModeSelect_gogogo():
+func _on_ModeSelect_gogogo(p1Device, config, isConfigChanged):
+	self.p1Device = p1Device
+	if isConfigChanged:
+		self.config = config
+		config.save("user://settings.cfg")
 	go_to_gogogo_mode()
 
-func _on_ModeSelect_dig_mode():
+func _on_ModeSelect_dig_mode(p1Device, config, isConfigChanged):
+	self.p1Device = p1Device
+	if isConfigChanged:
+		self.config = config
+		config.save("user://settings.cfg")
 	go_to_dig_mode()
 
-func _on_ModeSelect_triathalon():
+func _on_ModeSelect_triathalon(p1Device, config, isConfigChanged):
+	self.p1Device = p1Device
+	if isConfigChanged:
+		self.config = config
+		config.save("user://settings.cfg")
 	go_to_triathalon_mode()
 
-func _on_ModeSelect_back():
+func _on_ModeSelect_back(config, isConfigChanged, p1Device, p2Device):
+	self.p1Device = p1Device
+	self.p2Device = p2Device
+	if isConfigChanged:
+		self.config = config
+		config.save("user://settings.cfg")
 	go_to_main_menu()
 
 func _on_game_back_to_menu():
@@ -325,7 +347,7 @@ func _on_game_back_to_menu():
 func _on_MainMenu_multiplayer():
 	go_to_multiplayer()
 
-func _on_VersusMenu_back_to_menu(config, isConfigChanged, p1Device, p2Device):
+func _on_Versus_back_to_menu(config, isConfigChanged, p1Device, p2Device):
 	if isConfigChanged:
 		self.config = config
 		config.save("user://settings.cfg")
