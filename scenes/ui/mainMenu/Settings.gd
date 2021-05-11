@@ -15,24 +15,76 @@ var deviceSelect: DeviceSelect
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	select_fullscreen()
 
 func set_config(config: ConfigFile, p1Device, p2Device):
 	self.config = config
 	self.p1Device = p1Device
 	self.p2Device = p2Device
 	var fullscreen = config.get_value("video", "fullscreen")
-	if !fullscreen:
-		$VBoxContainer/MainArea/TopOptions/Fullscreen.text = "Windowed"
+	if fullscreen:
+		$VBoxContainer/MainArea/TopOptions/HBoxContainer/Fullscreen.text = "Fullscreen"
+
+func select_fullscreen():
+	var widthHeight = $VBoxContainer/MainArea/TopOptions/HBoxContainer/Fullscreen.get_rect().size
+	$VBoxContainer/MainArea/TopOptions/HBoxContainer/SelectArrow.position = Vector2(widthHeight[0], widthHeight[1] / 2 - 3)
+	$VBoxContainer/MainArea/TopOptions/HBoxContainer/SelectArrow.visible = true
+	$VBoxContainer/MainArea/TopOptions/HBoxContainer2/SelectArrow.visible = false
+	$VBoxContainer/MainArea/TopOptions/HBoxContainer3/SelectArrow.visible = false
+
+func is_fullscreen_selected():
+	return $VBoxContainer/MainArea/TopOptions/HBoxContainer/SelectArrow.visible
+
+func select_controls():
+	var widthHeight = $VBoxContainer/MainArea/TopOptions/HBoxContainer2/Controls.get_rect().size
+	$VBoxContainer/MainArea/TopOptions/HBoxContainer2/SelectArrow.position = Vector2(widthHeight[0], widthHeight[1] / 2 - 3)
+	$VBoxContainer/MainArea/TopOptions/HBoxContainer/SelectArrow.visible = false
+	$VBoxContainer/MainArea/TopOptions/HBoxContainer2/SelectArrow.visible = true
+	$VBoxContainer/MainArea/TopOptions/HBoxContainer3/SelectArrow.visible = false
+
+func is_controls_selected():
+	return $VBoxContainer/MainArea/TopOptions/HBoxContainer2/SelectArrow.visible
+
+func select_back():
+	var widthHeight = $VBoxContainer/MainArea/TopOptions/HBoxContainer3/Back.get_rect().size
+	$VBoxContainer/MainArea/TopOptions/HBoxContainer3/SelectArrow.position = Vector2(widthHeight[0], widthHeight[1] / 2 - 3)
+	$VBoxContainer/MainArea/TopOptions/HBoxContainer/SelectArrow.visible = false
+	$VBoxContainer/MainArea/TopOptions/HBoxContainer2/SelectArrow.visible = false
+	$VBoxContainer/MainArea/TopOptions/HBoxContainer3/SelectArrow.visible = true
+
+func is_back_selected():
+	return $VBoxContainer/MainArea/TopOptions/HBoxContainer3/SelectArrow.visible
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
 
 func _input(event):
-	if (event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton):
+	if ((event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton)
+	&& $VBoxContainer/MainArea/TopOptions.visible):
 		if event.is_action_pressed("ui_escape") || event.is_action_pressed("ui_cancel"):
 			_on_Back_pressed()
+		elif event.is_action_pressed("ui_accept"):
+			if is_fullscreen_selected():
+				_on_Fullscreen_pressed()
+			elif is_controls_selected():
+				_on_Controls_pressed()
+			elif is_back_selected():
+				_on_Back_pressed()
+		elif event.is_action_pressed("ui_down"):
+			if is_fullscreen_selected():
+				select_controls()
+			elif is_controls_selected():
+				select_back()
+			elif is_back_selected():
+				select_fullscreen()
+		elif event.is_action_pressed("ui_up"):
+			if is_fullscreen_selected():
+				select_back()
+			elif is_controls_selected():
+				select_fullscreen()
+			elif is_back_selected():
+				select_controls()
 
 func _on_Back_pressed():
 	# save config
@@ -40,11 +92,11 @@ func _on_Back_pressed():
 
 func _on_Fullscreen_pressed():
 	isConfigChanged = true
-	if $VBoxContainer/MainArea/TopOptions/Fullscreen.text == "Windowed":
-		$VBoxContainer/MainArea/TopOptions/Fullscreen.text = "Fullscreen"
+	if $VBoxContainer/MainArea/TopOptions/HBoxContainer/Fullscreen.text == "Windowed":
+		$VBoxContainer/MainArea/TopOptions/HBoxContainer/Fullscreen.text = "Fullscreen"
 		emit_signal("fullscreen")
 	else:
-		$VBoxContainer/MainArea/TopOptions/Fullscreen.text = "Windowed"
+		$VBoxContainer/MainArea/TopOptions/HBoxContainer/Fullscreen.text = "Windowed"
 		emit_signal("windowed")
 
 func _on_Controls_pressed():

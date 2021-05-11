@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scenes/ui/mainMenu/Settings.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/agane/Agane╠Ç 55 (roman).ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://scenes/ui/elements/SelectArrow.tscn" type="PackedScene" id=3]
 
 [sub_resource type="DynamicFont" id=1]
 size = 96
@@ -44,30 +45,51 @@ margin_bottom = 426.0
 alignment = 1
 
 [node name="TopOptions" type="VBoxContainer" parent="VBoxContainer/MainArea"]
-margin_left = 741.0
-margin_right = 1058.0
+margin_left = 730.0
+margin_right = 1070.0
 margin_bottom = 230.0
 custom_constants/separation = 10
 
-[node name="Fullscreen" type="Button" parent="VBoxContainer/MainArea/TopOptions"]
-margin_right = 317.0
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MainArea/TopOptions"]
+margin_right = 340.0
+margin_bottom = 70.0
+
+[node name="Fullscreen" type="Button" parent="VBoxContainer/MainArea/TopOptions/HBoxContainer"]
+margin_right = 340.0
 margin_bottom = 70.0
 custom_fonts/font = SubResource( 2 )
-text = "Fullscreen"
+text = "Windowed"
 
-[node name="Controls" type="Button" parent="VBoxContainer/MainArea/TopOptions"]
+[node name="SelectArrow" parent="VBoxContainer/MainArea/TopOptions/HBoxContainer" instance=ExtResource( 3 )]
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/MainArea/TopOptions"]
 margin_top = 80.0
-margin_right = 317.0
+margin_right = 340.0
 margin_bottom = 150.0
+
+[node name="Controls" type="Button" parent="VBoxContainer/MainArea/TopOptions/HBoxContainer2"]
+margin_right = 265.0
+margin_bottom = 70.0
 custom_fonts/font = SubResource( 2 )
 text = "Controls"
 
-[node name="Back" type="Button" parent="VBoxContainer/MainArea/TopOptions"]
+[node name="SelectArrow" parent="VBoxContainer/MainArea/TopOptions/HBoxContainer2" instance=ExtResource( 3 )]
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/MainArea/TopOptions"]
 margin_top = 160.0
-margin_right = 317.0
+margin_right = 340.0
 margin_bottom = 230.0
+
+[node name="Back" type="Button" parent="VBoxContainer/MainArea/TopOptions/HBoxContainer3"]
+margin_right = 151.0
+margin_bottom = 70.0
 custom_fonts/font = SubResource( 2 )
 text = "Back"
-[connection signal="pressed" from="VBoxContainer/MainArea/TopOptions/Fullscreen" to="." method="_on_Fullscreen_pressed"]
-[connection signal="pressed" from="VBoxContainer/MainArea/TopOptions/Controls" to="." method="_on_Controls_pressed"]
-[connection signal="pressed" from="VBoxContainer/MainArea/TopOptions/Back" to="." method="_on_Back_pressed"]
+
+[node name="SelectArrow" parent="VBoxContainer/MainArea/TopOptions/HBoxContainer3" instance=ExtResource( 3 )]
+[connection signal="mouse_entered" from="VBoxContainer/MainArea/TopOptions/HBoxContainer/Fullscreen" to="." method="select_fullscreen"]
+[connection signal="pressed" from="VBoxContainer/MainArea/TopOptions/HBoxContainer/Fullscreen" to="." method="_on_Fullscreen_pressed"]
+[connection signal="mouse_entered" from="VBoxContainer/MainArea/TopOptions/HBoxContainer2/Controls" to="." method="select_controls"]
+[connection signal="pressed" from="VBoxContainer/MainArea/TopOptions/HBoxContainer2/Controls" to="." method="_on_Controls_pressed"]
+[connection signal="mouse_entered" from="VBoxContainer/MainArea/TopOptions/HBoxContainer3/Back" to="." method="select_back"]
+[connection signal="pressed" from="VBoxContainer/MainArea/TopOptions/HBoxContainer3/Back" to="." method="_on_Back_pressed"]

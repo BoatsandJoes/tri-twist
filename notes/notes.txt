@@ -12,7 +12,6 @@
 	menu selection follows mouse on button hover
 	menu selection is retained when drilling down and coming back
 	add p2 das and p2 arr
-	if the other player is using mouse, then disable mouse input on our controls menu
 	keyboard/controller input on button config menu
 	actual button config
 	improved ai
@@ -190,18 +189,18 @@ Scope Creep:
 			Could send each other helpful items
 
 Tri words for mechanics or modes or titles:  
-	trippy  
-	triumph  
-	trivial  
-	hat trick  
-	trillion  
-	trickle  
-	triage  
-	trifle  
-	trial  
-	tricky  
-	triouts  
-	tribute  
+	trippy
+	triumph
+	trivial
+	hat trick
+	trillion
+	trickle
+	triage
+	trifle
+	trial
+	tricky
+	triouts
+	tribute
 	tri not to die
 	Trianglesaurus Rex
 	Ptriaerodactyl
@@ -227,8 +226,8 @@ Tri words for mechanics or modes or titles:
 	terror
 
 Titles:  
-	Trillion Trippy Triangles  
-	Triangle Triumph  
+	Trillion Trippy Triangles
+	Triangle Triumph
 	Triangle Trial
 	Twist and Shout
 	Chain Train
