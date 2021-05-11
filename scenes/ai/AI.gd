@@ -46,8 +46,6 @@ func _thread_function(userdata):
 						topCellInColumnIndex = topCellInColumnIndex - 33
 					else:
 						if ((column + (topCellInColumnIndex / 3) / 11) % 2 == 0):
-							print("point_facing_up " + String(column) + " " + String(topCellInColumnIndex) + " "
-							+ String(activePieceColors) + " " + String(boardColors[topCellInColumnIndex - 31]))
 							if (activePieceColors[2] == boardColors[topCellInColumnIndex - 31]):
 								best_move_column = column
 								best_move_rotation = Direction.VERT

@@ -214,6 +214,17 @@ Tri words for mechanics or modes or titles:
 	tackle
 	tectonic
 	time
+	tailored
+	tailspin
+	takeover
+	talent
+	tranquil
+	trouble
+	talent
+	tangy
+	tap
+	triangle deathmatch
+	terror
 
 Titles:  
 	Trillion Trippy Triangles  

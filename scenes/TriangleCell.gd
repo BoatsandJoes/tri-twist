@@ -45,19 +45,19 @@ func _ready():
 	$ClearTimer.wait_time = clearDelay
 	leftAnimationTimer = Timer.new()
 	leftAnimationTimer.one_shot = true
-	leftAnimationTimer.wait_time = 0.1
+	leftAnimationTimer.wait_time = 0.5
 	leftAnimationTimer.autostart = false
 	add_child(leftAnimationTimer)
 	leftAnimationTimer.connect("timeout", self, "_on_leftAnimationTimer_timeout")
 	rightAnimationTimer = Timer.new()
 	rightAnimationTimer.one_shot = true
-	rightAnimationTimer.wait_time = 0.1
+	rightAnimationTimer.wait_time = 0.5
 	rightAnimationTimer.autostart = false
 	add_child(rightAnimationTimer)
 	rightAnimationTimer.connect("timeout", self, "_on_rightAnimationTimer_timeout")
 	vertAnimationTimer = Timer.new()
 	vertAnimationTimer.one_shot = true
-	vertAnimationTimer.wait_time = 0.1
+	vertAnimationTimer.wait_time = 0.5
 	vertAnimationTimer.autostart = false
 	add_child(vertAnimationTimer)
 	vertAnimationTimer.connect("timeout", self, "_on_vertAnimationTimer_timeout")
@@ -203,6 +203,7 @@ func show_garbage_preview(color: Color):
 	$GarbagePreview.visible = true
 
 func show_garbage_spawn_animation(ratio: float):
+	ratio = bouncy(ratio, 3)
 	var previewPoints: PoolVector2Array = PoolVector2Array()
 	previewPoints.append(Vector2(ratio * size/2, -size * sqrt(3) / 6))
 	previewPoints.append(Vector2(size/4 - ratio * size/4, size * sqrt(3) / 12 +
@@ -790,6 +791,13 @@ func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
 		tumbleResult = Direction.LEFT
 	return [emptyCell, direction, tumbleResult]
 
+# Function that takes a number between 0 and 1 and return another number between 0 and 1
+# number returned follows a cubic function where f(0) = 0, f(0.5) = 0.5, and f(1) = 1, and increases fast slow fast
+# bounciness 1 means it will stop for an instant, < 1 means no stopping and > 1 means it will reverse for a bit
+func bouncy(ratio: float, bounciness: float):
+	# 1 means it will stop for an instant, < 1 means no stopping and > 1 means it will reverse for a bit
+	return bounciness * pow(ratio,3) - 1.5 * bounciness * pow(ratio,2) + (0.5 * bounciness + 1) * ratio
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if inGrid && get_parent().get_parent().get_parent().has_chain([rowIndex, columnIndex]):
@@ -803,59 +811,42 @@ func _process(delta):
 		$ChainTimerBarContainer/ChainTimerBar.hide()
 	# Clear animation
 	if (!leftAnimationTimer.is_stopped()):
+		var ratio = bouncy((leftAnimationTimer.wait_time - leftAnimationTimer.time_left) / leftAnimationTimer.wait_time, 3)
 		var leftAnimateVectorArray = PoolVector2Array()
-		leftAnimateVectorArray.append(Vector2(((leftAnimationTimer.wait_time - leftAnimationTimer.time_left) /
-		leftAnimationTimer.wait_time) * (size/2 - cos(PI/6) * size * sqrt(3) / 11),
-		((leftAnimationTimer.wait_time - leftAnimationTimer.time_left) / leftAnimationTimer.wait_time)
+		leftAnimateVectorArray.append(Vector2(ratio * (size/2 - cos(PI/6) * size * sqrt(3) / 11),
+		(ratio)
 		* (size * sqrt(3) / 6 + sin(PI/6) * size * sqrt(3) / 11)))
-		leftAnimateVectorArray.append(Vector2(size/2 - ((leftAnimationTimer.wait_time - leftAnimationTimer.time_left)
-		/ leftAnimationTimer.wait_time) * (cos(PI/6) * size * sqrt(3) / 11), size * sqrt(3) / 2 - 
-		((leftAnimationTimer.wait_time - leftAnimationTimer.time_left) / leftAnimationTimer.wait_time)
+		leftAnimateVectorArray.append(Vector2(size/2 - ratio * (cos(PI/6) * size * sqrt(3) / 11), size * sqrt(3) / 2 - ratio
 		* (size * sqrt(3) / 3 - sin(PI/6) * size * sqrt(3) / 11)))
 		leftAnimateVectorArray.append(
-		Vector2(size/2 - ((leftAnimationTimer.wait_time - leftAnimationTimer.time_left) / leftAnimationTimer.wait_time)
+		Vector2(size/2 - ratio
 		* (cos(PI/6) * size * sqrt(3) / 11),
-		size * sqrt(3) / 6 + ((leftAnimationTimer.wait_time - leftAnimationTimer.time_left) / leftAnimationTimer.wait_time) *
+		size * sqrt(3) / 6 + ratio *
 		(sin(PI/6) * size * sqrt(3) / 11)))
 		leftAnimate.set_polygon(leftAnimateVectorArray)
 		# Move polygon to center on our position.
 		leftAnimate.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 	if (!rightAnimationTimer.is_stopped()):
+		var ratio = bouncy((rightAnimationTimer.wait_time - rightAnimationTimer.time_left) / rightAnimationTimer.wait_time, 3)
 		var rightAnimateVectorArray = PoolVector2Array()
-		rightAnimateVectorArray.append(Vector2(size - ((rightAnimationTimer.wait_time - rightAnimationTimer.time_left) /
-		rightAnimationTimer.wait_time) * (size/2 - cos(PI/6) * size * sqrt(3) / 11),
-		((rightAnimationTimer.wait_time - rightAnimationTimer.time_left) / rightAnimationTimer.wait_time)
-		* (size * sqrt(3) / 6 + sin(PI/6) * size * sqrt(3) / 11)))
-		rightAnimateVectorArray.append(Vector2(size/2 + ((rightAnimationTimer.wait_time - rightAnimationTimer.time_left)
-		/ rightAnimationTimer.wait_time) * (cos(PI/6) * size * sqrt(3) / 11), size * sqrt(3) / 2 - 
-		((rightAnimationTimer.wait_time - rightAnimationTimer.time_left) / rightAnimationTimer.wait_time)
-		* (size * sqrt(3) / 3 - sin(PI/6) * size * sqrt(3) / 11)))
+		rightAnimateVectorArray.append(Vector2(size - ratio * (size/2 - cos(PI/6) * size * sqrt(3) / 11),
+		ratio * (size * sqrt(3) / 6 + sin(PI/6) * size * sqrt(3) / 11)))
+		rightAnimateVectorArray.append(Vector2(size/2 + ratio * (cos(PI/6) * size * sqrt(3) / 11),
+		size * sqrt(3) / 2 - ratio * (size * sqrt(3) / 3 - sin(PI/6) * size * sqrt(3) / 11)))
 		rightAnimateVectorArray.append(
-		Vector2(size/2 + ((rightAnimationTimer.wait_time - rightAnimationTimer.time_left) / rightAnimationTimer.wait_time)
-		* (cos(PI/6) * size * sqrt(3) / 11), size * sqrt(3) / 6 + ((rightAnimationTimer.wait_time - rightAnimationTimer.time_left)
-		/ rightAnimationTimer.wait_time) * (sin(PI/6) * size * sqrt(3) / 11)))
+		Vector2(size/2 + ratio * (cos(PI/6) * size * sqrt(3) / 11), size * sqrt(3) / 6 + ratio * (sin(PI/6) * size * sqrt(3) / 11)))
 		rightAnimate.set_polygon(rightAnimateVectorArray)
 		# Move polygon to center on our position.
 		rightAnimate.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
 	if (!vertAnimationTimer.is_stopped()):
+		var ratio = bouncy((vertAnimationTimer.wait_time - vertAnimationTimer.time_left) / vertAnimationTimer.wait_time, 3)
 		var vertAnimateVectorArray = PoolVector2Array()
-		vertAnimateVectorArray.append(Vector2(((vertAnimationTimer.wait_time - vertAnimationTimer.time_left)
-		/ vertAnimationTimer.wait_time) * (size/2 + 3),
-		((vertAnimationTimer.wait_time - vertAnimationTimer.time_left) / vertAnimationTimer.wait_time)
-		* (size * sqrt(3) / 6 - size * sqrt(3) / 11)))
-		vertAnimateVectorArray.append(Vector2(size - (size/2 + 3) *
-		((vertAnimationTimer.wait_time - vertAnimationTimer.time_left) / vertAnimationTimer.wait_time),
-		((vertAnimationTimer.wait_time - vertAnimationTimer.time_left) / vertAnimationTimer.wait_time)
-		* (size * sqrt(3) / 6 - size * sqrt(3) / 11)))
-		vertAnimateVectorArray.append(Vector2(size/2, size * sqrt(3) / 6
-		- ((vertAnimationTimer.wait_time - vertAnimationTimer.time_left) / vertAnimationTimer.wait_time) * (size * sqrt(3) / 11)))
+		vertAnimateVectorArray.append(Vector2(ratio * (size/2 + 3), ratio * (size * sqrt(3) / 6 - size * sqrt(3) / 11)))
+		vertAnimateVectorArray.append(Vector2(size - (size/2 + 3) * ratio, ratio * (size * sqrt(3) / 6 - size * sqrt(3) / 11)))
+		vertAnimateVectorArray.append(Vector2(size/2, size * sqrt(3) / 6 - ratio * (size * sqrt(3) / 11)))
 		vertAnimate.set_polygon(vertAnimateVectorArray)
 		# Move polygon to center on our position.
 		vertAnimate.position = Vector2((-1) * size/2, (-1) * size * sqrt(3) / 6)
-
-		$LeftParticles.position = Vector2(-cos(PI/6) * size * sqrt(3) / 11, sin(PI/6) * size * sqrt(3) / 11)
-		$RightParticles.position = Vector2(cos(PI/6) * size * sqrt(3) / 11, sin(PI/6) * size * sqrt(3) / 11)
-		$VerticalParticles.position = Vector2(0, (-1) * size * sqrt(3) / 11)
 
 func _on_ClearTimer_timeout():
 	# visual effect

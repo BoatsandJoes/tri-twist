@@ -168,7 +168,7 @@ func spawn_garbage(lockedInPiecesToSpawn: int):
 		var garbageHitstopTimer: Timer = Timer.new()
 		add_child(garbageHitstopTimer)
 		garbageHitstopTimer.one_shot = true
-		garbageHitstopTimer.wait_time = 0.15
+		garbageHitstopTimer.wait_time = 0.5
 		garbageHitstopTimer.connect("timeout", self, "_on_garbageHitstopTimer_timeout")
 		garbageHitstopTimer.start()
 		var record: Dictionary = {}
