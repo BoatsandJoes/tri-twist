@@ -109,8 +109,13 @@ margin_right = 321.0
 margin_bottom = 705.0
 custom_fonts/font = SubResource( 7 )
 text = "Exit"
+[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/VBoxContainer/Play" to="." method="select_play"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Play" to="." method="_on_Play_pressed"]
+[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/VBoxContainer/Multiplayer" to="." method="select_versus"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Multiplayer" to="." method="_on_Multiplayer_pressed"]
+[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/VBoxContainer/Settings" to="." method="select_settings"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Settings" to="." method="_on_Settings_pressed"]
+[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/VBoxContainer/Credits" to="." method="select_credits"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Credits" to="." method="_on_Credits_pressed"]
+[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/VBoxContainer/Exit" to="." method="select_exit"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Exit" to="." method="_on_Exit_pressed"]

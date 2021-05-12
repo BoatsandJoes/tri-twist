@@ -53,25 +53,89 @@ func make_all_tuning_menu_arrows_invisible():
 			child.get_node("RightSelectArrow").visible = false
 
 func _input(event: InputEvent):
-	if ((event is InputEventKey && device == "Keyboard" || event is InputEventKey && device == "Keyboard&Mouse")
-	|| (event is InputEventMouseButton && device == "Keyboard&Mouse")
+	if ((event is InputEventKey && device == "Keyboard") || (event is InputEventMouseButton && device == "Keyboard&Mouse")
 	|| (((event is InputEventJoypadButton || event is InputEventJoypadMotion) && device.begins_with("Controller"))
 	&& event.device == int(device.substr(device.find(" ") + 1, 2)) - 1)):
 		get_tree().set_input_as_handled()
 		if $HBoxContainer/TopMenu.visible:
-			if event.is_action_pressed("up"):
-				pass
-			elif event.is_action_pressed("down"):
-				pass
+			if event.is_action_pressed("ui_up"):
+				if $HBoxContainer/TopMenu/VBoxContainer/Tuning/SelectArrow.visible:
+					make_all_top_menu_arrows_invisible()
+					$HBoxContainer/TopMenu/VBoxContainer2/Ready/SelectArrow.visible = true
+				elif $HBoxContainer/TopMenu/VBoxContainer/GameButtonConfig/SelectArrow.visible:
+					make_all_top_menu_arrows_invisible()
+					$HBoxContainer/TopMenu/VBoxContainer/Tuning/SelectArrow.visible = true
+				elif $HBoxContainer/TopMenu/VBoxContainer/MenuButtonConfig/SelectArrow.visible:
+					make_all_top_menu_arrows_invisible()
+					$HBoxContainer/TopMenu/VBoxContainer/GameButtonConfig/SelectArrow.visible = true
+				elif $HBoxContainer/TopMenu/VBoxContainer2/TopBack/SelectArrow.visible:
+					make_all_top_menu_arrows_invisible()
+					$HBoxContainer/TopMenu/VBoxContainer/MenuButtonConfig/SelectArrow.visible = true
+				elif $HBoxContainer/TopMenu/VBoxContainer2/Ready/SelectArrow.visible:
+					make_all_top_menu_arrows_invisible()
+					$HBoxContainer/TopMenu/VBoxContainer2/TopBack/SelectArrow.visible = true
+			elif event.is_action_pressed("ui_down"):
+				if $HBoxContainer/TopMenu/VBoxContainer/Tuning/SelectArrow.visible:
+					make_all_top_menu_arrows_invisible()
+					$HBoxContainer/TopMenu/VBoxContainer/GameButtonConfig/SelectArrow.visible = true
+				elif $HBoxContainer/TopMenu/VBoxContainer/GameButtonConfig/SelectArrow.visible:
+					make_all_top_menu_arrows_invisible()
+					$HBoxContainer/TopMenu/VBoxContainer/MenuButtonConfig/SelectArrow.visible = true
+				elif $HBoxContainer/TopMenu/VBoxContainer/MenuButtonConfig/SelectArrow.visible:
+					make_all_top_menu_arrows_invisible()
+					$HBoxContainer/TopMenu/VBoxContainer2/TopBack/SelectArrow.visible = true
+				elif $HBoxContainer/TopMenu/VBoxContainer2/TopBack/SelectArrow.visible:
+					make_all_top_menu_arrows_invisible()
+					$HBoxContainer/TopMenu/VBoxContainer2/Ready/SelectArrow.visible = true
+				elif $HBoxContainer/TopMenu/VBoxContainer2/Ready/SelectArrow.visible:
+					make_all_top_menu_arrows_invisible()
+					$HBoxContainer/TopMenu/VBoxContainer/Tuning/SelectArrow.visible = true
 			elif event.is_action_pressed("ui_accept"):
-				pass
+				if $HBoxContainer/TopMenu/VBoxContainer/Tuning/SelectArrow.visible:
+					_on_Tuning_pressed()
+				elif $HBoxContainer/TopMenu/VBoxContainer/GameButtonConfig/SelectArrow.visible:
+					_on_GameButtons_pressed()
+				elif $HBoxContainer/TopMenu/VBoxContainer/MenuButtonConfig/SelectArrow.visible:
+					_on_MenuButtons_pressed()
+				elif $HBoxContainer/TopMenu/VBoxContainer2/TopBack/SelectArrow.visible:
+					_on_TopBack_pressed()
+				elif $HBoxContainer/TopMenu/VBoxContainer2/Ready/SelectArrow.visible:
+					$HBoxContainer/TopMenu/VBoxContainer2/Ready/Ready.pressed = (
+					!$HBoxContainer/TopMenu/VBoxContainer2/Ready/Ready.pressed)
+					_on_Ready_toggled($HBoxContainer/TopMenu/VBoxContainer2/Ready/Ready.pressed)
 			elif event.is_action_pressed("ui_cancel"):
-				pass
+				_on_TopBack_pressed()
 		elif $HBoxContainer/TuningMenu.visible:
-			if event.is_action_pressed("up"):
-				pass
-			elif event.is_action_pressed("down"):
-				pass
+			if event.is_action_pressed("ui_up"):
+				if $HBoxContainer/TuningMenu/Das/RightSelectArrow.visible:
+					make_all_tuning_menu_arrows_invisible()
+					$HBoxContainer/TuningMenu/TuningBack/SelectArrow.visible = true
+				elif $HBoxContainer/TuningMenu/Arr/RightSelectArrow.visible:
+					make_all_tuning_menu_arrows_invisible()
+					$HBoxContainer/TuningMenu/Das/LeftSelectArrow.visible = true
+					$HBoxContainer/TuningMenu/Das/RightSelectArrow.visible = true
+				elif $HBoxContainer/TuningMenu/TuningDefault/SelectArrow.visible:
+					make_all_tuning_menu_arrows_invisible()
+					$HBoxContainer/TuningMenu/Arr/LeftSelectArrow.visible = true
+					$HBoxContainer/TuningMenu/Arr/RightSelectArrow.visible = true
+				elif $HBoxContainer/TuningMenu/TuningBack/SelectArrow.visible:
+					make_all_tuning_menu_arrows_invisible()
+					$HBoxContainer/TuningMenu/TuningDefault/SelectArrow.visible = true
+			elif event.is_action_pressed("ui_down"):
+				if $HBoxContainer/TuningMenu/Das/RightSelectArrow.visible:
+					make_all_tuning_menu_arrows_invisible()
+					$HBoxContainer/TuningMenu/Arr/LeftSelectArrow.visible = true
+					$HBoxContainer/TuningMenu/Arr/RightSelectArrow.visible = true
+				elif $HBoxContainer/TuningMenu/Arr/RightSelectArrow.visible:
+					make_all_tuning_menu_arrows_invisible()
+					$HBoxContainer/TuningMenu/TuningDefault/SelectArrow.visible = true
+				elif $HBoxContainer/TuningMenu/TuningDefault/SelectArrow.visible:
+					make_all_tuning_menu_arrows_invisible()
+					$HBoxContainer/TuningMenu/TuningBack/SelectArrow.visible = true
+				elif $HBoxContainer/TuningMenu/TuningBack/SelectArrow.visible:
+					make_all_tuning_menu_arrows_invisible()
+					$HBoxContainer/TuningMenu/Das/LeftSelectArrow.visible = true
+					$HBoxContainer/TuningMenu/Das/RightSelectArrow.visible = true
 			if event.is_action_pressed("left"):
 				if $HBoxContainer/TuningMenu/Arr/LeftSelectArrow.visible:
 					_on_ArrDecrease_pressed()
@@ -83,9 +147,12 @@ func _input(event: InputEvent):
 				elif $HBoxContainer/TuningMenu/Das/RightSelectArrow.visible:
 					_on_DasIncrease_pressed()
 			elif event.is_action_pressed("ui_accept"):
-				pass
+				if $HBoxContainer/TuningMenu/TuningDefault/SelectArrow.visible:
+					_on_TuningDefault_pressed()
+				elif $HBoxContainer/TuningMenu/TuningBack/SelectArrow.visible:
+					_on_TuningBack_pressed()
 			elif event.is_action_pressed("ui_cancel"):
-				pass
+				_on_TuningBack_pressed()
 		elif $HBoxContainer/GameButtonConfig.visible:
 			pass
 		elif $HBoxContainer/MenuButtonConfig.visible:
@@ -99,6 +166,9 @@ func _on_Tuning_pressed():
 	$HBoxContainer/TopMenu/VBoxContainer2/Ready/Ready.pressed = false
 	emit_signal("ready_pressed", false, config, isConfigChanged)
 	$HBoxContainer/TopMenu.visible = false
+	make_all_tuning_menu_arrows_invisible()
+	$HBoxContainer/TuningMenu/Das/LeftSelectArrow.visible = true
+	$HBoxContainer/TuningMenu/Das/RightSelectArrow.visible = true
 	$HBoxContainer/TuningMenu.visible = true
 
 func _on_GameButtons_pressed():

@@ -102,8 +102,13 @@ margin_right = 461.0
 margin_bottom = 674.0
 custom_fonts/font = SubResource( 5 )
 text = "Back"
+[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/VBoxContainer/DigMode" to="." method="select_dig_deep"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/DigMode" to="." method="_on_DigMode_pressed"]
+[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/VBoxContainer/TakeYourTime" to="." method="select_take_your_time"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/TakeYourTime" to="." method="_on_TakeYourTime_pressed"]
+[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/VBoxContainer/GoGoGo" to="." method="select_gogogo"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/GoGoGo" to="." method="_on_GoGoGo_pressed"]
+[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/VBoxContainer/Triathalon" to="." method="select_triathalon"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Triathalon" to="." method="_on_Triathalon_pressed"]
+[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/VBoxContainer/Back" to="." method="select_exit"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Back" to="." method="_on_Back_pressed"]
