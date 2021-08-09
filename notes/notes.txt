@@ -1,5 +1,4 @@
 # tri-twist
-	title
 	loading screen
 	make all later garbage patterns identical between both players in versus (except for top edge, which can change if needed)
 	some way to break multiplayer stalemates
@@ -19,12 +18,6 @@
 	device selection should be wiped always except when restarting a game or exiting to a place beyond device select
 		rethink settings menu button config idk, maybe it's fine as is
 	online play
-		piece sequence generated ahead of time and shared (1000 pieces then loops)
-		incoming garbage delayed by at least a few frames on time out to account for latency (maybe the attacker extended at the last moment) (attack can no longer be extended, but can still be offset)
-		make game 100% deterministic
-		serialize opponent game state every frame
-		use prediction to guess what opponent is doing now based on what they were doing a second ago
-		if their real inputs differ, roll back their board
 		our board is unaffected and never has to be saved or changed in any way except for garbage prediction, particularly on time up
 		selecting piece colors and garbage colors before they're shown to the player will help the visuals (color selection may have to be rewound and redone if our opponent actually spawned a bunch of garbage)
 	visuals:
