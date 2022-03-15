@@ -22,7 +22,7 @@ var inGrid
 var isGhost
 var tumbleDirection: int
 var fallType: int
-var clearDelay = 4
+var clearDelay = 0.25
 var quickChainCutoff = 0
 var activeChainCap = 5
 var sequentialChainCap = 5
@@ -37,6 +37,7 @@ var vertAnimationTimer: Timer
 var leftAnimate: Polygon2D
 var rightAnimate: Polygon2D
 var vertAnimate: Polygon2D
+var tumbleCount: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -222,8 +223,9 @@ func spawn_piece(piece: TriangleCell):
 	get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT))
 
 func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighborVerticalColor: int, direction: int,
-		tumblingDirection: int, fallType: int):
+		tumblingDirection: int, fallType: int, tumblerCount: int):
 	self.fallType = fallType
+	self.tumbleCount = tumbleCount
 	if direction == Direction.VERTICAL || direction == Direction.VERTICAL_POINT:
 		tumbleDirection = tumblingDirection
 		if (tumblingDirection == Direction.VERTICAL):
@@ -234,17 +236,21 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 		elif ((tumblingDirection == Direction.RIGHT && pointFacingUp) ||
 				(tumblingDirection == Direction.LEFT && !pointFacingUp)):
 			set_colors(neighborLeftColor, neighborVerticalColor, neighborRightColor)
+			tumbleCount = tumbleCount + 1
 			emit_signal("tumble")
 		else:
 			set_colors(neighborVerticalColor, neighborRightColor, neighborLeftColor)
+			tumbleCount = tumbleCount + 1
 			emit_signal("tumble")
 	elif direction == Direction.LEFT:
 		tumbleDirection = Direction.RIGHT
 		set_colors(neighborLeftColor, neighborVerticalColor, neighborRightColor)
+		tumbleCount = tumbleCount + 1
 		emit_signal("tumble")
 	elif direction == Direction.RIGHT:
 		set_colors(neighborVerticalColor, neighborRightColor, neighborLeftColor)
 		tumbleDirection = Direction.LEFT
+		tumbleCount = tumbleCount + 1
 		emit_signal("tumble")
 	# Check if we should start our gravity timer or come to rest
 	var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
@@ -384,6 +390,7 @@ func clear(edge: int):
 		become_default_size()
 		isMarkedForInactiveClear = false
 		emit_signal("end_combo_if_exists", [rowIndex, columnIndex])
+		tumbleCount = 0
 		# Check to see if any neighbors should enter falling state.
 		if !pointFacingUp:
 			# Primarily, we have to check above.
@@ -434,6 +441,10 @@ func clear(edge: int):
 	elif edge != Direction.VERTICAL_POINT:
 		# Mark edge for clearing, visually.
 		highlight_edge(edge)
+		if tumbleCount == 0:
+			var neighbor = get_parent().get_neighbor(rowIndex, columnIndex, edge)
+			if neighbor.tumbleCount > 0:
+				get_parent().explode(rowIndex, columnIndex, neighbor.tumbleCount)
 		if activeChainMode:
 			# set a timer to actually clear the cell, or restart it
 			$ClearTimer.start()
@@ -534,6 +545,8 @@ func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
 				verticalClearTimeLeft = resultDictionary.get("clearTimeRemaining")
 			clear(Direction.VERTICAL)
 			numMatches = numMatches + 1
+		if numMatches == 0:
+			tumbleCount = 0
 		# Return chain root and this cell clear time remaining.
 		if get_parent().get_parent().get_parent().get_chains().has([rowIndex,columnIndex]):
 			# We are the root.
@@ -867,12 +880,13 @@ func _on_GravityTimer_timeout():
 			var tempVerticalColor = verticalColor
 			var tempTumbleDirection = moveInfo[2]
 			var tempFallType = fallType
+			var tempTumbleCount = tumbleCount
 			# clear self
 			clear(Direction.VERTICAL_POINT)
 			# copy to neighbor
 			get_parent().grid[emptyCell.rowIndex][emptyCell.columnIndex].fill_from_neighbor(
 				tempLeftColor, tempRightColor, tempVerticalColor,
-				direction, tempTumbleDirection, tempFallType)
+				direction, tempTumbleDirection, tempFallType, tempTumbleCount)
 		else:
 			# We have come to rest.
 			tumbleDirection = Direction.VERTICAL

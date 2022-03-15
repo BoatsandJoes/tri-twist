@@ -1,4 +1,7 @@
 # tri-twist
+	experimental changes:
+		emit particles right away instead of after white triangle effect (may need to rethink the whole thing)
+
 	loading screen
 	make all later garbage patterns identical between both players in versus (except for top edge, which can change if needed)
 	some way to break multiplayer stalemates

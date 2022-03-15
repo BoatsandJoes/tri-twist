@@ -200,7 +200,7 @@ func drop_piece(piece: TriangleCell, dropForReal: bool):
 			for columnIndex in range(grid[rowIndex].size()):
 				grid[rowIndex][columnIndex].wasHardDroppedMostRecently = false
 		neighbor.fill_from_neighbor(piece.leftColor, piece.rightColor, piece.verticalColor,
-			neighborDirection, piece.Direction.VERTICAL, piece.FallType.DROP)
+			neighborDirection, piece.Direction.VERTICAL, piece.FallType.DROP, 0)
 	return true
 
 func hard_drop(piece: TriangleCell):
@@ -243,6 +243,25 @@ func get_neighbor(rowIndex: int, columnIndex: int, direction: int) -> TriangleCe
 	&& rowIndex < grid.size() - 1):
 		return grid[rowIndex + 1][columnIndex]
 	return null
+
+func explode(rowIndex, columnIndex, tumbleCount):
+	if rowIndex != grid.size() - 1:
+		pass
+	if rowIndex != 0:
+		pass
+	if columnIndex != 0:
+		pass
+	if columnIndex != grid[rowIndex].size() - 1:
+		pass
+	var neighbor = get_neighbor(rowIndex, columnIndex, grid[0][0].Direction.LEFT)
+	if neighbor != null:
+		neighbor.clear(neighbor.Direction.RIGHT)
+	neighbor = get_neighbor(rowIndex, columnIndex, grid[0][0].Direction.RIGHT)
+	if neighbor != null:
+		neighbor.clear(neighbor.Direction.LEFT)
+	neighbor = get_neighbor(rowIndex, columnIndex, grid[0][0].Direction.VERTICAL)
+	if neighbor != null:
+		neighbor.clear(neighbor.Direction.VERTICAL)
 
 func set_off_chains():
 	for row in grid:
