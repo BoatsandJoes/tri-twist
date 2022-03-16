@@ -101,18 +101,23 @@ func _on_timer_timeout():
 
 func select_dig_deep():
 	selectArrow.position = digArrowPosition
+	$MarginContainer/HBoxContainer/VBoxContainer/ModeDescription.text = "Clear all triangles\nabove the line!"
 
 func select_take_your_time():
 	selectArrow.position = timeArrowPosition
+	$MarginContainer/HBoxContainer/VBoxContainer/ModeDescription.text = "Score as high as you\ncan in 60 moves!"
 
 func select_gogogo():
 	selectArrow.position = goArrowPosition
+	$MarginContainer/HBoxContainer/VBoxContainer/ModeDescription.text = "Score as high as you\ncan in two minutes!"
 
 func select_triathalon():
 	selectArrow.position = triathalonArrowPosition
+	$MarginContainer/HBoxContainer/VBoxContainer/ModeDescription.text = "Play all three modes\nback to back!"
 
 func select_exit():
 	selectArrow.position = backArrowPosition
+	$MarginContainer/HBoxContainer/VBoxContainer/ModeDescription.text = "\n"
 
 func _input(event):
 	if ($MarginContainer.visible && (event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton)):
