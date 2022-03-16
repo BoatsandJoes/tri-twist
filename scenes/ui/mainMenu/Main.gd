@@ -7,6 +7,8 @@ class_name Main
 var TitleScreen = load("res://scenes/ui/mainMenu/TitleScreen.tscn")
 var MainMenu = load("res://scenes/ui/mainMenu/MainMenu.tscn")
 var ModeSelect = load("res://scenes/ui/mainMenu/ModeSelect.tscn")
+var LocalOrOnline = load("res://scenes/ui/mainMenu/LocalOrOnline.tscn")
+var OnlineMenu = load("res://scenes/ui/mainMenu/OnlineMenu.tscn")
 var ModeMenu = load("res://scenes/ui/mainMenu/ModeMenu.tscn")
 var Settings = load("res://scenes/ui/mainMenu/Settings.tscn")
 var Credits = load("res://scenes/ui/mainMenu/Credits.tscn")
@@ -166,11 +168,35 @@ func go_to_multiplayer():
 		menu.queue_free()
 	if is_instance_valid(game):
 		game.queue_free()
+	menu = LocalOrOnline.instance()
+	add_child(menu)
+	menu.connect("back", self, "_on_Versus_back_to_menu")
+	menu.connect("offline", self, "go_to_offline")
+	menu.connect("online", self, "go_to_online")
+
+func go_to_offline():
+	if is_instance_valid(menu):
+		menu.queue_free()
+	if is_instance_valid(game):
+		game.queue_free()
 	menu = ModeMenu.instance()
 	add_child(menu)
 	menu.init(p1Device, p2Device, config)
-	menu.connect("back_to_menu", self, "_on_Versus_back_to_menu")
+	menu.connect("back_to_menu", self, "_on_offline_back_to_menu")
 	menu.connect("start", self, "go_to_multiplayer_game")
+
+func go_to_online():
+	if is_instance_valid(menu):
+		menu.queue_free()
+	if is_instance_valid(game):
+		game.queue_free()
+	menu = OnlineMenu.instance()
+	add_child(menu)
+	menu.connect("back", self, "_on_Online_back_to_menu")
+	menu.connect("start", self, "go_to_online_game")
+
+func go_to_online_game():
+	pass
 
 func go_to_multiplayer_game(p1Device, p2Device, config, isConfigChanged):
 	self.p1Device = p1Device
@@ -347,13 +373,19 @@ func _on_game_back_to_menu():
 func _on_MainMenu_multiplayer():
 	go_to_multiplayer()
 
-func _on_Versus_back_to_menu(config, isConfigChanged, p1Device, p2Device):
+func _on_Versus_back_to_menu():
+	go_to_main_menu()
+
+func _on_offline_back_to_menu(config, isConfigChanged, p1Device, p2Device):
 	if isConfigChanged:
 		self.config = config
 		config.save("user://settings.cfg")
 	self.p1Device = p1Device
 	self.p2Device = p2Device
-	go_to_main_menu()
+	go_to_multiplayer()
+
+func _on_Online_back_to_menu():
+	go_to_multiplayer()
 
 func _on_versus_restart():
 	go_to_multiplayer_game(p1Device, p2Device, config, false)

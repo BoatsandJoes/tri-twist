@@ -80,6 +80,11 @@ _global_script_classes=[ {
 "path": "res://scenes/ui/mainMenu/HowToPlay.gd"
 }, {
 "base": "Control",
+"class": "LocalOrOnline",
+"language": "GDScript",
+"path": "res://scenes/ui/mainMenu/LocalOrOnline.gd"
+}, {
+"base": "Control",
 "class": "Main",
 "language": "GDScript",
 "path": "res://scenes/ui/mainMenu/Main.gd"
@@ -98,6 +103,11 @@ _global_script_classes=[ {
 "class": "ModeSelect",
 "language": "GDScript",
 "path": "res://scenes/ui/mainMenu/ModeSelect.gd"
+}, {
+"base": "Control",
+"class": "OnlineMenu",
+"language": "GDScript",
+"path": "res://scenes/ui/mainMenu/OnlineMenu.gd"
 }, {
 "base": "Node2D",
 "class": "PausePopup",
@@ -164,10 +174,12 @@ _global_script_class_icons={
 "GoGoGo": "",
 "HUD": "",
 "HowToPlay": "",
+"LocalOrOnline": "",
 "Main": "",
 "MainMenu": "",
 "ModeMenu": "",
 "ModeSelect": "",
+"OnlineMenu": "",
 "PausePopup": "",
 "ScoreDisplay": "",
 "SelectArrow": "",
