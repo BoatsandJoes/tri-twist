@@ -6,6 +6,7 @@ signal grid_full
 signal garbage_rows
 signal erase_chain
 signal end_combo_if_exists
+signal multiplayer_finished
 
 export (PackedScene) var TriangleCell
 var screenWidth: int
@@ -24,6 +25,7 @@ var ghostColumn
 var garbageHitstopTimers: Array = []
 var digVersus = false
 var queuedAttacks: FakeGameGrid
+var multiplayerFinished = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -272,6 +274,11 @@ func _process(delta):
 		elif !isAnyCellMarkedForClear:
 			emit_signal("grid_full")
 	if digMode && rowsEmpty:
+		if digVersus:
+			if !multiplayerFinished:
+				emit_signal("multiplayer_finished")
+				multiplayerFinished = true
+		else:
 			move_up_rows(grid.size() - 1)
 			fill_bottom_rows(2)
 			emit_signal("garbage_rows")

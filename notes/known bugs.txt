@@ -14,6 +14,7 @@
 * last defense crashed one time when I had ai thinking time very short
 * mouse sometimes not visible in fullscreen
 * when toggling fullscreen and loading settings menu, arrow is in wrong position
+* game hangs on close
 
 might be fixed
 * saw a case where it looked like two chains didn't combine properly in active chain mode (only one chain actually active, it got stuck in "other chains" while the displayed chain "simulchaineous" kept counting up)

@@ -26,6 +26,8 @@ func _ready():
 	self, "player2_attack")
 	player1Scene.triangleDropper.gameGrid.connect("garbage_rows", self, "_on_scene1_garbage_rows")
 	player2Scene.triangleDropper.gameGrid.connect("garbage_rows", self, "_on_scene2_garbage_rows")
+	player1Scene.triangleDropper.gameGrid.connect("multiplayer_finished", self, "_on_scene1_multiplayer_finished")
+	player2Scene.triangleDropper.gameGrid.connect("multiplayer_finished", self, "_on_scene2_multiplayer_finished")
 
 func set_config(config, p1Device, p2Device):
 	player1Scene.set_player(1)
@@ -48,6 +50,12 @@ func _on_scene1_garbage_rows():
 
 func _on_scene2_garbage_rows():
 	player2_attack(50000, [])
+
+func _on_scene1_multiplayer_finished():
+	player2Scene.pausePopup.set_mode_finished()
+
+func _on_scene2_multiplayer_finished():
+	player2Scene.pausePopup.set_mode_finished()
 
 func _on_scene_restart():
 	emit_signal("restart")
