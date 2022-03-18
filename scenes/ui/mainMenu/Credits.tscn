@@ -26,7 +26,7 @@ margin_right = 1860.0
 margin_bottom = 1020.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Page1"]
-margin_right = 1883.0
+margin_right = 1800.0
 margin_bottom = 995.0
 custom_constants/separation = 280
 
@@ -181,7 +181,7 @@ align = 2
 [node name="VBoxContainer2" type="VBoxContainer" parent="Page1/HBoxContainer/VBoxContainer7"]
 margin_top = 417.0
 margin_right = 660.0
-margin_bottom = 702.0
+margin_bottom = 855.0
 
 [node name="Label" type="Label" parent="Page1/HBoxContainer/VBoxContainer7/VBoxContainer2"]
 margin_right = 660.0
@@ -193,11 +193,14 @@ Special Thanks"
 [node name="Label2" type="Label" parent="Page1/HBoxContainer/VBoxContainer7/VBoxContainer2"]
 margin_top = 135.0
 margin_right = 660.0
-margin_bottom = 285.0
+margin_bottom = 438.0
 custom_fonts/font = SubResource( 2 )
 text = "Derek Yu
 T. Ashley Jenkins
-Dave Hoffman"
+Dave Hoffman
+Tom Francis
+Jonas Neubauer
+Heather Ito"
 align = 2
 
 [node name="License" type="MarginContainer" parent="."]
