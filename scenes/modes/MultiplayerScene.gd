@@ -55,7 +55,7 @@ func _on_scene1_multiplayer_finished():
 	player2Scene.pausePopup.set_mode_finished()
 
 func _on_scene2_multiplayer_finished():
-	player2Scene.pausePopup.set_mode_finished()
+	player1Scene.pausePopup.set_mode_finished()
 
 func _on_scene_restart():
 	emit_signal("restart")
