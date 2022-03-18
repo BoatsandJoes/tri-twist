@@ -19,7 +19,7 @@ func _ready():
 	player1Scene.set_multiplayer()
 	player2Scene.set_multiplayer()
 	player1Scene.position = Vector2(-200, 200)
-	player2Scene.position = Vector2((get_tree().get_root().size[0] - 400) / 2, 200)
+	player2Scene.position = Vector2(760, 200)
 	player1Scene.hud.get_node("HBoxContainer/VBoxContainer/HBoxContainer/ComboDisplay").connect("combo_done",
 	self, "player1_attack")
 	player2Scene.hud.get_node("HBoxContainer/VBoxContainer/HBoxContainer/ComboDisplay").connect("combo_done",
