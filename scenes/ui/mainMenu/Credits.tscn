@@ -50,7 +50,7 @@ margin_top = 68.0
 margin_right = 837.0
 margin_bottom = 116.0
 custom_fonts/font = SubResource( 2 )
-text = "BoatsandJoes"
+text = "BoatsAndJoes"
 align = 2
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Page1/HBoxContainer/VBoxContainer"]
@@ -188,7 +188,7 @@ margin_bottom = 960.0
 margin_right = 1800.0
 margin_bottom = 1061.0
 custom_fonts/font = SubResource( 3 )
-text = "Copyright (c) 2021 BoatsandJoes. All rights reserved.
+text = "Copyright (c) 2021 BoatsAndJoes. All rights reserved.
 
 This game uses Godot Engine, available under the following license:
 

@@ -1,14 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scenes/ui/mainMenu/ModeMenu.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/agane/Agane╠Ç 55 (roman).ttf" type="DynamicFontData" id=2]
 
 [sub_resource type="DynamicFont" id=1]
 size = 96
-font_data = ExtResource( 2 )
-
-[sub_resource type="DynamicFont" id=2]
-size = 64
 font_data = ExtResource( 2 )
 
 [node name="ModeMenu" type="MarginContainer"]
@@ -40,42 +36,5 @@ text = "Versus"
 [node name="MainArea" type="HBoxContainer" parent="VBoxContainer"]
 margin_top = 196.0
 margin_right = 1800.0
-margin_bottom = 280.0
+margin_bottom = 196.0
 alignment = 1
-
-[node name="ModeModal" type="PanelContainer" parent="VBoxContainer/MainArea"]
-margin_left = 338.0
-margin_right = 1461.0
-margin_bottom = 84.0
-
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MainArea/ModeModal"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 1116.0
-margin_bottom = 77.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MainArea/ModeModal/MarginContainer"]
-margin_right = 1109.0
-margin_bottom = 70.0
-alignment = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MainArea/ModeModal/MarginContainer/VBoxContainer"]
-margin_right = 1109.0
-margin_bottom = 70.0
-custom_constants/separation = 800
-alignment = 1
-
-[node name="Start" type="Button" parent="VBoxContainer/MainArea/ModeModal/MarginContainer/VBoxContainer/HBoxContainer"]
-margin_right = 158.0
-margin_bottom = 70.0
-custom_fonts/font = SubResource( 2 )
-text = "Start"
-
-[node name="Back" type="Button" parent="VBoxContainer/MainArea/ModeModal/MarginContainer/VBoxContainer/HBoxContainer"]
-margin_left = 958.0
-margin_right = 1109.0
-margin_bottom = 70.0
-custom_fonts/font = SubResource( 2 )
-text = "Back"
-[connection signal="pressed" from="VBoxContainer/MainArea/ModeModal/MarginContainer/VBoxContainer/HBoxContainer/Start" to="." method="_on_Start_pressed"]
-[connection signal="pressed" from="VBoxContainer/MainArea/ModeModal/MarginContainer/VBoxContainer/HBoxContainer/Back" to="." method="_on_Back_pressed"]

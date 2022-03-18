@@ -68,10 +68,10 @@ margin_right = 340.0
 margin_bottom = 150.0
 
 [node name="Controls" type="Button" parent="VBoxContainer/MainArea/TopOptions/HBoxContainer2"]
-margin_right = 265.0
+margin_right = 221.0
 margin_bottom = 70.0
 custom_fonts/font = SubResource( 2 )
-text = "Controls"
+text = "Tuning"
 
 [node name="SelectArrow" parent="VBoxContainer/MainArea/TopOptions/HBoxContainer2" instance=ExtResource( 3 )]
 

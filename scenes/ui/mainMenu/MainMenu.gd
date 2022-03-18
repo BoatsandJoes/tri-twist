@@ -9,6 +9,8 @@ signal back_to_title
 signal exit
 
 const taglines: Array = [
+"It's triangle time!", #idk, it doesn't mean anything
+"Let's go get ready to look so good!", #Homestar Runner Teen Girl Squad #1
 "Ah, I see you are a Windows user", #Someone online's opening line of open source software evangelism (name witheld)
 "Like putting too much air in a balloon!", #Futurama: Where No Fan Has Gone Before 
 "Think of shipping channels in the ocean", #Numb3rs: Shadow Markets

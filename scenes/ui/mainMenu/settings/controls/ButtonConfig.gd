@@ -62,26 +62,14 @@ func _input(event: InputEvent):
 				if $HBoxContainer/TopMenu/VBoxContainer/Tuning/SelectArrow.visible:
 					make_all_top_menu_arrows_invisible()
 					$HBoxContainer/TopMenu/VBoxContainer2/Ready/SelectArrow.visible = true
-				elif $HBoxContainer/TopMenu/VBoxContainer/GameButtonConfig/SelectArrow.visible:
-					make_all_top_menu_arrows_invisible()
-					$HBoxContainer/TopMenu/VBoxContainer/Tuning/SelectArrow.visible = true
-				elif $HBoxContainer/TopMenu/VBoxContainer/MenuButtonConfig/SelectArrow.visible:
-					make_all_top_menu_arrows_invisible()
-					$HBoxContainer/TopMenu/VBoxContainer/GameButtonConfig/SelectArrow.visible = true
 				elif $HBoxContainer/TopMenu/VBoxContainer2/TopBack/SelectArrow.visible:
 					make_all_top_menu_arrows_invisible()
-					$HBoxContainer/TopMenu/VBoxContainer/MenuButtonConfig/SelectArrow.visible = true
+					$HBoxContainer/TopMenu/VBoxContainer/Tuning/SelectArrow.visible = true
 				elif $HBoxContainer/TopMenu/VBoxContainer2/Ready/SelectArrow.visible:
 					make_all_top_menu_arrows_invisible()
 					$HBoxContainer/TopMenu/VBoxContainer2/TopBack/SelectArrow.visible = true
 			elif event.is_action_pressed("ui_down"):
 				if $HBoxContainer/TopMenu/VBoxContainer/Tuning/SelectArrow.visible:
-					make_all_top_menu_arrows_invisible()
-					$HBoxContainer/TopMenu/VBoxContainer/GameButtonConfig/SelectArrow.visible = true
-				elif $HBoxContainer/TopMenu/VBoxContainer/GameButtonConfig/SelectArrow.visible:
-					make_all_top_menu_arrows_invisible()
-					$HBoxContainer/TopMenu/VBoxContainer/MenuButtonConfig/SelectArrow.visible = true
-				elif $HBoxContainer/TopMenu/VBoxContainer/MenuButtonConfig/SelectArrow.visible:
 					make_all_top_menu_arrows_invisible()
 					$HBoxContainer/TopMenu/VBoxContainer2/TopBack/SelectArrow.visible = true
 				elif $HBoxContainer/TopMenu/VBoxContainer2/TopBack/SelectArrow.visible:
@@ -93,10 +81,6 @@ func _input(event: InputEvent):
 			elif event.is_action_pressed("ui_accept"):
 				if $HBoxContainer/TopMenu/VBoxContainer/Tuning/SelectArrow.visible:
 					_on_Tuning_pressed()
-				elif $HBoxContainer/TopMenu/VBoxContainer/GameButtonConfig/SelectArrow.visible:
-					_on_GameButtons_pressed()
-				elif $HBoxContainer/TopMenu/VBoxContainer/MenuButtonConfig/SelectArrow.visible:
-					_on_MenuButtons_pressed()
 				elif $HBoxContainer/TopMenu/VBoxContainer2/TopBack/SelectArrow.visible:
 					_on_TopBack_pressed()
 				elif $HBoxContainer/TopMenu/VBoxContainer2/Ready/SelectArrow.visible:
@@ -153,10 +137,6 @@ func _input(event: InputEvent):
 					_on_TuningBack_pressed()
 			elif event.is_action_pressed("ui_cancel"):
 				_on_TuningBack_pressed()
-		elif $HBoxContainer/GameButtonConfig.visible:
-			pass
-		elif $HBoxContainer/MenuButtonConfig.visible:
-			pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -266,14 +246,6 @@ func _on_MenuBack_pressed():
 func _on_Tuning_mouse_entered():
 	make_all_top_menu_arrows_invisible()
 	$HBoxContainer/TopMenu/VBoxContainer/Tuning/SelectArrow.visible = true
-
-func _on_GameButtons_mouse_entered():
-	make_all_top_menu_arrows_invisible()
-	$HBoxContainer/TopMenu/VBoxContainer/GameButtonConfig/SelectArrow.visible = true
-
-func _on_MenuButtons_mouse_entered():
-	make_all_top_menu_arrows_invisible()
-	$HBoxContainer/TopMenu/VBoxContainer/MenuButtonConfig/SelectArrow.visible = true
 
 func _on_TopBack_mouse_entered():
 	make_all_top_menu_arrows_invisible()

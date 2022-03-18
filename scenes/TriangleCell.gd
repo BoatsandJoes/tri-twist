@@ -442,7 +442,7 @@ func clear(edge: int):
 
 func highlight_edge(edge: int):
 	if Direction.LEFT == edge:
-		$LeftEdge.set_modulate(Color(3,3,3))
+		$LeftEdge.set_modulate(Color(5,5,5))
 		$LeftParticles.color = Color($LeftEdge.color[0] * 3, $LeftEdge.color[1] * 3, $LeftEdge.color[2] * 3)
 		var leftEdgeVectorArray = PoolVector2Array()
 		leftEdgeVectorArray.append(Vector2(0, 0))
@@ -452,7 +452,7 @@ func highlight_edge(edge: int):
 		# Move polygon to center on our position.
 		$LeftEdge.position = Vector2((-1) * (size + 6)/2, (-1) * (size + 6) * sqrt(3) / 6)
 	if Direction.RIGHT == edge:
-		$RightEdge.set_modulate(Color(3,3,3))
+		$RightEdge.set_modulate(Color(5,5,5))
 		$RightParticles.color = Color($RightEdge.color[0] * 3, $RightEdge.color[1] * 3, $RightEdge.color[2] * 3)
 		# right
 		var rightEdgeVectorArray = PoolVector2Array()
@@ -463,7 +463,7 @@ func highlight_edge(edge: int):
 		# Move polygon to center on our position.
 		$RightEdge.position = Vector2((-1) * (size + 6)/2, (-1) * (size + 6) * sqrt(3) / 6)
 	elif Direction.VERTICAL == edge:
-		$VerticalEdge.set_modulate(Color(3,3,3))
+		$VerticalEdge.set_modulate(Color(5,5,5))
 		$VerticalParticles.color = Color($VerticalEdge.color[0] * 3, $VerticalEdge.color[1] * 3, $VerticalEdge.color[2] * 3)
 		# vertical
 		var verticalEdgeVectorArray = PoolVector2Array()
@@ -723,13 +723,13 @@ func clear_self_and_matching_neighbors(alreadyCheckedCoordinates: Array):
 		clear(Direction.VERTICAL_POINT)
 
 func show_clear_animation():
-	if $LeftEdge.get_modulate() == Color(3,3,3):
+	if $LeftEdge.get_modulate() == Color(5,5,5):
 		leftAnimationTimer.start()
 		leftAnimate.visible = true
-	if $RightEdge.get_modulate() == Color(3,3,3):
+	if $RightEdge.get_modulate() == Color(5,5,5):
 		rightAnimationTimer.start()
 		rightAnimate.visible = true
-	if $VerticalEdge.get_modulate() == Color(3,3,3):
+	if $VerticalEdge.get_modulate() == Color(5,5,5):
 		vertAnimationTimer.start()
 		vertAnimate.visible = true
 

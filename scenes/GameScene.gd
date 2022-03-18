@@ -17,6 +17,14 @@ var pieceSequence: Array = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	pausePopup = PausePopup.instance()
+	add_child(pausePopup)
+	pausePopup.connect("restart", self, "_on_PausePopup_restart")
+	pausePopup.connect("back_to_menu", self, "_on_PausePopup_back_to_menu")
+	fakeGrid = FakeGameGrid.instance()
+	add_child(fakeGrid)
+	fakeGrid.visible = false
+	fakeGrid.initialize_grid(1920, 1080)
 	randomize()
 	triangleDropper = TriangleDropper.instance()
 	add_child(triangleDropper)
@@ -39,14 +47,6 @@ func _ready():
 	hud.set_size(Vector2(1900, 780))
 	add_child(hud)
 	hud.connect("end_game", self, "_on_HUD_end_game")
-	pausePopup = PausePopup.instance()
-	add_child(pausePopup)
-	pausePopup.connect("restart", self, "_on_PausePopup_restart")
-	pausePopup.connect("back_to_menu", self, "_on_PausePopup_back_to_menu")
-	fakeGrid = FakeGameGrid.instance()
-	add_child(fakeGrid)
-	fakeGrid.visible = false
-	fakeGrid.initialize_grid(1920, 1080)
 
 func set_player(player: int):
 	self.player = player

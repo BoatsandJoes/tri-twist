@@ -23,15 +23,11 @@ func init(p1Device, p2Device, config: ConfigFile):
 
 func create_device_select():
 	deviceSelect = DeviceSelect.instance()
-	$VBoxContainer/MainArea/ModeModal.visible = false
 	$VBoxContainer/MainArea.add_child(deviceSelect)
 	deviceSelect.init(p1Device, p2Device, config)
 	deviceSelect.connect("cancel", self, "_on_DeviceSelect_cancel")
 	deviceSelect.connect("config_changed", self, "_on_DeviceSelect_config_changed")
 	deviceSelect.connect("everyone_ready", self, "_on_DeviceSelect_everyone_ready")
-
-func initialize_mode_modal():
-	$VBoxContainer/MainArea/ModeModal.visible = true
 
 func set_label(string: String):
 	$VBoxContainer/HBoxContainer/Label.text = string
@@ -50,12 +46,4 @@ func _on_DeviceSelect_config_changed(config: ConfigFile):
 func _on_DeviceSelect_everyone_ready(p1Device, p2Device):
 	self.p1Device = p1Device
 	self.p2Device = p2Device
-	deviceSelect.queue_free()
-	deviceSelect.visible = false
-	initialize_mode_modal()
-
-func _on_Start_pressed():
 	emit_signal("start", p1Device, p2Device, config, isConfigChanged)
-
-func _on_Back_pressed():
-	create_device_select()
