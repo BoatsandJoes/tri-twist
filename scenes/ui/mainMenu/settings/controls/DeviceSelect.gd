@@ -37,14 +37,14 @@ func update_device_list():
 		create_new_label($HBoxContainer/Player2Device, "Keyboard")
 	else:
 		create_new_label($HBoxContainer/AllDevices, "Keyboard")
-	if "Keyboard&Mouse" == p1Device:
+	if "Mouse" == p1Device:
 		p1DeviceFound = true
-		create_new_label($HBoxContainer/Player1Device, "Keyboard&Mouse")
-	elif "Keyboard&Mouse" == p2Device:
+		create_new_label($HBoxContainer/Player1Device, "Mouse")
+	elif "Mouse" == p2Device:
 		p2DeviceFound = true
-		create_new_label($HBoxContainer/Player2Device, "Keyboard&Mouse")
+		create_new_label($HBoxContainer/Player2Device, "Mouse")
 	else:
-		create_new_label($HBoxContainer/AllDevices, "Keyboard&Mouse")
+		create_new_label($HBoxContainer/AllDevices, "Mouse")
 	for device in devices:
 		var string: String = "Controller " + String(device + 1)
 		if string == p1Device:
@@ -134,7 +134,7 @@ func move_label_left(text: String):
 	if delete_label($HBoxContainer/Player2Device, text):
 		p2Device = "CPU"
 		create_new_label($HBoxContainer/AllDevices, text)
-	elif !has_label($HBoxContainer/Player1Device) && delete_label($HBoxContainer/AllDevices, text):
+	elif !has_label($HBoxContainer/Player1Device) && p1ButtonConfig == null && delete_label($HBoxContainer/AllDevices, text):
 		p1Device = text
 		create_new_label($HBoxContainer/Player1Device, text)
 
@@ -142,7 +142,7 @@ func move_label_right(text: String):
 	if delete_label($HBoxContainer/Player1Device, text):
 		p1Device = "CPU"
 		create_new_label($HBoxContainer/AllDevices, text)
-	elif !has_label($HBoxContainer/Player2Device) && delete_label($HBoxContainer/AllDevices, text):
+	elif !has_label($HBoxContainer/Player2Device) && p2ButtonConfig == null && delete_label($HBoxContainer/AllDevices, text):
 		p2Device = text
 		create_new_label($HBoxContainer/Player2Device, text)
 
@@ -151,7 +151,38 @@ func ready_check():
 		emit_signal("everyone_ready", p1Device, p2Device)
 
 func _input(event):
-	if event.is_action_pressed("left"):
+	if event is InputEventMouseButton && event.is_action_pressed("hard_drop"):
+		var labelText = "Mouse"
+		if find_label($HBoxContainer/AllDevices, labelText):
+			if get_global_mouse_position()[0] < 960:
+				move_label_left("Mouse")
+			else:
+				move_label_right("Mouse")
+		elif find_label($HBoxContainer/Player2Device, labelText) && get_global_mouse_position()[0] < 960:
+			move_label_left("Mouse")
+		elif find_label($HBoxContainer/Player1Device, labelText) && get_global_mouse_position()[0] >= 960:
+			move_label_right("Mouse")
+		else:
+			# Open button config
+			if has_specific_label($HBoxContainer/Player1Device, labelText):
+				for child in $HBoxContainer/Player1Device.get_children():
+					if !child is Label:
+						child.visible = false
+				p1ButtonConfig = ButtonConfig.instance()
+				$HBoxContainer/Player1Device.add_child(p1ButtonConfig)
+				p1ButtonConfig.init(p1Device, config)
+				p1ButtonConfig.connect("ready_pressed", self, "_on_p1ButtonConfig_ready_pressed")
+				p1ButtonConfig.connect("back", self, "_on_p1ButtonConfig_back")
+			elif has_specific_label($HBoxContainer/Player2Device, labelText):
+				for child in $HBoxContainer/Player2Device.get_children():
+					if !child is Label:
+						child.visible = false
+				p2ButtonConfig = ButtonConfig.instance()
+				$HBoxContainer/Player2Device.add_child(p2ButtonConfig)
+				p2ButtonConfig.init(p2Device, config)
+				p2ButtonConfig.connect("ready_pressed", self, "_on_p2ButtonConfig_ready_pressed")
+				p2ButtonConfig.connect("back", self, "_on_p2ButtonConfig_back")
+	elif event.is_action_pressed("left"):
 		# Move device left
 		if event is InputEventKey:
 			move_label_left("Keyboard")
@@ -184,7 +215,6 @@ func _input(event):
 				p1ButtonConfig.init(p1Device, config)
 				p1ButtonConfig.connect("ready_pressed", self, "_on_p1ButtonConfig_ready_pressed")
 				p1ButtonConfig.connect("back", self, "_on_p1ButtonConfig_back")
-
 			elif has_specific_label($HBoxContainer/Player2Device, labelText):
 				for child in $HBoxContainer/Player2Device.get_children():
 					if !child is Label:
@@ -194,7 +224,6 @@ func _input(event):
 				p2ButtonConfig.init(p2Device, config)
 				p2ButtonConfig.connect("ready_pressed", self, "_on_p2ButtonConfig_ready_pressed")
 				p2ButtonConfig.connect("back", self, "_on_p2ButtonConfig_back")
-			
 	elif event.is_action_pressed("ui_cancel"):
 		get_tree().set_input_as_handled()
 		var labelText: String = ""
@@ -203,7 +232,7 @@ func _input(event):
 		elif (event is InputEventKey):
 			labelText = "Keyboard"
 		elif event is InputEventMouseButton:
-			labelText = "Keyboard&Mouse"
+			labelText = "Mouse"
 		if (find_label($HBoxContainer/Player1Device, labelText)):
 			# Move device to middle if it is not in the middle
 			move_label_right(labelText)

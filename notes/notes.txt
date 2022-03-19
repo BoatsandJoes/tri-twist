@@ -1,19 +1,18 @@
 # tri-twist
+	* sound
+	* improved ai
 	loading screen
 	make all later garbage patterns identical between both players in versus (except for top edge, which can change if needed)
 	some way to break multiplayer stalemates
-	clean up multiplayer double pause menu
 	reset settings on this tab to defaults button
 	saving scores + displaying best scores
 	"are you sure?" on quit, restart, back to menu
 	try to adjust dig deep to be good for new players and then make it the main mode (current problem is if you can't make it to the bottom in 2 minutes then that kind of sucks)
-	allow selection of "Keyboard&Mouse" device
 	menu selection follows mouse on button hover
 	menu selection is retained when drilling down and coming back
 	add p2 das and p2 arr
 	keyboard/controller input on button config menu
 	actual button config
-	improved ai
 	store cpu difficulty in config object
 	device selection should be wiped always except when restarting a game or exiting to a place beyond device select
 		rethink settings menu button config idk, maybe it's fine as is
@@ -229,3 +228,5 @@ Titles:
 	Untitled Untriangle
 	Triceradrops
 	Triangle Temptation
+	Trongle
+	TriAngels

@@ -6,12 +6,10 @@
 * in triathalon dig, there was a piece that cleared individually somehow
 * multiplayer settings crash
 * active piece starting position does not go to mouse even if device is mouse
-* p2 versus grid drifts left (relative to p1 board) as horizontal resolution shrinks
 * single piece stays highlighted after board moves up? (check video)
 * mouse controls in multiplayer use unscaled board positions for mouse pointer
-* if one player readies and then the other player opens button config, the player is unreadied for some reason
 * restart broken in every mode except dig and versus
-* last defense crashed one time when I had ai thinking time very short
+* last defense crashed on two occasions when I had ai thinking time very short
 * mouse sometimes not visible in fullscreen
 * when toggling fullscreen and loading settings menu, arrow is in wrong position
 * game hangs on close

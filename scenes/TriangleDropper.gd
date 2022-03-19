@@ -42,7 +42,7 @@ func init():
 	activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
 	activePiece.fill_randomly()
 	add_child(activePiece)
-	if (device == "Keyboard&Mouse"):
+	if (device == "Mouse"):
 		set_active_piece_position_based_on_mouse(get_global_mouse_position()[0])
 	# Previews
 	for i in range(3):
@@ -82,7 +82,7 @@ func set_active_piece_position(positionIndex: int):
 	activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, positionIndex, true)
 
 func update_active_piece_position():
-	if device == "Keyboard&Mouse":
+	if device == "Mouse":
 		set_active_piece_position_based_on_mouse(get_global_mouse_position()[0])
 
 func set_das(das: int):
@@ -177,35 +177,36 @@ func hard_drop():
 	advance_piece()
 
 func _input(event):
-	if ((event is InputEventKey && (device == "Keyboard" || device == "Keyboard&Mouse"))
+	if ((event is InputEventKey && device == "Keyboard")
 	|| ((event is InputEventJoypadButton || event is InputEventJoypadMotion) && device.begins_with("Controller")
 	&& int(device.substr(device.find(" ") + 1, 2)) - 1 == event.device)
-	|| (event is InputEventMouseButton && device == "Keyboard&Mouse")):
-		if event.is_action_pressed("left"):
-			leftPressed = true
-			rightPressed = false
-			$DasTimer.start()
-			$ArrTimer.stop()
-			move_piece_left()
-		elif event.is_action_pressed("right"):
-			rightPressed = true
-			leftPressed = false
-			$DasTimer.start()
-			$ArrTimer.stop()
-			move_piece_right()
-		elif event.is_action_released("left"):
-			leftPressed = false
-			$DasTimer.stop()
-			$ArrTimer.stop()
-			if rightPressed:
+	|| (event is InputEventMouseButton && device == "Mouse")):
+		if device != "Mouse":
+			if event.is_action_pressed("left"):
+				leftPressed = true
+				rightPressed = false
 				$DasTimer.start()
-		elif event.is_action_released("right"):
-			rightPressed = false
-			$DasTimer.stop()
-			$ArrTimer.stop()
-			if leftPressed:
+				$ArrTimer.stop()
+				move_piece_left()
+			elif event.is_action_pressed("right"):
+				rightPressed = true
+				leftPressed = false
 				$DasTimer.start()
-		elif event.is_action_pressed("clockwise"):
+				$ArrTimer.stop()
+				move_piece_right()
+			elif event.is_action_released("left"):
+				leftPressed = false
+				$DasTimer.stop()
+				$ArrTimer.stop()
+				if rightPressed:
+					$DasTimer.start()
+			elif event.is_action_released("right"):
+				rightPressed = false
+				$DasTimer.stop()
+				$ArrTimer.stop()
+				if leftPressed:
+					$DasTimer.start()
+		if event.is_action_pressed("clockwise"):
 			rotate_clockwise()
 		elif event.is_action_pressed("counterclockwise"):
 			rotate_counterclockwise()
@@ -214,7 +215,7 @@ func _input(event):
 				soft_drop()
 			elif event.is_action_pressed("hard_drop") && ghostPiece.visible:
 				hard_drop()
-	elif event is InputEventMouseMotion && device == "Keyboard&Mouse":
+	elif event is InputEventMouseMotion && device == "Mouse":
 		set_active_piece_position_based_on_mouse(event.position[0])
 
 func set_piece_sequence(pieceSequence: PoolIntArray):

@@ -53,10 +53,11 @@ func make_all_tuning_menu_arrows_invisible():
 			child.get_node("RightSelectArrow").visible = false
 
 func _input(event: InputEvent):
-	if ((event is InputEventKey && device == "Keyboard") || (event is InputEventMouseButton && device == "Keyboard&Mouse")
+	if ((event is InputEventKey && device == "Keyboard") || (event is InputEventMouseButton && device == "Mouse")
 	|| (((event is InputEventJoypadButton || event is InputEventJoypadMotion) && device.begins_with("Controller"))
 	&& event.device == int(device.substr(device.find(" ") + 1, 2)) - 1)):
-		get_tree().set_input_as_handled()
+		if !(event is InputEventMouseButton) || device != "Mouse":
+			get_tree().set_input_as_handled()
 		if $HBoxContainer/TopMenu.visible:
 			if event.is_action_pressed("ui_up"):
 				if $HBoxContainer/TopMenu/VBoxContainer/Tuning/SelectArrow.visible:
