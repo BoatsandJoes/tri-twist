@@ -43,6 +43,8 @@ func initialize_display():
 func load_config_from_filesystem():
 	config = ConfigFile.new()
 	var err = config.load("user://settings.cfg")
+	if !config.has_section_key("audio", "volume"):
+		config.set_value("audio", "volume", 50)
 	if !config.has_section_key("video", "fullscreen"):
 		config.set_value("video", "fullscreen", true)
 	if !config.has_section_key("tuning", "das"):
@@ -58,7 +60,7 @@ func set_config(config: ConfigFile):
 	if is_instance_valid(game):
 		game.set_config(config)
 
-# Got these methods from reddit user leanderish: thanks!
+# Got this method from reddit user leanderish: thanks!
 func set_fullscreen():
 	config.set_value("video", "fullscreen", true)
 	var window_size = OS.get_screen_size()
@@ -81,6 +83,7 @@ func set_fullscreen():
 		vp.set_size(scaled_size) # Not sure this is strictly necessary
 		vp.set_attach_to_screen_rect(screen_rect)
 
+# Got this method from reddit user leanderish: thanks!
 func set_windowed():
 	config.set_value("video", "fullscreen", false)
 	var window_size = OS.get_screen_size()
