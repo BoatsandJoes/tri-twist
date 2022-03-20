@@ -22,7 +22,7 @@ const taglines: Array = [
 "Might be a roguelike", # Some purist roguelike fans get upset when someone (INCORRECTLY :O ) categorizes a game in their genre
 "Not a fighting game", # Some purist fighting game fans get upset when someone (INCORRECTLY :O ) categorizes a game in their genre
 "Contains arbitrary execution and artificial difficulty", # Video game players often complain about these things. Some like them
-"I can be your angle... or yuor devil", #Meme, often associated with Egoraptor/Game Grumps. Also, triangles
+"I can be your angle... or your devil", #Meme, often associated with Egoraptor/Game Grumps. Also, triangles
 "I've always wanted to feel like my puzzle game\nhad the vibe of a teen romance novel", #My sister's response to I can be your angle
 "Oh no! It's boiling acid!", #Security guard from near the beginning of Batman Forever
 "A wagon full of pancakes? In the championship?\nI'd like to see it try", #Homestar Runner: Strong Bad Email #117 "Montage"
@@ -35,7 +35,7 @@ const taglines: Array = [
 "YOU DIED", #Message that appears in several From Software games when you die
 "Trongle", #Alternate title
 "I couldn't tell a vertex from an edge, but my wife?\nShe's crazy about triangles! Can't get enough of 'em!",
-# ^TV detective Columbo often attributes his insights to "his wife," to lull his target into thinking he's a simpleton
+# ^ TV detective Columbo often attributes his insights to "his wife," to lull his target into thinking he's a simpleton
 "To boldly Tri where no Angel has tried before" #Star Trek "To boldly go"
 ]
 

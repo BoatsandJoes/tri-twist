@@ -103,9 +103,11 @@ func set_device(device: String):
 		ask_ai_for_move()
 
 func ask_ai_for_move():
-	ai.find_best_move([activePiece.leftColor, activePiece.rightColor, activePiece.verticalColor,
-	previews[0].leftColor, previews[0].rightColor, previews[0].verticalColor], serialize())
-	aiTimer.start(1)
+	if ai.find_best_move([activePiece.leftColor, activePiece.rightColor, activePiece.verticalColor,
+	previews[0].leftColor, previews[0].rightColor, previews[0].verticalColor], serialize()):
+		aiTimer.start(0.9)
+	else:
+		aiTimer.start(4.2)
 
 func enable_dropping():
 	droppingAllowed = true

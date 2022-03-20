@@ -23,6 +23,13 @@ func find_best_move(nextFewPieceEdgeColors: Array, boardState: Dictionary):
 	best_move_column = randi() % 11
 	best_move_rotation = randi() % 3
 	_thread_function(null)
+	# return false if the grid is near the bottom, true otherwise (slow down when about to win)
+	var index = 99
+	while index > 66:
+		if boardColors[index] != 4:
+			return true
+		index = index - 1
+	return false
 
 func get_best_move():
 	var column = best_move_column
