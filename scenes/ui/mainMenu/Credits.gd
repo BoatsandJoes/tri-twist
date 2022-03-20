@@ -8,6 +8,7 @@ func _ready():
 	pass # Replace with function body.
 
 func _input(event):
+	get_tree().set_input_as_handled()
 	if (event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton) && event.is_pressed():
 		if (event.is_action_pressed("ui_accept") || event.is_action_pressed("ui_down") || event.is_action_pressed("ui_right")
 		|| event.is_action_pressed("hard_drop")):
