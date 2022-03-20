@@ -26,10 +26,26 @@ var garbageHitstopTimers: Array = []
 var digVersus = false
 var queuedAttacks: FakeGameGrid
 var multiplayerFinished = false
+var muted = false
+var audioStreamPlayers = []
+var matchSFX1 = preload("res://assets/sfx/phaseJump1.ogg")
+var matchSFX2 = preload("res://assets/sfx/phaseJump2.ogg")
+var matchSFX3 = preload("res://assets/sfx/phaseJump3.ogg")
+var matchSFX4 = preload("res://assets/sfx/phaseJump4.ogg")
+var matchSFX5 = preload("res://assets/sfx/phaseJump5.ogg")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	matchSFX1.loop = false
+	matchSFX2.loop = false
+	matchSFX3.loop = false
+	matchSFX4.loop = false
+	matchSFX5.loop = false
+	for i in 4:
+		var player = AudioStreamPlayer.new()
+		player.bus = "Master"
+		self.audioStreamPlayers.append(player)
+		add_child(player)
 
 # create grid and fill it with cells
 func initialize_grid(gridWidth: int, gridHeight: int, screenHeight: int, screenWidth: int):
@@ -54,6 +70,18 @@ func initialize_grid(gridWidth: int, gridHeight: int, screenHeight: int, screenW
 	$GarbageTimerBar.hide()
 	$GarbageTimerBar.rect_size = Vector2(cellSize * (gridWidth + 1) / 2, cellSize / 5)
 	$GarbageTimerBar.rect_position = Vector2(grid[0][0].position[0] - cellSize / 2, grid[0][0].position[1] + cellSize / 2)
+
+func mute():
+	muted = true
+
+#Takes an integer from 0-100
+func set_volume(volume: int):
+	if volume == 0:
+		mute()
+	else:
+		var volFloat = (1.0 - (volume / 100.0)) * -30
+		for player in audioStreamPlayers:
+			player.volume_db = volFloat
 
 func set_dig_mode():
 	digMode = true
@@ -88,6 +116,31 @@ func set_clear_scaling(value):
 	for row in grid:
 		for cell in row:
 			cell.clearScaling = value
+
+func playSFX(sfxString: String):
+	if !muted:
+		var sound
+		if sfxString == "matchSFX1":
+			sound = matchSFX1
+		elif sfxString == "matchSFX2":
+			sound = matchSFX2
+		elif sfxString == "matchSFX3":
+			sound = matchSFX3
+		elif sfxString == "matchSFX4":
+			sound = matchSFX4
+		elif sfxString == "matchSFX5":
+			sound = matchSFX5
+		var soundPlayed = false
+		for player in audioStreamPlayers:
+			if !player.playing:
+				player.stream = sound
+				player.play()
+				soundPlayed = true
+				break
+		if !soundPlayed:
+			# Cut off the oldest sound.
+			audioStreamPlayers[0].stream = sound
+			audioStreamPlayers[0].play()
 
 func has_no_filled_cells_above_row_index(index: int) -> bool:
 	index = index + 1

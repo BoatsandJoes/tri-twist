@@ -12,6 +12,7 @@ size = 48
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=3]
+size = 20
 font_data = ExtResource( 2 )
 
 [node name="Credits" type="Control"]
@@ -213,7 +214,7 @@ margin_bottom = 1020.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="License"]
 margin_right = 1800.0
-margin_bottom = 960.0
+margin_bottom = 1009.0
 
 [node name="Label" type="Label" parent="License/VBoxContainer"]
 margin_right = 1800.0
@@ -252,8 +253,6 @@ Licensed under the Apache License, Version 2.0 (the \"License\"); you may not us
 http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-
-This game uses FMOD Studio and FMOD Engine by Firelight Technologies Pty Ltd., exercising the right granted by the FMod EULA to use FMOD Studio and FMOD Engine for non-commercial use without a license, adhering to all specified conditions.
 
 You're very astute. This game doesn't actually have a Japanese localization."
 autowrap = true

@@ -30,6 +30,7 @@ func show_dropper():
 	triangleDropper.screenWidth = 700
 	triangleDropper.init()
 	triangleDropper.set_previews_visible(0)
+	triangleDropper.mute()
 	spinner.queue_free()
 	if startingBoardState != null:
 		set_up_demo_internal()

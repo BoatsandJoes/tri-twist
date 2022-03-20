@@ -83,6 +83,7 @@ func prep_dig():
 func set_config(config: ConfigFile, p1Device, p2Device):
 	triangleDropper.set_das(config.get_value("tuning", "das"))
 	triangleDropper.set_arr(config.get_value("tuning", "arr"))
+	triangleDropper.gameGrid.set_volume(config.get_value("audio", "volume"))
 	if player == 2:
 		triangleDropper.set_device(p2Device)
 	else:

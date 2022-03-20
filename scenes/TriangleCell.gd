@@ -687,23 +687,35 @@ func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Diction
 				existingSequentialChainCount = existingChain.get("sequentialChainCount")
 			existingSequentialChainCount = existingSequentialChainCount + 1
 			existingChain["sequentialChainCount"] = existingSequentialChainCount
-		#TODO sound sfx "normal match, changes pitch depending on 'sequentialChainCount' 1 through 5"
-		else:
-			if lowestTimeLeft > $ClearTimer.wait_time - quickChainCutoff:
-				# Quick chain
-				var existingQuickChainCount: int = 0
-				if existingChain.has("quickChainCount"):
-					existingQuickChainCount = existingChain.get("quickChainCount")
-				existingQuickChainCount = existingQuickChainCount + 1
-				existingChain["quickChainCount"] = existingQuickChainCount
+			#TODO sound sfx "normal match, changes pitch depending on 'sequentialChainCount' 1 through 5"
+			if existingSequentialChainCount == 1:
+				get_parent().playSFX("matchSFX1")
+			elif existingSequentialChainCount == 2:
+				get_parent().playSFX("matchSFX2")
+			elif existingSequentialChainCount == 3:
+				get_parent().playSFX("matchSFX3")
+			elif existingSequentialChainCount == 4:
+				get_parent().playSFX("matchSFX4")
 			else:
-				# Active chain
-				var existingActiveChainCount: int = 0
-				if existingChain.has("activeChainCount"):
-					existingActiveChainCount = existingChain.get("activeChainCount")
-				existingActiveChainCount = existingActiveChainCount + 1
-				existingChain["activeChainCount"] = existingActiveChainCount
-				#TODO sound sfx "normal match, changes pitch depending on 'activeChainCount' 1 through 5"
+				get_parent().playSFX("matchSFX5")
+		else:
+			# Active chain
+			var existingActiveChainCount: int = 0
+			if existingChain.has("activeChainCount"):
+				existingActiveChainCount = existingChain.get("activeChainCount")
+			existingActiveChainCount = existingActiveChainCount + 1
+			existingChain["activeChainCount"] = existingActiveChainCount
+			#TODO sound sfx "normal match, changes pitch depending on 'activeChainCount' 1 through 5"
+			if existingActiveChainCount == 1:
+				get_parent().playSFX("matchSFX1")
+			elif existingActiveChainCount == 2:
+				get_parent().playSFX("matchSFX2")
+			elif existingActiveChainCount == 3:
+				get_parent().playSFX("matchSFX3")
+			elif existingActiveChainCount == 4:
+				get_parent().playSFX("matchSFX4")
+			else:
+				get_parent().playSFX("matchSFX5")
 	return existingChain
 
 func clear_self_and_matching_neighbors(alreadyCheckedCoordinates: Array):

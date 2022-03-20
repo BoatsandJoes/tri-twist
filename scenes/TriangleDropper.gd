@@ -58,6 +58,9 @@ func init():
 	ghostPiece.set_modulate(Color(1,1,1,0.5))
 	add_child(ghostPiece)
 
+func mute():
+	gameGrid.mute()
+
 func set_multiplayer():
 	for i in range(previews.size()):
 		previews[i].init(activePiece.size, -1, -1, Vector2(gameGrid.grid[-1][-8].position[0] + (i + 1.1) * activePiece.size,
