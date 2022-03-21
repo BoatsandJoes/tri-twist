@@ -33,6 +33,7 @@ var matchSFX2 = preload("res://assets/sfx/phaseJump2.ogg")
 var matchSFX3 = preload("res://assets/sfx/phaseJump3.ogg")
 var matchSFX4 = preload("res://assets/sfx/phaseJump4.ogg")
 var matchSFX5 = preload("res://assets/sfx/phaseJump5.ogg")
+var threeTone2 = preload("res://assets/sfx/threeTone2.ogg")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -41,6 +42,7 @@ func _ready():
 	matchSFX3.loop = false
 	matchSFX4.loop = false
 	matchSFX5.loop = false
+	threeTone2.loop = false
 	for i in 4:
 		var player = AudioStreamPlayer.new()
 		player.bus = "Master"
@@ -117,7 +119,7 @@ func set_clear_scaling(value):
 		for cell in row:
 			cell.clearScaling = value
 
-func playSFX(sfxString: String):
+func play_sfx(sfxString: String):
 	if !muted:
 		var sound
 		if sfxString == "matchSFX1":
@@ -130,6 +132,8 @@ func playSFX(sfxString: String):
 			sound = matchSFX4
 		elif sfxString == "matchSFX5":
 			sound = matchSFX5
+		elif sfxString == "threeTone2":
+			sound = threeTone2
 		var soundPlayed = false
 		for player in audioStreamPlayers:
 			if !player.playing:

@@ -670,7 +670,8 @@ func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Diction
 			existingBrainChainCount = existingChain.get("brainChainCount")
 		existingBrainChainCount = existingBrainChainCount + 1
 		existingChain["brainChainCount"] = existingBrainChainCount
-		#TODO sound sfx "extra points match"
+		#sound sfx "extra points match"
+		get_parent().play_sfx("threeTone2")
 	elif fallType == FallType.CLEAR:
 		# Lucky chain (fewer points, to make mashing weaker)
 		var existingLuckyChainCount: int = 0
@@ -687,17 +688,17 @@ func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Diction
 				existingSequentialChainCount = existingChain.get("sequentialChainCount")
 			existingSequentialChainCount = existingSequentialChainCount + 1
 			existingChain["sequentialChainCount"] = existingSequentialChainCount
-			#TODO sound sfx "normal match, changes pitch depending on 'sequentialChainCount' 1 through 5"
+			#sound sfx "normal match, changes pitch depending on 'sequentialChainCount' 1 through 5"
 			if existingSequentialChainCount == 1:
-				get_parent().playSFX("matchSFX1")
+				get_parent().play_sfx("matchSFX1")
 			elif existingSequentialChainCount == 2:
-				get_parent().playSFX("matchSFX2")
+				get_parent().play_sfx("matchSFX2")
 			elif existingSequentialChainCount == 3:
-				get_parent().playSFX("matchSFX3")
+				get_parent().play_sfx("matchSFX3")
 			elif existingSequentialChainCount == 4:
-				get_parent().playSFX("matchSFX4")
+				get_parent().play_sfx("matchSFX4")
 			else:
-				get_parent().playSFX("matchSFX5")
+				get_parent().play_sfx("matchSFX5")
 		else:
 			# Active chain
 			var existingActiveChainCount: int = 0
@@ -705,17 +706,17 @@ func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Diction
 				existingActiveChainCount = existingChain.get("activeChainCount")
 			existingActiveChainCount = existingActiveChainCount + 1
 			existingChain["activeChainCount"] = existingActiveChainCount
-			#TODO sound sfx "normal match, changes pitch depending on 'activeChainCount' 1 through 5"
+			#sound sfx "normal match, changes pitch depending on 'activeChainCount' 1 through 5"
 			if existingActiveChainCount == 1:
-				get_parent().playSFX("matchSFX1")
+				get_parent().play_sfx("matchSFX1")
 			elif existingActiveChainCount == 2:
-				get_parent().playSFX("matchSFX2")
+				get_parent().play_sfx("matchSFX2")
 			elif existingActiveChainCount == 3:
-				get_parent().playSFX("matchSFX3")
+				get_parent().play_sfx("matchSFX3")
 			elif existingActiveChainCount == 4:
-				get_parent().playSFX("matchSFX4")
+				get_parent().play_sfx("matchSFX4")
 			else:
-				get_parent().playSFX("matchSFX5")
+				get_parent().play_sfx("matchSFX5")
 	return existingChain
 
 func clear_self_and_matching_neighbors(alreadyCheckedCoordinates: Array):
