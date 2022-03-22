@@ -1,7 +1,7 @@
 # tri-twist
-	* sound
 	* store page (screenshots, trailer, description)
-	* browser version
+	* export windows version
+	* export browser version
 	loading screen
 	make all later garbage patterns identical between both players in versus (except for top edge, which can change if needed)
 	some way to break multiplayer stalemates

@@ -182,8 +182,9 @@ _global_script_class_icons={
 
 [application]
 
-config/name="TriTwist"
+config/name="TriAngels"
 run/main_scene="res://scenes/ui/mainMenu/Main.tscn"
+run/disable_stdout=true
 boot_splash/image="res://assets/sprites/Boatsand.png"
 boot_splash/fullsize=false
 config/icon="res://icon.png"
