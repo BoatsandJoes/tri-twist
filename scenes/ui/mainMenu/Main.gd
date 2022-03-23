@@ -124,7 +124,6 @@ func go_to_main_menu():
 	menu.connect("settings", self, "_on_MainMenu_settings")
 	menu.connect("credits", self, "_on_MainMenu_credits")
 	menu.connect("back_to_title", self, "_on_MainMenu_back_to_title")
-	menu.connect("exit", self, "_on_MainMenu_exit")
 
 func go_to_settings():
 	if is_instance_valid(menu):
@@ -135,8 +134,6 @@ func go_to_settings():
 	add_child(menu)
 	menu.set_config(config, p1Device, p2Device)
 	menu.connect("back_to_menu", self, "_on_Settings_back_to_menu")
-	menu.connect("windowed", self, "set_windowed")
-	menu.connect("fullscreen", self, "set_fullscreen")
 	menu.connect("devices_set", self, "_on_Settings_devices_set")
 
 func go_to_credits():
@@ -278,9 +275,6 @@ func _on_TitleScreen_start():
 	go_to_main_menu()
 
 func _on_TitleScreen_exit():
-	exit_game()
-
-func _on_MainMenu_exit():
 	exit_game()
 
 func _on_MainMenu_play():

@@ -6,7 +6,6 @@ signal multiplayer
 signal settings
 signal credits
 signal back_to_title
-signal exit
 
 const taglines: Array = [
 "It's triangle time!", #idk, it doesn't mean anything
@@ -45,7 +44,6 @@ var playArrowPosition: Vector2
 var versusArrowPosition: Vector2
 var settingsArrowPosition: Vector2
 var creditsArrowPosition: Vector2
-var exitArrowPosition: Vector2
 var timer: Timer
 
 # Called when the node enters the scene tree for the first time.
@@ -62,18 +60,17 @@ func _ready():
 	# Wait to make sure that buttons have resized.
 	timer.start(0.01)
 
+
 func _on_timer_timeout():
 	var playButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Play.rect_global_position
 	var versusButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Multiplayer.rect_global_position
 	var settingsButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Settings.rect_global_position
 	var creditsButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Credits.rect_global_position
-	var exitButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Exit.rect_global_position
 	var buttonWidthHeight = $MarginContainer/HBoxContainer/VBoxContainer/Play.get_rect().size
 	playArrowPosition = Vector2(playButtonPosition[0] + buttonWidthHeight[0], playButtonPosition[1] + buttonWidthHeight[1] / 2)
 	versusArrowPosition = Vector2(versusButtonPosition[0] + buttonWidthHeight[0], versusButtonPosition[1] + buttonWidthHeight[1] / 2)
 	settingsArrowPosition = Vector2(settingsButtonPosition[0]+buttonWidthHeight[0],settingsButtonPosition[1]+buttonWidthHeight[1] / 2)
 	creditsArrowPosition = Vector2(creditsButtonPosition[0] + buttonWidthHeight[0], creditsButtonPosition[1]+buttonWidthHeight[1] / 2)
-	exitArrowPosition = Vector2(exitButtonPosition[0] + buttonWidthHeight[0], exitButtonPosition[1] + buttonWidthHeight[1] / 2)
 	select_play()
 	selectArrow.visible = true
 	timer.queue_free()
@@ -84,19 +81,15 @@ func _on_timer_timeout():
 
 func _input(event):
 	if (event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton):
-		if event.is_action_pressed("ui_escape") || event.is_action_pressed("ui_cancel"):
-			emit_signal("exit")
-		elif event.is_action_pressed("ui_up"):
+		if event.is_action_pressed("ui_up"):
 			if play_selected():
-				select_exit()
+				select_credits()
 			elif versus_selected():
 				select_play()
 			elif settings_selected():
 				select_versus()
 			elif credits_selected():
 				select_settings()
-			elif exit_selected():
-				select_credits()
 		elif event.is_action_pressed("ui_down"):
 			if play_selected():
 				select_versus()
@@ -105,8 +98,6 @@ func _input(event):
 			elif settings_selected():
 				select_credits()
 			elif credits_selected():
-				select_exit()
-			elif exit_selected():
 				select_play()
 		elif event.is_action_pressed("ui_accept"):
 			if play_selected():
@@ -117,8 +108,6 @@ func _input(event):
 				_on_Settings_pressed()
 			elif credits_selected():
 				_on_Credits_pressed()
-			elif exit_selected():
-				_on_Exit_pressed()
 
 func play_selected():
 	return selectArrow.position == playArrowPosition
@@ -132,9 +121,6 @@ func settings_selected():
 func credits_selected():
 	return selectArrow.position == creditsArrowPosition
 
-func exit_selected():
-	return selectArrow.position == exitArrowPosition
-
 func select_play():
 	selectArrow.position = playArrowPosition
 	
@@ -146,9 +132,6 @@ func select_settings():
 	
 func select_credits():
 	selectArrow.position = creditsArrowPosition
-	
-func select_exit():
-	selectArrow.position = exitArrowPosition
 
 func _on_Play_pressed():
 	emit_signal("play")
@@ -161,6 +144,3 @@ func _on_Settings_pressed():
 
 func _on_Credits_pressed():
 	emit_signal("credits")
-
-func _on_Exit_pressed():
-	emit_signal("exit")
