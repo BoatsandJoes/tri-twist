@@ -5,11 +5,11 @@
 [ext_resource path="res://assets/fonts/agane/Agane.ttf" type="DynamicFontData" id=3]
 
 [sub_resource type="DynamicFont" id=1]
-size = 208
+size = 64
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=2]
-size = 48
+size = 208
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=3]
@@ -45,69 +45,77 @@ margin_bottom = 1020.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 margin_right = 1800.0
-margin_bottom = 1024.0
+margin_bottom = 960.0
 custom_constants/separation = 20
 alignment = 1
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
 margin_left = 264.0
 margin_right = 1194.0
-margin_bottom = 1024.0
-alignment = 1
+margin_bottom = 960.0
+
+[node name="Tagline2" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer3"]
+margin_right = 930.0
+margin_bottom = 265.0
+custom_fonts/font = SubResource( 1 )
+text = "If game is wrong size,
+try fullscreen and then
+hit the Escape key
+"
 
 [node name="Title" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer3"]
-margin_top = 382.0
+margin_top = 269.0
 margin_right = 930.0
-margin_bottom = 590.0
-custom_fonts/font = SubResource( 1 )
+margin_bottom = 477.0
+custom_fonts/font = SubResource( 2 )
 text = "TriAngels"
 
 [node name="Tagline" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer3"]
-margin_top = 594.0
+margin_top = 481.0
 margin_right = 930.0
-margin_bottom = 642.0
-custom_fonts/font = SubResource( 2 )
+margin_bottom = 545.0
+custom_fonts/font = SubResource( 1 )
 text = "Tagline goes here"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
 margin_left = 1214.0
 margin_right = 1535.0
-margin_bottom = 1024.0
+margin_bottom = 960.0
 custom_constants/separation = 5
 alignment = 2
 
 [node name="Play" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 306.0
+margin_top = 242.0
 margin_right = 321.0
-margin_bottom = 392.0
+margin_bottom = 328.0
 custom_fonts/font = SubResource( 3 )
 text = "Solo"
 
 [node name="Multiplayer" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 397.0
+margin_top = 333.0
 margin_right = 321.0
-margin_bottom = 483.0
+margin_bottom = 419.0
 custom_fonts/font = SubResource( 4 )
 text = "Versus"
 
 [node name="Settings" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 488.0
+margin_top = 424.0
 margin_right = 321.0
-margin_bottom = 574.0
+margin_bottom = 510.0
 custom_fonts/font = SubResource( 5 )
 text = "Settings"
 
 [node name="Credits" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 579.0
+margin_top = 515.0
 margin_right = 321.0
-margin_bottom = 665.0
+margin_bottom = 601.0
 custom_fonts/font = SubResource( 6 )
 text = "Credits"
 
 [node name="FullscreenTip" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 670.0
+margin_top = 606.0
 margin_right = 321.0
-margin_bottom = 1024.0
+margin_bottom = 960.0
 custom_fonts/font = SubResource( 7 )
 text = "
 
