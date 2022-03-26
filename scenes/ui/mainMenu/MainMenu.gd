@@ -34,7 +34,7 @@ const taglines: Array = [
 "No obtuse mechanics", #Obtuse is a type of angle that a triangle can have, but not in this game.
 "YOU DIED", #Message that appears in several From Software games when you die
 "Trongle", #Alternate title
-"I couldn't tell a vertex from an edge, but my wife?\nShe's crazy about triangles! Can't get enough of 'em!",
+"I couldn't tell a vertex from an edge,\nbut my wife? She's crazy about\ntriangles! Can't get enough of 'em!",
 # ^ TV detective Columbo often attributes his insights to "his wife," to lull his target into thinking he's a simpleton
 "To boldly Tri where no Angel has tried before" #Star Trek "To boldly go"
 ]
