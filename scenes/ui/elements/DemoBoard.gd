@@ -3,8 +3,6 @@ class_name DemoBoard
 
 var TriangleDropper = load("res://scenes/TriangleDropper.tscn")
 var triangleDropper: TriangleDropper
-var Spinner = load("res://scenes/ui/elements/Spinner.tscn")
-var spinner: Spinner
 var chains: Dictionary = {}
 var startingBoardState = null
 var instructions: Array
@@ -14,10 +12,6 @@ var instructionIndex: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	spinner = Spinner.instance()
-	add_child(spinner)
-	spinner.init(40)
-	spinner.position = Vector2(250, 175)
 	triangleDropper = TriangleDropper.instance()
 	add_child(triangleDropper)
 	triangleDropper.position = Vector2(triangleDropper.position[0] - 30, triangleDropper.position[1])
@@ -31,7 +25,6 @@ func show_dropper():
 	triangleDropper.init()
 	triangleDropper.set_previews_visible(0)
 	triangleDropper.mute()
-	spinner.queue_free()
 	if startingBoardState != null:
 		set_up_demo_internal()
 

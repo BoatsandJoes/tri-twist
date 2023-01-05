@@ -220,7 +220,7 @@ margin_bottom = 1009.0
 margin_right = 1800.0
 margin_bottom = 1061.0
 custom_fonts/font = SubResource( 3 )
-text = "Copyright (c) 2022 BoatsAndJoes. All rights reserved.
+text = "Copyright (c) 2023 BoatsAndJoes. All rights reserved.
 
 This game uses Godot Engine, available under the following license:
 

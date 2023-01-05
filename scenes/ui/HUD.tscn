@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scenes/ui/HUD.gd" type="Script" id=1]
-[ext_resource path="res://scenes/ui/MoveCount.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/ui/TimeDisplay.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/ui/ComboDisplay.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/ui/ScoreDisplay.tscn" type="PackedScene" id=5]
@@ -20,29 +19,22 @@ margin_right = 1720.0
 margin_bottom = 780.0
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
-margin_right = 1147.0
+margin_right = 1151.0
 margin_bottom = 780.0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 5.0
 custom_constants/separation = 250
 alignment = 2
 
-[node name="MoveCount" parent="HBoxContainer/VBoxContainer2" instance=ExtResource( 2 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 434.0
-margin_right = 1147.0
-margin_bottom = 482.0
-
 [node name="TimeDisplay" parent="HBoxContainer/VBoxContainer2" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 732.0
-margin_right = 1147.0
+margin_right = 1151.0
 margin_bottom = 780.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
-margin_left = 1151.0
+margin_left = 1155.0
 margin_right = 1720.0
 margin_bottom = 780.0
 size_flags_horizontal = 3
@@ -51,7 +43,7 @@ alignment = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
 margin_top = 596.0
-margin_right = 569.0
+margin_right = 565.0
 margin_bottom = 610.0
 
 [node name="HackySpacingLabel" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
@@ -71,7 +63,7 @@ rect_scale = Vector2( 1, 1 )
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 680.0
-margin_right = 569.0
+margin_right = 565.0
 margin_bottom = 780.0
-[connection signal="out_of_moves" from="HBoxContainer/VBoxContainer2/MoveCount" to="." method="_on_MoveCount_out_of_moves"]
+
 [connection signal="out_of_time" from="HBoxContainer/VBoxContainer2/TimeDisplay" to="." method="_on_TimeDisplay_out_of_time"]

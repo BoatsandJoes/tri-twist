@@ -13,10 +13,6 @@ var leftPressed = false
 var rightPressed = false
 var previews = []
 var droppingAllowed = true
-var AI = load("res://scenes/ai/AI.tscn")
-var ai: AI
-var aiTimer: Timer
-var device: String
 var gridWidth: int = 11
 var gridHeight: int = 5
 var screenHeight: int = 1080
@@ -42,8 +38,6 @@ func init():
 	activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
 	activePiece.fill_randomly()
 	add_child(activePiece)
-	if (device == "Mouse"):
-		set_active_piece_position_based_on_mouse(get_global_mouse_position()[0])
 	# Previews
 	for i in range(3):
 		var preview: TriangleCell = TriangleCell.instance()
@@ -61,16 +55,6 @@ func init():
 func mute():
 	gameGrid.mute()
 
-func set_multiplayer():
-	for i in range(previews.size()):
-		previews[i].init(activePiece.size, -1, -1, Vector2(gameGrid.grid[-1][-8].position[0] + (i + 1.1) * activePiece.size,
-		activePiece.position[1] - activePiece.size * 1.5), false, false)
-		if pieceSequence.size() == 0:
-			previews[i].fill_randomly()
-		else:
-			previews[i].set_colors(pieceSequence[(i+1)*3], pieceSequence[(i+1)*3 + 1], pieceSequence[(i+1)*3 + 2])
-	gameGrid.set_multiplayer()
-
 func set_active_piece_position_based_on_mouse(horizontalMousePosition: int):
 	for cell in gameGrid.grid[0]:
 		#TODO remove horizontal areas between cells that neither the left nor right cell will claim, but only for game start/unpause
@@ -85,32 +69,7 @@ func set_active_piece_position(positionIndex: int):
 	activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, positionIndex, true)
 
 func update_active_piece_position():
-	if device == "Mouse":
-		set_active_piece_position_based_on_mouse(get_global_mouse_position()[0])
-
-func set_das(das: int):
-	$DasTimer.wait_time = das / 60.0
-
-func set_arr(arr: int):
-	$ArrTimer.wait_time = arr / 60.0
-
-func set_device(device: String):
-	self.device = device
-	if device == "CPU":
-		ai = AI.instance()
-		add_child(ai)
-		aiTimer = Timer.new()
-		add_child(aiTimer)
-		aiTimer.one_shot = true
-		aiTimer.connect("timeout", self, "_on_aiTimer_timeout")
-		ask_ai_for_move()
-
-func ask_ai_for_move():
-	if ai.find_best_move([activePiece.leftColor, activePiece.rightColor, activePiece.verticalColor,
-	previews[0].leftColor, previews[0].rightColor, previews[0].verticalColor], serialize()):
-		aiTimer.start(0.9)
-	else:
-		aiTimer.start(4.2)
+	set_active_piece_position_based_on_mouse(get_global_mouse_position()[0])
 
 func enable_dropping():
 	droppingAllowed = true
@@ -182,35 +141,7 @@ func hard_drop():
 	advance_piece()
 
 func _input(event):
-	if ((event is InputEventKey && device == "Keyboard")
-	|| ((event is InputEventJoypadButton || event is InputEventJoypadMotion) && device.begins_with("Controller")
-	&& int(device.substr(device.find(" ") + 1, 2)) - 1 == event.device)
-	|| (event is InputEventMouseButton && device == "Mouse")):
-		if device != "Mouse":
-			if event.is_action_pressed("left"):
-				leftPressed = true
-				rightPressed = false
-				$DasTimer.start()
-				$ArrTimer.stop()
-				move_piece_left()
-			elif event.is_action_pressed("right"):
-				rightPressed = true
-				leftPressed = false
-				$DasTimer.start()
-				$ArrTimer.stop()
-				move_piece_right()
-			elif event.is_action_released("left"):
-				leftPressed = false
-				$DasTimer.stop()
-				$ArrTimer.stop()
-				if rightPressed:
-					$DasTimer.start()
-			elif event.is_action_released("right"):
-				rightPressed = false
-				$DasTimer.stop()
-				$ArrTimer.stop()
-				if leftPressed:
-					$DasTimer.start()
+	if (event is InputEventMouseButton):
 		if event.is_action_pressed("clockwise"):
 			rotate_clockwise()
 		elif event.is_action_pressed("counterclockwise"):
@@ -220,7 +151,7 @@ func _input(event):
 				soft_drop()
 			elif event.is_action_pressed("hard_drop") && ghostPiece.visible:
 				hard_drop()
-	elif event is InputEventMouseMotion && device == "Mouse":
+	elif event is InputEventMouseMotion:
 		set_active_piece_position_based_on_mouse(event.position[0])
 
 func set_piece_sequence(pieceSequence: PoolIntArray):
@@ -229,15 +160,6 @@ func set_piece_sequence(pieceSequence: PoolIntArray):
 	for i in range(previews.size()):
 		previews[i].set_colors(pieceSequence[(i+1) * 3], pieceSequence[(i+1) * 3 + 1], pieceSequence[(i+1) * 3 + 2])
 	currentPieceIndex = previews.size() + 1
-
-func set_drop_timer(value):
-	if value == 0:
-		dropTimer = false
-		$DropTimer.stop()
-	else:
-		dropTimer = true
-		$DropTimer.wait_time = value
-		$DropTimer.start()
 
 func draw_ghost_pieces():
 	ghostLinePoints = PoolVector2Array()
@@ -316,36 +238,6 @@ func advance_piece():
 		$DropTimer.start()
 	emit_signal("piece_sequence_advanced")
 
-func perform_best_ai_move():
-	var bestMove = ai.get_best_move()
-	set_active_piece_position(bestMove[0])
-	if bestMove[1] == ai.Direction.LEFT:
-		rotate_counterclockwise()
-	if bestMove[1] == ai.Direction.RIGHT:
-		rotate_clockwise()
-	$DropTimer.start()
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	draw_ghost_pieces()
-
-func _on_aiTimer_timeout():
-	perform_best_ai_move()
-
-func _on_DropTimer_timeout():
-	if ghostPiece.visible:
-		hard_drop()
-	ask_ai_for_move()
-
-func _on_DasTimer_timeout():
-	if rightPressed:
-		move_piece_right()
-	elif leftPressed:
-		move_piece_left()
-	$ArrTimer.start()
-
-func _on_ArrTimer_timeout():
-	if rightPressed:
-		move_piece_right()
-	elif leftPressed:
-		move_piece_left()

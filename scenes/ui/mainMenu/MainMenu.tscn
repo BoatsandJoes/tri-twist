@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scenes/ui/mainMenu/MainMenu.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/agane/Agane╠Ç 55 (roman).ttf" type="DynamicFontData" id=2]
@@ -12,14 +12,6 @@ size = 48
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=3]
-size = 80
-font_data = ExtResource( 2 )
-
-[sub_resource type="DynamicFont" id=4]
-size = 80
-font_data = ExtResource( 2 )
-
-[sub_resource type="DynamicFont" id=5]
 size = 80
 font_data = ExtResource( 2 )
 
@@ -49,73 +41,61 @@ custom_constants/separation = 20
 alignment = 1
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 264.0
-margin_right = 1194.0
+margin_left = 189.0
+margin_right = 1102.0
 margin_bottom = 960.0
 alignment = 1
 
 [node name="Title" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer3"]
 margin_top = 350.0
-margin_right = 930.0
+margin_right = 913.0
 margin_bottom = 558.0
 custom_fonts/font = SubResource( 1 )
 text = "TriAngels"
 
 [node name="Tagline" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer3"]
 margin_top = 562.0
-margin_right = 930.0
+margin_right = 913.0
 margin_bottom = 610.0
 custom_fonts/font = SubResource( 2 )
 text = "Tagline goes here"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
-margin_left = 1214.0
-margin_right = 1535.0
+margin_left = 1122.0
+margin_right = 1611.0
 margin_bottom = 960.0
 custom_constants/separation = 5
 alignment = 1
 
 [node name="Play" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 255.0
-margin_right = 321.0
-margin_bottom = 341.0
+margin_top = 300.0
+margin_right = 489.0
+margin_bottom = 386.0
 custom_fonts/font = SubResource( 3 )
-text = "Solo"
+text = "Play!"
 
-[node name="Multiplayer" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 346.0
-margin_right = 321.0
-margin_bottom = 432.0
-custom_fonts/font = SubResource( 4 )
-text = "Versus"
-
-[node name="Settings" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 437.0
-margin_right = 321.0
-margin_bottom = 523.0
-custom_fonts/font = SubResource( 5 )
-text = "Settings"
+[node name="Volume" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+margin_top = 391.0
+margin_right = 489.0
+margin_bottom = 477.0
+custom_fonts/font = SubResource( 3 )
+text = "Volume %50"
 
 [node name="Credits" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 528.0
-margin_right = 321.0
-margin_bottom = 614.0
+margin_top = 482.0
+margin_right = 489.0
+margin_bottom = 568.0
 custom_fonts/font = SubResource( 6 )
 text = "Credits"
 
 [node name="Exit" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 619.0
-margin_right = 321.0
-margin_bottom = 705.0
+margin_top = 573.0
+margin_right = 489.0
+margin_bottom = 659.0
 custom_fonts/font = SubResource( 7 )
 text = "Exit"
-[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/VBoxContainer/Play" to="." method="select_play"]
+
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Play" to="." method="_on_Play_pressed"]
-[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/VBoxContainer/Multiplayer" to="." method="select_versus"]
-[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Multiplayer" to="." method="_on_Multiplayer_pressed"]
-[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/VBoxContainer/Settings" to="." method="select_settings"]
-[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Settings" to="." method="_on_Settings_pressed"]
-[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/VBoxContainer/Credits" to="." method="select_credits"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Volume" to="." method="_on_Volume_pressed"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Credits" to="." method="_on_Credits_pressed"]
-[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/VBoxContainer/Exit" to="." method="select_exit"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Exit" to="." method="_on_Exit_pressed"]

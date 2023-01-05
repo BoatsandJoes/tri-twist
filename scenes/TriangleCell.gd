@@ -25,12 +25,8 @@ var fallType: int
 var clearDelay = 4
 var quickChainCutoff = 0
 var activeChainCap = 5
-var sequentialChainCap = 5
 var clearScaling = 0.0
-var activeChainMode = true
-var isMarkedForInactiveClear = false
 var wasHardDroppedMostRecently = false
-var sequentialChainCapFlag = false
 var leftAnimationTimer: Timer
 var rightAnimationTimer: Timer
 var vertAnimationTimer: Timer
@@ -75,11 +71,6 @@ func init(triangleSize: int, triRowIndex: int, triColumnIndex: int, cellPostion:
 	tumbleDirection = Direction.VERTICAL
 	# set position
 	position = cellPostion
-	# Define vertices
-	#var baseVectorArray = PoolVector2Array()
-	#baseVectorArray.append(Vector2(0, 0))
-	#baseVectorArray.append(Vector2(size, 0))
-	#baseVectorArray.append(Vector2(size/2, size * sqrt(3) / 2))
 	# Define vertices of children
 	become_default_size()
 	leftAnimate = Polygon2D.new()
@@ -193,27 +184,6 @@ func set_colors(left: int, right: int, vertical: int):
 	verticalColor = vertical
 	update_colors_visually()
 
-func show_garbage_preview(color: Color):
-	var garbagePreviewVectorArray = PoolVector2Array()
-	garbagePreviewVectorArray.append(Vector2(0, -size * sqrt(3) / 6))
-	garbagePreviewVectorArray.append(Vector2(size/4, size * sqrt(3) / 12))
-	garbagePreviewVectorArray.append(Vector2(-size/4, size * sqrt(3) / 12))
-	$GarbagePreview.set_polygon(garbagePreviewVectorArray)
-	$GarbagePreview.set_color(color)
-	$GarbagePreview.visible = true
-
-func show_garbage_spawn_animation(ratio: float):
-	ratio = bouncy(ratio, 3)
-	var previewPoints: PoolVector2Array = PoolVector2Array()
-	previewPoints.append(Vector2(ratio * size/2, -size * sqrt(3) / 6))
-	previewPoints.append(Vector2(size/4 - ratio * size/4, size * sqrt(3) / 12 +
-	ratio * size * sqrt(3) / 4))
-	previewPoints.append(Vector2(-size/4 - ratio * size/4, size * sqrt(3) / 12 -
-	ratio * size * sqrt(3) / 4))
-	$GarbagePreview.set_polygon(previewPoints)
-	$GarbagePreview.set_color(Color(0.870588, 0.4, 0.117647, 0.8 + ratio / 5))
-	$GarbagePreview.visible = true
-
 func spawn_piece(piece: TriangleCell):
 	fallType = FallType.DROP
 	wasHardDroppedMostRecently = true
@@ -234,18 +204,14 @@ func fill_from_neighbor(neighborLeftColor: int, neighborRightColor: int, neighbo
 		elif ((tumblingDirection == Direction.RIGHT && pointFacingUp) ||
 				(tumblingDirection == Direction.LEFT && !pointFacingUp)):
 			set_colors(neighborLeftColor, neighborVerticalColor, neighborRightColor)
-			emit_signal("tumble")
 		else:
 			set_colors(neighborVerticalColor, neighborRightColor, neighborLeftColor)
-			emit_signal("tumble")
 	elif direction == Direction.LEFT:
 		tumbleDirection = Direction.RIGHT
 		set_colors(neighborLeftColor, neighborVerticalColor, neighborRightColor)
-		emit_signal("tumble")
 	elif direction == Direction.RIGHT:
 		set_colors(neighborVerticalColor, neighborRightColor, neighborLeftColor)
 		tumbleDirection = Direction.LEFT
-		emit_signal("tumble")
 	# Check if we should start our gravity timer or come to rest
 	var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
 	var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
@@ -295,13 +261,6 @@ func after_fill_checks(leftNeighbor, rightNeighbor):
 						# Pushing.
 						rightNeighbor.enter_falling_state(Direction.RIGHT, FallType.PUSH)
 						#TODO sound sfx optional "toppling balancing piece"
-	if !is_marked_for_clear() && !is_falling() && fallType == FallType.DROP:
-		if !activeChainMode:
-			# Don't set off if we just hit the sequential chain cap
-			if sequentialChainCapFlag:
-				sequentialChainCapFlag = false
-			else:
-				get_parent().set_off_chains()
 
 func update_colors_visually():
 	var leftArray: PoolColorArray = PoolColorArray()
@@ -338,34 +297,6 @@ func update_colors_visually():
 	$VerticalEdge.set_vertex_colors(verticalArray)
 	$VerticalEdge.color = colors[verticalColor]
 
-func spin(rotation: int) -> bool:
-	if !is_marked_for_clear():
-		# Naively spin.
-		if ((rotation == Rotation.COUNTERCLOCKWISE && !pointFacingUp)
-				|| (rotation == Rotation.CLOCKWISE && pointFacingUp)):
-			set_colors(verticalColor, leftColor, rightColor)
-		else:
-			set_colors(rightColor, verticalColor, leftColor)
-		# Check to see if we match.
-		var leftNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.LEFT)
-		var rightNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.RIGHT)
-		var verticalNeighbor = get_parent().get_neighbor(rowIndex, columnIndex, Direction.VERTICAL)
-		if ((leftNeighbor != null && leftNeighbor.rightColor == leftColor) ||
-		(rightNeighbor != null && rightNeighbor.leftColor == rightColor) ||
-		(verticalNeighbor != null && verticalNeighbor.verticalColor == verticalColor)):
-			# Perform the match
-			fallType = FallType.DROP
-			check_for_clear([])
-			return true
-		else:
-			#unspin.
-			if ((rotation == Rotation.COUNTERCLOCKWISE && !pointFacingUp)
-				|| (rotation == Rotation.CLOCKWISE && pointFacingUp)):
-				set_colors(rightColor, verticalColor, leftColor)
-			else:
-				set_colors(verticalColor, leftColor, rightColor)
-	return false
-
 func enter_falling_state(tumblingDirection: int, fallType: int):
 	if !is_marked_for_clear() && !is_falling():
 		$GravityTimer.start()
@@ -382,7 +313,6 @@ func clear(edge: int):
 		set_colors(colors.size() - 1, colors.size() - 1, colors.size() - 1)
 		$ChainTimerBarContainer/ChainTimerBar.set_modulate(Color(1,1,1))
 		become_default_size()
-		isMarkedForInactiveClear = false
 		emit_signal("end_combo_if_exists", [rowIndex, columnIndex])
 		# Check to see if any neighbors should enter falling state.
 		if !pointFacingUp:
@@ -434,11 +364,8 @@ func clear(edge: int):
 	elif edge != Direction.VERTICAL_POINT:
 		# Mark edge for clearing, visually.
 		highlight_edge(edge)
-		if activeChainMode:
-			# set a timer to actually clear the cell, or restart it
-			$ClearTimer.start()
-		else:
-			isMarkedForInactiveClear = true
+		# set a timer to actually clear the cell, or restart it
+		$ClearTimer.start()
 
 func highlight_edge(edge: int):
 	if Direction.LEFT == edge:
@@ -561,11 +488,6 @@ func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
 					if (chainCount >= activeChainCap):
 						# Clear.
 						clear_self_and_matching_neighbors([])
-					elif (existingChain.has("sequentialChainCount") &&
-					existingChain.get("sequentialChainCount") >= sequentialChainCap):
-						# Set flag for later, and clear.
-						sequentialChainCapFlag = true
-						clear_self_and_matching_neighbors([])
 				# Tell our caller the root and clear time remaining.
 				return {"root": chainRootsArray[0], "clearTimeRemaining": clearTimerTimeLeft}
 			elif initialCheckedCoordinates.empty() && numMatches > 0:
@@ -588,11 +510,6 @@ func check_for_clear(alreadyCheckedCoordinates: Array) -> Dictionary:
 						chainCount = chainCount + combinedChain.get("luckyChainCount")
 					if (chainCount >= activeChainCap):
 						# Clear.
-						clear_self_and_matching_neighbors([])
-					elif (combinedChain.has("sequentialChainCount") &&
-					combinedChain.get("sequentialChainCount") >= sequentialChainCap):
-						# Set flag for later, and clear.
-						sequentialChainCapFlag = true
 						clear_self_and_matching_neighbors([])
 					return {"root": chainRootsArray[0], "clearTimeRemaining": clearTimerTimeLeft}
 	return {"root": [], "clearTimeRemaining": clearTimerTimeLeft}
@@ -623,12 +540,6 @@ func combine_chains(chainRoots: Array, numMatches, lowestTimeLeft) -> Dictionary
 					+ contributingChain.get("activeChainCount"))
 				else:
 					combinedChain["activeChainCount"] = contributingChain.get("activeChainCount")
-			if contributingChain.has("sequentialChainCount"):
-				if combinedChain.has("sequentialChainCount"):
-					combinedChain["sequentialChainCount"] = (combinedChain.get("sequentialChainCount")
-					+ contributingChain.get("sequentialChainCount"))
-				else:
-					combinedChain["sequentialChainCount"] = contributingChain.get("sequentialChainCount")
 			if contributingChain.has("twoTrickCount"):
 				if combinedChain.has("twoTrickCount"):
 					combinedChain["twoTrickCount"] = combinedChain.get("twoTrickCount") + contributingChain.get("twoTrickCount")
@@ -681,42 +592,23 @@ func update_existing_chain(existingChain, numMatches, lowestTimeLeft) -> Diction
 		existingChain["luckyChainCount"] = existingLuckyChainCount
 		#TODO sound sfx optional "this match is worth like 1 point"
 	else:
-		if !activeChainMode:
-			# Sequential chain
-			var existingSequentialChainCount: int = 0
-			if existingChain.has("sequentialChainCount"):
-				existingSequentialChainCount = existingChain.get("sequentialChainCount")
-			existingSequentialChainCount = existingSequentialChainCount + 1
-			existingChain["sequentialChainCount"] = existingSequentialChainCount
-			#sound sfx "normal match, changes pitch depending on 'sequentialChainCount' 1 through 5"
-			if existingSequentialChainCount == 1:
-				get_parent().play_sfx("matchSFX1")
-			elif existingSequentialChainCount == 2:
-				get_parent().play_sfx("matchSFX2")
-			elif existingSequentialChainCount == 3:
-				get_parent().play_sfx("matchSFX3")
-			elif existingSequentialChainCount == 4:
-				get_parent().play_sfx("matchSFX4")
-			else:
-				get_parent().play_sfx("matchSFX5")
+		# Active chain
+		var existingActiveChainCount: int = 0
+		if existingChain.has("activeChainCount"):
+			existingActiveChainCount = existingChain.get("activeChainCount")
+		existingActiveChainCount = existingActiveChainCount + 1
+		existingChain["activeChainCount"] = existingActiveChainCount
+		#sound sfx "normal match, changes pitch depending on 'activeChainCount' 1 through 5"
+		if existingActiveChainCount == 1:
+			get_parent().play_sfx("matchSFX1")
+		elif existingActiveChainCount == 2:
+			get_parent().play_sfx("matchSFX2")
+		elif existingActiveChainCount == 3:
+			get_parent().play_sfx("matchSFX3")
+		elif existingActiveChainCount == 4:
+			get_parent().play_sfx("matchSFX4")
 		else:
-			# Active chain
-			var existingActiveChainCount: int = 0
-			if existingChain.has("activeChainCount"):
-				existingActiveChainCount = existingChain.get("activeChainCount")
-			existingActiveChainCount = existingActiveChainCount + 1
-			existingChain["activeChainCount"] = existingActiveChainCount
-			#sound sfx "normal match, changes pitch depending on 'activeChainCount' 1 through 5"
-			if existingActiveChainCount == 1:
-				get_parent().play_sfx("matchSFX1")
-			elif existingActiveChainCount == 2:
-				get_parent().play_sfx("matchSFX2")
-			elif existingActiveChainCount == 3:
-				get_parent().play_sfx("matchSFX3")
-			elif existingActiveChainCount == 4:
-				get_parent().play_sfx("matchSFX4")
-			else:
-				get_parent().play_sfx("matchSFX5")
+			get_parent().play_sfx("matchSFX5")
 	return existingChain
 
 func clear_self_and_matching_neighbors(alreadyCheckedCoordinates: Array):
@@ -753,7 +645,7 @@ func is_falling() -> bool:
 	return !$GravityTimer.is_stopped()
 
 func is_marked_for_clear() -> bool:
-	return !$ClearTimer.is_stopped() || (isMarkedForInactiveClear && !activeChainMode)
+	return !$ClearTimer.is_stopped()
 
 func get_next_move_if_this_were_you(theoryTumbleDirection) -> Array:
 	if theoryTumbleDirection == Direction.VERTICAL_POINT:

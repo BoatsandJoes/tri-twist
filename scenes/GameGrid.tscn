@@ -1,14 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://scenes/GameGrid.gd" type="Script" id=1]
 [ext_resource path="res://scenes/TriangleCell.tscn" type="PackedScene" id=2]
-
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 1, 1, 1, 1 )
-
-[sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 0, 0, 0, 1 )
-shadow_size = 2
 
 [node name="GameGrid" type="Node2D"]
 script = ExtResource( 1 )
@@ -19,14 +12,3 @@ margin = 3
 z_index = 1
 default_color = Color( 1, 1, 1, 0.588235 )
 texture_mode = 1044957385
-
-[node name="GarbageTimer" type="Timer" parent="."]
-wait_time = 2.0
-one_shot = true
-
-[node name="GarbageTimerBar" type="ProgressBar" parent="."]
-margin_right = 4.0
-margin_bottom = 14.0
-custom_styles/fg = SubResource( 1 )
-custom_styles/bg = SubResource( 2 )
-[connection signal="timeout" from="GarbageTimer" to="." method="_on_GarbageTimer_timeout"]

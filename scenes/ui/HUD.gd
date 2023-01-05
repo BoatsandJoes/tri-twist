@@ -19,14 +19,8 @@ func set_multiplayer():
 	visible = false
 	set_time_limit(0,0)
 
-func set_move_limit(value: int):
-	$HBoxContainer/VBoxContainer2/MoveCount.init(value)
-
 func set_time_limit(minutes: int, seconds: int):
 	$HBoxContainer/VBoxContainer2/TimeDisplay.init(minutes, seconds)
-
-func _on_MoveCount_out_of_moves():
-	emit_signal("end_game")
 
 func _on_TimeDisplay_out_of_time():
 	emit_signal("end_game")

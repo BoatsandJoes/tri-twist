@@ -2,16 +2,14 @@ extends Control
 class_name MainMenu
 
 signal play
-signal multiplayer
-signal settings
 signal credits
-signal back_to_title
 signal exit
+signal volume
 
 const taglines: Array = [
 "It's triangle time!", #idk, it doesn't mean anything
 "Let's go get ready to look so good!", #Homestar Runner Teen Girl Squad #1
-"Ah, I see you are a Windows user", #Someone online's opening line of open source software evangelism (name witheld)
+"Ah, I see you are a Mac user", #Someone online's opening line of open source software evangelism (name witheld)
 "Like putting too much air in a balloon!", #Futurama: Where No Fan Has Gone Before 
 "Think of shipping channels in the ocean", #Numb3rs: Shadow Markets
 "It's how hackers talk when they don't want to be overheard", #Numb3rs: Shadow Markets
@@ -39,125 +37,32 @@ const taglines: Array = [
 "To boldly Tri where no Angel has tried before" #Star Trek "To boldly go"
 ]
 
-var SelectArrow = load("res://scenes/ui/elements/SelectArrow.tscn")
-var selectArrow: SelectArrow
-var playArrowPosition: Vector2
-var versusArrowPosition: Vector2
-var settingsArrowPosition: Vector2
-var creditsArrowPosition: Vector2
-var exitArrowPosition: Vector2
-var timer: Timer
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
 	$MarginContainer/HBoxContainer/VBoxContainer3/Tagline.text = taglines[randi() % taglines.size()]
-	selectArrow = SelectArrow.instance()
-	add_child(selectArrow)
-	selectArrow.visible = false
-	timer = Timer.new()
-	add_child(timer)
-	timer.one_shot = true
-	timer.connect("timeout", self, "_on_timer_timeout")
-	# Wait to make sure that buttons have resized.
-	timer.start(0.01)
-
-func _on_timer_timeout():
-	var playButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Play.rect_global_position
-	var versusButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Multiplayer.rect_global_position
-	var settingsButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Settings.rect_global_position
-	var creditsButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Credits.rect_global_position
-	var exitButtonPosition = $MarginContainer/HBoxContainer/VBoxContainer/Exit.rect_global_position
-	var buttonWidthHeight = $MarginContainer/HBoxContainer/VBoxContainer/Play.get_rect().size
-	playArrowPosition = Vector2(playButtonPosition[0] + buttonWidthHeight[0], playButtonPosition[1] + buttonWidthHeight[1] / 2)
-	versusArrowPosition = Vector2(versusButtonPosition[0] + buttonWidthHeight[0], versusButtonPosition[1] + buttonWidthHeight[1] / 2)
-	settingsArrowPosition = Vector2(settingsButtonPosition[0]+buttonWidthHeight[0],settingsButtonPosition[1]+buttonWidthHeight[1] / 2)
-	creditsArrowPosition = Vector2(creditsButtonPosition[0] + buttonWidthHeight[0], creditsButtonPosition[1]+buttonWidthHeight[1] / 2)
-	exitArrowPosition = Vector2(exitButtonPosition[0] + buttonWidthHeight[0], exitButtonPosition[1] + buttonWidthHeight[1] / 2)
-	select_play()
-	selectArrow.visible = true
-	timer.queue_free()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
 
 func _input(event):
-	if (event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton):
-		if event.is_action_pressed("ui_escape") || event.is_action_pressed("ui_cancel"):
-			emit_signal("exit")
-		elif event.is_action_pressed("ui_up"):
-			if play_selected():
-				select_exit()
-			elif versus_selected():
-				select_play()
-			elif settings_selected():
-				select_versus()
-			elif credits_selected():
-				select_settings()
-			elif exit_selected():
-				select_credits()
-		elif event.is_action_pressed("ui_down"):
-			if play_selected():
-				select_versus()
-			elif versus_selected():
-				select_settings()
-			elif settings_selected():
-				select_credits()
-			elif credits_selected():
-				select_exit()
-			elif exit_selected():
-				select_play()
-		elif event.is_action_pressed("ui_accept"):
-			if play_selected():
-				_on_Play_pressed()
-			elif versus_selected():
-				_on_Multiplayer_pressed()
-			elif settings_selected():
-				_on_Settings_pressed()
-			elif credits_selected():
-				_on_Credits_pressed()
-			elif exit_selected():
-				_on_Exit_pressed()
-
-func play_selected():
-	return selectArrow.position == playArrowPosition
-
-func versus_selected():
-	return selectArrow.position == versusArrowPosition
-
-func settings_selected():
-	return selectArrow.position == settingsArrowPosition
-
-func credits_selected():
-	return selectArrow.position == creditsArrowPosition
-
-func exit_selected():
-	return selectArrow.position == exitArrowPosition
-
-func select_play():
-	selectArrow.position = playArrowPosition
-	
-func select_versus():
-	selectArrow.position = versusArrowPosition
-	
-func select_settings():
-	selectArrow.position = settingsArrowPosition
-	
-func select_credits():
-	selectArrow.position = creditsArrowPosition
-	
-func select_exit():
-	selectArrow.position = exitArrowPosition
+	if event.is_action_pressed("ui_escape") || event.is_action_pressed("ui_cancel"):
+		emit_signal("exit")
 
 func _on_Play_pressed():
 	emit_signal("play")
 
-func _on_Multiplayer_pressed():
-	emit_signal("multiplayer")
+func _on_Volume_pressed():
+	var volume = int($MarginContainer/HBoxContainer/VBoxContainer/Volume.text.substr(8, 3))
+	volume = volume - 10
+	if volume < 0:
+		volume = 100
+	set_volume(volume)
+	emit_signal("volume", volume)
 
-func _on_Settings_pressed():
-	emit_signal("settings")
+func set_volume(volume):
+	$MarginContainer/HBoxContainer/VBoxContainer/Volume.text = $MarginContainer/HBoxContainer/VBoxContainer/Volume.text.substr(0, 8) + String(volume)
 
 func _on_Credits_pressed():
 	emit_signal("credits")

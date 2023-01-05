@@ -61,10 +61,6 @@ initial_velocity_random = 0.5
 wait_time = 0.2
 one_shot = true
 
-[node name="GarbagePreview" type="Polygon2D" parent="."]
-visible = false
-color = Color( 1, 1, 1, 0.784314 )
-
 [node name="ChainTimerBarContainer" type="Node2D" parent="."]
 
 [node name="ChainTimerBar" type="ProgressBar" parent="ChainTimerBarContainer"]
@@ -73,6 +69,7 @@ margin_bottom = 14.0
 custom_styles/fg = SubResource( 1 )
 custom_styles/bg = SubResource( 2 )
 value = 1.0
+
 [connection signal="mouse_entered" from="." to="." method="_on_TriangleCell_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_TriangleCell_mouse_exited"]
 [connection signal="timeout" from="ClearTimer" to="." method="_on_ClearTimer_timeout"]
