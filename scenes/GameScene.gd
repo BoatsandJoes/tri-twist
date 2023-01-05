@@ -59,10 +59,8 @@ func prep_dig():
 func set_config(config: ConfigFile):
 	triangleDropper.gameGrid.set_volume(config.get_value("audio", "volume"))
 
-func _input(event):
-	if ((event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton)
-	&& event.is_action_pressed("pause")):
-		# Set pause menu to pause mode
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST:
 		pausePopup.set_mode_pause()
 		show_fake_grid()
 

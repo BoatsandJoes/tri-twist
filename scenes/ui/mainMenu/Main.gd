@@ -41,6 +41,7 @@ func exit_game():
 	get_tree().quit()
 
 func go_to_main_menu():
+	get_tree().set_quit_on_go_back(true)
 	if is_instance_valid(menu):
 		menu.queue_free()
 	if is_instance_valid(game):
@@ -54,6 +55,7 @@ func go_to_main_menu():
 	menu.connect("volume", self, "_on_MainMenu_volume")
 
 func go_to_credits():
+	get_tree().set_quit_on_go_back(false)
 	if is_instance_valid(menu):
 		menu.queue_free()
 	if is_instance_valid(game):
@@ -79,6 +81,7 @@ func go_to_dig_mode():
 		actually_go_to_dig()
 
 func actually_go_to_dig():
+	get_tree().set_quit_on_go_back(false)
 	if is_instance_valid(restartTimer):
 		restartTimer.queue_free()
 	game = DigMode.instance()

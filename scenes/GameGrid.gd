@@ -221,10 +221,7 @@ func _process(delta):
 				rowsEmpty = false
 			if cell.is_marked_for_clear():
 				isAnyCellMarkedForClear = true
-	if isGridFull:
-		if !grid[0][0].activeChainMode && isAnyCellMarkedForClear:
-			set_off_chains()
-		elif !isAnyCellMarkedForClear:
+	if isGridFull && !isAnyCellMarkedForClear:
 			emit_signal("grid_full")
 	if digMode && rowsEmpty:
 		move_up_rows(grid.size() - 1)

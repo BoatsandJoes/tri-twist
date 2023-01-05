@@ -19,6 +19,10 @@ texture_mode = 111
 wait_time = 0.05
 one_shot = true
 
+[node name="HardDropTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
 [node name="Label" type="Label" parent="."]
 visible = false
 margin_left = 124.044
@@ -27,13 +31,4 @@ margin_right = 183.044
 margin_bottom = 232.681
 text = "You Died"
 
-[node name="DasTimer" type="Timer" parent="."]
-wait_time = 0.2
-one_shot = true
-
-[node name="ArrTimer" type="Timer" parent="."]
-wait_time = 0.05
-
 [connection signal="timeout" from="DropTimer" to="." method="_on_DropTimer_timeout"]
-[connection signal="timeout" from="DasTimer" to="." method="_on_DasTimer_timeout"]
-[connection signal="timeout" from="ArrTimer" to="." method="_on_ArrTimer_timeout"]

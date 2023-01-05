@@ -29,19 +29,9 @@ func set_mode_finished():
 	get_parent().set_process_input(false)
 	get_tree().paused = true
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-func _input(event):
-	if ((event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton) && $PopupPanel.visible &&
-	$PopupPanel/VBoxContainer.visible):
-		if !event is InputEventMouseButton:
-			get_tree().set_input_as_handled()
-		if event.is_action_pressed("ui_escape") || event.is_action_pressed("ui_cancel") || event.is_action_pressed("pause"):
-			if $PopupPanel/VBoxContainer/Buttons/Resume.visible:
-				_on_Resume_pressed()
-			else:
-				_on_BackToMain_pressed()
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST && $PopupPanel.visible && $PopupPanel/VBoxContainer.visible:
+		_on_BackToMain_pressed()
 
 func _on_Resume_pressed():
 	$PopupPanel.visible = false

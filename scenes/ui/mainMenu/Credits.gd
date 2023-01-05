@@ -9,13 +9,12 @@ func _ready():
 
 func _input(event):
 	get_tree().set_input_as_handled()
-	if (event is InputEventKey || event is InputEventJoypadButton || event is InputEventMouseButton) && event.is_pressed():
-		if (event.is_action_pressed("ui_accept") || event.is_action_pressed("ui_down") || event.is_action_pressed("ui_right")
-		|| event.is_action_pressed("hard_drop")):
-			advance()
-		elif (event.is_action_pressed("ui_escape") || event.is_action_pressed("ui_cancel") || event.is_action_pressed("ui_left") ||
-		event.is_action_pressed("ui_up")):
-			retreat()
+	if (event is InputEventScreenTouch) && event.is_pressed():
+		advance()
+
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST:
+		retreat()
 
 func advance():
 	if $Page1.visible:

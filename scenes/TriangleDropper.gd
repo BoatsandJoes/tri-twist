@@ -19,6 +19,8 @@ var screenHeight: int = 1080
 var screenWidth: int = 1920
 var pieceSequence: PoolIntArray
 var currentPieceIndex: int = 0
+var pieceHasDragged: bool = false
+var initialTouchX: int
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -55,21 +57,21 @@ func init():
 func mute():
 	gameGrid.mute()
 
-func set_active_piece_position_based_on_mouse(horizontalMousePosition: int):
-	for cell in gameGrid.grid[0]:
-		#TODO remove horizontal areas between cells that neither the left nor right cell will claim, but only for game start/unpause
-		if ((horizontalMousePosition < cell.position[0] + cell.size / 4
-		&& horizontalMousePosition > cell.position[0] - cell.size / 4)
-		|| (cell.columnIndex == 0 && horizontalMousePosition < cell.position[0])
-		|| (cell.columnIndex == gameGrid.grid[0].size() - 1 && horizontalMousePosition > cell.position[0])):
-			set_active_piece_position(cell.columnIndex)
+func set_active_piece_position_based_on_touch(horizontalMousePosition: int):
+	set_active_piece_position(activePiece.columnIndex +
+	(horizontalMousePosition - initialTouchX)/(gameGrid.cellSize/2), horizontalMousePosition)
 
-func set_active_piece_position(positionIndex: int):
-	activePiece.columnIndex = positionIndex
-	activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, positionIndex, true)
-
-func update_active_piece_position():
-	set_active_piece_position_based_on_mouse(get_global_mouse_position()[0])
+func set_active_piece_position(positionIndex: int, pixel):
+	if positionIndex < 0:
+		positionIndex = 0
+	if positionIndex > 10:
+		positionIndex = 10
+	if activePiece.columnIndex != positionIndex:
+		pieceHasDragged = true
+		if pixel != null:
+			initialTouchX = pixel
+		activePiece.columnIndex = positionIndex
+		activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, positionIndex, true)
 
 func enable_dropping():
 	droppingAllowed = true
@@ -108,7 +110,7 @@ func deserialize(state: Dictionary):
 			previousPieceIndex = 0
 		previews[i].set_colors(pieceSequence[previousPieceIndex*3], pieceSequence[previousPieceIndex*3 + 1],
 		pieceSequence[previousPieceIndex*3 + 2])
-	set_active_piece_position(state.get("activePieceColumnIndex"))
+	set_active_piece_position(state.get("activePieceColumnIndex"), null)
 	var colors: PoolIntArray = state.get("boardColors")
 	for rowIndex in range(gameGrid.grid.size()):
 		for columnIndex in range(gameGrid.gridWidth):
@@ -117,13 +119,13 @@ func deserialize(state: Dictionary):
 
 func move_piece_right():
 	if activePiece.columnIndex < gameGrid.grid[-1].size() - 1:
-				activePiece.columnIndex = activePiece.columnIndex + 1
-				activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
+		activePiece.columnIndex = activePiece.columnIndex + 1
+		activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
 
 func move_piece_left():
 	if activePiece.columnIndex > 0:
-				activePiece.columnIndex = activePiece.columnIndex - 1
-				activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
+		activePiece.columnIndex = activePiece.columnIndex - 1
+		activePiece.position = gameGrid.get_position_for_cell(gameGrid.gridHeight, activePiece.columnIndex, true)
 
 func rotate_clockwise():
 	activePiece.set_colors(activePiece.verticalColor, activePiece.leftColor, activePiece.rightColor)
@@ -141,18 +143,24 @@ func hard_drop():
 	advance_piece()
 
 func _input(event):
-	if (event is InputEventMouseButton):
-		if event.is_action_pressed("clockwise"):
-			rotate_clockwise()
-		elif event.is_action_pressed("counterclockwise"):
-			rotate_counterclockwise()
-		elif droppingAllowed:
-			if event.is_action_pressed("soft_drop"):
-				soft_drop()
-			elif event.is_action_pressed("hard_drop") && ghostPiece.visible:
+	if event is InputEventScreenTouch && event.index == 0:
+		if event.is_pressed():
+			pieceHasDragged = false
+			initialTouchX = event.position.x
+		elif !pieceHasDragged:
+			if event.position.x > 960:
+				rotate_clockwise()
+			else:
+				rotate_counterclockwise()
+	elif event is InputEventScreenDrag && event.index == 0:
+		if droppingAllowed && $HardDropTimer.is_stopped():
+			if event.get_speed().y > 1000 && ghostPiece.visible:
 				hard_drop()
-	elif event is InputEventMouseMotion:
-		set_active_piece_position_based_on_mouse(event.position[0])
+				$HardDropTimer.start()
+			elif event.get_speed().y < -1000:
+				soft_drop()
+				$HardDropTimer.start()
+		set_active_piece_position_based_on_touch(event.position[0])
 
 func set_piece_sequence(pieceSequence: PoolIntArray):
 	self.pieceSequence = pieceSequence
