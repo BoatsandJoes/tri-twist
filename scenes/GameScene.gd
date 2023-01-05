@@ -43,7 +43,7 @@ func _ready():
 	triangleDropper.gameGrid.connect("end_combo_if_exists", self, "end_combo_if_exists")
 	hud = HUD.instance()
 	hud.set_position(Vector2(10, 100))
-	hud.set_size(Vector2(1900, 780))
+	hud.set_size(Vector2(1900, 830))
 	add_child(hud)
 	hud.connect("end_game", self, "_on_HUD_end_game")
 

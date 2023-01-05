@@ -22,12 +22,8 @@ func init(minutes: int, seconds: int):
 func update_time_string():
 	var currentTimeInt: int = int(currentTime)
 	var minutes: int = currentTimeInt / 60
-	if minutes > 99:
-		return "99:59.99"
 	var seconds: int = currentTimeInt % 60
-	var centisecondsString: String = ("%.2f" % currentTime)
-	$VBoxContainer/TimeValue.text = (String(minutes).pad_zeros(2) + ":" + String(seconds).pad_zeros(2) +
-	"." + centisecondsString.substr(centisecondsString.length() - 2, 2))
+	$VBoxContainer/TimeValue.text = (String(minutes).pad_zeros(2) + ":" + String(seconds).pad_zeros(2))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

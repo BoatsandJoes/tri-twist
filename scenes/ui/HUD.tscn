@@ -29,7 +29,7 @@ alignment = 2
 [node name="TimeDisplay" parent="HBoxContainer/VBoxContainer2" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 732.0
+margin_top = 652.0
 margin_right = 1151.0
 margin_bottom = 780.0
 

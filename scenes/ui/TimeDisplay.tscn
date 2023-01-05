@@ -1,14 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scenes/ui/TimeDisplay.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/agane/Agane╠Ç 55 (roman).ttf" type="DynamicFontData" id=2]
 
-[sub_resource type="DynamicFont" id=1]
-size = 48
-font_data = ExtResource( 2 )
-
 [sub_resource type="DynamicFont" id=2]
-size = 48
+size = 128
 font_data = ExtResource( 2 )
 
 [node name="TimeDisplay" type="MarginContainer"]
@@ -20,17 +16,9 @@ script = ExtResource( 1 )
 margin_right = 1920.0
 margin_bottom = 1080.0
 
-[node name="TimeLabel" type="Label" parent="VBoxContainer"]
-margin_top = 516.0
-margin_right = 124.0
-margin_bottom = 564.0
-custom_fonts/font = SubResource( 1 )
-text = "Time "
-
 [node name="TimeValue" type="Label" parent="VBoxContainer"]
-margin_left = 128.0
-margin_top = 516.0
-margin_right = 316.0
-margin_bottom = 564.0
+margin_top = 476.0
+margin_right = 502.0
+margin_bottom = 604.0
 custom_fonts/font = SubResource( 2 )
 text = "00:00:00"
